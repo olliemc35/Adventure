@@ -107,7 +107,7 @@ namespace Adventure
             rope[0].spriteDisplacement.Y = 0;
             rope[0].idleHitbox.rectangle.X = (int)rope[0].spritePosition.X + rope[0].idleHitbox.offsetX;
             rope[0].idleHitbox.rectangle.Y = (int)rope[0].spritePosition.Y + rope[0].idleHitbox.offsetY;
-            rope[0].animatedSprite.Position = rope[0].spritePosition;
+            rope[0].animatedSprite_Idle.Position = rope[0].spritePosition;
             rope[0].attached = true;
 
             for (int i = 0; i <= IndexOfFirstEnabledRopeBit; i++)
@@ -139,7 +139,7 @@ namespace Adventure
         {
             for (int i = 0; i < rope.Count(); i++)
             {
-                rope[i].animatedSprite.Render(spriteBatch);
+                rope[i].animatedSprite_Idle.Render(spriteBatch);
 
             }
 
@@ -159,7 +159,7 @@ namespace Adventure
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.X = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.X + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetX;
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.Y = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.Y + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetY;
             rope[IndexOfFirstRopeBitAnchor].spriteVelocity = player.spriteVelocity;
-            rope[IndexOfFirstRopeBitAnchor].animatedSprite.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
+            rope[IndexOfFirstRopeBitAnchor].animatedSprite_Idle.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
 
 
             for (int i = 0; i < IndexOfFirstEnabledRopeBit; i++)
@@ -271,7 +271,7 @@ namespace Adventure
                     ropeBitsDrawnOnScreen[k].spritePosition.Y = DistanceToNearestInteger(ropeBitsDrawnOnScreen[k].spritePosition.Y);
                     ropeBitsDrawnOnScreen[k].spritePosition.Y += 0.5f * rope[0].idleHitbox.rectangle.Height;
 
-                    ropeBitsDrawnOnScreen[k].animatedSprite.Position = ropeBitsDrawnOnScreen[k].spritePosition;
+                    ropeBitsDrawnOnScreen[k].animatedSprite_Idle.Position = ropeBitsDrawnOnScreen[k].spritePosition;
                     ropeBitsDrawnOnScreen[k].Enabled = true;
 
                 }

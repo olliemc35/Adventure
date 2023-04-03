@@ -98,7 +98,7 @@ namespace Adventure
         {
             if (compress)
             {
-                animatedSprite.Play("Compress");
+                animatedSprite_Idle.Play("Compress");
                 currentFrame = frameAndTag["Compress"].From;
                 tagOfCurrentFrame = "Compress";
             }
@@ -109,25 +109,25 @@ namespace Adventure
                 idleHitbox.rectangle.Height = initialHeight;
                 launchSpeedMultiplier = 1;
 
-                animatedSprite.Play("Idle");
+                animatedSprite_Idle.Play("Idle");
                 currentFrame = frameAndTag["Idle"].From;
                 tagOfCurrentFrame = "Idle";
             }
             else if (launchFlag)
             {
-                animatedSprite.Play("Launch");
+                animatedSprite_Idle.Play("Launch");
                 currentFrame = frameAndTag["Launch"].From;
                 tagOfCurrentFrame = "Launch";
             }
             else
             {
-                animatedSprite.Play("Idle");
+                animatedSprite_Idle.Play("Idle");
                 currentFrame = frameAndTag["Idle"].From;
                 tagOfCurrentFrame = "Idle";
             }
 
 
-            animatedSprite.OnFrameEnd = () =>
+            animatedSprite_Idle.OnFrameEnd = () =>
             {
                 if (tagOfCurrentFrame == "Compress")
                 {
@@ -174,15 +174,15 @@ namespace Adventure
 
             //};
 
-            animatedSprite.OnAnimationLoop = () =>
+            animatedSprite_Idle.OnAnimationLoop = () =>
             {
                 if (tagOfCurrentFrame == "Launch")
                 {
-                    animatedSprite.Play("Idle");
+                    animatedSprite_Idle.Play("Idle");
                     currentFrame = frameAndTag["Idle"].From;
                     tagOfCurrentFrame = "Idle";
 
-                    animatedSprite.OnAnimationLoop = null;
+                    animatedSprite_Idle.OnAnimationLoop = null;
 
                 }
 
@@ -190,7 +190,7 @@ namespace Adventure
                 {
                     compress = false;
 
-                    animatedSprite.Play("Idle");
+                    animatedSprite_Idle.Play("Idle");
                     currentFrame = frameAndTag["Idle"].From;
                     tagOfCurrentFrame = "Idle";
 
@@ -202,7 +202,7 @@ namespace Adventure
 
                     needToJumpAgain = true;
 
-                    animatedSprite.OnAnimationLoop = null;
+                    animatedSprite_Idle.OnAnimationLoop = null;
 
                 }
 

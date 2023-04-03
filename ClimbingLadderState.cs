@@ -75,11 +75,12 @@ namespace Adventure
 
         public override void UpdateAnimations()
         {
-            player.animatedSprite.Play("ClimbingLadder");
-            player.currentFrame = player.frameAndTag["ClimbingLadder"].From;
-            player.tagOfCurrentFrame = "ClimbingLadder";
-            player.TurnOffAllHitboxes();
-            player.idleHitbox.isActive = true;
+            player.nameOfCurrentAnimationSprite = "ClimbingLadder";
+            //player.animatedSprite_Idle.Play("ClimbingLadder");
+            //player.currentFrame = player.frameAndTag["ClimbingLadder"].From;
+            //player.tagOfCurrentFrame = "ClimbingLadder";
+            //player.TurnOffAllHitboxes();
+            //player.idleHitbox.isActive = true;
         }
 
 

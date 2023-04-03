@@ -196,7 +196,7 @@ namespace Adventure
             //else 
             if (player.SpriteCollidedOnLeft)
             {
-                player.animatedSprite.Play("SlideLeft");
+                player.animatedSprite_Idle.Play("SlideLeft");
                 player.currentFrame = player.frameAndTag["SlideLeft"].From;
                 player.tagOfCurrentFrame = "SlideLeft";
                 player.TurnOffAllHitboxes();
@@ -204,7 +204,7 @@ namespace Adventure
             }
             else if (player.SpriteCollidedOnTop)
             {
-                player.animatedSprite.Play("ClimbTop");
+                player.animatedSprite_Idle.Play("ClimbTop");
                 player.currentFrame = player.frameAndTag["ClimbTop"].From;
                 player.tagOfCurrentFrame = "ClimbTop";
                 player.TurnOffAllHitboxes();
@@ -212,7 +212,7 @@ namespace Adventure
             }
             else if (player.SpriteCollidedOnRight)
             {
-                player.animatedSprite.Play("SlideRight");
+                player.animatedSprite_Idle.Play("SlideRight");
                 player.currentFrame = player.frameAndTag["SlideRight"].From;
                 player.tagOfCurrentFrame = "SlideRight";
                 player.TurnOffAllHitboxes();

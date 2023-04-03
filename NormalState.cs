@@ -474,19 +474,24 @@ namespace Adventure
                 {
                     if (player.spriteDirectionX == -1)
                     {
-                        player.animatedSprite.Play("JumpLeft");
-                        player.currentFrame = player.frameAndTag["JumpLeft"].From;
-                        player.tagOfCurrentFrame = "JumpLeft";
-                        player.TurnOffAllHitboxes();
-                        player.idleHitbox.isActive = true;
+                        player.nameOfCurrentAnimationSprite = "JumpLeft";
+
+                        //player.animatedSprite_Idle.Play("JumpLeft");
+                        //player.currentFrame = player.frameAndTag["JumpLeft"].From;
+                        //player.tagOfCurrentFrame = "JumpLeft";
+                        //player.TurnOffAllHitboxes();
+                        //player.idleHitbox.isActive = true;
                     }
                     else
                     {
-                        player.animatedSprite.Play("JumpRight");
-                        player.currentFrame = player.frameAndTag["JumpRight"].From;
-                        player.tagOfCurrentFrame = "JumpRight";
-                        player.TurnOffAllHitboxes();
-                        player.idleHitbox.isActive = true;
+                        player.nameOfCurrentAnimationSprite = "JumpRight";
+
+
+                        //player.animatedSprite_Idle.Play("JumpRight");
+                        //player.currentFrame = player.frameAndTag["JumpRight"].From;
+                        //player.tagOfCurrentFrame = "JumpRight";
+                        //player.TurnOffAllHitboxes();
+                        //player.idleHitbox.isActive = true;
 
                     }
                 }
@@ -494,19 +499,24 @@ namespace Adventure
                 {
                     if (player.spriteDirectionX == -1)
                     {
-                        player.animatedSprite.Play("FallingLeft");
-                        player.currentFrame = player.frameAndTag["FallingLeft"].From;
-                        player.tagOfCurrentFrame = "FallingLeft";
-                        player.TurnOffAllHitboxes();
-                        player.idleHitbox.isActive = true;
+                        player.nameOfCurrentAnimationSprite = "FallingLeft";
+
+                        //player.animatedSprite_Idle.Play("FallingLeft");
+                        //player.currentFrame = player.frameAndTag["FallingLeft"].From;
+                        //player.tagOfCurrentFrame = "FallingLeft";
+                        //player.TurnOffAllHitboxes();
+                        //player.idleHitbox.isActive = true;
                     }
                     else
                     {
-                        player.animatedSprite.Play("FallingRight");
-                        player.currentFrame = player.frameAndTag["FallingRight"].From;
-                        player.tagOfCurrentFrame = "FallingRight";
-                        player.TurnOffAllHitboxes();
-                        player.idleHitbox.isActive = true;
+                        player.nameOfCurrentAnimationSprite = "FallingRight";
+
+
+                        //player.animatedSprite_Idle.Play("FallingRight");
+                        //player.currentFrame = player.frameAndTag["FallingRight"].From;
+                        //player.tagOfCurrentFrame = "FallingRight";
+                        //player.TurnOffAllHitboxes();
+                        //player.idleHitbox.isActive = true;
                     }
                 }
             }
@@ -514,82 +524,92 @@ namespace Adventure
             {
                 if (landedFlag)
                 {
-                    player.animatedSprite.Play("Landed");
-                    player.currentFrame = player.frameAndTag["Landed"].From;
-                    player.tagOfCurrentFrame = "Landed";
-                    player.TurnOffAllHitboxes();
-                    player.idleHitbox.isActive = true;
+                    player.nameOfCurrentAnimationSprite = "Landed";
+
+
+                    //player.animatedSprite_Idle.Play("Landed");
+                    //player.currentFrame = player.frameAndTag["Landed"].From;
+                    //player.tagOfCurrentFrame = "Landed";
+                    //player.TurnOffAllHitboxes();
+                    //player.idleHitbox.isActive = true;
 
                 }
                 else if (player.spriteDirectionX == 1)
                 {
+                    player.nameOfCurrentAnimationSprite = "MoveRight";
 
-                    player.animatedSprite.Play("MoveRight");
-                    player.currentFrame = player.frameAndTag["MoveRight"].From;
-                    player.tagOfCurrentFrame = "MoveRight";
-                    player.TurnOffAllHitboxes();
-                    player.idleHitbox.isActive = true;
+                    //player.animatedSprite_Idle.Play("MoveRight");
+                    //player.currentFrame = player.frameAndTag["MoveRight"].From;
+                    //player.tagOfCurrentFrame = "MoveRight";
+                    //player.TurnOffAllHitboxes();
+                    //player.idleHitbox.isActive = true;
 
                 }
                 else if (player.spriteDirectionX == -1)
                 {
+                    player.nameOfCurrentAnimationSprite = "MoveLeft";
 
-                    player.animatedSprite.Play("MoveLeft");
-                    player.currentFrame = player.frameAndTag["MoveLeft"].From;
-                    player.tagOfCurrentFrame = "MoveLeft";
-                    player.TurnOffAllHitboxes();
-                    player.idleHitbox.isActive = true;
+
+                    //player.animatedSprite_Idle.Play("MoveLeft");
+                    //player.currentFrame = player.frameAndTag["MoveLeft"].From;
+                    //player.tagOfCurrentFrame = "MoveLeft";
+                    //player.TurnOffAllHitboxes();
+                    //player.idleHitbox.isActive = true;
                 }
                 else if (player.spriteDirectionX == 0)
                 {
                     if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
                     {
-                        player.animatedSprite.Play("Idle");
-                        player.currentFrame = player.frameAndTag["Idle"].From;
-                        player.tagOfCurrentFrame = "Idle";
-                        player.TurnOffAllHitboxes();
-                        player.idleHitbox.isActive = true;
+                        player.nameOfCurrentAnimationSprite = "Idle";
+
+                        //player.animatedSprite_Idle.Play("Idle");
+                        //player.currentFrame = player.frameAndTag["Idle"].From;
+                        //player.tagOfCurrentFrame = "Idle";
+                        //player.TurnOffAllHitboxes();
+                        //player.idleHitbox.isActive = true;
                     }
                     else if (player.previousSpriteDirectionX == -1)
                     {
-                        player.animatedSprite.Play("IdleLeft");
-                        player.currentFrame = player.frameAndTag["IdleLeft"].From;
-                        player.tagOfCurrentFrame = "IdleLeft";
-                        player.TurnOffAllHitboxes();
-                        player.idleHitbox.isActive = true;
+                        player.nameOfCurrentAnimationSprite = "IdleLeft";
+
+                        //player.animatedSprite_Idle.Play("IdleLeft");
+                        //player.currentFrame = player.frameAndTag["IdleLeft"].From;
+                        //player.tagOfCurrentFrame = "IdleLeft";
+                        //player.TurnOffAllHitboxes();
+                        //player.idleHitbox.isActive = true;
                     }
                 }
 
 
             }
 
-            player.animatedSprite.OnAnimationLoop = () =>
-            {
-                if (player.tagOfCurrentFrame == "Landed")
-                {
-                    landedFlag = false;
-                    player.animatedSprite.OnAnimationLoop = null;
-                }
-                //if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
-                //{
-                //    player.animatedSprite.Play("Idle");
-                //    player.currentFrame = player.frameAndTag["Idle"].From;
-                //    player.tagOfCurrentFrame = "Idle";
-                //    player.TurnOffAllHitboxes();
-                //    player.idleHitbox.isActive = true;
-                //    player.animatedSprite.OnAnimationLoop = null;
-                //}
-                //else if (player.previousSpriteDirectionX == -1)
-                //{
-                //    player.animatedSprite.Play("IdleLeft");
-                //    player.currentFrame = player.frameAndTag["IdleLeft"].From;
-                //    player.tagOfCurrentFrame = "IdleLeft";
-                //    player.TurnOffAllHitboxes();
-                //    player.idleHitbox.isActive = true;
-                //    player.animatedSprite.OnAnimationLoop = null;
-                //}
+            //player.animatedSprite_Idle.OnAnimationLoop = () =>
+            //{
+            //    if (player.tagOfCurrentFrame == "Landed")
+            //    {
+            //        landedFlag = false;
+            //        player.animatedSprite_Idle.OnAnimationLoop = null;
+            //    }
+            //    //if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
+            //    //{
+            //    //    player.animatedSprite.Play("Idle");
+            //    //    player.currentFrame = player.frameAndTag["Idle"].From;
+            //    //    player.tagOfCurrentFrame = "Idle";
+            //    //    player.TurnOffAllHitboxes();
+            //    //    player.idleHitbox.isActive = true;
+            //    //    player.animatedSprite.OnAnimationLoop = null;
+            //    //}
+            //    //else if (player.previousSpriteDirectionX == -1)
+            //    //{
+            //    //    player.animatedSprite.Play("IdleLeft");
+            //    //    player.currentFrame = player.frameAndTag["IdleLeft"].From;
+            //    //    player.tagOfCurrentFrame = "IdleLeft";
+            //    //    player.TurnOffAllHitboxes();
+            //    //    player.idleHitbox.isActive = true;
+            //    //    player.animatedSprite.OnAnimationLoop = null;
+            //    //}
 
-            };
+            //};
 
         }
 

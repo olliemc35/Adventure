@@ -174,7 +174,7 @@ namespace Adventure
             }
 
 
-            activeScreen = screens[36];
+            activeScreen = screens[0];
             activeScreen.Show();
 
             player.LoadContent(content, References.graphicsDevice);

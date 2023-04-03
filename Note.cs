@@ -350,13 +350,13 @@ namespace Adventure
 
             if (keyPlayInteractedAnimation)
             {
-                key.animatedSprite.Play("Interacted");
+                key.animatedSprite_Idle.Play("Interacted");
                 key.currentFrame = key.frameAndTag["Interacted"].From;
                 key.tagOfCurrentFrame = "Interacted";
             }
             else
             {
-                key.animatedSprite.Play("Idle");
+                key.animatedSprite_Idle.Play("Idle");
                 key.currentFrame = key.frameAndTag["Idle"].From;
                 key.tagOfCurrentFrame = "Idle";
             }

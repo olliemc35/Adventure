@@ -269,11 +269,12 @@ namespace Adventure
 
         public override void UpdateAnimations()
         {
-            player.animatedSprite.Play("Teleport");
-            player.currentFrame = player.frameAndTag["Teleport"].From;
-            player.tagOfCurrentFrame = "Teleport";
-            player.TurnOffAllHitboxes();
-            player.idleHitbox.isActive = true;
+            player.nameOfCurrentAnimationSprite = "Teleport";
+            //player.animatedSprite_Idle.Play("Teleport");
+            //player.currentFrame = player.frameAndTag["Teleport"].From;
+            //player.tagOfCurrentFrame = "Teleport";
+            //player.TurnOffAllHitboxes();
+            //player.idleHitbox.isActive = true;
         }
 
 

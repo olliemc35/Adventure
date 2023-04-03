@@ -9,13 +9,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame.Aseprite.Content.Processors;
 
 namespace Adventure
 {
     public class AnimationSprite : Sprite
     {
-        // animatedSprite has its own position vector which needs to be updated after we update the spritePosition.
-        public AnimatedSprite animatedSprite;
+        public SpriteSheet spriteSheet;
+        public AnimatedSprite animatedSprite_Idle;
+        public IDictionary<string, AnimatedSprite> animatedSpriteAndTag = new Dictionary<string, AnimatedSprite>();
+        public string nameOfCurrentAnimationSprite;
+
+
+
         public AsepriteFrame baseFrame;
         public int currentFrame;
         public string tagOfCurrentFrame;
@@ -30,15 +36,35 @@ namespace Adventure
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
+            //asepriteFile = contentManager.Load<AsepriteFile>(spriteFilename);
+            //animatedSprite = (AnimatedSprite)SpriteProcessor.Process(graphicsDevice, asepriteFile, aseFrameIndex: 0);
+
+            //  Load the Aseprite file
             asepriteFile = contentManager.Load<AsepriteFile>(spriteFilename);
-            animatedSprite = new AnimatedSprite();
-            animatedSprite = new AnimatedSprite(asepriteFile);
+            //  Use the SpriteSheetProcessor to process the SpriteSheet from the Aseprite file.
+            spriteSheet = SpriteSheetProcessor.Process(graphicsDevice, asepriteFile);
+            animatedSprite_Idle = spriteSheet.CreateAnimatedSprite("Idle");
+            animatedSpriteAndTag.Add("Idle", animatedSprite_Idle);
+            nameOfCurrentAnimationSprite = "Idle";
+
+
+            // Load in the relevant aseprite file
+            //asepriteFile = contentManager.Load<AsepriteFile>(spriteFilename);
+           // textureAtlas = TextureAtlasProcessor.Process(graphicsDevice, asepriteFile);
+            //spriteTexture = textureAtlas.GetRegion(0).Texture;
+            //animatedSprite = (AnimatedSprite)textureAtlas.CreateSprite(regionIndex: 0);
+            //AsepriteTag tag = asepriteFile.GetTag(0);
+            //animatedSprite = new AnimatedSprite(tag);
+
+
             baseFrame = asepriteFile.Frames[0];
             currentFrame = 0;
             tagOfCurrentFrame = "Idle";
-            frameAndTag = asepriteFile.Tags;
 
-            spriteTexture = asepriteDocument.Texture;
+
+            //frameAndTag = asepriteFile.Tags;
+
+            //spriteTexture = asepriteDocument.Texture;
 
             // Create the idleHitbox
             idleHitbox = new HitboxRectangle((int)spritePosition.X, (int)spritePosition.Y, baseFrame.Width, baseFrame.Height);
@@ -49,7 +75,7 @@ namespace Adventure
 
             animationPosition.X = DistanceToNearestInteger(spritePosition.X);
             animationPosition.Y = DistanceToNearestInteger(spritePosition.Y);
-            animatedSprite.Position = animationPosition;
+            //animatedSprite.Position = animationPosition;
 
 
             if (climable)
@@ -69,7 +95,10 @@ namespace Adventure
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            animatedSprite.Update(gameTime);
+
+            animatedSpriteAndTag[nameOfCurrentAnimationSprite].Update(gameTime);
+            animatedSpriteAndTag[nameOfCurrentAnimationSprite].Play();
+            //animatedSprite.Update(gameTime);
             //animatedSprite.Position = spritePosition;
             // We set the position to be the nearest integer
             // This helps remove any pixel blurring. Essentially the computer doesn't know what to do if we ask it to draw at a sub-pixel and it draws
@@ -78,7 +107,7 @@ namespace Adventure
             // This is often referred to as "clamping."
             animationPosition.X = DistanceToNearestInteger(spritePosition.X);
             animationPosition.Y = DistanceToNearestInteger(spritePosition.Y);
-            animatedSprite.Position = animationPosition;
+           // animatedSprite.Position = animationPosition;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -89,7 +118,7 @@ namespace Adventure
             }
             if (Enabled)
             {
-                animatedSprite.Render(spriteBatch);
+                animatedSpriteAndTag[nameOfCurrentAnimationSprite].Draw(spriteBatch, animationPosition);
             }
         }
 

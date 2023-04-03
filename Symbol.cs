@@ -29,13 +29,13 @@ namespace Adventure
 
             if (TurnedOn)
             {
-                animatedSprite.Play("Interacted");
+                animatedSprite_Idle.Play("Interacted");
                 currentFrame = frameAndTag["Interacted"].From;
                 tagOfCurrentFrame = "Interacted";
             }
             else
             {
-                animatedSprite.Play("Idle");
+                animatedSprite_Idle.Play("Idle");
                 currentFrame = frameAndTag["Idle"].From;
                 tagOfCurrentFrame = "Idle";
             }

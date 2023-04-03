@@ -242,11 +242,12 @@ namespace Adventure
 
         public override void UpdateAnimations()
         {
-            player.animatedSprite.Play("Idle");
-            player.currentFrame = player.frameAndTag["Idle"].From;
-            player.tagOfCurrentFrame = "Idle";
-            player.TurnOffAllHitboxes();
-            player.idleHitbox.isActive = true;
+            player.nameOfCurrentAnimationSprite = "Idle";
+            //player.animatedSprite_Idle.Play("Idle");
+            //player.currentFrame = player.frameAndTag["Idle"].From;
+            //player.tagOfCurrentFrame = "Idle";
+            //player.TurnOffAllHitboxes();
+            //player.idleHitbox.isActive = true;
         }
 
 

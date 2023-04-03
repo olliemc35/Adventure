@@ -1,18 +1,37 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework;
-using MonoGame.Framework.Utilities.Deflate;
+using MonoGame.Aseprite;
+using MonoGame.Aseprite.AsepriteTypes;
+using MonoGame.Aseprite.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame.Aseprite.Content.Processors;
+using Microsoft.Xna.Framework.Input;
 
 namespace Adventure
 {
     public class Player : MovingSprite
     {
+        public AnimatedSprite animatedSprite_IdleLeft;
+        public AnimatedSprite animatedSprite_MoveRight;
+        public AnimatedSprite animatedSprite_MoveLeft;
+        public AnimatedSprite animatedSprite_JumpRight;
+        public AnimatedSprite animatedSprite_JumpLeft;
+        public AnimatedSprite animatedSprite_Respawn;
+        public AnimatedSprite animatedSprite_Dead;
+        public AnimatedSprite animatedSprite_ClimbingLadder;
+        public AnimatedSprite animatedSprite_Teleport;
+        public AnimatedSprite animatedSprite_SlideRight;
+        public AnimatedSprite animatedSprite_SlideLeft;
+        public AnimatedSprite animatedSprite_ClimbTop;
+        public AnimatedSprite animatedSprite_Landed;
+        public AnimatedSprite animatedSprite_FallingRight;
+        public AnimatedSprite animatedSprite_FallingLeft;
+
 
         public KeyboardState keyboardState;
         public KeyboardState oldKeyboardState;
@@ -180,6 +199,48 @@ namespace Adventure
         {
 
             base.LoadContent(contentManager, graphicsDevice);
+
+
+
+            animatedSprite_IdleLeft = spriteSheet.CreateAnimatedSprite("IdleLeft");
+            animatedSpriteAndTag.Add("IdleLeft", animatedSprite_IdleLeft);
+            animatedSprite_MoveRight = spriteSheet.CreateAnimatedSprite("MoveRight");
+            animatedSpriteAndTag.Add("MoveRight", animatedSprite_MoveRight);
+            animatedSprite_MoveLeft = spriteSheet.CreateAnimatedSprite("MoveLeft");
+            animatedSpriteAndTag.Add("MoveLeft", animatedSprite_MoveLeft);
+            animatedSprite_JumpRight = spriteSheet.CreateAnimatedSprite("JumpRight");
+            animatedSpriteAndTag.Add("JumpRight", animatedSprite_JumpRight);
+            animatedSprite_JumpLeft = spriteSheet.CreateAnimatedSprite("JumpLeft");
+            animatedSpriteAndTag.Add("JumpLeft", animatedSprite_JumpLeft);
+            animatedSprite_Respawn = spriteSheet.CreateAnimatedSprite("Respawn");
+            animatedSpriteAndTag.Add("Respawn", animatedSprite_Respawn);
+            animatedSprite_Dead = spriteSheet.CreateAnimatedSprite("Dead");
+            animatedSpriteAndTag.Add("Dead", animatedSprite_Dead);
+            animatedSprite_ClimbingLadder = spriteSheet.CreateAnimatedSprite("ClimbingLadder");
+            animatedSpriteAndTag.Add("ClimbingLadder", animatedSprite_ClimbingLadder);
+            animatedSprite_Teleport = spriteSheet.CreateAnimatedSprite("Teleport");
+            animatedSpriteAndTag.Add("Teleport", animatedSprite_Teleport);
+            animatedSprite_SlideRight = spriteSheet.CreateAnimatedSprite("SlideRight");
+            animatedSpriteAndTag.Add("SlideRight", animatedSprite_SlideRight);
+            animatedSprite_SlideLeft = spriteSheet.CreateAnimatedSprite("SlideLeft");
+            animatedSpriteAndTag.Add("SlideLeft", animatedSprite_SlideLeft);
+            animatedSprite_ClimbTop = spriteSheet.CreateAnimatedSprite("ClimbTop");
+            animatedSpriteAndTag.Add("ClimbTop", animatedSprite_ClimbTop);
+            animatedSprite_Landed = spriteSheet.CreateAnimatedSprite("Landed");
+            animatedSpriteAndTag.Add("Landed", animatedSprite_Landed);
+            animatedSprite_FallingRight = spriteSheet.CreateAnimatedSprite("FallingRight");
+            animatedSpriteAndTag.Add("FallingRight", animatedSprite_FallingRight);
+            animatedSprite_FallingLeft = spriteSheet.CreateAnimatedSprite("FallingLeft");
+            animatedSpriteAndTag.Add("FallingLeft", animatedSprite_FallingLeft);
+
+
+            animatedSprite_Dead.OnAnimationLoop = (animatedSprite_Dead) =>
+            {
+                Dead = false;
+                Respawn = true;
+                //animatedSprite_Dead.OnAnimationLoop = null;
+            };
+
 
             spriteHitboxTexture = new Texture2D(graphicsDevice, 1, 1);
             spriteHitboxTexture.SetData(new Color[] { Color.White });
@@ -354,25 +415,25 @@ namespace Adventure
         {
 
 
-            if (gunEquipped)
-            {
-                if (fire)
-                {
-                    animatedSprite.Play("GunFire");
-                    currentFrame = frameAndTag["GunFire"].From;
-                    tagOfCurrentFrame = "GunFire";
-                    TurnOffAllHitboxes();
-                    idleHitbox.isActive = true;
-                }
-                else
-                {
-                    animatedSprite.Play("GunStance");
-                    currentFrame = frameAndTag["GunStance"].From;
-                    tagOfCurrentFrame = "GunStance";
-                    TurnOffAllHitboxes();
-                    idleHitbox.isActive = true;
-                }
-            }
+            //if (gunEquipped)
+            //{
+            //    if (fire)
+            //    {
+            //        animatedSprite_Idle.Play("GunFire");
+            //        currentFrame = frameAndTag["GunFire"].From;
+            //        tagOfCurrentFrame = "GunFire";
+            //        TurnOffAllHitboxes();
+            //        idleHitbox.isActive = true;
+            //    }
+            //    else
+            //    {
+            //        animatedSprite_Idle.Play("GunStance");
+            //        currentFrame = frameAndTag["GunStance"].From;
+            //        tagOfCurrentFrame = "GunStance";
+            //        TurnOffAllHitboxes();
+            //        idleHitbox.isActive = true;
+            //    }
+            //}
 
 
             // onanimationLoop can only be called at one time? Or something to do with setting null - don't quite understand how this function works
@@ -483,7 +544,7 @@ namespace Adventure
 
 
 
-            animatedSprite.Render(spriteBatch);
+            animatedSpriteAndTag[nameOfCurrentAnimationSprite].Draw(spriteBatch, animationPosition);
             rope.Draw(spriteBatch);
 
 

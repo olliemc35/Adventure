@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace Adventure
                 player.spritePosition.Y = References.activeScreen.respawnPoint.Y;
                 player.idleHitbox.rectangle.X = (int)player.spritePosition.X + player.idleHitbox.offsetX;
                 player.idleHitbox.rectangle.Y = (int)player.spritePosition.Y + player.idleHitbox.offsetY;
-                player.animatedSprite.Position = player.spritePosition;
+                //player.animatedSprite_Idle.Position = player.spritePosition;
                 player.spriteVelocity.X = 0;
                 player.spriteVelocity.Y = 0;
             }
@@ -49,34 +50,48 @@ namespace Adventure
         {
             if (Dead)
             {
-                player.animatedSprite.Play("Dead");
-                player.currentFrame = player.frameAndTag["Dead"].From;
-                player.tagOfCurrentFrame = "Dead";
-                player.TurnOffAllHitboxes();
-                player.idleHitbox.isActive = true;
+                player.nameOfCurrentAnimationSprite = "Dead";
+
+                //player.animatedSprite_Idle.Play("Dead");
+                //player.currentFrame = player.frameAndTag["Dead"].From;
+                //player.tagOfCurrentFrame = "Dead";
+                //player.TurnOffAllHitboxes();
+                //player.idleHitbox.isActive = true;
             }
             else if (Respawn)
             {
-                player.animatedSprite.Play("Respawn");
-                player.currentFrame = player.frameAndTag["Respawn"].From;
-                player.tagOfCurrentFrame = "Respawn";
-                player.TurnOffAllHitboxes();
-                player.idleHitbox.isActive = true;
+                player.nameOfCurrentAnimationSprite = "Respawn";
+
+
+                //player.animatedSprite_Idle.Play("Respawn");
+                //player.currentFrame = player.frameAndTag["Respawn"].From;
+                //player.tagOfCurrentFrame = "Respawn";
+                //player.TurnOffAllHitboxes();
+                //player.idleHitbox.isActive = true;
             }
 
-            player.animatedSprite.OnAnimationLoop = () =>
+            player.animatedSprite_Dead.OnAnimationLoop(Dead = false)
+
+            player.animatedSprite_Dead.OnAnimationLoop = (null) =>
+            {
+                Dead = false;
+                Respawn = true;
+                player.animatedSprite_Dead.OnAnimationLoop = null;
+            };
+
+            player.animatedSprite_Idle.OnAnimationLoop = () =>
             {
                 if (player.tagOfCurrentFrame == "Dead")
                 {
                     Dead = false;
                     Respawn = true;
-                    player.animatedSprite.OnAnimationLoop = null;
+                    player.animatedSprite_Idle.OnAnimationLoop = null;
                 }
 
                 if (player.tagOfCurrentFrame == "Respawn")
                 {
                     Respawn = false;
-                    player.animatedSprite.Play("Idle");
+                    player.animatedSprite_Idle.Play("Idle");
                     player.currentFrame = player.frameAndTag["Idle"].From;
                     player.tagOfCurrentFrame = "Idle";
                     player.TurnOffAllHitboxes();
@@ -84,7 +99,7 @@ namespace Adventure
 
                     exits = Exits.exitToNormalState;
 
-                    player.animatedSprite.OnAnimationLoop = null;
+                    player.animatedSprite_Idle.OnAnimationLoop = null;
 
                 }
             };

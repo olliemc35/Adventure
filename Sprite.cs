@@ -16,7 +16,7 @@ namespace Adventure
     public class Sprite : GameObject
     {
         public AsepriteFile asepriteFile;
-        public TextureAtlas textureMap;
+        public TextureAtlas textureAtlas;
 
         public Texture2D spriteTexture;
         public Vector2 spritePosition;
@@ -73,8 +73,8 @@ namespace Adventure
         {
             // Load in the relevant aseprite file
             asepriteFile = contentManager.Load<AsepriteFile>(spriteFilename);
-            textureMap = TextureAtlasProcessor.Process(graphicsDevice, asepriteFile);
-            spriteTexture = textureMap.GetRegion(0).Texture;
+            textureAtlas = TextureAtlasProcessor.Process(graphicsDevice, asepriteFile);
+            spriteTexture = textureAtlas.GetRegion(0).Texture;
 
 
             // Create the idleHitbox

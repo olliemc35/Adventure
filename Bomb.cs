@@ -36,23 +36,23 @@ namespace Adventure
         {
             if (detonate)
             {
-                animatedSprite.Play("Detonate");
+                animatedSprite_Idle.Play("Detonate");
                 currentFrame = frameAndTag["Detonate"].From;
                 tagOfCurrentFrame = "Detonate";
             }
             else
             {
-                animatedSprite.Play("Planted");
+                animatedSprite_Idle.Play("Planted");
                 currentFrame = frameAndTag["Planted"].From;
                 tagOfCurrentFrame = "Planted";
             }
 
-            animatedSprite.OnAnimationLoop = () =>
+            animatedSprite_Idle.OnAnimationLoop = () =>
             {
                 if (tagOfCurrentFrame == "Detonate")
                 {
                     readyToRemove = true;
-                    animatedSprite.OnAnimationLoop = null;
+                    animatedSprite_Idle.OnAnimationLoop = null;
                 }
             };
 

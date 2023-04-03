@@ -303,7 +303,7 @@ namespace Adventure
 
             //}
 
-            animatedSprite.Render(spriteBatch);
+            animatedSprite_Idle.Render(spriteBatch);
 
 
         }
@@ -472,14 +472,14 @@ namespace Adventure
         {
             if (timeStationaryCounter == 0)
             {
-                animatedSprite.Play("Moving");
+                animatedSprite_Idle.Play("Moving");
                 currentFrame = frameAndTag["Moving"].From;
                 tagOfCurrentFrame = "Moving";
 
             }
             else
             {
-                animatedSprite.Play("Idle");
+                animatedSprite_Idle.Play("Idle");
                 currentFrame = frameAndTag["Idle"].From;
                 tagOfCurrentFrame = "Idle";
             }

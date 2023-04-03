@@ -123,20 +123,20 @@ namespace Adventure
 
                     if (orb.spritePosition.Y == startStream.Y)
                     {
-                        orbReceptors[1].animatedSprite.Play("Hit");
+                        orbReceptors[1].animatedSprite_Idle.Play("Hit");
                         orbReceptors[1].currentFrame = orbReceptors[1].frameAndTag["Hit"].From;
                         orbReceptors[1].tagOfCurrentFrame = "Hit";
                     }
                     else if (orb.spritePosition.Y == startStream.Y - 8 * verticalSpacing)
                     {
-                        orbReceptors[3].animatedSprite.Play("Hit");
+                        orbReceptors[3].animatedSprite_Idle.Play("Hit");
                         orbReceptors[3].currentFrame = orbReceptors[3].frameAndTag["Hit"].From;
                         orbReceptors[3].tagOfCurrentFrame = "Hit";
 
                     }
                     else if (orb.spritePosition.Y == startStream.Y - 2 * 8 * verticalSpacing)
                     {
-                        orbReceptors[5].animatedSprite.Play("Hit");
+                        orbReceptors[5].animatedSprite_Idle.Play("Hit");
                         orbReceptors[5].currentFrame = orbReceptors[5].frameAndTag["Hit"].From;
                         orbReceptors[5].tagOfCurrentFrame = "Hit";
                     }
@@ -148,14 +148,14 @@ namespace Adventure
             {
                 sprite.Update(gameTime);
 
-                sprite.animatedSprite.OnAnimationLoop = () =>
+                sprite.animatedSprite_Idle.OnAnimationLoop = () =>
                 {
                     if (sprite.tagOfCurrentFrame == "Hit")
                     {
-                        sprite.animatedSprite.Play("Idle");
+                        sprite.animatedSprite_Idle.Play("Idle");
                         sprite.currentFrame = sprite.frameAndTag["Idle"].From;
                         sprite.tagOfCurrentFrame = "Idle";
-                        sprite.animatedSprite.OnAnimationLoop = null;
+                        sprite.animatedSprite_Idle.OnAnimationLoop = null;
                     }
                 };
 
