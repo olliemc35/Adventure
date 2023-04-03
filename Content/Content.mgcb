@@ -14,3 +14,542 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin ../../../OneDrive/Documents/AsepriteImages/adventurer.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/adventurer.aseprite;adventurer.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/adventurer2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/adventurer2.aseprite;adventurer2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/adventurer3.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/adventurer3.aseprite;adventurer3.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/AKeyRound.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/AKeyRound.aseprite;AKeyRound.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/AncientDoor.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/AncientDoor.aseprite;AncientDoor.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Beam.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Beam.aseprite;Beam.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Bell.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Bell.aseprite;Bell.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Bell2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Bell2.aseprite;Bell2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/BigFireball.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BigFireball.aseprite;BigFireball.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Bomb.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Bomb.aseprite;Bomb.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/BottomBeam.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BottomBeam.aseprite;BottomBeam.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/BottomWall.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BottomWall.aseprite;BottomWall.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/BottomWallDouble.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BottomWallDouble.aseprite;BottomWallDouble.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/BouncingOrb.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BouncingOrb.aseprite;BouncingOrb.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Bullet.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Bullet.aseprite;Bullet.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/CKeyRound.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/CKeyRound.aseprite;CKeyRound.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/ClimableBox.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/ClimableBox.aseprite;ClimableBox.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/ClimablePlatform.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/ClimablePlatform.aseprite;ClimablePlatform.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Door.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Door.aseprite;Door.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Door2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Door2.aseprite;Door2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/EKeyRound.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/EKeyRound.aseprite;EKeyRound.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Fireball.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Fireball.aseprite;Fireball.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/FKeyRound.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/FKeyRound.aseprite;FKeyRound.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/GKeyRound.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/GKeyRound.aseprite;GKeyRound.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Goblin.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Goblin.aseprite;Goblin.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/goblin2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/goblin2.aseprite;goblin2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/hoodedoldman.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/hoodedoldman.aseprite;hoodedoldman.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/hoodedoldmanv2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/hoodedoldmanv2.aseprite;hoodedoldmanv2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Ladder.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Ladder.aseprite;Ladder.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/LadderBottomRung.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/LadderBottomRung.aseprite;LadderBottomRung.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/LadderTopRung.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/LadderTopRung.aseprite;LadderTopRung.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/LaunchPad.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/LaunchPad.aseprite;LaunchPad.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/LeftWall.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/LeftWall.aseprite;LeftWall.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level36.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level36.aseprite;Level36.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level37.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level37.aseprite;Level37.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level37Markers.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level37Markers.aseprite;Level37Markers.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/MovingClimablePlatform.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/MovingClimablePlatform.aseprite;MovingClimablePlatform.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/movingPlatform1.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/movingPlatform1.aseprite;movingPlatform1.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/movingPlatform1Long.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/movingPlatform1Long.aseprite;movingPlatform1Long.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure.aseprite;MysteriousHoodedFigure.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure2.aseprite;MysteriousHoodedFigure2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NoteBomb.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NoteBomb.aseprite;NoteBomb.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NoteLine.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NoteLine.aseprite;NoteLine.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrangeOrb.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrangeOrb.aseprite;OrangeOrb.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Orb.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Orb.aseprite;Orb.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbMiddle.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbMiddle.aseprite;OrbMiddle.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbReceptors.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbReceptors.aseprite;OrbReceptors.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbVesselEndLeft.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbVesselEndLeft.aseprite;OrbVesselEndLeft.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbVesselEndRight.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbVesselEndRight.aseprite;OrbVesselEndRight.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbWindowLeft.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbWindowLeft.aseprite;OrbWindowLeft.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbWindowMiddle.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbWindowMiddle.aseprite;OrbWindowMiddle.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbWindowRight.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbWindowRight.aseprite;OrbWindowRight.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Platform1.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Platform1.aseprite;Platform1.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Platform2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Platform2.aseprite;Platform2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Post.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Post.aseprite;Post.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/PostDown.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/PostDown.aseprite;PostDown.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/RedDot.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/RedDot.aseprite;RedDot.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/RedDot2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/RedDot2.aseprite;RedDot2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/RedSquare.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/RedSquare.aseprite;RedSquare.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Respawn.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Respawn.aseprite;Respawn.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/RightWall.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/RightWall.aseprite;RightWall.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/RopeRing.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/RopeRing.aseprite;RopeRing.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/RopeRing2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/RopeRing2.aseprite;RopeRing2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/rune_A.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/rune_A.aseprite;rune_A.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/rune_C.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/rune_C.aseprite;rune_C.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/rune_E.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/rune_E.aseprite;rune_E.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/rune_F.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/rune_F.aseprite;rune_F.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/rune_G.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/rune_G.aseprite;rune_G.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Sentinel.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Sentinel.aseprite;Sentinel.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Spike.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Spike.aseprite;Spike.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Sprite-0001.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Sprite-0001.aseprite;Sprite-0001.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/symbolPlate.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/symbolPlate.aseprite;symbolPlate.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/symbolPlateLong.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/symbolPlateLong.aseprite;symbolPlateLong.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TEST.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TEST.aseprite;TEST.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Tile_air.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Tile_air.aseprite;Tile_air.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Tile_grass.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Tile_grass.aseprite;Tile_grass.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Tile_ground.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Tile_ground.aseprite;Tile_ground.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Tile_spike.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Tile_spike.aseprite;Tile_spike.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TILES.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TILES.aseprite;TILES.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TILESET_TEST.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TILESET_TEST.aseprite;TILESET_TEST.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TopBeam.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TopBeam.aseprite;TopBeam.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TopWall.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TopWall.aseprite;TopWall.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TopWallDouble.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TopWallDouble.aseprite;TopWallDouble.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TuningForkC.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TuningForkC.aseprite;TuningForkC.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TuningForkE.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TuningForkE.aseprite;TuningForkE.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/TuningForkG.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/TuningForkG.aseprite;TuningForkG.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/whiteDot.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/whiteDot.aseprite;whiteDot.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Wolf.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Wolf.aseprite;Wolf.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/WoodenGate.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/WoodenGate.aseprite;WoodenGate.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/WoodenGateHorizontal.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/WoodenGateHorizontal.aseprite;WoodenGateHorizontal.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/YellowDot.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/YellowDot.aseprite;YellowDot.aseprite
+
+#begin ../../../OneDrive/Documents/SoundEffects/A.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/A.wav;A.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/C.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/C.wav;C.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/CMajArpeggio.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/CMajArpeggio.wav;CMajArpeggio.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/E.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/E.wav;E.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/F.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/F.wav;F.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/FHigh.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/FHigh.wav;FHigh.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/G.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/G.wav;G.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/GLow.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/GLow.wav;GLow.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/HighCBell.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/HighCBell.wav;HighCBell.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/HighEflatBell.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/HighEflatBell.wav;HighEflatBell.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/HighGBell.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/HighGBell.wav;HighGBell.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/TestForGame.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/TestForGame.wav;TestForGame.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/TestForGame2.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/TestForGame2.wav;TestForGame2.wav
+
+#begin ../../../OneDrive/Documents/SoundEffects/TimpaniC.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:../../../OneDrive/Documents/SoundEffects/TimpaniC.wav;TimpaniC.wav
+
