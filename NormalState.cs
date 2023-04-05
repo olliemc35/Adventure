@@ -524,64 +524,130 @@ namespace Adventure
             {
                 if (landedFlag)
                 {
-                    player.nameOfCurrentAnimationSprite = "Landed";
-
-
-                    //player.animatedSprite_Idle.Play("Landed");
-                    //player.currentFrame = player.frameAndTag["Landed"].From;
-                    //player.tagOfCurrentFrame = "Landed";
-                    //player.TurnOffAllHitboxes();
-                    //player.idleHitbox.isActive = true;
-
+                    landedFlag = false;
+                    player.StopCurrentAnimation();
+                    player.animation_Landed.Play();
                 }
-                else if (player.spriteDirectionX == 1)
+
+                // Hmmm think about this.
+                // Only want to call Play() once - when we enter a state
+                // I.e. when we first press RIGHT want to say player.animation_MoveRight.Play();
+                // We don't want to keep saying play whilst the key is held down.
+                // Also need to remember to STOP all animations which are currently playing.
+                if (!player.animation_Landed.IsAnimating)
                 {
-                    player.nameOfCurrentAnimationSprite = "MoveRight";
-
-                    //player.animatedSprite_Idle.Play("MoveRight");
-                    //player.currentFrame = player.frameAndTag["MoveRight"].From;
-                    //player.tagOfCurrentFrame = "MoveRight";
-                    //player.TurnOffAllHitboxes();
-                    //player.idleHitbox.isActive = true;
-
-                }
-                else if (player.spriteDirectionX == -1)
-                {
-                    player.nameOfCurrentAnimationSprite = "MoveLeft";
-
-
-                    //player.animatedSprite_Idle.Play("MoveLeft");
-                    //player.currentFrame = player.frameAndTag["MoveLeft"].From;
-                    //player.tagOfCurrentFrame = "MoveLeft";
-                    //player.TurnOffAllHitboxes();
-                    //player.idleHitbox.isActive = true;
-                }
-                else if (player.spriteDirectionX == 0)
-                {
-                    if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
+                    if (player.spriteDirectionX == 1)
                     {
-                        player.nameOfCurrentAnimationSprite = "Idle";
+                        player.animation_MoveRight.Play();
 
-                        //player.animatedSprite_Idle.Play("Idle");
-                        //player.currentFrame = player.frameAndTag["Idle"].From;
-                        //player.tagOfCurrentFrame = "Idle";
-                        //player.TurnOffAllHitboxes();
-                        //player.idleHitbox.isActive = true;
                     }
-                    else if (player.previousSpriteDirectionX == -1)
+                    else if (player.spriteDirectionX == -1)
                     {
-                        player.nameOfCurrentAnimationSprite = "IdleLeft";
-
-                        //player.animatedSprite_Idle.Play("IdleLeft");
-                        //player.currentFrame = player.frameAndTag["IdleLeft"].From;
-                        //player.tagOfCurrentFrame = "IdleLeft";
-                        //player.TurnOffAllHitboxes();
-                        //player.idleHitbox.isActive = true;
+                        player.animation_MoveLeft.Play();
                     }
+                    else if (player.spriteDirectionX == 0)
+                    {
+                        if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
+                        {
+                            player.animation_Idle.Play();
+                        }
+                        else if (player.previousSpriteDirectionX == -1)
+                        {
+                            player.animation_IdleLeft.Play();
+                        }
+                    }
+
                 }
+
+
+
+
+                
+
+
+
+                //if (landedFlag)
+                //{
+                //    landedFlag = false;
+                //    //player.nameOfCurrentAnimationSprite = "Landed";
+
+                //    player.StopCurrentAnimation();
+                //    player.animation_Landed.Play();
+
+                //    //player.animatedSprite_Idle.Play("Landed");
+                //    //player.currentFrame = player.frameAndTag["Landed"].From;
+                //    //player.tagOfCurrentFrame = "Landed";
+                //    //player.TurnOffAllHitboxes();
+                //    //player.idleHitbox.isActive = true;
+
+                //}
+                //else if (player.spriteDirectionX == 1)
+                //{
+                //    player.nameOfCurrentAnimationSprite = "MoveRight";
+
+                //    //player.animatedSprite_Idle.Play("MoveRight");
+                //    //player.currentFrame = player.frameAndTag["MoveRight"].From;
+                //    //player.tagOfCurrentFrame = "MoveRight";
+                //    //player.TurnOffAllHitboxes();
+                //    //player.idleHitbox.isActive = true;
+
+                //}
+                //else if (player.spriteDirectionX == -1)
+                //{
+                //    player.nameOfCurrentAnimationSprite = "MoveLeft";
+
+
+                //    //player.animatedSprite_Idle.Play("MoveLeft");
+                //    //player.currentFrame = player.frameAndTag["MoveLeft"].From;
+                //    //player.tagOfCurrentFrame = "MoveLeft";
+                //    //player.TurnOffAllHitboxes();
+                //    //player.idleHitbox.isActive = true;
+                //}
+                //else if (player.spriteDirectionX == 0)
+                //{
+                //    if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
+                //    {
+                //        player.nameOfCurrentAnimationSprite = "Idle";
+
+                //        //player.animatedSprite_Idle.Play("Idle");
+                //        //player.currentFrame = player.frameAndTag["Idle"].From;
+                //        //player.tagOfCurrentFrame = "Idle";
+                //        //player.TurnOffAllHitboxes();
+                //        //player.idleHitbox.isActive = true;
+                //    }
+                //    else if (player.previousSpriteDirectionX == -1)
+                //    {
+                //        player.nameOfCurrentAnimationSprite = "IdleLeft";
+
+                //        //player.animatedSprite_Idle.Play("IdleLeft");
+                //        //player.currentFrame = player.frameAndTag["IdleLeft"].From;
+                //        //player.tagOfCurrentFrame = "IdleLeft";
+                //        //player.TurnOffAllHitboxes();
+                //        //player.idleHitbox.isActive = true;
+                //    }
+                //}
 
 
             }
+
+            //player.animation_ClimbingLadder.OnAnimationEnd? = () =>
+            //{
+
+            //};
+
+            player.animation_ClimbingLadder.OnAnimationEnd = (Nullable) =>
+            {
+
+            };
+
+            //player.animation_Landed.OnAnimationLoop = (hello) =>
+            //{
+                
+            //    landedFlag = false;
+            //    player.animation_Idle.Play();
+            //    player.nameOfCurrentAnimationSprite = "Idle";
+            //    player.animation_Landed.OnAnimationLoop = null;
+            //};
 
             //player.animatedSprite_Idle.OnAnimationLoop = () =>
             //{
@@ -611,7 +677,11 @@ namespace Adventure
 
             //};
 
+       
+
         }
+
+       
 
         //if (player.jump < 0)
         //{

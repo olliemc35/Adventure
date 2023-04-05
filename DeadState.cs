@@ -70,39 +70,55 @@ namespace Adventure
                 //player.idleHitbox.isActive = true;
             }
 
-            player.animatedSprite_Dead.OnAnimationLoop(Dead = false)
-
-            player.animatedSprite_Dead.OnAnimationLoop = (null) =>
+            player.animation_Dead.OnAnimationLoop = (animatedSprite_Dead) =>
             {
                 Dead = false;
                 Respawn = true;
-                player.animatedSprite_Dead.OnAnimationLoop = null;
+                player.animation_Dead.OnAnimationLoop = null;
             };
 
-            player.animatedSprite_Idle.OnAnimationLoop = () =>
+
+            player.animation_Respawn.OnAnimationLoop = (animatedSprite_Respawn) =>
             {
-                if (player.tagOfCurrentFrame == "Dead")
-                {
-                    Dead = false;
-                    Respawn = true;
-                    player.animatedSprite_Idle.OnAnimationLoop = null;
-                }
+                Respawn = false;
+                player.nameOfCurrentAnimationSprite = "Idle";
 
-                if (player.tagOfCurrentFrame == "Respawn")
-                {
-                    Respawn = false;
-                    player.animatedSprite_Idle.Play("Idle");
-                    player.currentFrame = player.frameAndTag["Idle"].From;
-                    player.tagOfCurrentFrame = "Idle";
-                    player.TurnOffAllHitboxes();
-                    player.idleHitbox.isActive = true;
+                //player.animatedSprite_Idle.Play("Idle");
+                //player.currentFrame = player.frameAndTag["Idle"].From;
+                //player.tagOfCurrentFrame = "Idle";
+                //player.TurnOffAllHitboxes();
+                //player.idleHitbox.isActive = true;
 
-                    exits = Exits.exitToNormalState;
+                exits = Exits.exitToNormalState;
 
-                    player.animatedSprite_Idle.OnAnimationLoop = null;
-
-                }
+                player.animation_Respawn.OnAnimationLoop = null;
             };
+
+
+            //player.animatedSprite_Idle.OnAnimationLoop = () =>
+            //{
+            //    if (player.tagOfCurrentFrame == "Dead")
+            //    {
+            //        Dead = false;
+            //        Respawn = true;
+            //        player.animatedSprite_Idle.OnAnimationLoop = null;
+            //    }
+
+            //    if (player.tagOfCurrentFrame == "Respawn")
+            //    {
+            //        Respawn = false;
+            //        player.animatedSprite_Idle.Play("Idle");
+            //        player.currentFrame = player.frameAndTag["Idle"].From;
+            //        player.tagOfCurrentFrame = "Idle";
+            //        player.TurnOffAllHitboxes();
+            //        player.idleHitbox.isActive = true;
+
+            //        exits = Exits.exitToNormalState;
+
+            //        player.animatedSprite_Idle.OnAnimationLoop = null;
+
+            //    }
+            //};
         }
 
 

@@ -103,7 +103,7 @@ namespace Adventure
             }
 
             weight.LoadContent(contentManager, graphicsDevice);
-            weight.CreateHitboxesForGunLine();
+            //weight.CreateHitboxesForGunLine();
             weight.EnableGunlineHitboxes();
 
         }
@@ -116,11 +116,11 @@ namespace Adventure
             weight.spritePosition.Y = rope[NumberOfRopeBits - 1].spritePosition.Y;
 
 
-            if (weight.animatedSprite_Idle.CurrentFrameIndex != weight.previousFrameNumber)
-            {
-                weight.UpdateGunlineHitboxes();
-                weight.previousFrameNumber = weight.animatedSprite_Idle.CurrentFrameIndex;
-            }
+            //if (weight.animatedSprite_Idle.CurrentFrameIndex != weight.previousFrameNumber)
+            //{
+            //    weight.UpdateGunlineHitboxes();
+            //    weight.previousFrameNumber = weight.animatedSprite_Idle.CurrentFrameIndex;
+            //}
 
 
             for (int i = 0; i <= IndexOfFirstEnabledRopeBit; i++)
@@ -161,10 +161,10 @@ namespace Adventure
         {
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].animatedSprite_Idle.Render(spriteBatch);
+                rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
             }
 
-            weight.animatedSprite_Idle.Render(spriteBatch);
+            weight.animation_Idle.Draw(spriteBatch, weight.animationPosition);
 
             //foreach (HitboxRectangle hitbox in weight.hitboxesForGunlineForEachFrame[1])
             //{
@@ -181,7 +181,7 @@ namespace Adventure
             rope[0].idleHitbox.rectangle.Y = (int)rope[0].spritePosition.Y + rope[0].idleHitbox.offsetY;
             rope[0].spriteVelocity.X = 0;
             rope[0].spriteVelocity.Y = 0;
-            rope[0].animatedSprite_Idle.Position = rope[0].spritePosition;
+            //rope[0].animatedSprite_Idle.Position = rope[0].spritePosition;
 
             for (int i = 1; i <= NumberOfRopeBits - 1; i++)
             {

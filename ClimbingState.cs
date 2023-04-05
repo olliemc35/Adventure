@@ -196,27 +196,32 @@ namespace Adventure
             //else 
             if (player.SpriteCollidedOnLeft)
             {
-                player.animatedSprite_Idle.Play("SlideLeft");
-                player.currentFrame = player.frameAndTag["SlideLeft"].From;
-                player.tagOfCurrentFrame = "SlideLeft";
-                player.TurnOffAllHitboxes();
-                player.idleHitbox.isActive = true;
+                player.nameOfCurrentAnimationSprite = "SlideLeft";
+                //player.animatedSprite_Idle.Play("SlideLeft");
+                //player.currentFrame = player.frameAndTag["SlideLeft"].From;
+                //player.tagOfCurrentFrame = "SlideLeft";
+                //player.TurnOffAllHitboxes();
+                //player.idleHitbox.isActive = true;
             }
             else if (player.SpriteCollidedOnTop)
             {
-                player.animatedSprite_Idle.Play("ClimbTop");
-                player.currentFrame = player.frameAndTag["ClimbTop"].From;
-                player.tagOfCurrentFrame = "ClimbTop";
-                player.TurnOffAllHitboxes();
-                player.idleHitbox.isActive = true;
+                player.nameOfCurrentAnimationSprite = "ClimbTop";
+
+                //player.animatedSprite_Idle.Play("ClimbTop");
+                //player.currentFrame = player.frameAndTag["ClimbTop"].From;
+                //player.tagOfCurrentFrame = "ClimbTop";
+                //player.TurnOffAllHitboxes();
+                //player.idleHitbox.isActive = true;
             }
             else if (player.SpriteCollidedOnRight)
             {
-                player.animatedSprite_Idle.Play("SlideRight");
-                player.currentFrame = player.frameAndTag["SlideRight"].From;
-                player.tagOfCurrentFrame = "SlideRight";
-                player.TurnOffAllHitboxes();
-                player.idleHitbox.isActive = true;
+                player.nameOfCurrentAnimationSprite = "SlideRight";
+
+                //player.animatedSprite_Idle.Play("SlideRight");
+                //player.currentFrame = player.frameAndTag["SlideRight"].From;
+                //player.tagOfCurrentFrame = "SlideRight";
+                //player.TurnOffAllHitboxes();
+                //player.idleHitbox.isActive = true;
 
             }
 

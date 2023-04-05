@@ -165,14 +165,17 @@ namespace Adventure
 
         public void LoadScreens(ContentManager content)
         {
+            menuFont = content.Load<SpriteFont>("menufont");
+
+
             CreateScreens(content);
 
             foreach (GameScreen screen in screens)
             {
+                //Debug.WriteLine("here");
                 screen.LoadContent(content, References.graphicsDevice);
                 screen.Hide();
             }
-
 
             activeScreen = screens[0];
             activeScreen.Show();
@@ -254,7 +257,6 @@ namespace Adventure
 
         public void CreateScreens(ContentManager content)
         {
-            menuFont = content.Load<SpriteFont>("menufont");
 
 
             // Create screen 1
@@ -1424,37 +1426,37 @@ namespace Adventure
             };
 
 
-            // Create screen 36            
-            tileSetScreen36 = new Tileset("Level36");
+            //// Create screen 36            
+            //tileSetScreen36 = new Tileset("Level36");
 
-            List<GameObject> screen36GameObjects = new List<GameObject>()
-            {
-                new Door(new Vector2(8 * 1, 8 * 15), "Door", 35, 2),
-                new Door(new Vector2(8 * 34, 8 * 15), "Door", 37, 1),
-            };
-
-            screen36 = new ActionScreen(spriteBatch, menuFont, player, screen36GameObjects, tileSetScreen36, keyboardState, oldKeyboardState)
-            {
-                respawnPoint = new Vector2(8 * 1, 8 * 15),
-                screenNumber = 36,
-                cameraBehaviourType1 = true
-            };
-
-            // Create screen 37            
-            tileSetScreen37 = new Tileset("Level37", "Level37Markers");
-
-            //List<GameObject> screen37GameObjects = new List<GameObject>()
+            //List<GameObject> screen36GameObjects = new List<GameObject>()
             //{
-            //    new Door(new Vector2(8 * 1, 8 * 19), "Door", 36, 2),
-            //    new Door(new Vector2(8 * 34, 8 * 14), "Door", 1, 1),
+            //    new Door(new Vector2(8 * 1, 8 * 15), "Door", 35, 2),
+            //    new Door(new Vector2(8 * 34, 8 * 15), "Door", 37, 1),
             //};
 
-            screen37 = new ActionScreen(spriteBatch, menuFont, player, tileSetScreen37.screenGameObjects, tileSetScreen37, keyboardState, oldKeyboardState)
-            {
-                respawnPoint = new Vector2(8 * 1, 8 * 15),
-                screenNumber = 37,
-                cameraBehaviourType1 = true
-            };
+            //screen36 = new ActionScreen(spriteBatch, menuFont, player, screen36GameObjects, tileSetScreen36, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8 * 1, 8 * 15),
+            //    screenNumber = 36,
+            //    cameraBehaviourType1 = true
+            //};
+
+            //// Create screen 37            
+            //tileSetScreen37 = new Tileset("Level37", "Level37Markers");
+
+            ////List<GameObject> screen37GameObjects = new List<GameObject>()
+            ////{
+            ////    new Door(new Vector2(8 * 1, 8 * 19), "Door", 36, 2),
+            ////    new Door(new Vector2(8 * 34, 8 * 14), "Door", 1, 1),
+            ////};
+
+            //screen37 = new ActionScreen(spriteBatch, menuFont, player, tileSetScreen37.screenGameObjects, tileSetScreen37, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8 * 1, 8 * 15),
+            //    screenNumber = 37,
+            //    cameraBehaviourType1 = true
+            //};
 
 
             //References.soundManager.flagTest = true;
@@ -1464,42 +1466,42 @@ namespace Adventure
 
             screens = new List<GameScreen>();
             screens.Add(screen1);
-            screens.Add(screen2);
-            screens.Add(screen3);
-            screens.Add(screen4);
-            screens.Add(screen5);
-            screens.Add(screen6);
-            screens.Add(screen7);
-            screens.Add(screen8);
-            screens.Add(screen9);
-            screens.Add(screen10);
-            screens.Add(screen11);
-            screens.Add(screen12);
-            screens.Add(screen13);
-            screens.Add(screen14);
-            screens.Add(screen15);
-            screens.Add(screen16);
-            screens.Add(screen17);
-            screens.Add(screen18);
-            screens.Add(screen19);
-            screens.Add(screen20);
-            screens.Add(screen21);
-            screens.Add(screen22);
-            screens.Add(screen23);
-            screens.Add(screen24);
-            screens.Add(screen25);
-            screens.Add(screen26);
-            screens.Add(screen27);
-            screens.Add(screen28);
-            screens.Add(screen29);
-            screens.Add(screen30);
-            screens.Add(screen31);
-            screens.Add(screen32);
-            screens.Add(screen33);
-            screens.Add(screen34);
-            screens.Add(screen35);
-            screens.Add(screen36);
-            screens.Add(screen37);
+            //screens.Add(screen2);
+            //screens.Add(screen3);
+            //screens.Add(screen4);
+            //screens.Add(screen5);
+            //screens.Add(screen6);
+            //screens.Add(screen7);
+            //screens.Add(screen8);
+            //screens.Add(screen9);
+            //screens.Add(screen10);
+            //screens.Add(screen11);
+            //screens.Add(screen12);
+            //screens.Add(screen13);
+            //screens.Add(screen14);
+            //screens.Add(screen15);
+            //screens.Add(screen16);
+            //screens.Add(screen17);
+            //screens.Add(screen18);
+            //screens.Add(screen19);
+            //screens.Add(screen20);
+            //screens.Add(screen21);
+            //screens.Add(screen22);
+            //screens.Add(screen23);
+            //screens.Add(screen24);
+            //screens.Add(screen25);
+            //screens.Add(screen26);
+            //screens.Add(screen27);
+            //screens.Add(screen28);
+            //screens.Add(screen29);
+            //screens.Add(screen30);
+            //screens.Add(screen31);
+            //screens.Add(screen32);
+            //screens.Add(screen33);
+            //screens.Add(screen34);
+            //screens.Add(screen35);
+            //screens.Add(screen36);
+            //screens.Add(screen37);
 
             screens.Add(previousActiveScreen);
             screens.Add(activeScreen);

@@ -11,7 +11,7 @@ namespace Adventure
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         public ScreenManager screenManager;
-
+        public AssetManager assetManager;
         public int ScreenHeight;
         public int ScreenWidth;
 
@@ -29,11 +29,14 @@ namespace Adventure
 
             // We wish to render pixels at 320 x 180 like in Celeste. This mirrors old retro games
             // With this, each tile will be 8 x 8
-            graphics.PreferredBackBufferWidth = 320;
-            graphics.PreferredBackBufferHeight = 180;
-            //graphics.SynchronizeWithVerticalRetrace = true; // This is vsync
-            //graphics.PreferMultiSampling = true;
-            graphics.ApplyChanges();
+            //graphics.PreferredBackBufferWidth = 320;
+            //graphics.PreferredBackBufferHeight = 180;
+            ////graphics.SynchronizeWithVerticalRetrace = true; // This is vsync
+            ////graphics.PreferMultiSampling = true;
+            //graphics.ApplyChanges();
+
+            assetManager = new AssetManager();
+            References.assetManager = assetManager;
 
             References.content = Content;
             References.game = this;
@@ -45,22 +48,37 @@ namespace Adventure
         protected override void Initialize()
         {
             References.graphicsDevice = GraphicsDevice;
-            //ScreenHeight = graphics.PreferredBackBufferHeight;
-            //ScreenWidth = graphics.PreferredBackBufferWidth;
+
+            //graphics.HardwareModeSwitch = false;
+            ////
+            //graphics.PreferredBackBufferWidth = 320;
+            //graphics.PreferredBackBufferHeight = 180;
+            ////graphics.HardwareModeSwitch = true;
+            //graphics.ApplyChanges();
+
             ScreenHeight = 180;
             ScreenWidth = 320;
             IsFixedTimeStep = true;
             TargetElapsedTime = TimeSpan.FromTicks((long)(TimeSpan.TicksPerMillisecond * (1000 / (double)60))); // Lock at 60 FPS
 
 
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 480;
+            graphics.ApplyChanges();
+
+            renderTarget = new RenderTarget2D(GraphicsDevice, 320, 180, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
             base.Initialize();
-            renderTarget = new RenderTarget2D(graphics.GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            //renderTarget = new RenderTarget2D(graphics.GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+
         }
 
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             screenManager = new ScreenManager(spriteBatch);
+
+            assetManager.LoadContent(Content, GraphicsDevice);
             screenManager.LoadScreens(Content);
 
         }
@@ -85,7 +103,13 @@ namespace Adventure
                 System.Threading.Thread.Sleep(1);
             }
 
+
         }
+
+   
+
+        // SEE: https://community.monogame.net/t/transforming-objects-for-a-rendertarget2d/13959
+
 
         protected override void Draw(GameTime gameTime)
         {
@@ -105,5 +129,8 @@ namespace Adventure
 
             base.Draw(gameTime);
         }
+
+
+
     }
 }

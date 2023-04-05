@@ -14,21 +14,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin ../../../OneDrive/Documents/AsepriteImages/adventurer.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/adventurer.aseprite;adventurer.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/adventurer2.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/adventurer2.aseprite;adventurer2.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/adventurer3.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/adventurer3.aseprite;adventurer3.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/AKeyRound.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -44,50 +29,15 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Beam.aseprite;Beam.aseprite
 
-#begin ../../../OneDrive/Documents/AsepriteImages/Bell.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Bell.aseprite;Bell.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Bell2.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Bell2.aseprite;Bell2.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/BigFireball.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/BigFireball.aseprite;BigFireball.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Bomb.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Bomb.aseprite;Bomb.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/BottomBeam.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/BottomBeam.aseprite;BottomBeam.aseprite
 
-#begin ../../../OneDrive/Documents/AsepriteImages/BottomWall.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/BottomWall.aseprite;BottomWall.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/BottomWallDouble.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/BottomWallDouble.aseprite;BottomWallDouble.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/BouncingOrb.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/BouncingOrb.aseprite;BouncingOrb.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Bullet.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Bullet.aseprite;Bullet.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/CKeyRound.aseprite
 /importer:AsepriteFileContentImporter
@@ -109,20 +59,10 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Door.aseprite;Door.aseprite
 
-#begin ../../../OneDrive/Documents/AsepriteImages/Door2.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Door2.aseprite;Door2.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/EKeyRound.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/EKeyRound.aseprite;EKeyRound.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Fireball.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Fireball.aseprite;Fireball.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/FKeyRound.aseprite
 /importer:AsepriteFileContentImporter
@@ -133,16 +73,6 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/GKeyRound.aseprite;GKeyRound.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Goblin.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Goblin.aseprite;Goblin.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/goblin2.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/goblin2.aseprite;goblin2.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/hoodedoldman.aseprite
 /importer:AsepriteFileContentImporter
@@ -174,11 +104,6 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/LaunchPad.aseprite;LaunchPad.aseprite
 
-#begin ../../../OneDrive/Documents/AsepriteImages/LeftWall.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/LeftWall.aseprite;LeftWall.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/Level36.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -208,16 +133,6 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/movingPlatform1Long.aseprite;movingPlatform1Long.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure.aseprite;MysteriousHoodedFigure.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure2.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/MysteriousHoodedFigure2.aseprite;MysteriousHoodedFigure2.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/NoteBomb.aseprite
 /importer:AsepriteFileContentImporter
@@ -274,16 +189,6 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/OrbWindowRight.aseprite;OrbWindowRight.aseprite
 
-#begin ../../../OneDrive/Documents/AsepriteImages/Platform1.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Platform1.aseprite;Platform1.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Platform2.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Platform2.aseprite;Platform2.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/Post.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -313,11 +218,6 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Respawn.aseprite;Respawn.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/RightWall.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/RightWall.aseprite;RightWall.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/RopeRing.aseprite
 /importer:AsepriteFileContentImporter
@@ -354,20 +254,10 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/rune_G.aseprite;rune_G.aseprite
 
-#begin ../../../OneDrive/Documents/AsepriteImages/Sentinel.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Sentinel.aseprite;Sentinel.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/Spike.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Spike.aseprite;Spike.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Sprite-0001.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Sprite-0001.aseprite;Sprite-0001.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/symbolPlate.aseprite
 /importer:AsepriteFileContentImporter
@@ -378,11 +268,6 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/symbolPlateLong.aseprite;symbolPlateLong.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/TEST.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/TEST.aseprite;TEST.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/Tile_air.aseprite
 /importer:AsepriteFileContentImporter
@@ -399,35 +284,10 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Tile_ground.aseprite;Tile_ground.aseprite
 
-#begin ../../../OneDrive/Documents/AsepriteImages/Tile_spike.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Tile_spike.aseprite;Tile_spike.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/TILES.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/TILES.aseprite;TILES.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/TILESET_TEST.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/TILESET_TEST.aseprite;TILESET_TEST.aseprite
-
 #begin ../../../OneDrive/Documents/AsepriteImages/TopBeam.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/TopBeam.aseprite;TopBeam.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/TopWall.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/TopWall.aseprite;TopWall.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/TopWallDouble.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/TopWallDouble.aseprite;TopWallDouble.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/TuningForkC.aseprite
 /importer:AsepriteFileContentImporter
@@ -448,11 +308,6 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/whiteDot.aseprite;whiteDot.aseprite
-
-#begin ../../../OneDrive/Documents/AsepriteImages/Wolf.aseprite
-/importer:AsepriteFileContentImporter
-/processor:AsepriteFileContentProcessor
-/build:../../../OneDrive/Documents/AsepriteImages/Wolf.aseprite;Wolf.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/WoodenGate.aseprite
 /importer:AsepriteFileContentImporter
@@ -552,4 +407,11 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:../../../OneDrive/Documents/SoundEffects/TimpaniC.wav;TimpaniC.wav
+
+#begin menufont.spritefont
+/importer:FontDescriptionImporter
+/processor:LocalizedFontProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:menufont.spritefont
 

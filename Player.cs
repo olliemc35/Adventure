@@ -11,26 +11,27 @@ using System.Text;
 using System.Threading.Tasks;
 using MonoGame.Aseprite.Content.Processors;
 using Microsoft.Xna.Framework.Input;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Adventure
 {
     public class Player : MovingSprite
     {
-        public AnimatedSprite animatedSprite_IdleLeft;
-        public AnimatedSprite animatedSprite_MoveRight;
-        public AnimatedSprite animatedSprite_MoveLeft;
-        public AnimatedSprite animatedSprite_JumpRight;
-        public AnimatedSprite animatedSprite_JumpLeft;
-        public AnimatedSprite animatedSprite_Respawn;
-        public AnimatedSprite animatedSprite_Dead;
-        public AnimatedSprite animatedSprite_ClimbingLadder;
-        public AnimatedSprite animatedSprite_Teleport;
-        public AnimatedSprite animatedSprite_SlideRight;
-        public AnimatedSprite animatedSprite_SlideLeft;
-        public AnimatedSprite animatedSprite_ClimbTop;
-        public AnimatedSprite animatedSprite_Landed;
-        public AnimatedSprite animatedSprite_FallingRight;
-        public AnimatedSprite animatedSprite_FallingLeft;
+        public AnimatedSprite animation_IdleLeft;
+        public AnimatedSprite animation_MoveRight;
+        public AnimatedSprite animation_MoveLeft;
+        public AnimatedSprite animation_JumpRight;
+        public AnimatedSprite animation_JumpLeft;
+        public AnimatedSprite animation_Respawn;
+        public AnimatedSprite animation_Dead;
+        public AnimatedSprite animation_ClimbingLadder;
+        public AnimatedSprite animation_Teleport;
+        public AnimatedSprite animation_SlideRight;
+        public AnimatedSprite animation_SlideLeft;
+        public AnimatedSprite animation_ClimbTop;
+        public AnimatedSprite animation_Landed;
+        public AnimatedSprite animation_FallingRight;
+        public AnimatedSprite animation_FallingLeft;
 
 
         public KeyboardState keyboardState;
@@ -195,52 +196,68 @@ namespace Adventure
 
         }
 
+        public void StopCurrentAnimation()
+        {
+            foreach (AnimatedSprite animation in animations)
+            {
+                if (animation.IsAnimating)
+                {
+                    animation.Stop();
+                }
+            }
+        }
+
+        public void ReturnToIdleAnimation(AnimatedSprite animation)
+        {
+            animation.Stop();
+            animation_Idle.Play();
+        }
+
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
 
             base.LoadContent(contentManager, graphicsDevice);
 
+            
+
+            animation_IdleLeft = spriteSheet.CreateAnimatedSprite("IdleLeft");
+            animatedSpriteAndTag.Add("IdleLeft", animation_IdleLeft);
+            animation_MoveRight = spriteSheet.CreateAnimatedSprite("MoveRight");
+            animatedSpriteAndTag.Add("MoveRight", animation_MoveRight);
+            animation_MoveLeft = spriteSheet.CreateAnimatedSprite("MoveLeft");
+            animatedSpriteAndTag.Add("MoveLeft", animation_MoveLeft);
+            animation_JumpRight = spriteSheet.CreateAnimatedSprite("JumpRight");
+            animatedSpriteAndTag.Add("JumpRight", animation_JumpRight);
+            animation_JumpLeft = spriteSheet.CreateAnimatedSprite("JumpLeft");
+            animatedSpriteAndTag.Add("JumpLeft", animation_JumpLeft);
+            animation_Respawn = spriteSheet.CreateAnimatedSprite("Respawn");
+            animatedSpriteAndTag.Add("Respawn", animation_Respawn);
+            animation_Dead = spriteSheet.CreateAnimatedSprite("Dead");
+            animatedSpriteAndTag.Add("Dead", animation_Dead);
+            animation_ClimbingLadder = spriteSheet.CreateAnimatedSprite("ClimbingLadder");
+            animatedSpriteAndTag.Add("ClimbingLadder", animation_ClimbingLadder);
+            animation_Teleport = spriteSheet.CreateAnimatedSprite("Teleport");
+            animatedSpriteAndTag.Add("Teleport", animation_Teleport);
+            animation_SlideRight = spriteSheet.CreateAnimatedSprite("SlideRight");
+            animatedSpriteAndTag.Add("SlideRight", animation_SlideRight);
+            animation_SlideLeft = spriteSheet.CreateAnimatedSprite("SlideLeft");
+            animatedSpriteAndTag.Add("SlideLeft", animation_SlideLeft);
+            animation_ClimbTop = spriteSheet.CreateAnimatedSprite("ClimbTop");
+            animatedSpriteAndTag.Add("ClimbTop", animation_ClimbTop);
+            animation_Landed = spriteSheet.CreateAnimatedSprite("Landed");
+            animatedSpriteAndTag.Add("Landed", animation_Landed);
+            animation_FallingRight = spriteSheet.CreateAnimatedSprite("FallingRight");
+            animatedSpriteAndTag.Add("FallingRight", animation_FallingRight);
+            animation_FallingLeft = spriteSheet.CreateAnimatedSprite("FallingLeft");
+            animatedSpriteAndTag.Add("FallingLeft", animation_FallingLeft);
 
 
-            animatedSprite_IdleLeft = spriteSheet.CreateAnimatedSprite("IdleLeft");
-            animatedSpriteAndTag.Add("IdleLeft", animatedSprite_IdleLeft);
-            animatedSprite_MoveRight = spriteSheet.CreateAnimatedSprite("MoveRight");
-            animatedSpriteAndTag.Add("MoveRight", animatedSprite_MoveRight);
-            animatedSprite_MoveLeft = spriteSheet.CreateAnimatedSprite("MoveLeft");
-            animatedSpriteAndTag.Add("MoveLeft", animatedSprite_MoveLeft);
-            animatedSprite_JumpRight = spriteSheet.CreateAnimatedSprite("JumpRight");
-            animatedSpriteAndTag.Add("JumpRight", animatedSprite_JumpRight);
-            animatedSprite_JumpLeft = spriteSheet.CreateAnimatedSprite("JumpLeft");
-            animatedSpriteAndTag.Add("JumpLeft", animatedSprite_JumpLeft);
-            animatedSprite_Respawn = spriteSheet.CreateAnimatedSprite("Respawn");
-            animatedSpriteAndTag.Add("Respawn", animatedSprite_Respawn);
-            animatedSprite_Dead = spriteSheet.CreateAnimatedSprite("Dead");
-            animatedSpriteAndTag.Add("Dead", animatedSprite_Dead);
-            animatedSprite_ClimbingLadder = spriteSheet.CreateAnimatedSprite("ClimbingLadder");
-            animatedSpriteAndTag.Add("ClimbingLadder", animatedSprite_ClimbingLadder);
-            animatedSprite_Teleport = spriteSheet.CreateAnimatedSprite("Teleport");
-            animatedSpriteAndTag.Add("Teleport", animatedSprite_Teleport);
-            animatedSprite_SlideRight = spriteSheet.CreateAnimatedSprite("SlideRight");
-            animatedSpriteAndTag.Add("SlideRight", animatedSprite_SlideRight);
-            animatedSprite_SlideLeft = spriteSheet.CreateAnimatedSprite("SlideLeft");
-            animatedSpriteAndTag.Add("SlideLeft", animatedSprite_SlideLeft);
-            animatedSprite_ClimbTop = spriteSheet.CreateAnimatedSprite("ClimbTop");
-            animatedSpriteAndTag.Add("ClimbTop", animatedSprite_ClimbTop);
-            animatedSprite_Landed = spriteSheet.CreateAnimatedSprite("Landed");
-            animatedSpriteAndTag.Add("Landed", animatedSprite_Landed);
-            animatedSprite_FallingRight = spriteSheet.CreateAnimatedSprite("FallingRight");
-            animatedSpriteAndTag.Add("FallingRight", animatedSprite_FallingRight);
-            animatedSprite_FallingLeft = spriteSheet.CreateAnimatedSprite("FallingLeft");
-            animatedSpriteAndTag.Add("FallingLeft", animatedSprite_FallingLeft);
+            animation_Landed.OnAnimationEnd = ReturnToIdleAnimation;
 
-
-            animatedSprite_Dead.OnAnimationLoop = (animatedSprite_Dead) =>
-            {
-                Dead = false;
-                Respawn = true;
-                //animatedSprite_Dead.OnAnimationLoop = null;
-            };
-
+            animations.Add(animation_Landed);
+            animations.Add(animation_IdleLeft);
+            animations.Add(animation_MoveRight);
+            animations.Add(animation_MoveLeft);
 
             spriteHitboxTexture = new Texture2D(graphicsDevice, 1, 1);
             spriteHitboxTexture.SetData(new Color[] { Color.White });
@@ -264,7 +281,7 @@ namespace Adventure
         }
 
 
-
+       
         // This method gets input from the keyboard
         public void GetDirectionInputFromKeyboard()
         {

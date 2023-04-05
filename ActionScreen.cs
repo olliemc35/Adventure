@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Adventure
 {
@@ -378,8 +379,6 @@ namespace Adventure
 
                 for (int j = 0; j < tileset.arrayofTileSetSpriteFilenames.GetLength(1); j++)
                 {
-
-
 
                     Sprite tile = new Sprite(new Vector2(8 * j, 8 * i), tileset.arrayofTileSetSpriteFilenames[i, j]);
 

@@ -12,7 +12,7 @@ namespace Adventure
 {
     public class Note : Sprite
     {
-        public MovingSprite key;
+        public Key key;
 
 
         public string symbolFilename;
@@ -56,7 +56,7 @@ namespace Adventure
         {
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
             spriteFilename = null;
 
         }
@@ -67,7 +67,7 @@ namespace Adventure
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
             this.gates = gates;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
             spriteFilename = null;
 
         }
@@ -77,7 +77,7 @@ namespace Adventure
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
             this.movingPlatformsNoLoop = movingPlatformsNoLooping;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
             spriteFilename = null;
 
         }
@@ -86,7 +86,7 @@ namespace Adventure
         {
             this.noteValue = noteValue;
             this.movingPlatformsOneLoop = movingPlatformsOneLoop;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
             spriteFilename = null;
 
         }
@@ -95,7 +95,7 @@ namespace Adventure
         {
             this.noteValue = noteValue;
             this.movingPlatformsHalfLoop = movingPlatformsHalfLoop;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
             spriteFilename = null;
 
         }
@@ -106,7 +106,7 @@ namespace Adventure
             this.noteValue = noteValue;
             this.noteShip = noteShip;
             this.displacementScalingForNoteShip = displacementScalingForNoteShip;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
             spriteFilename = null;
 
         }
@@ -117,7 +117,7 @@ namespace Adventure
         {
             this.noteValue = noteValue;
             this.launchPad = launchPad;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
             spriteFilename = null;
 
         }
@@ -127,7 +127,7 @@ namespace Adventure
         {
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
-            key = new MovingSprite(keyPosition, keyFilename);
+            key = new Key(keyPosition, keyFilename);
 
             orbSpeed = speedOfOrb;
             this.orbFilename = orbFilename;
@@ -350,15 +350,19 @@ namespace Adventure
 
             if (keyPlayInteractedAnimation)
             {
-                key.animatedSprite_Idle.Play("Interacted");
-                key.currentFrame = key.frameAndTag["Interacted"].From;
-                key.tagOfCurrentFrame = "Interacted";
+                key.nameOfCurrentAnimationSprite = "Interacted";
+
+                //key.animatedSprite_Idle.Play("Interacted");
+                //key.currentFrame = key.frameAndTag["Interacted"].From;
+                //key.tagOfCurrentFrame = "Interacted";
             }
             else
             {
-                key.animatedSprite_Idle.Play("Idle");
-                key.currentFrame = key.frameAndTag["Idle"].From;
-                key.tagOfCurrentFrame = "Idle";
+                key.nameOfCurrentAnimationSprite = "Idle";
+
+                //key.animatedSprite_Idle.Play("Idle");
+                //key.currentFrame = key.frameAndTag["Idle"].From;
+                //key.tagOfCurrentFrame = "Idle";
             }
 
 

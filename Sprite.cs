@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -46,6 +47,7 @@ namespace Adventure
         // E.g. in collision detection code we can test for if (sprite.Highlight) to isolate that particular sprite in the code
         public bool Highlight = false;
 
+
         public Sprite()
         {
         }
@@ -71,9 +73,13 @@ namespace Adventure
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
+            //References.counter += 1;
+            //Debug.WriteLine(References.counter);
             // Load in the relevant aseprite file
             asepriteFile = contentManager.Load<AsepriteFile>(spriteFilename);
+            //Sprite sprite = SpriteProcessor.Process(graphicsDevice, asepriteFile, aseFrameIndex: 0);
             textureAtlas = TextureAtlasProcessor.Process(graphicsDevice, asepriteFile);
+            //spriteTexture = SpriteProcessor.Process(graphicsDevice, asepriteFile, aseFrameIndex: 0).TextureRegion.Texture;
             spriteTexture = textureAtlas.GetRegion(0).Texture;
 
 

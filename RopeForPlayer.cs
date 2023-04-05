@@ -182,7 +182,7 @@ namespace Adventure
                                     rope[0].spriteDisplacement.Y = 0;
                                     rope[0].idleHitbox.rectangle.X = (int)rope[0].spritePosition.X + rope[0].idleHitbox.offsetX;
                                     rope[0].idleHitbox.rectangle.Y = (int)rope[0].spritePosition.Y + rope[0].idleHitbox.offsetY;
-                                    rope[0].animatedSprite_Idle.Position = rope[0].spritePosition;
+                                    //rope[0].animatedSprite_Idle.Position = rope[0].spritePosition;
                                     rope[0].attached = true;
                                 }
                             }
@@ -304,7 +304,7 @@ namespace Adventure
 
                 for (int i = 0; i <= IndexOfFirstRopeBitAnchor; i++)
                 {
-                    rope[i].animatedSprite_Idle.Render(spriteBatch);
+                    rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
 
 
                     foreach (Pivot pivot in rope[i].pivotsBetweenThisRopeBitandOnePlus)
@@ -343,7 +343,7 @@ namespace Adventure
             rope[IndexOfFirstRopeBitAnchor].spritePosition.Y = ropeAnchor.Y;
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.X = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.X + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetX;
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.Y = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.Y + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetY;
-            rope[IndexOfFirstRopeBitAnchor].animatedSprite_Idle.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
+            //rope[IndexOfFirstRopeBitAnchor].animatedSprite_Idle.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
 
             for (int i = 0; i <= IndexOfFirstEnabledRopeBit; i++)
             {
@@ -440,7 +440,7 @@ namespace Adventure
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.X = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.X + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetX;
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.Y = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.Y + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetY;
             rope[IndexOfFirstRopeBitAnchor].spriteVelocity = player.spriteVelocity; // this is important so the the rope frictional force behaves properly
-            rope[IndexOfFirstRopeBitAnchor].animatedSprite_Idle.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
+            //rope[IndexOfFirstRopeBitAnchor].animatedSprite_Idle.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
 
             for (int i = 0; i < IndexOfFirstEnabledRopeBit; i++)
             {
@@ -509,7 +509,7 @@ namespace Adventure
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.X = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.X + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetX;
             rope[IndexOfFirstRopeBitAnchor].idleHitbox.rectangle.Y = (int)rope[IndexOfFirstRopeBitAnchor].spritePosition.Y + rope[IndexOfFirstRopeBitAnchor].idleHitbox.offsetY;
             rope[IndexOfFirstRopeBitAnchor].spriteVelocity = player.spriteVelocity;
-            rope[IndexOfFirstRopeBitAnchor].animatedSprite_Idle.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
+            //rope[IndexOfFirstRopeBitAnchor].animatedSprite_Idle.Position = rope[IndexOfFirstRopeBitAnchor].spritePosition;
 
 
             for (int i = 0; i < IndexOfFirstEnabledRopeBit; i++)
@@ -773,7 +773,7 @@ namespace Adventure
                             rope[i].spritePosition = ropeAnchor;
                         }
 
-                        rope[i].animatedSprite_Idle.Position = rope[i].spritePosition;
+                        //rope[i].animatedSprite_Idle.Position = rope[i].spritePosition;
                     }
 
 
@@ -902,7 +902,7 @@ namespace Adventure
 
                         rope[IndexOfFirstEnabledRopeBit + i].Enabled = true;
                         rope[IndexOfFirstEnabledRopeBit + i].spritePosition = ropeAnchor + displacementVec * ((float)(count - i) / count);
-                        rope[IndexOfFirstEnabledRopeBit + i].animatedSprite_Idle.Position = rope[IndexOfFirstEnabledRopeBit + i].spritePosition;
+                        //rope[IndexOfFirstEnabledRopeBit + i].animatedSprite_Idle.Position = rope[IndexOfFirstEnabledRopeBit + i].spritePosition;
 
 
                         // Update idleHitbox position, but this is probably unnecessary as this is done in spriteCollider
@@ -1056,7 +1056,7 @@ namespace Adventure
                     ropeBitsDrawnOnScreen[k].spritePosition.Y = DistanceToNearestInteger(ropeBitsDrawnOnScreen[k].spritePosition.Y);
                     ropeBitsDrawnOnScreen[k].spritePosition.Y += 0.5f * rope[0].idleHitbox.rectangle.Height;
 
-                    ropeBitsDrawnOnScreen[k].animatedSprite_Idle.Position = ropeBitsDrawnOnScreen[k].spritePosition;
+                    //ropeBitsDrawnOnScreen[k].animatedSprite_Idle.Position = ropeBitsDrawnOnScreen[k].spritePosition;
                     ropeBitsDrawnOnScreen[k].Enabled = true;
 
                 }

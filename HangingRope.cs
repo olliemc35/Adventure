@@ -95,7 +95,7 @@ namespace Adventure
         {
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].animatedSprite_Idle.Render(spriteBatch);
+                rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
             }
 
             base.Draw(spriteBatch);
@@ -110,7 +110,7 @@ namespace Adventure
             rope[NumberOfRopeBits - 1].idleHitbox.rectangle.Y = (int)rope[NumberOfRopeBits - 1].spritePosition.Y + rope[NumberOfRopeBits - 1].idleHitbox.offsetY;
             rope[NumberOfRopeBits - 1].spriteVelocity.X = 0;
             rope[NumberOfRopeBits - 1].spriteVelocity.Y = 0;
-            rope[NumberOfRopeBits - 1].animatedSprite_Idle.Position = rope[NumberOfRopeBits - 1].spritePosition;
+            //rope[NumberOfRopeBits - 1].animatedSprite_Idle.Position = rope[NumberOfRopeBits - 1].spritePosition;
 
             for (int i = 0; i < NumberOfRopeBits - 1; i++)
             {

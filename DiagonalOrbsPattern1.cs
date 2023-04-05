@@ -12,7 +12,7 @@ namespace Adventure
     public class DiagonalOrbsPattern1 : GameObject
     {
         public List<MusicalMovingPlatformNoLoop> orbs = new List<MusicalMovingPlatformNoLoop>();
-        public List<AnimationSprite> orbReceptors = new List<AnimationSprite>();
+        public List<OrbReceptor> orbReceptors = new List<OrbReceptor>();
         public float horizontalSpacing;
         public float verticalSpacing;
         public Vector2 startStream;
@@ -71,8 +71,8 @@ namespace Adventure
 
             for (int i = 0; i < 3; i++)
             {
-                orbReceptors.Add(new AnimationSprite(new Vector2(startStream.X, startStream.Y - 8 * i * verticalSpacing), "orbReceptors"));
-                orbReceptors.Add(new AnimationSprite(new Vector2(endStream.X, endStream.Y - 8 * i * verticalSpacing), "orbReceptors"));
+                orbReceptors.Add(new OrbReceptor(new Vector2(startStream.X, startStream.Y - 8 * i * verticalSpacing), "orbReceptors"));
+                orbReceptors.Add(new OrbReceptor(new Vector2(endStream.X, endStream.Y - 8 * i * verticalSpacing), "orbReceptors"));
             }
 
 
@@ -123,41 +123,54 @@ namespace Adventure
 
                     if (orb.spritePosition.Y == startStream.Y)
                     {
-                        orbReceptors[1].animatedSprite_Idle.Play("Hit");
-                        orbReceptors[1].currentFrame = orbReceptors[1].frameAndTag["Hit"].From;
-                        orbReceptors[1].tagOfCurrentFrame = "Hit";
+                        orbReceptors[1].nameOfCurrentAnimationSprite = "Hit";
+
+                        //orbReceptors[1].animatedSprite_Idle.Play("Hit");
+                        //orbReceptors[1].currentFrame = orbReceptors[1].frameAndTag["Hit"].From;
+                        //orbReceptors[1].tagOfCurrentFrame = "Hit";
                     }
                     else if (orb.spritePosition.Y == startStream.Y - 8 * verticalSpacing)
                     {
-                        orbReceptors[3].animatedSprite_Idle.Play("Hit");
-                        orbReceptors[3].currentFrame = orbReceptors[3].frameAndTag["Hit"].From;
-                        orbReceptors[3].tagOfCurrentFrame = "Hit";
+                        orbReceptors[3].nameOfCurrentAnimationSprite = "Hit";
+
+                        //orbReceptors[3].animatedSprite_Idle.Play("Hit");
+                        //orbReceptors[3].currentFrame = orbReceptors[3].frameAndTag["Hit"].From;
+                        //orbReceptors[3].tagOfCurrentFrame = "Hit";
 
                     }
                     else if (orb.spritePosition.Y == startStream.Y - 2 * 8 * verticalSpacing)
                     {
-                        orbReceptors[5].animatedSprite_Idle.Play("Hit");
-                        orbReceptors[5].currentFrame = orbReceptors[5].frameAndTag["Hit"].From;
-                        orbReceptors[5].tagOfCurrentFrame = "Hit";
+                        orbReceptors[5].nameOfCurrentAnimationSprite = "Hit";
+
+                        //orbReceptors[5].animatedSprite_Idle.Play("Hit");
+                        //orbReceptors[5].currentFrame = orbReceptors[5].frameAndTag["Hit"].From;
+                        //orbReceptors[5].tagOfCurrentFrame = "Hit";
                     }
                 }
 
             }
 
-            foreach (AnimationSprite sprite in orbReceptors)
+            foreach (OrbReceptor orbReceptor in orbReceptors)
             {
-                sprite.Update(gameTime);
+                orbReceptor.Update(gameTime);
 
-                sprite.animatedSprite_Idle.OnAnimationLoop = () =>
+                orbReceptor.animatedSprite_Hit.OnAnimationLoop = (hello) =>
                 {
-                    if (sprite.tagOfCurrentFrame == "Hit")
-                    {
-                        sprite.animatedSprite_Idle.Play("Idle");
-                        sprite.currentFrame = sprite.frameAndTag["Idle"].From;
-                        sprite.tagOfCurrentFrame = "Idle";
-                        sprite.animatedSprite_Idle.OnAnimationLoop = null;
-                    }
+                    orbReceptor.nameOfCurrentAnimationSprite = "Idle";
+                    orbReceptor.animatedSprite_Hit.OnAnimationLoop = null;
                 };
+
+
+                //sprite.animatedSprite_Idle.OnAnimationLoop = () =>
+                //{
+                //    if (sprite.tagOfCurrentFrame == "Hit")
+                //    {
+                //        sprite.animatedSprite_Idle.Play("Idle");
+                //        sprite.currentFrame = sprite.frameAndTag["Idle"].From;
+                //        sprite.tagOfCurrentFrame = "Idle";
+                //        sprite.animatedSprite_Idle.OnAnimationLoop = null;
+                //    }
+                //};
 
             }
 

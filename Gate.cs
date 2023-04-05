@@ -29,7 +29,7 @@ namespace Adventure
 
             animationPosition.X = DistanceToNearestInteger(spritePosition.X);
             animationPosition.Y = DistanceToNearestInteger(spritePosition.Y);
-            animatedSprite_Idle.Position = animationPosition;
+            //animatedSprite_Idle.Position = animationPosition;
 
         }
 

@@ -6,11 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame.Aseprite.Sprites;
 
 namespace Adventure
 {
     public class MovingPlatform : MovingSprite
     {
+
+        public AnimatedSprite animatedSprite_Moving;
+
         public Vector2 startPosition;
         public Vector2 endPosition;
         public Vector2 positionOffset = new Vector2(0, 0);
@@ -192,6 +196,9 @@ namespace Adventure
         {
             base.LoadContent(contentManager, graphicsDevice);
 
+            animatedSprite_Moving = spriteSheet.CreateAnimatedSprite("Moving");
+            animatedSpriteAndTag.Add("Moving", animatedSprite_Moving);
+
             CollisionSprite = true;
             idleHitbox.isActive = true;
 
@@ -302,8 +309,8 @@ namespace Adventure
             //}
 
             //}
-
-            animatedSprite_Idle.Render(spriteBatch);
+            base.Draw(spriteBatch);
+            //animatedSprite_Idle.Render(spriteBatch);
 
 
         }
@@ -472,16 +479,20 @@ namespace Adventure
         {
             if (timeStationaryCounter == 0)
             {
-                animatedSprite_Idle.Play("Moving");
-                currentFrame = frameAndTag["Moving"].From;
-                tagOfCurrentFrame = "Moving";
+                nameOfCurrentAnimationSprite = "Moving";
+
+                //animatedSprite_Idle.Play("Moving");
+                //currentFrame = frameAndTag["Moving"].From;
+                //tagOfCurrentFrame = "Moving";
 
             }
             else
             {
-                animatedSprite_Idle.Play("Idle");
-                currentFrame = frameAndTag["Idle"].From;
-                tagOfCurrentFrame = "Idle";
+                nameOfCurrentAnimationSprite = "Idle";
+
+                //animatedSprite_Idle.Play("Idle");
+                //currentFrame = frameAndTag["Idle"].From;
+                //tagOfCurrentFrame = "Idle";
             }
 
 

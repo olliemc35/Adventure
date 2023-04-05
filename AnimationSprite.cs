@@ -16,7 +16,8 @@ namespace Adventure
     public class AnimationSprite : Sprite
     {
         public SpriteSheet spriteSheet;
-        public AnimatedSprite animatedSprite_Idle;
+        public List<AnimatedSprite> animations = new List<AnimatedSprite>();
+        public AnimatedSprite animation_Idle;
         public IDictionary<string, AnimatedSprite> animatedSpriteAndTag = new Dictionary<string, AnimatedSprite>();
         public string nameOfCurrentAnimationSprite;
 
@@ -43,14 +44,18 @@ namespace Adventure
             asepriteFile = contentManager.Load<AsepriteFile>(spriteFilename);
             //  Use the SpriteSheetProcessor to process the SpriteSheet from the Aseprite file.
             spriteSheet = SpriteSheetProcessor.Process(graphicsDevice, asepriteFile);
-            animatedSprite_Idle = spriteSheet.CreateAnimatedSprite("Idle");
-            animatedSpriteAndTag.Add("Idle", animatedSprite_Idle);
+            animation_Idle = spriteSheet.CreateAnimatedSprite("Idle");
+            animatedSpriteAndTag.Add("Idle", animation_Idle);
             nameOfCurrentAnimationSprite = "Idle";
+            animation_Idle.Play();
+            animations.Add(animation_Idle);
 
+
+ 
 
             // Load in the relevant aseprite file
             //asepriteFile = contentManager.Load<AsepriteFile>(spriteFilename);
-           // textureAtlas = TextureAtlasProcessor.Process(graphicsDevice, asepriteFile);
+            // textureAtlas = TextureAtlasProcessor.Process(graphicsDevice, asepriteFile);
             //spriteTexture = textureAtlas.GetRegion(0).Texture;
             //animatedSprite = (AnimatedSprite)textureAtlas.CreateSprite(regionIndex: 0);
             //AsepriteTag tag = asepriteFile.GetTag(0);
@@ -96,8 +101,12 @@ namespace Adventure
         {
             base.Update(gameTime);
 
-            animatedSpriteAndTag[nameOfCurrentAnimationSprite].Update(gameTime);
-            animatedSpriteAndTag[nameOfCurrentAnimationSprite].Play();
+            //animatedSprite_Idle.Update(gameTime);
+            //animatedSprite_Idle.Play();
+
+            foreach (AnimatedSprite anim in animations) { anim.Update(gameTime); }
+            //animatedSpriteAndTag[nameOfCurrentAnimationSprite].Update(gameTime);
+            //animatedSpriteAndTag[nameOfCurrentAnimationSprite].Play();
             //animatedSprite.Update(gameTime);
             //animatedSprite.Position = spritePosition;
             // We set the position to be the nearest integer
@@ -118,7 +127,14 @@ namespace Adventure
             }
             if (Enabled)
             {
-                animatedSpriteAndTag[nameOfCurrentAnimationSprite].Draw(spriteBatch, animationPosition);
+                foreach (AnimatedSprite animation in animations)
+                {
+                    if (animation.IsAnimating)
+                    {
+                        animation.Draw(spriteBatch, animationPosition);
+                    }
+                }
+                //animatedSpriteAndTag[nameOfCurrentAnimationSprite].Draw(spriteBatch, animationPosition);
             }
         }
 

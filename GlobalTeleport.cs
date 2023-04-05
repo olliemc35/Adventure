@@ -27,9 +27,11 @@ namespace Adventure
         public override void Update(GameTime gameTime)
         {
             InRange = true;
-            animatedSprite_Idle.Play("InRange");
-            currentFrame = frameAndTag["InRange"].From;
-            tagOfCurrentFrame = "InRange";
+            nameOfCurrentAnimationSprite = "InRange";
+
+            //animatedSprite_Idle.Play("InRange");
+            //currentFrame = frameAndTag["InRange"].From;
+            //tagOfCurrentFrame = "InRange";
 
             base.Update(gameTime);
         }

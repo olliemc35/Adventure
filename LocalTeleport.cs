@@ -71,16 +71,20 @@ namespace Adventure
             if (Vector2.Distance(References.player.spritePosition, spritePosition) <= radius)
             {
                 InRange = true;
-                animatedSprite_Idle.Play("InRange");
-                currentFrame = frameAndTag["InRange"].From;
-                tagOfCurrentFrame = "InRange";
+                nameOfCurrentAnimationSprite = "InRange";
+
+                //animatedSprite_Idle.Play("InRange");
+                //currentFrame = frameAndTag["InRange"].From;
+                //tagOfCurrentFrame = "InRange";
             }
             else
             {
                 InRange = false;
-                animatedSprite_Idle.Play("Idle");
-                currentFrame = frameAndTag["Idle"].From;
-                tagOfCurrentFrame = "Idle";
+                nameOfCurrentAnimationSprite = "Idle";
+
+                //animatedSprite_Idle.Play("Idle");
+                //currentFrame = frameAndTag["Idle"].From;
+                //tagOfCurrentFrame = "Idle";
             }
 
             base.Update(gameTime);

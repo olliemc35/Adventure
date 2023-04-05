@@ -224,10 +224,10 @@ namespace Adventure
             }
 
 
-            foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[animatedSprite_Idle.CurrentFrameIndex])
-            {
-                hitbox.isActive = true;
-            }
+            //foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[animatedSprite_Idle.CurrentFrameIndex])
+            //{
+            //    hitbox.isActive = true;
+            //}
 
         }
 
@@ -248,10 +248,10 @@ namespace Adventure
                 }
             }
 
-            foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[animatedSprite_Idle.CurrentFrameIndex])
-            {
-                hitbox.isActive = true;
-            }
+            //foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[animatedSprite_Idle.CurrentFrameIndex])
+            //{
+            //    hitbox.isActive = true;
+            //}
 
         }
 
@@ -285,30 +285,30 @@ namespace Adventure
 
 
 
-        public Color[,] TextureTo2DArrayOfColors(Texture2D texture, int frameNumber)
-        {
-            // Get bounds of the frame on the sprite map
-            int x = animatedSprite_Idle.Frames[frameNumber].Bounds.X;
-            int y = animatedSprite_Idle.Frames[frameNumber].Bounds.Y;
+        //public Color[,] TextureTo2DArrayOfColors(Texture2D texture, int frameNumber)
+        //{
+        //    // Get bounds of the frame on the sprite map
+        //    int x = animatedSprite_Idle.Frames[frameNumber].Bounds.X;
+        //    int y = animatedSprite_Idle.Frames[frameNumber].Bounds.Y;
 
-            // First we create 1-dim array which can be obtained via the standard GetData method of Texture2D
-            Color[] colorsOne = new Color[texture.Width * texture.Height];
-            texture.GetData(colorsOne);
+        //    // First we create 1-dim array which can be obtained via the standard GetData method of Texture2D
+        //    Color[] colorsOne = new Color[texture.Width * texture.Height];
+        //    texture.GetData(colorsOne);
 
-            // Now we convert this into an easier 2-dim array
-            Color[,] colorsTwo = new Color[baseFrame.Width, baseFrame.Height];
+        //    // Now we convert this into an easier 2-dim array
+        //    Color[,] colorsTwo = new Color[baseFrame.Width, baseFrame.Height];
 
-            for (int i = 0; i < baseFrame.Width; i++)
-            {
-                for (int j = 0; j < baseFrame.Height; j++)
-                {
-                    // colorsTwo[i, j] = colorsOne[i + j * texture.Width];
-                    colorsTwo[i, j] = colorsOne[x + i + (y + j) * texture.Width];
-                }
-            }
+        //    for (int i = 0; i < baseFrame.Width; i++)
+        //    {
+        //        for (int j = 0; j < baseFrame.Height; j++)
+        //        {
+        //            // colorsTwo[i, j] = colorsOne[i + j * texture.Width];
+        //            colorsTwo[i, j] = colorsOne[x + i + (y + j) * texture.Width];
+        //        }
+        //    }
 
-            return colorsTwo;
-        }
+        //    return colorsTwo;
+        //}
 
 
 
@@ -439,35 +439,35 @@ namespace Adventure
         }
 
 
-        public void UpdateColorMapAtThisPoint(Vector2 collisionPoint)
-        {
-            // want to operate on enemy texture 2d directly
-            collisionPoint.X = (int)collisionPoint.X - spritePosition.X;
-            collisionPoint.Y = (int)collisionPoint.Y - spritePosition.Y;
-            int x = animatedSprite_Idle.Frames[animatedSprite_Idle.CurrentFrameIndex].Bounds.X;
-            int y = animatedSprite_Idle.Frames[animatedSprite_Idle.CurrentFrameIndex].Bounds.Y;
+        //public void UpdateColorMapAtThisPoint(Vector2 collisionPoint)
+        //{
+        //    // want to operate on enemy texture 2d directly
+        //    collisionPoint.X = (int)collisionPoint.X - spritePosition.X;
+        //    collisionPoint.Y = (int)collisionPoint.Y - spritePosition.Y;
+        //    int x = animatedSprite_Idle.Frames[animatedSprite_Idle.CurrentFrameIndex].Bounds.X;
+        //    int y = animatedSprite_Idle.Frames[animatedSprite_Idle.CurrentFrameIndex].Bounds.Y;
 
-            // E.g. to turn it red ...
-            colorMapOfSpriteSheet[x + (int)collisionPoint.X + (y + (int)collisionPoint.Y) * animatedSprite_Idle.Texture.Width].R = 255;
-            colorMapOfSpriteSheet[x + (int)collisionPoint.X + (y + (int)collisionPoint.Y) * animatedSprite_Idle.Texture.Width].G = 0;
-            colorMapOfSpriteSheet[x + (int)collisionPoint.X + (y + (int)collisionPoint.Y) * animatedSprite_Idle.Texture.Width].B = 0;
+        //    // E.g. to turn it red ...
+        //    colorMapOfSpriteSheet[x + (int)collisionPoint.X + (y + (int)collisionPoint.Y) * animatedSprite_Idle.Texture.Width].R = 255;
+        //    colorMapOfSpriteSheet[x + (int)collisionPoint.X + (y + (int)collisionPoint.Y) * animatedSprite_Idle.Texture.Width].G = 0;
+        //    colorMapOfSpriteSheet[x + (int)collisionPoint.X + (y + (int)collisionPoint.Y) * animatedSprite_Idle.Texture.Width].B = 0;
 
-            animatedSprite_Idle.Texture.SetData<Color>(colorMapOfSpriteSheet);
-        }
+        //    animatedSprite_Idle.Texture.SetData<Color>(colorMapOfSpriteSheet);
+        //}
 
 
 
-        public void CreateHitboxesForGunLine()
-        {
-            for (int i = 0; i < animatedSprite_Idle.Frames.Count; i++)
-            {
-                List<HitboxRectangle> hitboxes = new List<HitboxRectangle>();
-                Color[,] colorMap = TextureTo2DArrayOfColors(animatedSprite_Idle.Texture, i);
-                BuildHitboxSetFromColourMap(colorMap, hitboxes);
-                hitboxesForGunlineForEachFrame.Add(hitboxes);
+        //public void CreateHitboxesForGunLine()
+        //{
+        //    for (int i = 0; i < animatedSprite_Idle.Frames.Count; i++)
+        //    {
+        //        List<HitboxRectangle> hitboxes = new List<HitboxRectangle>();
+        //        Color[,] colorMap = TextureTo2DArrayOfColors(animatedSprite_Idle.Texture, i);
+        //        BuildHitboxSetFromColourMap(colorMap, hitboxes);
+        //        hitboxesForGunlineForEachFrame.Add(hitboxes);
 
-            }
-        }
+        //    }
+        //}
 
     }
 }

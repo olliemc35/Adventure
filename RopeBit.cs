@@ -132,7 +132,7 @@ namespace Adventure
             idleHitbox.rectangle.X += idleHitbox.offsetX;
             idleHitbox.rectangle.Y += idleHitbox.offsetY;
             idleHitbox.isActive = true;
-            animatedSprite_Idle.Play("Idle");
+            //animatedSprite_Idle.Play("Idle");
         }
 
 
@@ -155,7 +155,7 @@ namespace Adventure
                 }
             }
 
-            animatedSprite_Idle.Render(spriteBatch);
+            animation_Idle.Draw(spriteBatch, animationPosition);
         }
 
 

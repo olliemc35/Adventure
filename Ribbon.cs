@@ -117,7 +117,7 @@ namespace Adventure
 
             for (int i = 0; i <= IndexOfRopeBitInPlayersHand; i++)
             {
-                rope[i].animatedSprite_Idle.Render(spriteBatch);
+                rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
 
 
                 foreach (Pivot pivot in rope[i].pivotsBetweenThisRopeBitandOnePlus)
@@ -182,7 +182,7 @@ namespace Adventure
                 {
                     rope[i].spriteVelocity.X = 0;
                     rope[i].spriteVelocity.Y = 0;
-                    rope[i].animatedSprite_Idle.Position = rope[i].spritePosition;
+                    //rope[i].animatedSprite_Idle.Position = rope[i].spritePosition;
                 }
 
 
@@ -191,7 +191,7 @@ namespace Adventure
             if (!rope[IndexOfRopeBitInPlayersHand].isFixed)
             {
                 rope[IndexOfRopeBitInPlayersHand].spritePosition = player.ropeAnchor;
-                rope[IndexOfRopeBitInPlayersHand].animatedSprite_Idle.Position = rope[IndexOfRopeBitInPlayersHand].spritePosition;
+                //rope[IndexOfRopeBitInPlayersHand].animatedSprite_Idle.Position = rope[IndexOfRopeBitInPlayersHand].spritePosition;
             }
 
 
@@ -294,7 +294,7 @@ namespace Adventure
 
                         rope[IndexOfRopeBitInPlayersHand - 1 + i].Enabled = true;
                         rope[IndexOfRopeBitInPlayersHand - 1 + i].spritePosition = rope[IndexOfRopeBitInPlayersHand - 1].spritePosition + vec;
-                        rope[IndexOfRopeBitInPlayersHand - 1 + i].animatedSprite_Idle.Position = rope[IndexOfRopeBitInPlayersHand - 1 + i].spritePosition;
+                        //rope[IndexOfRopeBitInPlayersHand - 1 + i].animatedSprite_Idle.Position = rope[IndexOfRopeBitInPlayersHand - 1 + i].spritePosition;
                         rope[IndexOfRopeBitInPlayersHand - 1 + i].spriteVelocity = rope[IndexOfRopeBitInPlayersHand].spriteVelocity;
 
                     }

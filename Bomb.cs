@@ -1,4 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Aseprite.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +15,11 @@ namespace Adventure
         public bool detonate = false;
         public bool readyToRemove = false;
         public Note attachedNote;
+
+        public AnimatedSprite animatedSprite_Detonate;
+        public AnimatedSprite animatedSprite_Planted;
+
+
         public Bomb() : base()
         {
 
@@ -32,28 +40,43 @@ namespace Adventure
             attachedNote = note;
         }
 
+        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        {
+            base.LoadContent(contentManager, graphicsDevice);
+
+            animatedSprite_Detonate = spriteSheet.CreateAnimatedSprite("Detonate");
+            animatedSpriteAndTag.Add("Detonate", animatedSprite_Detonate);
+            animatedSprite_Planted = spriteSheet.CreateAnimatedSprite("Planted");
+            animatedSpriteAndTag.Add("Planted", animatedSprite_Planted);
+
+        }
+
+
         public override void Update(GameTime gameTime)
         {
             if (detonate)
             {
-                animatedSprite_Idle.Play("Detonate");
-                currentFrame = frameAndTag["Detonate"].From;
-                tagOfCurrentFrame = "Detonate";
+                nameOfCurrentAnimationSprite = "Detonate";
+                //animatedSprite_Idle.Play("Detonate");
+                //currentFrame = frameAndTag["Detonate"].From;
+                //tagOfCurrentFrame = "Detonate";
             }
             else
             {
-                animatedSprite_Idle.Play("Planted");
-                currentFrame = frameAndTag["Planted"].From;
-                tagOfCurrentFrame = "Planted";
+                nameOfCurrentAnimationSprite = "Planted";
+
+                //animatedSprite_Idle.Play("Planted");
+                //currentFrame = frameAndTag["Planted"].From;
+                //tagOfCurrentFrame = "Planted";
             }
 
-            animatedSprite_Idle.OnAnimationLoop = () =>
+
+            animatedSprite_Detonate.OnAnimationLoop = (animatedSprite_Detonate) =>
             {
-                if (tagOfCurrentFrame == "Detonate")
-                {
+                
                     readyToRemove = true;
-                    animatedSprite_Idle.OnAnimationLoop = null;
-                }
+                    animatedSprite_Detonate.OnAnimationLoop = null;
+                
             };
 
             base.Update(gameTime);
