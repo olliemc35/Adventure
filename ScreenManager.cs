@@ -15,8 +15,7 @@ namespace Adventure
         SpriteBatch spriteBatch;
         SpriteFont menuFont;
 
-        public SoundManager soundManager = new SoundManager();
-        public List<List<Sprite>> sprites = new List<List<Sprite>>();
+        public List<List<AnimatedGameObject>> sprites = new List<List<AnimatedGameObject>>();
         public List<List<GameObject>> gameObjects = new List<List<GameObject>>();
 
         public ActionScreen screen1;
@@ -151,14 +150,12 @@ namespace Adventure
 
             player = new Player(new Vector2(8, 0))
             {
-                spriteFilename = "hoodedoldmanv2"
-                //spriteFilename = "adventurer3"
+                filename = "hoodedoldmanv2"
             };
 
 
             References.ScreenNumber = this.ScreenNumber;
             References.PreviousScreenNumber = this.ScreenNumber;
-            References.soundManager = this.soundManager;
 
         }
 
@@ -168,22 +165,31 @@ namespace Adventure
             menuFont = content.Load<SpriteFont>("menufont");
 
 
-            CreateScreens(content);
+            CreateScreens();
+
+            //activeScreen = new GameScreen(spriteBatch);
+            //previousActiveScreen = activeScreen;
+
+            //screens.Add(previousActiveScreen);
+            //screens.Add(activeScreen);
+
 
             foreach (GameScreen screen in screens)
             {
-                //Debug.WriteLine("here");
-                screen.LoadContent(content, References.graphicsDevice);
-                screen.Hide();
+                if (screen != null)
+                {
+                    //Debug.WriteLine("here");
+                    screen.LoadContent(content, References.graphicsDevice);
+                    screen.Hide();
+                }
             }
 
-            activeScreen = screens[0];
+            activeScreen = screens[33];
             activeScreen.Show();
 
             player.LoadContent(content, References.graphicsDevice);
-            player.spritePosition = activeScreen.respawnPoint;
+            player.position = activeScreen.respawnPoint;
 
-            soundManager.LoadContent(content);
 
             References.activeScreen = activeScreen;
             References.player = player;
@@ -206,11 +212,11 @@ namespace Adventure
                 activeScreen = screens[ScreenNumber - 1];
                 References.activeScreen = activeScreen;
                 DisableShowScreenTransition(screens[PreviousScreenNumber - 1], screens[ScreenNumber - 1]);
-                player.spritePosition.X = activeScreen.screenDoors[References.DoorNumberToMoveTo - 1].spritePosition.X;
-                player.spritePosition.Y = activeScreen.screenDoors[References.DoorNumberToMoveTo - 1].spritePosition.Y;
+                player.position.X = activeScreen.screenDoors[References.DoorNumberToMoveTo - 1].position.X;
+                player.position.Y = activeScreen.screenDoors[References.DoorNumberToMoveTo - 1].position.Y;
             }
 
-            soundManager.Update(gameTime);
+            //soundManager.Update(gameTime);
 
             oldKeyboardState = keyboardState;
 
@@ -255,7 +261,7 @@ namespace Adventure
             return keyboardState.IsKeyUp(theKey) && oldKeyboardState.IsKeyDown(theKey);
         }
 
-        public void CreateScreens(ContentManager content)
+        public void CreateScreens()
         {
 
 
@@ -313,7 +319,7 @@ namespace Adventure
 
             List<GameObject> screen3GameObjects = new List<GameObject>()
             {
-                new AnimationSprite(new Vector2(8 * 30, 8 * 12), "Post"),
+                new AnimatedGameObject(new Vector2(8 * 30, 8 * 12), "Post"),
                 new Door(new Vector2(8 * 1, 8 * 18), "Door", 2, 2),
                 new Door(new Vector2(8 * 36, 8 * 11), "Door", 4, 1)
             };
@@ -720,7 +726,7 @@ namespace Adventure
 
             };
 
-            NoteAndGatePuzzle screen15NoteAndGatePuzzle = new NoteAndGatePuzzle(new Vector2(8 * 17 - 4, 8 * 5 - 4), "symbolPlatelong", screen15Notes, screen15Gates[3]);
+            NoteAndGatePuzzle screen15NoteAndGatePuzzle = new NoteAndGatePuzzle(new Vector2(8 * 17 - 4, 8 * 5 - 4), "symbolPlateLong", screen15Notes, screen15Gates[3]);
 
             screen15GameObjects.Add(screen15NoteAndGatePuzzle);
             screen15GameObjects.AddRange(screen15Gates);
@@ -845,7 +851,7 @@ namespace Adventure
 
             Gate screen18Gate = new Gate(new Vector2(8 * 35, 8 * 15), "AncientDoor", new Vector2(8 * 35, 8 * 4));
 
-            NoteAndGateAndOrbPuzzle screen18NoteAndGateAndOrbPuzzle = new NoteAndGateAndOrbPuzzle(new Vector2(8 * 17 - 4, 8 * 3 - 4), "symbolPlatelong", screen18Notes, screen18Gate, screen18OrbVessel);
+            NoteAndGateAndOrbPuzzle screen18NoteAndGateAndOrbPuzzle = new NoteAndGateAndOrbPuzzle(new Vector2(8 * 17 - 4, 8 * 3 - 4), "symbolPlateLong", screen18Notes, screen18Gate, screen18OrbVessel);
 
             screen18GameObjects.Add(screen18NoteAndGateAndOrbPuzzle);
             screen18GameObjects.AddRange(screen18Notes);
@@ -967,10 +973,10 @@ namespace Adventure
                 new Door(new Vector2(8 * 37, 8 * 12), "Door", 23, 1)
             };
 
-            AnimationSprite screen22Platform = new AnimationSprite(new Vector2(8 * 17, 8 * 15), "ClimablePlatform")
+            AnimatedGameObject screen22Platform = new AnimatedGameObject(new Vector2(8 * 17, 8 * 15), "ClimablePlatform")
             {
                 climable = true,
-                CollisionSprite = true
+                CollisionObject = true
             };
 
 
@@ -1010,10 +1016,10 @@ namespace Adventure
                 new FlashingBeam(new Vector2( 8 * 20, 8 * 3), 600, 10, 0, new Vector2( 8 * 20, 8 * 21)),
             };
 
-            AnimationSprite screen23Platform = new AnimationSprite(new Vector2(8 * 17, 8 * 15), "ClimablePlatform")
+            AnimatedGameObject screen23Platform = new AnimatedGameObject(new Vector2(8 * 17, 8 * 15), "ClimablePlatform")
             {
                 climable = true,
-                CollisionSprite = true
+                CollisionObject = true
             };
 
 
@@ -1044,7 +1050,7 @@ namespace Adventure
             MovingPlatform screen24Platform = new MovingPlatform(new Vector2(8 * 12, 8 * 15), "MovingClimablePlatform", new Vector2(8 * 24, 8 * 15), 30, 1f)
             {
                 climable = true,
-                CollisionSprite = true
+                CollisionObject = true
             };
 
 
@@ -1164,7 +1170,7 @@ namespace Adventure
             List<GameObject> screen28GameObjects = new List<GameObject>()
             {
                 new Door(new Vector2(8 * 1, 8 * 2), "Door", 27, 2),
-                new Door(new Vector2(8 * 38, 8 * 2), "Door", 30, 1),
+                new Door(new Vector2(8 * 38, 8 * 2), "Door", 29, 1),
                 new LocalTeleport(new Vector2(8 * 19, 8 *18), "RopeRing2"),
                 new LocalTeleport(new Vector2(8 * 30, 8 *15), "RopeRing2"),
                 new LocalTeleport(new Vector2(8 * 25, 8 *8), "RopeRing2")
@@ -1194,7 +1200,7 @@ namespace Adventure
             List<GameObject> screen29GameObjects = new List<GameObject>()
             {
                 new Door(new Vector2(8 * 1, 8 * 11), "Door", 28, 2),
-                new Door(new Vector2(8 * 70, 8 * 11), "Door", 1, 1)
+                new Door(new Vector2(8 * 70, 8 * 11), "Door", 30, 1)
 
             };
 
@@ -1225,7 +1231,7 @@ namespace Adventure
             };
 
             Note screen30Note = new Note(new Vector2(8 * 10, 8 * 11), "TuningForkC", "C", screen30MovingPlatforms);
-            screen30MovingPlatforms[0].spritesOnPlatform = new List<Sprite>() { screen30Note };
+            screen30MovingPlatforms[0].spritesOnPlatform = new List<AnimatedGameObject>() { screen30Note };
 
             screen30GameObjects.AddRange(screen30MovingPlatforms);
             screen30GameObjects.Add(screen30Note);
@@ -1260,12 +1266,12 @@ namespace Adventure
 
             for (int i = 0; i < 120; i++)
             {
-                screen31GameObjects.Add(new Sprite(new Vector2(8 * i, 8 * 5), "NoteLine"));
-                screen31GameObjects.Add(new Sprite(new Vector2(8 * i, 8 * 17), "NoteLine"));
+                screen31GameObjects.Add(new AnimatedGameObject(new Vector2(8 * i, 8 * 5), "NoteLine"));
+                screen31GameObjects.Add(new AnimatedGameObject(new Vector2(8 * i, 8 * 17), "NoteLine"));
 
                 if (i >= 8 && i <= 112)
                 {
-                    screen31GameObjects.Add(new Sprite(new Vector2(8 * i, 8 * 11), "NoteLine"));
+                    screen31GameObjects.Add(new AnimatedGameObject(new Vector2(8 * i, 8 * 11), "NoteLine"));
 
                 }
 
@@ -1273,7 +1279,7 @@ namespace Adventure
 
             NoteShip screen31NoteShip = new NoteShip(new Vector2(8 * 9, 8 * 11), "movingPlatform1Long", new Vector2(8 * 102, 8 * 11), 0, 2, 8 * 6);
 
-            List<Sprite> screen31Notes = new List<Sprite>()
+            List<AnimatedGameObject> screen31Notes = new List<AnimatedGameObject>()
             {
                 new Note (new Vector2(8 * 9, 8* 9), "FKeyRound", "F", screen31NoteShip, 1),
                 new Note (new Vector2(8 * 13, 8* 9), "AKeyRound", "A", screen31NoteShip, 0),
@@ -1445,11 +1451,11 @@ namespace Adventure
             //// Create screen 37            
             //tileSetScreen37 = new Tileset("Level37", "Level37Markers");
 
-            ////List<GameObject> screen37GameObjects = new List<GameObject>()
-            ////{
-            ////    new Door(new Vector2(8 * 1, 8 * 19), "Door", 36, 2),
-            ////    new Door(new Vector2(8 * 34, 8 * 14), "Door", 1, 1),
-            ////};
+            //List<GameObject> screen37GameObjects = new List<GameObject>()
+            //{
+            //    new Door(new Vector2(8 * 1, 8 * 19), "Door", 36, 2),
+            //    new Door(new Vector2(8 * 34, 8 * 14), "Door", 1, 1),
+            //};
 
             //screen37 = new ActionScreen(spriteBatch, menuFont, player, tileSetScreen37.screenGameObjects, tileSetScreen37, keyboardState, oldKeyboardState)
             //{
@@ -1461,50 +1467,50 @@ namespace Adventure
 
             //References.soundManager.flagTest = true;
 
-            activeScreen = new GameScreen(spriteBatch);
-            previousActiveScreen = activeScreen;
+            //activeScreen = new GameScreen(spriteBatch);
+            //previousActiveScreen = activeScreen;
 
             screens = new List<GameScreen>();
             screens.Add(screen1);
-            //screens.Add(screen2);
-            //screens.Add(screen3);
-            //screens.Add(screen4);
-            //screens.Add(screen5);
-            //screens.Add(screen6);
-            //screens.Add(screen7);
-            //screens.Add(screen8);
-            //screens.Add(screen9);
-            //screens.Add(screen10);
-            //screens.Add(screen11);
-            //screens.Add(screen12);
-            //screens.Add(screen13);
-            //screens.Add(screen14);
-            //screens.Add(screen15);
-            //screens.Add(screen16);
-            //screens.Add(screen17);
-            //screens.Add(screen18);
-            //screens.Add(screen19);
-            //screens.Add(screen20);
-            //screens.Add(screen21);
-            //screens.Add(screen22);
-            //screens.Add(screen23);
-            //screens.Add(screen24);
-            //screens.Add(screen25);
-            //screens.Add(screen26);
-            //screens.Add(screen27);
-            //screens.Add(screen28);
-            //screens.Add(screen29);
-            //screens.Add(screen30);
-            //screens.Add(screen31);
-            //screens.Add(screen32);
-            //screens.Add(screen33);
-            //screens.Add(screen34);
-            //screens.Add(screen35);
-            //screens.Add(screen36);
-            //screens.Add(screen37);
+            screens.Add(screen2);
+            screens.Add(screen3);
+            screens.Add(screen4);
+            screens.Add(screen5);
+            screens.Add(screen6);
+            screens.Add(screen7);
+            screens.Add(screen8);
+            screens.Add(screen9);
+            screens.Add(screen10);
+            screens.Add(screen11);
+            screens.Add(screen12);
+            screens.Add(screen13);
+            screens.Add(screen14);
+            screens.Add(screen15);
+            screens.Add(screen16);
+            screens.Add(screen17);
+            screens.Add(screen18);
+            screens.Add(screen19);
+            screens.Add(screen20);
+            screens.Add(screen21);
+            screens.Add(screen22);
+            screens.Add(screen23);
+            screens.Add(screen24);
+            screens.Add(screen25);
+            screens.Add(screen26);
+            screens.Add(screen27);
+            screens.Add(screen28);
+            screens.Add(screen29);
+            screens.Add(screen30);
+            screens.Add(screen31);
+            screens.Add(screen32);
+            screens.Add(screen33);
+            screens.Add(screen34);
+            screens.Add(screen35);
+            screens.Add(screen36);
+            screens.Add(screen37);
 
-            screens.Add(previousActiveScreen);
-            screens.Add(activeScreen);
+            //screens.Add(previousActiveScreen);
+            //screens.Add(activeScreen);
 
 
         }

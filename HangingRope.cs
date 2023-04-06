@@ -23,7 +23,7 @@ namespace Adventure
 
             distanceTilEquilibriumY = 1.1f * LengthBetweenRopeBits;
             distanceStretchRequiredToOvercomeFriction = 1.1f * LengthBetweenRopeBits;
-            springConstant = DistanceToNearestInteger(rope[0].mass * rope[0].gravityConstant / (float)(distanceTilEquilibriumY - LengthBetweenRopeBits));
+            springConstant = FindNearestInteger(rope[0].mass * rope[0].gravityConstant / (float)(distanceTilEquilibriumY - LengthBetweenRopeBits));
             groundFrictionNormalConstant = (float)(distanceStretchRequiredToOvercomeFriction - LengthBetweenRopeBits) / (distanceTilEquilibriumY - LengthBetweenRopeBits);
 
 
@@ -37,9 +37,9 @@ namespace Adventure
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                RopeBit ropeBit = new RopeBit(spritePosition);
+                RopeBit ropeBit = new RopeBit(position);
                 ropeBit.Enabled = false;
-                ropeBit.spriteFilename = "YellowDot";
+                ropeBit.filename = "YellowDot";
                 ropeBit.idleHitbox.rectangle.Width = 1;
                 ropeBit.idleHitbox.rectangle.Height = 1;
                 ropeBit.idleHitbox.offsetX = 3;
@@ -71,11 +71,11 @@ namespace Adventure
         {
             for (int i = 0; i <= IndexOfFirstEnabledRopeBit; i++)
             {
-                if (Math.Abs(rope[i].spriteVelocity.X) < 0.001)
+                if (Math.Abs(rope[i].velocity.X) < 0.001)
                 {
                     rope[i].FirstLoopX = true;
                 }
-                if (Math.Abs(rope[i].spriteVelocity.Y) < 0.001)
+                if (Math.Abs(rope[i].velocity.Y) < 0.001)
                 {
                     rope[i].FirstLoopY = true;
                 }
@@ -105,11 +105,11 @@ namespace Adventure
         public void SimulateRopeHanging()
         {
 
-            rope[NumberOfRopeBits - 1].spritePosition = ropeAnchor;
-            rope[NumberOfRopeBits - 1].idleHitbox.rectangle.X = (int)rope[NumberOfRopeBits - 1].spritePosition.X + rope[NumberOfRopeBits - 1].idleHitbox.offsetX;
-            rope[NumberOfRopeBits - 1].idleHitbox.rectangle.Y = (int)rope[NumberOfRopeBits - 1].spritePosition.Y + rope[NumberOfRopeBits - 1].idleHitbox.offsetY;
-            rope[NumberOfRopeBits - 1].spriteVelocity.X = 0;
-            rope[NumberOfRopeBits - 1].spriteVelocity.Y = 0;
+            rope[NumberOfRopeBits - 1].position = ropeAnchor;
+            rope[NumberOfRopeBits - 1].idleHitbox.rectangle.X = (int)rope[NumberOfRopeBits - 1].position.X + rope[NumberOfRopeBits - 1].idleHitbox.offsetX;
+            rope[NumberOfRopeBits - 1].idleHitbox.rectangle.Y = (int)rope[NumberOfRopeBits - 1].position.Y + rope[NumberOfRopeBits - 1].idleHitbox.offsetY;
+            rope[NumberOfRopeBits - 1].velocity.X = 0;
+            rope[NumberOfRopeBits - 1].velocity.Y = 0;
             //rope[NumberOfRopeBits - 1].animatedSprite_Idle.Position = rope[NumberOfRopeBits - 1].spritePosition;
 
             for (int i = 0; i < NumberOfRopeBits - 1; i++)
@@ -117,8 +117,8 @@ namespace Adventure
 
                 rope[i].totalForce.X = 0;
                 rope[i].totalForce.Y = 0;
-                rope[i].previousSpriteVelocity = rope[i].spriteVelocity;
-                rope[i].previousSpritePosition = rope[i].spritePosition;
+                rope[i].previousVelocity = rope[i].velocity;
+                rope[i].previousPosition = rope[i].position;
 
             }
 
@@ -126,7 +126,7 @@ namespace Adventure
 
             for (int i = NumberOfRopeBits - 2; i >= 0; i--)
             {
-                if (Vector2.Distance(rope[i].spritePosition, rope[i + 1].spritePosition) >= LengthBetweenRopeBits)
+                if (Vector2.Distance(rope[i].position, rope[i + 1].position) >= LengthBetweenRopeBits)
                 {
                     FindSpringForcesPairWise(rope[i], rope[i + 1], LengthBetweenRopeBits);
                     FindSpringFrictionPairWise(rope[i], rope[i + 1]);

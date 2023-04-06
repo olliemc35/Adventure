@@ -28,7 +28,8 @@ namespace Adventure
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
             base.LoadContent(contentManager, graphicsDevice);
-            noteSound = contentManager.Load<SoundEffect>(noteValue);
+            noteSound = References.soundManager.soundEffects[noteValue];
+            //noteSound = contentManager.Load<SoundEffect>(noteValue);
         }
 
 
@@ -46,26 +47,26 @@ namespace Adventure
 
                     if (horizontalMovement)
                     {
-                        if (spritePosition.X == endPosition.X)
+                        if (position.X == endPosition.X)
                         {
                             movePlatform = false;
                             timeStationaryCounter = 0;
                             firstLoop = true;
                             hitFlag = true;
-                            spritePosition.X = startPosition.X;
+                            position.X = startPosition.X;
                             noteInstances.Add(noteSound.CreateInstance());
                             noteInstances.Last().Play();
                         }
                     }
                     else if (verticalMovement)
                     {
-                        if (spritePosition.Y == endPosition.Y)
+                        if (position.Y == endPosition.Y)
                         {
                             movePlatform = false;
                             timeStationaryCounter = 0;
                             firstLoop = true;
                             hitFlag = true;
-                            spritePosition.Y = startPosition.Y;
+                            position.Y = startPosition.Y;
                             noteInstances.Add(noteSound.CreateInstance());
                             noteInstances.Last().Play();
                         }

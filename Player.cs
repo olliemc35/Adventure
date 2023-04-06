@@ -12,10 +12,12 @@ using System.Threading.Tasks;
 using MonoGame.Aseprite.Content.Processors;
 using Microsoft.Xna.Framework.Input;
 using System.Security.Cryptography.X509Certificates;
+using System.Diagnostics;
+//using System.Numerics;
 
 namespace Adventure
 {
-    public class Player : MovingSprite
+    public class Player : SwingingGameObject
     {
         public AnimatedSprite animation_IdleLeft;
         public AnimatedSprite animation_MoveRight;
@@ -30,6 +32,7 @@ namespace Adventure
         public AnimatedSprite animation_SlideLeft;
         public AnimatedSprite animation_ClimbTop;
         public AnimatedSprite animation_Landed;
+        public AnimatedSprite animation_LandedLeft;
         public AnimatedSprite animation_FallingRight;
         public AnimatedSprite animation_FallingLeft;
 
@@ -42,6 +45,15 @@ namespace Adventure
 
         public Vector2 ropeAnchor = new Vector2(0, 0);
 
+        public bool DirectionChangedX;
+        public bool DirectionChangedY;
+
+
+        // These will be +/-1 or 0
+        public int spriteDirectionX;
+        public int spriteDirectionY;
+        public int previousSpriteDirectionX;
+        public int previousSpriteDirectionY;
 
         public float jumpDuration;
         public float jumpHeight;
@@ -114,7 +126,6 @@ namespace Adventure
         public Vector2 velocityAtTheBeginningOfTheInterval = new Vector2(0, 0);
         public float timerXAtTheBeginningOfTheInterval = 0;
 
-        public float maxFallSpeed = 300;
 
 
 
@@ -136,11 +147,8 @@ namespace Adventure
 
         public Player(Vector2 initialPosition) : base(initialPosition)
         {
-            spriteMaxHorizontalSpeed = 60;
+            maxHorizontalSpeed = 60;
 
-            maxSpriteAcceleration = 3;
-            terminalSpeedY = 30f;
-            terminalSpeedX = 30f;
             jumpDuration = 0.5f;
             jumpHeight = 24;
             leftDash = 500;
@@ -154,11 +162,7 @@ namespace Adventure
             jump = 0;
 
 
-            constantAcceleration = 120f;
-            constantDeceleration = 60f;
-            groundFrictionConstant = constantAcceleration / spriteMaxHorizontalSpeed;
-            initialVelocity = speedToStartOfFrom;
-
+            maxVerticalSpeed = 300;
 
 
             //mass = 1;
@@ -175,9 +179,9 @@ namespace Adventure
 
 
             //Highlight = true;
-            rope = new RopeForPlayer(spritePosition, this);
+            rope = new RopeForPlayer(position, this);
             gun = new Gun(this);
-            rope.LoadContent(References.content, References.graphicsDevice);
+            //rope.LoadContent(References.content, References.graphicsDevice);
 
 
             // There was an issue where deltaTime was not getting updated on the first frame, and this meant that if we fell from a high ground
@@ -196,22 +200,30 @@ namespace Adventure
 
         }
 
-        public void StopCurrentAnimation()
-        {
-            foreach (AnimatedSprite animation in animations)
-            {
-                if (animation.IsAnimating)
-                {
-                    animation.Stop();
-                }
-            }
-        }
+       
+
 
         public void ReturnToIdleAnimation(AnimatedSprite animation)
         {
-            animation.Stop();
-            animation_Idle.Play();
+            UpdatePlayingAnimation(animation_Idle);
         }
+
+        public void ReturnToRespawnAnimation(AnimatedSprite animation)
+        {
+            UpdatePlayingAnimation(animation_Respawn, 1);
+            position.X = References.activeScreen.respawnPoint.X;
+            position.Y = References.activeScreen.respawnPoint.Y;
+            idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
+            idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
+            //player.animatedSprite_Idle.Position = player.spritePosition;
+            velocity.X = 0;
+            velocity.Y = 0;
+        }
+        //public void ReturnToIdleAnimation(AnimatedSprite animation)
+        //{
+        //    animation.Stop();
+        //    animation_Idle.Play();
+        //}
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
@@ -221,46 +233,31 @@ namespace Adventure
             
 
             animation_IdleLeft = spriteSheet.CreateAnimatedSprite("IdleLeft");
-            animatedSpriteAndTag.Add("IdleLeft", animation_IdleLeft);
             animation_MoveRight = spriteSheet.CreateAnimatedSprite("MoveRight");
-            animatedSpriteAndTag.Add("MoveRight", animation_MoveRight);
             animation_MoveLeft = spriteSheet.CreateAnimatedSprite("MoveLeft");
-            animatedSpriteAndTag.Add("MoveLeft", animation_MoveLeft);
             animation_JumpRight = spriteSheet.CreateAnimatedSprite("JumpRight");
-            animatedSpriteAndTag.Add("JumpRight", animation_JumpRight);
             animation_JumpLeft = spriteSheet.CreateAnimatedSprite("JumpLeft");
-            animatedSpriteAndTag.Add("JumpLeft", animation_JumpLeft);
             animation_Respawn = spriteSheet.CreateAnimatedSprite("Respawn");
-            animatedSpriteAndTag.Add("Respawn", animation_Respawn);
             animation_Dead = spriteSheet.CreateAnimatedSprite("Dead");
-            animatedSpriteAndTag.Add("Dead", animation_Dead);
             animation_ClimbingLadder = spriteSheet.CreateAnimatedSprite("ClimbingLadder");
-            animatedSpriteAndTag.Add("ClimbingLadder", animation_ClimbingLadder);
             animation_Teleport = spriteSheet.CreateAnimatedSprite("Teleport");
-            animatedSpriteAndTag.Add("Teleport", animation_Teleport);
             animation_SlideRight = spriteSheet.CreateAnimatedSprite("SlideRight");
-            animatedSpriteAndTag.Add("SlideRight", animation_SlideRight);
             animation_SlideLeft = spriteSheet.CreateAnimatedSprite("SlideLeft");
-            animatedSpriteAndTag.Add("SlideLeft", animation_SlideLeft);
             animation_ClimbTop = spriteSheet.CreateAnimatedSprite("ClimbTop");
-            animatedSpriteAndTag.Add("ClimbTop", animation_ClimbTop);
             animation_Landed = spriteSheet.CreateAnimatedSprite("Landed");
-            animatedSpriteAndTag.Add("Landed", animation_Landed);
+            animation_LandedLeft = spriteSheet.CreateAnimatedSprite("LandedLeft");
             animation_FallingRight = spriteSheet.CreateAnimatedSprite("FallingRight");
-            animatedSpriteAndTag.Add("FallingRight", animation_FallingRight);
             animation_FallingLeft = spriteSheet.CreateAnimatedSprite("FallingLeft");
-            animatedSpriteAndTag.Add("FallingLeft", animation_FallingLeft);
 
 
             animation_Landed.OnAnimationEnd = ReturnToIdleAnimation;
+            animation_LandedLeft.OnAnimationEnd = ReturnToIdleAnimation;
+            animation_Respawn.OnAnimationEnd = ReturnToIdleAnimation;
+            animation_Dead.OnAnimationEnd = ReturnToRespawnAnimation;
 
-            animations.Add(animation_Landed);
-            animations.Add(animation_IdleLeft);
-            animations.Add(animation_MoveRight);
-            animations.Add(animation_MoveLeft);
 
-            spriteHitboxTexture = new Texture2D(graphicsDevice, 1, 1);
-            spriteHitboxTexture.SetData(new Color[] { Color.White });
+            idleHitbox.texture = References.assetManager.hitboxTexture;
+
 
 
             //idleHitbox.rectangle.Width = 10; ;
@@ -273,8 +270,8 @@ namespace Adventure
             idleHitbox.offsetX = 3;
             idleHitbox.rectangle.Height = 14;
             idleHitbox.offsetY = 2;
-            idleHitbox.rectangle.X = (int)spritePosition.X + idleHitbox.offsetX;
-            idleHitbox.rectangle.Y = (int)spritePosition.Y + idleHitbox.offsetY;
+            idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
+            idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
             idleHitbox.isActive = true;
 
 
@@ -387,11 +384,11 @@ namespace Adventure
 
             if (runButtonPressed)
             {
-                spriteMaxHorizontalSpeed = 180;
+                maxHorizontalSpeed = 180;
             }
             else
             {
-                spriteMaxHorizontalSpeed = 120;
+                maxHorizontalSpeed = 120;
             }
 
 
@@ -408,21 +405,21 @@ namespace Adventure
 
         public void MovePlayer(GameTime gameTime)
         {
-            bool oldCollidedOnLeft = SpriteCollidedOnLeft;
-            bool oldCollidedOnRight = SpriteCollidedOnRight;
-            bool oldCollidedOnTop = SpriteCollidedOnTop;
-            bool oldCollidedOnBottom = SpriteCollidedOnBottom;
+            bool oldCollidedOnLeft = CollidedOnLeft;
+            bool oldCollidedOnRight = CollidedOnRight;
+            bool oldCollidedOnTop = CollidedOnTop;
+            bool oldCollidedOnBottom = CollidedOnBottom;
 
-            previousSpriteVelocity = spriteVelocity;
-            previousSpritePosition = spritePosition;
+            previousVelocity = velocity;
+            previousPosition = position;
 
             playerStateManager.Update(gameTime);
 
 
-            flagCollidedOnLeft = !oldCollidedOnLeft && SpriteCollidedOnLeft;
-            flagCollidedOnRight = !oldCollidedOnRight && SpriteCollidedOnRight;
-            flagCollidedOnTop = !oldCollidedOnTop && SpriteCollidedOnTop;
-            flagCollidedOnBottom = !oldCollidedOnBottom && SpriteCollidedOnBottom;
+            flagCollidedOnLeft = !oldCollidedOnLeft && CollidedOnLeft;
+            flagCollidedOnRight = !oldCollidedOnRight && CollidedOnRight;
+            flagCollidedOnTop = !oldCollidedOnTop && CollidedOnTop;
+            flagCollidedOnBottom = !oldCollidedOnBottom && CollidedOnBottom;
 
         }
 
@@ -479,6 +476,10 @@ namespace Adventure
             //Debug.WriteLine(SpriteCollidedOnBottom);
             //Debug.WriteLine(spriteVelocity.X);
 
+
+           // Debug.WriteLine(spriteVelocity.X);
+
+
             if (References.activeScreen.screenRibbons.Count > 0)
             {
                 foreach (Ribbon ribbon in References.activeScreen.screenRibbons)
@@ -518,8 +519,8 @@ namespace Adventure
 
             gun.Update(gameTime);
 
-            ropeAnchor.X = spritePosition.X + idleHitbox.offsetX + 1;
-            ropeAnchor.Y = spritePosition.Y + idleHitbox.offsetY + idleHitbox.rectangle.Height / 2 - 2;
+            ropeAnchor.X = position.X + idleHitbox.offsetX + 1;
+            ropeAnchor.Y = position.Y + idleHitbox.offsetY + idleHitbox.rectangle.Height / 2 - 2;
 
 
             base.Update(gameTime);
@@ -533,7 +534,7 @@ namespace Adventure
 
 
             // base.Update(gameTime);
-            ManageAnimations();
+            //ManageAnimations();
 
         }
 
@@ -560,8 +561,9 @@ namespace Adventure
             playerStateManager.Draw(spriteBatch);
 
 
+            base.Draw(spriteBatch);
 
-            animatedSpriteAndTag[nameOfCurrentAnimationSprite].Draw(spriteBatch, animationPosition);
+            //animatedSpriteAndTag[nameOfCurrentAnimationSprite].Draw(spriteBatch, animationPosition);
             rope.Draw(spriteBatch);
 
 

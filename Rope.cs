@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Adventure
 {
-    public class Rope : Sprite
+    public class Rope : AnimatedGameObject
     {
         public List<RopeBit> rope = new List<RopeBit>();
         public List<RopeBit> ropeBitsDrawnOnScreen = new List<RopeBit>();
@@ -69,15 +69,15 @@ namespace Adventure
 
             if (rope[i].FirstLoopX)
             {
-                rope[i].spriteDisplacement.X = 0.5f * rope[i].totalForce.X * rope[i].deltaTime * rope[i].deltaTime + rope[i].spriteVelocity.X * rope[i].deltaTime;
+                rope[i].displacement.X = 0.5f * rope[i].totalForce.X * rope[i].deltaTime * rope[i].deltaTime + rope[i].velocity.X * rope[i].deltaTime;
 
             }
             else
             {
-                rope[i].spriteDisplacement.X += rope[i].totalForce.X * rope[i].deltaTime * rope[i].deltaTime;
+                rope[i].displacement.X += rope[i].totalForce.X * rope[i].deltaTime * rope[i].deltaTime;
             }
 
-            rope[i].spriteVelocity.X += rope[i].totalForce.X * rope[i].deltaTime;
+            rope[i].velocity.X += rope[i].totalForce.X * rope[i].deltaTime;
 
             rope[i].FirstLoopX = false;
 
@@ -91,15 +91,15 @@ namespace Adventure
             if (rope[i].FirstLoopY)
             {
 
-                rope[i].spriteDisplacement.Y = 0.5f * rope[i].totalForce.Y * rope[i].deltaTime * rope[i].deltaTime + rope[i].spriteVelocity.Y * rope[i].deltaTime;
+                rope[i].displacement.Y = 0.5f * rope[i].totalForce.Y * rope[i].deltaTime * rope[i].deltaTime + rope[i].velocity.Y * rope[i].deltaTime;
 
             }
             else
             {
-                rope[i].spriteDisplacement.Y += rope[i].totalForce.Y * rope[i].deltaTime * rope[i].deltaTime;
+                rope[i].displacement.Y += rope[i].totalForce.Y * rope[i].deltaTime * rope[i].deltaTime;
             }
 
-            rope[i].spriteVelocity.Y += rope[i].totalForce.Y * rope[i].deltaTime;
+            rope[i].velocity.Y += rope[i].totalForce.Y * rope[i].deltaTime;
 
             rope[i].FirstLoopY = false;
 
@@ -113,7 +113,7 @@ namespace Adventure
         public void FindSpringForcesPairWise(RopeBit ropeBit1, RopeBit ropeBit2, float length)
         {
 
-            Vector2 displacement1to2 = ropeBit2.spritePosition - ropeBit1.spritePosition;
+            Vector2 displacement1to2 = ropeBit2.position - ropeBit1.position;
 
 
             float springForce = -springConstant * (displacement1to2.Length() - length);
@@ -139,7 +139,7 @@ namespace Adventure
         public void FindSpringFrictionPairWise(RopeBit ropeBit1, RopeBit ropeBit2)
         {
 
-            Vector2 relativeVelocity = new Vector2(ropeBit2.spriteVelocity.X - ropeBit1.spriteVelocity.X, ropeBit2.spriteVelocity.Y - ropeBit1.spriteVelocity.Y);
+            Vector2 relativeVelocity = new Vector2(ropeBit2.velocity.X - ropeBit1.velocity.X, ropeBit2.velocity.Y - ropeBit1.velocity.Y);
             Vector2 frictionForce = -frictionConstant * relativeVelocity;
 
             //if (ropeBit2 == rope[4])
@@ -156,9 +156,9 @@ namespace Adventure
         public void FindGroundFriction(RopeBit ropeBit1)
         {
 
-            if (ropeBit1.SpriteCollidedOnBottom)
+            if (ropeBit1.CollidedOnBottom)
             {
-                Vector2 frictionForce = -groundFrictionConstant * ropeBit1.spriteVelocity;
+                Vector2 frictionForce = -groundFrictionConstant * ropeBit1.velocity;
                 ropeBit1.totalForce += frictionForce;
             }
 
@@ -168,7 +168,7 @@ namespace Adventure
         public void FindWallFrictionWithNormal(RopeBit ropeBit1)
         {
 
-            if (ropeBit1.SpriteCollidedOnRight)
+            if (ropeBit1.CollidedOnRight)
             {
                 float frictionForce;
 
@@ -187,8 +187,8 @@ namespace Adventure
                 if (Math.Abs(ropeBit1.totalForce.Y) < frictionForce)
                 {
                     ropeBit1.FirstLoopY = true;
-                    ropeBit1.spriteDisplacement.Y = 0;
-                    ropeBit1.spriteVelocity.Y = 0;
+                    ropeBit1.displacement.Y = 0;
+                    ropeBit1.velocity.Y = 0;
                     ropeBit1.totalForce.Y = 0;
                 }
                 else
@@ -206,7 +206,7 @@ namespace Adventure
                 return;
             }
 
-            if (ropeBit1.SpriteCollidedOnLeft)
+            if (ropeBit1.CollidedOnLeft)
             {
                 float frictionForce;
 
@@ -225,8 +225,8 @@ namespace Adventure
                 if (Math.Abs(ropeBit1.totalForce.Y) < frictionForce)
                 {
                     ropeBit1.FirstLoopY = true;
-                    ropeBit1.spriteDisplacement.Y = 0;
-                    ropeBit1.spriteVelocity.Y = 0;
+                    ropeBit1.displacement.Y = 0;
+                    ropeBit1.velocity.Y = 0;
                     ropeBit1.totalForce.Y = 0;
                 }
                 else
@@ -252,7 +252,7 @@ namespace Adventure
         public void FindGroundFrictionWithNormal(RopeBit ropeBit1)
         {
 
-            if (ropeBit1.SpriteCollidedOnBottom)
+            if (ropeBit1.CollidedOnBottom)
             {
                 //float frictionForce = groundFrictionNormalConstant * ropeBit1.mass * ropeBit1.gravityConstant;
                 float frictionForce;
@@ -271,8 +271,8 @@ namespace Adventure
                 if (Math.Abs(ropeBit1.totalForce.X) < frictionForce)
                 {
                     ropeBit1.FirstLoopX = true;
-                    ropeBit1.spriteDisplacement.X = 0;
-                    ropeBit1.spriteVelocity.X = 0;
+                    ropeBit1.displacement.X = 0;
+                    ropeBit1.velocity.X = 0;
                     ropeBit1.totalForce.X = 0;
                 }
                 else
@@ -294,7 +294,7 @@ namespace Adventure
 
         public void FindAirFrictionEULER(RopeBit ropeBit1)
         {
-            Vector2 frictionForce = -airFrictionConstant * ropeBit1.spriteVelocity;
+            Vector2 frictionForce = -airFrictionConstant * ropeBit1.velocity;
             ropeBit1.totalForce += frictionForce;
         }
 

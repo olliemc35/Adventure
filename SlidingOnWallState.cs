@@ -34,17 +34,17 @@ namespace Adventure
 
             UpdateAnimations();
             FindVelocityAndDisplacement();
-            player.spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
         }
 
 
         public override void UpdateExits()
         {
-            if (player.SpriteCollidedOnBottom)
+            if (player.CollidedOnBottom)
             {
-                player.spriteVelocity.Y = 0;
-                player.spriteDisplacement.Y = 0;
+                player.velocity.Y = 0;
+                player.displacement.Y = 0;
                 exits = Exits.exitToNormalState;
                 return;
             }
@@ -55,8 +55,8 @@ namespace Adventure
                 {
                     if (leavingWallCounter >= numberOfFramesToLeaveWall)
                     {
-                        player.spriteVelocity.Y = 0;
-                        player.spriteDisplacement.Y = 0;
+                        player.velocity.Y = 0;
+                        player.displacement.Y = 0;
                         exits = Exits.exitToNormalState;
                         return;
                     }
@@ -75,8 +75,8 @@ namespace Adventure
                 {
                     if (leavingWallCounter >= numberOfFramesToLeaveWall)
                     {
-                        player.spriteVelocity.Y = 0;
-                        player.spriteDisplacement.Y = 0;
+                        player.velocity.Y = 0;
+                        player.displacement.Y = 0;
                         exits = Exits.exitToNormalState;
                         return;
                     }
@@ -94,14 +94,14 @@ namespace Adventure
             {
                 if (facingRight)
                 {
-                    player.spriteVelocity.X = -wallJumpSpeed;
+                    player.velocity.X = -wallJumpSpeed;
                 }
                 else
                 {
-                    player.spriteVelocity.X = wallJumpSpeed;
+                    player.velocity.X = wallJumpSpeed;
                 }
 
-                player.spriteVelocity.Y = -1 * player.jumpSpeed;
+                player.velocity.Y = -1 * player.jumpSpeed;
                 exits = Exits.exitToNormalState;
                 return;
             }
@@ -110,10 +110,10 @@ namespace Adventure
 
         public void FindVelocityAndDisplacement()
         {
-            player.spriteVelocity.X = 0;
-            player.spriteDisplacement.X = 0;
-            player.spriteVelocity.Y = slideConstant;
-            player.spriteDisplacement.Y = player.spriteVelocity.Y * player.deltaTime;
+            player.velocity.X = 0;
+            player.displacement.X = 0;
+            player.velocity.Y = slideConstant;
+            player.displacement.Y = player.velocity.Y * player.deltaTime;
         }
 
 
@@ -121,23 +121,11 @@ namespace Adventure
         {
             if (facingRight)
             {
-                player.nameOfCurrentAnimationSprite = "SlideRight";
-
-                //player.animatedSprite_Idle.Play("SlideRight");
-                //player.currentFrame = player.frameAndTag["SlideRight"].From;
-                //player.tagOfCurrentFrame = "SlideRight";
-                //player.TurnOffAllHitboxes();
-                //player.idleHitbox.isActive = true;
+                player.UpdatePlayingAnimation(player.animation_SlideRight);
             }
             else
             {
-                player.nameOfCurrentAnimationSprite = "SlideLeft";
-
-                //player.animatedSprite_Idle.Play("SlideLeft");
-                //player.currentFrame = player.frameAndTag["SlideLeft"].From;
-                //player.tagOfCurrentFrame = "SlideLeft";
-                //player.TurnOffAllHitboxes();
-                //player.idleHitbox.isActive = true;
+                player.UpdatePlayingAnimation(player.animation_SlideLeft);
             }
         }
 

@@ -12,17 +12,21 @@ using MonoGame.Aseprite;
 using MonoGame.Aseprite.Sprites;
 using MonoGame.Aseprite.Content.Processors;
 using MonoGame.Aseprite.AsepriteTypes;
+using System.Reflection.Metadata;
 
 namespace Adventure
 {
     public class AssetManager
     {
         public List<string> spriteFilenames;
+        public Texture2D hitboxTexture;
         public IDictionary<string, SpriteSheet> spriteSheets = new Dictionary<string, SpriteSheet>();
 
         public AssetManager() 
-        { 
-        
+        {         
+            
+
+
             spriteFilenames = new List<string>()
             {
                 "AKeyRound",
@@ -85,11 +89,17 @@ namespace Adventure
                 "WoodenGateHorizontal",
                 "YellowDot"
             };
-        
+
+            //Debug.WriteLine(spriteFilenames.Contains("RedDot"));
+
+
         }
 
         public void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
+
+            hitboxTexture = new Texture2D(graphicsDevice, 1, 1);
+            hitboxTexture.SetData(new Color[] { Color.White });
 
             foreach (string filename in spriteFilenames)
             {
@@ -97,6 +107,8 @@ namespace Adventure
                 SpriteSheet spriteSheet = SpriteSheetProcessor.Process(graphicsDevice, asepriteFile);
                 spriteSheets.Add(filename, spriteSheet);
             }
+
+       
             
         }
 

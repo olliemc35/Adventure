@@ -49,48 +49,48 @@ namespace Adventure
                 if (!isTeleportGlobal)
                 {
 
-                    Vector2 vec1 = player.spritePosition;
+                    Vector2 vec1 = player.position;
                     vec1.X += player.idleHitbox.offsetX + 0.5f * player.idleHitbox.rectangle.Width;
                     vec1.Y += player.idleHitbox.offsetY + 0.5f * player.idleHitbox.rectangle.Height;
 
-                    Vector2 vec2 = portal.spritePosition;
+                    Vector2 vec2 = portal.position;
                     vec2.X += 0.5f * portal.idleHitbox.rectangle.Width;
                     vec2.Y += 0.5f * portal.idleHitbox.rectangle.Height;
 
                     CreateTeleportEffect(vec1, vec2);
                     lastPositionBeforeTeleport = vec1;
 
-                    teleportPosition = portal.spritePosition;
+                    teleportPosition = portal.position;
                     teleportDirection = vec2 - vec1;
                     teleportDirection.Normalize();
 
-                    player.spriteVelocity.X = 0;
-                    player.spriteVelocity.Y = 0;
-                    player.spriteDisplacement.X = 0;
-                    player.spriteDisplacement.Y = 0;
-                    player.spritePosition = portal.spritePosition;
+                    player.velocity.X = 0;
+                    player.velocity.Y = 0;
+                    player.displacement.X = 0;
+                    player.displacement.Y = 0;
+                    player.position = portal.position;
 
 
                 }
                 else if (isTeleportGlobal)
                 {
 
-                    Vector2 vec1 = player.spritePosition;
+                    Vector2 vec1 = player.position;
                     vec1.X += player.idleHitbox.offsetX + 0.5f * player.idleHitbox.rectangle.Width;
                     vec1.Y += player.idleHitbox.offsetY + 0.5f * player.idleHitbox.rectangle.Height;
 
-                    Vector2 vec2 = portal.spritePosition;
+                    Vector2 vec2 = portal.position;
                     vec2.X += 0.5f * portal.idleHitbox.rectangle.Width;
                     vec2.Y += 0.5f * portal.idleHitbox.rectangle.Height;
 
                     CreateTeleportEffect(vec1, vec2);
                     lastPositionBeforeTeleport = vec1;
 
-                    player.spriteVelocity.X = 0;
-                    player.spriteVelocity.Y = 0;
-                    player.spriteDisplacement.X = 0;
-                    player.spriteDisplacement.Y = 0;
-                    player.spritePosition = portal.spritePosition;
+                    player.velocity.X = 0;
+                    player.velocity.Y = 0;
+                    player.displacement.X = 0;
+                    player.displacement.Y = 0;
+                    player.position = portal.position;
 
                 }
             }
@@ -98,7 +98,7 @@ namespace Adventure
             UpdateAnimations();
             UpdateVelocityAndDisplacement();
 
-            player.spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
         }
 
@@ -118,7 +118,7 @@ namespace Adventure
 
                     if (Vector2.Distance(lastPositionBeforeTeleport, vec) < (float)teleportEffectAnimationCounter / teleportEffectLength * Vector2.Distance(lastPositionBeforeTeleport, teleportPosition))
                     {
-                        spriteBatch.Draw(player.spriteHitboxTexture, rect, Color.White);
+                        spriteBatch.Draw(player.idleHitbox.texture, rect, Color.White);
                     }
 
                 }
@@ -182,10 +182,10 @@ namespace Adventure
             if (teleportCounter >= framesStoppedWhilstTeleporting)
             {
 
-                player.spriteVelocity.X = teleportSpeed * teleportDirection.X;
-                player.spriteDisplacement.X = player.spriteVelocity.X * player.deltaTime;
-                player.spriteVelocity.Y = teleportSpeed * teleportDirection.Y;
-                player.spriteDisplacement.Y = player.spriteVelocity.Y * player.deltaTime;
+                player.velocity.X = teleportSpeed * teleportDirection.X;
+                player.displacement.X = player.velocity.X * player.deltaTime;
+                player.velocity.Y = teleportSpeed * teleportDirection.Y;
+                player.displacement.Y = player.velocity.Y * player.deltaTime;
                 player.launchFlag = true;
                 teleportCounter = 0;
                 exits = Exits.exitToNormalState;
@@ -269,12 +269,8 @@ namespace Adventure
 
         public override void UpdateAnimations()
         {
-            player.nameOfCurrentAnimationSprite = "Teleport";
-            //player.animatedSprite_Idle.Play("Teleport");
-            //player.currentFrame = player.frameAndTag["Teleport"].From;
-            //player.tagOfCurrentFrame = "Teleport";
-            //player.TurnOffAllHitboxes();
-            //player.idleHitbox.isActive = true;
+            player.UpdatePlayingAnimation(player.animation_Teleport);
+
         }
 
 

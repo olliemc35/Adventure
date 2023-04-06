@@ -10,10 +10,10 @@ using MonoGame.Aseprite.Sprites;
 
 namespace Adventure
 {
-    public class MovingPlatform : MovingSprite
+    public class MovingPlatform : MovingGameObject
     {
 
-        public AnimatedSprite animatedSprite_Moving;
+        public AnimatedSprite animation_Moving;
 
         public Vector2 startPosition;
         public Vector2 endPosition;
@@ -42,26 +42,26 @@ namespace Adventure
 
         public bool movePlayerToo = false;
 
-        public List<Sprite> spritesOnPlatform;
+        public List<AnimatedGameObject> spritesOnPlatform;
 
 
 
         public MovingPlatform() : base()
         {
-            CollisionSprite = true;
+            CollisionObject = true;
 
         }
 
         public MovingPlatform(Vector2 initialPosition) : base(initialPosition)
         {
-            CollisionSprite = true;
+            CollisionObject = true;
             beforeDelay = false;
 
         }
 
         public MovingPlatform(Vector2 startPosition, string filename, Vector2 endPosition, int timeStationaryAtEndPoints, float speed) : base(startPosition, filename)
         {
-            CollisionSprite = true;
+            CollisionObject = true;
             beforeDelay = false;
 
             this.startPosition = startPosition;
@@ -102,9 +102,9 @@ namespace Adventure
 
         }
 
-        public MovingPlatform(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, List<Sprite> spritesOnPlatform) : base(initialPosition, filename)
+        public MovingPlatform(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, List<AnimatedGameObject> spritesOnPlatform) : base(initialPosition, filename)
         {
-            CollisionSprite = true;
+            CollisionObject = true;
             beforeDelay = false;
 
             this.spritesOnPlatform = spritesOnPlatform;
@@ -196,10 +196,8 @@ namespace Adventure
         {
             base.LoadContent(contentManager, graphicsDevice);
 
-            animatedSprite_Moving = spriteSheet.CreateAnimatedSprite("Moving");
-            animatedSpriteAndTag.Add("Moving", animatedSprite_Moving);
-
-            CollisionSprite = true;
+            animation_Moving = spriteSheet.CreateAnimatedSprite("Moving");
+            CollisionObject = true;
             idleHitbox.isActive = true;
 
 
@@ -233,13 +231,13 @@ namespace Adventure
 
 
 
-            spritePosition.X += spriteDisplacement.X;
-            spritePosition.X = DistanceToNearestInteger(spritePosition.X);
-            spritePosition.Y += spriteDisplacement.Y;
-            spritePosition.Y = DistanceToNearestInteger(spritePosition.Y);
+            position.X += displacement.X;
+            position.X = FindNearestInteger(position.X);
+            position.Y += displacement.Y;
+            position.Y = FindNearestInteger(position.Y);
 
             // This needs to be done BEFORE idleHitbox is updated
-            if (spriteCollider.CheckForEdgesMeeting(this.idleHitbox, References.player.idleHitbox))
+            if (colliderManager.CheckForEdgesMeeting(this.idleHitbox, References.player.idleHitbox))
             {
                 movePlayerToo = true;
             }
@@ -248,35 +246,35 @@ namespace Adventure
                 movePlayerToo = false;
             }
 
-            idleHitbox.rectangle.X = DistanceToNearestInteger(spritePosition.X) + idleHitbox.offsetX;
-            idleHitbox.rectangle.Y = DistanceToNearestInteger(spritePosition.Y) + idleHitbox.offsetY;
+            idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
+            idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
 
             if (movePlayerToo)
             {
-                References.player.spritePosition.X += spriteDisplacement.X;
-                References.player.spritePosition.Y += spriteDisplacement.Y;
-                References.player.velocityOffSetDueToMovingPlatform.X = spriteVelocity.X;
-                References.player.velocityOffSetDueToMovingPlatform.Y = spriteVelocity.Y;
+                References.player.position.X += displacement.X;
+                References.player.position.Y += displacement.Y;
+                References.player.velocityOffSetDueToMovingPlatform.X = velocity.X;
+                References.player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
             }
             if (spritesOnPlatform != null)
             {
 
-                foreach (Sprite sprite in spritesOnPlatform)
+                foreach (AnimatedGameObject sprite in spritesOnPlatform)
                 {
                     if (sprite is Note note)
                     {
-                        note.key.spritePosition.X += spriteDisplacement.X;
-                        note.key.idleHitbox.rectangle.X = (int)note.key.spritePosition.X + note.key.idleHitbox.offsetX;
-                        note.key.spritePosition.Y += spriteDisplacement.Y;
-                        note.key.idleHitbox.rectangle.Y = (int)note.key.spritePosition.Y + note.key.idleHitbox.offsetY;
+                        note.key.position.X += displacement.X;
+                        note.key.idleHitbox.rectangle.X = (int)note.key.position.X + note.key.idleHitbox.offsetX;
+                        note.key.position.Y += displacement.Y;
+                        note.key.idleHitbox.rectangle.Y = (int)note.key.position.Y + note.key.idleHitbox.offsetY;
                     }
                     else
                     {
 
-                        sprite.spritePosition.X += spriteDisplacement.X;
-                        sprite.idleHitbox.rectangle.X = (int)sprite.spritePosition.X + sprite.idleHitbox.offsetX;
-                        sprite.spritePosition.Y += spriteDisplacement.Y;
-                        sprite.idleHitbox.rectangle.Y = (int)sprite.spritePosition.Y + sprite.idleHitbox.offsetY;
+                        sprite.position.X += displacement.X;
+                        sprite.idleHitbox.rectangle.X = (int)sprite.position.X + sprite.idleHitbox.offsetX;
+                        sprite.position.Y += displacement.Y;
+                        sprite.idleHitbox.rectangle.Y = (int)sprite.position.Y + sprite.idleHitbox.offsetY;
                     }
                 }
             }
@@ -318,17 +316,17 @@ namespace Adventure
 
         public void FindHorizontalVelocityAndDisplacement()
         {
-            if (spritePosition.X != endPosition.X && spritePosition.X != startPosition.X)
+            if (position.X != endPosition.X && position.X != startPosition.X)
             {
                 if (movingRight)
                 {
-                    spriteVelocity.X = 60 * speed;
-                    spriteDisplacement.X = spriteVelocity.X * deltaTime;
+                    velocity.X = 60 * speed;
+                    displacement.X = velocity.X * deltaTime;
                 }
                 else if (movingLeft)
                 {
-                    spriteVelocity.X = -60 * speed;
-                    spriteDisplacement.X = spriteVelocity.X * deltaTime;
+                    velocity.X = -60 * speed;
+                    displacement.X = velocity.X * deltaTime;
                 }
 
                 return;
@@ -337,17 +335,17 @@ namespace Adventure
             if (timeStationaryAtEndPoints > 0)
             {
 
-                if ((spritePosition.X == endPosition.X || spritePosition.X == startPosition.X) && timeStationaryCounter < timeStationaryAtEndPoints)
+                if ((position.X == endPosition.X || position.X == startPosition.X) && timeStationaryCounter < timeStationaryAtEndPoints)
                 {
 
-                    spriteVelocity.X = 0;
-                    spriteDisplacement.X = 0;
+                    velocity.X = 0;
+                    displacement.X = 0;
                     timeStationaryCounter += 1;
                     return;
                 }
             }
 
-            if ((spritePosition.X == endPosition.X || spritePosition.X == startPosition.X) && timeStationaryCounter == timeStationaryAtEndPoints)
+            if ((position.X == endPosition.X || position.X == startPosition.X) && timeStationaryCounter == timeStationaryAtEndPoints)
             {
                 timeStationaryCounter = 0;
 
@@ -355,13 +353,13 @@ namespace Adventure
                 {
                     if (movingRight)
                     {
-                        spriteVelocity.X = 60 * speed;
-                        spriteDisplacement.X = spriteVelocity.X * deltaTime;
+                        velocity.X = 60 * speed;
+                        displacement.X = velocity.X * deltaTime;
                     }
                     else if (movingLeft)
                     {
-                        spriteVelocity.X = -60 * speed;
-                        spriteDisplacement.X = spriteVelocity.X * deltaTime;
+                        velocity.X = -60 * speed;
+                        displacement.X = velocity.X * deltaTime;
                     }
 
                     firstLoop = false;
@@ -373,15 +371,15 @@ namespace Adventure
                     {
                         movingRight = false;
                         movingLeft = true;
-                        spriteVelocity.X = -60 * speed;
-                        spriteDisplacement.X = spriteVelocity.X * deltaTime;
+                        velocity.X = -60 * speed;
+                        displacement.X = velocity.X * deltaTime;
                     }
                     else if (movingLeft)
                     {
                         movingLeft = false;
                         movingRight = true;
-                        spriteVelocity.X = 60 * speed;
-                        spriteDisplacement.X = spriteVelocity.X * deltaTime;
+                        velocity.X = 60 * speed;
+                        displacement.X = velocity.X * deltaTime;
                     }
                 }
 
@@ -391,19 +389,19 @@ namespace Adventure
 
         public void FindVerticalVelocityAndDisplacement()
         {
-            if (spritePosition.Y != endPosition.Y && spritePosition.Y != startPosition.Y)
+            if (position.Y != endPosition.Y && position.Y != startPosition.Y)
             {
                 if (movingDown)
                 {
                     positionOffset.Y = 1;
-                    spriteVelocity.Y = 60 * speed;
-                    spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                    velocity.Y = 60 * speed;
+                    displacement.Y = velocity.Y * deltaTime;
                 }
                 else if (movingUp)
                 {
                     positionOffset.Y = -1;
-                    spriteVelocity.Y = -60 * speed;
-                    spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                    velocity.Y = -60 * speed;
+                    displacement.Y = velocity.Y * deltaTime;
 
                 }
 
@@ -413,18 +411,18 @@ namespace Adventure
 
             if (timeStationaryAtEndPoints > 0)
             {
-                if ((spritePosition.Y == endPosition.Y || spritePosition.Y == startPosition.Y) && timeStationaryCounter < timeStationaryAtEndPoints)
+                if ((position.Y == endPosition.Y || position.Y == startPosition.Y) && timeStationaryCounter < timeStationaryAtEndPoints)
                 {
                     positionOffset.Y = 0;
-                    spriteVelocity.Y = 0;
-                    spriteDisplacement.Y = 0;
+                    velocity.Y = 0;
+                    displacement.Y = 0;
                     timeStationaryCounter += 1;
                     return;
                 }
             }
 
 
-            if ((spritePosition.Y == endPosition.Y || spritePosition.Y == startPosition.Y) && timeStationaryCounter == timeStationaryAtEndPoints)
+            if ((position.Y == endPosition.Y || position.Y == startPosition.Y) && timeStationaryCounter == timeStationaryAtEndPoints)
             {
                 timeStationaryCounter = 0;
 
@@ -433,14 +431,14 @@ namespace Adventure
                     if (movingDown)
                     {
                         positionOffset.Y = 1;
-                        spriteVelocity.Y = 60 * speed;
-                        spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                        velocity.Y = 60 * speed;
+                        displacement.Y = velocity.Y * deltaTime;
                     }
                     else if (movingUp)
                     {
                         positionOffset.Y = -1;
-                        spriteVelocity.Y = -60 * speed;
-                        spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                        velocity.Y = -60 * speed;
+                        displacement.Y = velocity.Y * deltaTime;
                     }
 
                     firstLoop = false;
@@ -452,16 +450,16 @@ namespace Adventure
                         movingDown = false;
                         movingUp = true;
                         positionOffset.Y = -1;
-                        spriteVelocity.Y = -60 * speed;
-                        spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                        velocity.Y = -60 * speed;
+                        displacement.Y = velocity.Y * deltaTime;
                     }
                     else if (movingUp)
                     {
                         movingUp = false;
                         movingDown = true;
                         positionOffset.Y = 1;
-                        spriteVelocity.Y = 60 * speed;
-                        spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                        velocity.Y = 60 * speed;
+                        displacement.Y = velocity.Y * deltaTime;
 
                     }
 
@@ -479,20 +477,11 @@ namespace Adventure
         {
             if (timeStationaryCounter == 0)
             {
-                nameOfCurrentAnimationSprite = "Moving";
-
-                //animatedSprite_Idle.Play("Moving");
-                //currentFrame = frameAndTag["Moving"].From;
-                //tagOfCurrentFrame = "Moving";
-
+                UpdatePlayingAnimation(animation_Moving);
             }
             else
             {
-                nameOfCurrentAnimationSprite = "Idle";
-
-                //animatedSprite_Idle.Play("Idle");
-                //currentFrame = frameAndTag["Idle"].From;
-                //tagOfCurrentFrame = "Idle";
+                UpdatePlayingAnimation(animation_Idle);
             }
 
 

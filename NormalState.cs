@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,8 +54,8 @@ namespace Adventure
             statesX = StatesX.atRestX;
             statesY = StatesY.atRestY;
 
-            originalLambdaAccel = player.spriteMaxHorizontalSpeed / (TimeTakenToAccelerateToMaxSpeedX * TimeTakenToAccelerateToMaxSpeedX);
-            originalLambdaDecel = player.spriteMaxHorizontalSpeed / (TimeTakenToDecelerateFromMaxSpeedX * TimeTakenToDecelerateFromMaxSpeedX);
+            originalLambdaAccel = player.maxHorizontalSpeed / (TimeTakenToAccelerateToMaxSpeedX * TimeTakenToAccelerateToMaxSpeedX);
+            originalLambdaDecel = player.maxHorizontalSpeed / (TimeTakenToDecelerateFromMaxSpeedX * TimeTakenToDecelerateFromMaxSpeedX);
 
             lambdaAccel = originalLambdaAccel;
             lambdaDecel = originalLambdaDecel;
@@ -76,11 +77,11 @@ namespace Adventure
 
                 UpdateAnimations();
 
-                if (player.spriteVelocity.X > 0)
+                if (player.velocity.X > 0)
                 {
                     statesX = StatesX.constantVelocityRightUntilHitGround;
                 }
-                else if (player.spriteVelocity.X < 0)
+                else if (player.velocity.X < 0)
                 {
                     statesX = StatesX.constantVelocityLeftUntilHitGround;
                 }
@@ -101,7 +102,7 @@ namespace Adventure
                     }
                 }
 
-                if (player.SpriteCollidedOnBottom && player.spriteVelocity.Y == 0)
+                if (player.CollidedOnBottom && player.velocity.Y == 0)
                 {
                     statesY = StatesY.atRestY;
                 }
@@ -112,7 +113,7 @@ namespace Adventure
 
 
                 UpdateVelocityAndDisplacement();
-                player.spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
                 return;
 
             }
@@ -123,7 +124,7 @@ namespace Adventure
             UpdateStatesX();
             UpdateStatesY();
             UpdateVelocityAndDisplacement();
-            player.spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
         }
 
         public override void UpdateVelocityAndDisplacement()
@@ -134,14 +135,14 @@ namespace Adventure
 
         public override void UpdateExits()
         {
-            if (!player.SpriteCollidedOnBottom)
+            if (!player.CollidedOnBottom)
             {
-                if (player.SpriteCollidedOnRight && player.spriteDirectionX == 1)
+                if (player.CollidedOnRight && player.spriteDirectionX == 1)
                 {
                     exits = Exits.exitToSlidingWallStateFacingRight;
                     return;
                 }
-                if (player.SpriteCollidedOnLeft && player.spriteDirectionX == -1)
+                if (player.CollidedOnLeft && player.spriteDirectionX == -1)
                 {
                     exits = Exits.exitToSlidingWallStateFacingLeft;
                     return;
@@ -179,7 +180,7 @@ namespace Adventure
 
                 playerControlCounter += 1;
 
-                if (player.SpriteCollidedOnBottom)
+                if (player.CollidedOnBottom)
                 {
                     if (player.spriteDirectionX == 1)
                     {
@@ -223,7 +224,7 @@ namespace Adventure
 
                 playerControlCounter += 1;
 
-                if (player.SpriteCollidedOnBottom)
+                if (player.CollidedOnBottom)
                 {
 
                     if (player.spriteDirectionX == -1)
@@ -244,13 +245,13 @@ namespace Adventure
             }
 
 
-            if (player.SpriteCollidedOnRight && player.spriteDirectionX == 1)
+            if (player.CollidedOnRight && player.spriteDirectionX == 1)
             {
                 statesX = StatesX.constantVelocityRight;
                 return;
             }
 
-            if (player.SpriteCollidedOnLeft && player.spriteDirectionX == -1)
+            if (player.CollidedOnLeft && player.spriteDirectionX == -1)
             {
                 statesX = StatesX.constantVelocityLeft;
                 return;
@@ -292,23 +293,23 @@ namespace Adventure
                 return;
             }
 
-            if (statesX == StatesX.accelerateRight && player.spriteVelocity.X >= player.spriteMaxHorizontalSpeed)
+            if (statesX == StatesX.accelerateRight && player.velocity.X >= player.maxHorizontalSpeed)
             {
-                player.spriteVelocity.X = player.spriteMaxHorizontalSpeed;
+                player.velocity.X = player.maxHorizontalSpeed;
                 statesX = StatesX.constantVelocityRight;
                 return;
             }
 
-            if (statesX == StatesX.accelerateLeft && player.spriteVelocity.X <= -player.spriteMaxHorizontalSpeed)
+            if (statesX == StatesX.accelerateLeft && player.velocity.X <= -player.maxHorizontalSpeed)
             {
-                player.spriteVelocity.X = -player.spriteMaxHorizontalSpeed;
+                player.velocity.X = -player.maxHorizontalSpeed;
                 statesX = StatesX.constantVelocityLeft;
                 return;
             }
 
-            if ((statesX == StatesX.decelerateLeft || statesX == StatesX.decelerateRight || statesX == StatesX.constantVelocityRightUntilHitGround || statesX == StatesX.constantVelocityLeftUntilHitGround) && Math.Abs(player.spriteVelocity.X) <= 0.01)
+            if ((statesX == StatesX.decelerateLeft || statesX == StatesX.decelerateRight || statesX == StatesX.constantVelocityRightUntilHitGround || statesX == StatesX.constantVelocityLeftUntilHitGround) && Math.Abs(player.velocity.X) <= 0.01)
             {
-                player.spriteVelocity.X = 0;
+                player.velocity.X = 0;
                 statesX = StatesX.atRestX;
                 return;
             }
@@ -340,59 +341,59 @@ namespace Adventure
             {
                 case StatesX.constantVelocityLeft:
                     {
-                        player.spriteVelocity.X += 0;
+                        player.velocity.X += 0;
                         break;
                     }
 
                 case StatesX.constantVelocityRight:
                     {
-                        player.spriteVelocity.X += 0;
+                        player.velocity.X += 0;
                         break;
                     }
 
                 case StatesX.accelerateLeft:
                     {
-                        player.spriteVelocity.X += -lambdaAccel * player.deltaTime;
-                        player.spriteVelocity.X = Math.Max(player.spriteVelocity.X, -player.spriteMaxHorizontalSpeed);
+                        player.velocity.X += -lambdaAccel * player.deltaTime;
+                        player.velocity.X = Math.Max(player.velocity.X, -player.maxHorizontalSpeed);
                         break;
                     }
                 case StatesX.accelerateRight:
                     {
-                        player.spriteVelocity.X += lambdaAccel * player.deltaTime;
-                        player.spriteVelocity.X = Math.Min(player.spriteVelocity.X, player.spriteMaxHorizontalSpeed);
+                        player.velocity.X += lambdaAccel * player.deltaTime;
+                        player.velocity.X = Math.Min(player.velocity.X, player.maxHorizontalSpeed);
                         break;
                     }
                 case StatesX.decelerateLeft:
                     {
-                        player.spriteVelocity.X += lambdaDecel * player.deltaTime;
-                        player.spriteVelocity.X = Math.Min(player.spriteVelocity.X, 0);
+                        player.velocity.X += lambdaDecel * player.deltaTime;
+                        player.velocity.X = Math.Min(player.velocity.X, 0);
                         break;
                     }
                 case StatesX.decelerateRight:
                     {
-                        player.spriteVelocity.X += -lambdaDecel * player.deltaTime;
-                        player.spriteVelocity.X = Math.Max(player.spriteVelocity.X, 0);
+                        player.velocity.X += -lambdaDecel * player.deltaTime;
+                        player.velocity.X = Math.Max(player.velocity.X, 0);
                         break;
                     }
                 case StatesX.constantVelocityLeftUntilHitGround:
                     {
-                        player.spriteVelocity.X += 0;
+                        player.velocity.X += 0;
                         break;
                     }
                 case StatesX.constantVelocityRightUntilHitGround:
                     {
-                        player.spriteVelocity.X += 0;
+                        player.velocity.X += 0;
                         break;
                     }
                 case StatesX.atRestX:
                     {
-                        player.spriteVelocity.X = 0;
+                        player.velocity.X = 0;
                         break;
                     }
 
             }
 
-            player.spriteDisplacement.X = player.spriteVelocity.X * player.deltaTime;
+            player.displacement.X = player.velocity.X * player.deltaTime;
 
 
         }
@@ -412,23 +413,23 @@ namespace Adventure
             if (statesY == StatesY.atRestY && player.flagJumpButtonPressed)
             {
                 statesY = StatesY.falling;
-                player.spriteVelocity.Y = -player.jumpSpeed;
+                player.velocity.Y = -player.jumpSpeed;
                 return;
             }
 
             // On the ground and walk off an edge
-            if (statesY == StatesY.atRestY && !player.SpriteCollidedOnBottom)
+            if (statesY == StatesY.atRestY && !player.CollidedOnBottom)
             {
                 statesY = StatesY.falling;
-                player.spriteVelocity.Y = 0;
+                player.velocity.Y = 0;
                 return;
             }
 
             // Falling in middair and hit ground
-            if (statesY == StatesY.falling && player.SpriteCollidedOnBottom)
+            if (statesY == StatesY.falling && player.CollidedOnBottom)
             {
                 statesY = StatesY.atRestY;
-                player.spriteVelocity.Y = 0;
+                player.velocity.Y = 0;
                 landedFlag = true;
                 return;
             }
@@ -446,20 +447,18 @@ namespace Adventure
 
                 case StatesY.falling:
                     {
-                        player.spriteVelocity.Y += player.gravityConstant * player.deltaTime;
-                        player.spriteVelocity.Y = Math.Min(player.spriteVelocity.Y, player.maxFallSpeed);
-                        //player.spriteDisplacement.Y = player.spriteVelocity.Y * player.deltaTime + 0.5f * player.gravityConstant * player.deltaTime * player.deltaTime;
+                        player.velocity.Y += player.gravityConstant * player.deltaTime;
+                        player.velocity.Y = Math.Min(player.velocity.Y, player.maxVerticalSpeed);
                         break;
                     }
                 case StatesY.atRestY:
                     {
-                        player.spriteVelocity.Y = 0;
-                        //player.spriteDisplacement.Y = 0;
+                        player.velocity.Y = 0;
                         break;
                     }
             }
 
-            player.spriteDisplacement.Y = player.spriteVelocity.Y * player.deltaTime;
+            player.displacement.Y = player.velocity.Y * player.deltaTime;
 
 
         }
@@ -470,53 +469,48 @@ namespace Adventure
         {
             if (statesY == StatesY.falling)
             {
-                if (player.spriteVelocity.Y < 0)
+                if (player.velocity.Y < 0)
                 {
                     if (player.spriteDirectionX == -1)
                     {
-                        player.nameOfCurrentAnimationSprite = "JumpLeft";
-
-                        //player.animatedSprite_Idle.Play("JumpLeft");
-                        //player.currentFrame = player.frameAndTag["JumpLeft"].From;
-                        //player.tagOfCurrentFrame = "JumpLeft";
-                        //player.TurnOffAllHitboxes();
-                        //player.idleHitbox.isActive = true;
+                        player.UpdatePlayingAnimation(player.animation_JumpLeft);
                     }
-                    else
+                    else if (player.spriteDirectionX == 1) 
                     {
-                        player.nameOfCurrentAnimationSprite = "JumpRight";
-
-
-                        //player.animatedSprite_Idle.Play("JumpRight");
-                        //player.currentFrame = player.frameAndTag["JumpRight"].From;
-                        //player.tagOfCurrentFrame = "JumpRight";
-                        //player.TurnOffAllHitboxes();
-                        //player.idleHitbox.isActive = true;
-
+                        player.UpdatePlayingAnimation(player.animation_JumpRight);
+                    }
+                    else if (player.spriteDirectionX == 0)
+                    {
+                        if (player.previousSpriteDirectionX == -1)
+                        {
+                            player.UpdatePlayingAnimation(player.animation_JumpLeft);
+                        }
+                        else if (player.previousSpriteDirectionX == 1)
+                        {
+                            player.UpdatePlayingAnimation(player.animation_JumpRight);
+                        }
                     }
                 }
                 else
                 {
                     if (player.spriteDirectionX == -1)
                     {
-                        player.nameOfCurrentAnimationSprite = "FallingLeft";
-
-                        //player.animatedSprite_Idle.Play("FallingLeft");
-                        //player.currentFrame = player.frameAndTag["FallingLeft"].From;
-                        //player.tagOfCurrentFrame = "FallingLeft";
-                        //player.TurnOffAllHitboxes();
-                        //player.idleHitbox.isActive = true;
+                        player.UpdatePlayingAnimation(player.animation_FallingLeft);
                     }
-                    else
+                    else if (player.spriteDirectionX == 1)
                     {
-                        player.nameOfCurrentAnimationSprite = "FallingRight";
-
-
-                        //player.animatedSprite_Idle.Play("FallingRight");
-                        //player.currentFrame = player.frameAndTag["FallingRight"].From;
-                        //player.tagOfCurrentFrame = "FallingRight";
-                        //player.TurnOffAllHitboxes();
-                        //player.idleHitbox.isActive = true;
+                        player.UpdatePlayingAnimation(player.animation_FallingRight);
+                    }
+                    else if (player.spriteDirectionX == 0)
+                    {
+                        if (player.previousSpriteDirectionX == -1)
+                        {
+                            player.UpdatePlayingAnimation(player.animation_FallingLeft);
+                        }
+                        else if (player.previousSpriteDirectionX == 1)
+                        {
+                            player.UpdatePlayingAnimation(player.animation_FallingRight);
+                        }
                     }
                 }
             }
@@ -525,35 +519,50 @@ namespace Adventure
                 if (landedFlag)
                 {
                     landedFlag = false;
-                    player.StopCurrentAnimation();
-                    player.animation_Landed.Play();
-                }
 
-                // Hmmm think about this.
-                // Only want to call Play() once - when we enter a state
-                // I.e. when we first press RIGHT want to say player.animation_MoveRight.Play();
-                // We don't want to keep saying play whilst the key is held down.
-                // Also need to remember to STOP all animations which are currently playing.
-                if (!player.animation_Landed.IsAnimating)
-                {
-                    if (player.spriteDirectionX == 1)
+                    if (player.spriteDirectionX == -1)
                     {
-                        player.animation_MoveRight.Play();
-
+                        player.UpdatePlayingAnimation(player.animation_LandedLeft, 1);
                     }
-                    else if (player.spriteDirectionX == -1)
+                    else if (player.spriteDirectionX == 1)
                     {
-                        player.animation_MoveLeft.Play();
+                        player.UpdatePlayingAnimation(player.animation_Landed, 1);
                     }
                     else if (player.spriteDirectionX == 0)
                     {
-                        if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
+                        if (player.previousSpriteDirectionX == -1)
                         {
-                            player.animation_Idle.Play();
+                            player.UpdatePlayingAnimation(player.animation_LandedLeft, 1);
+                        }
+                        else if (player.previousSpriteDirectionX == 1)
+                        {
+                            player.UpdatePlayingAnimation(player.animation_Landed, 1);
+                        }
+                    }
+
+                }
+
+                if (!(player.animation_Landed.IsAnimating || player.animation_LandedLeft.IsAnimating))
+                {
+                    if (player.spriteDirectionX == 1)
+                    {
+                        player.UpdatePlayingAnimation(player.animation_MoveRight);
+                    }
+                    else if (player.spriteDirectionX == -1)
+                    {
+                        player.UpdatePlayingAnimation(player.animation_MoveLeft);
+                    }
+                    else if (player.spriteDirectionX == 0)
+                    {
+                        if (player.previousSpriteDirectionX == 1)
+                        {
+                            player.UpdatePlayingAnimation(player.animation_Idle);
+
                         }
                         else if (player.previousSpriteDirectionX == -1)
                         {
-                            player.animation_IdleLeft.Play();
+                            player.UpdatePlayingAnimation(player.animation_IdleLeft);
+
                         }
                     }
 
@@ -562,251 +571,18 @@ namespace Adventure
 
 
 
-                
-
-
-
-                //if (landedFlag)
-                //{
-                //    landedFlag = false;
-                //    //player.nameOfCurrentAnimationSprite = "Landed";
-
-                //    player.StopCurrentAnimation();
-                //    player.animation_Landed.Play();
-
-                //    //player.animatedSprite_Idle.Play("Landed");
-                //    //player.currentFrame = player.frameAndTag["Landed"].From;
-                //    //player.tagOfCurrentFrame = "Landed";
-                //    //player.TurnOffAllHitboxes();
-                //    //player.idleHitbox.isActive = true;
-
-                //}
-                //else if (player.spriteDirectionX == 1)
-                //{
-                //    player.nameOfCurrentAnimationSprite = "MoveRight";
-
-                //    //player.animatedSprite_Idle.Play("MoveRight");
-                //    //player.currentFrame = player.frameAndTag["MoveRight"].From;
-                //    //player.tagOfCurrentFrame = "MoveRight";
-                //    //player.TurnOffAllHitboxes();
-                //    //player.idleHitbox.isActive = true;
-
-                //}
-                //else if (player.spriteDirectionX == -1)
-                //{
-                //    player.nameOfCurrentAnimationSprite = "MoveLeft";
-
-
-                //    //player.animatedSprite_Idle.Play("MoveLeft");
-                //    //player.currentFrame = player.frameAndTag["MoveLeft"].From;
-                //    //player.tagOfCurrentFrame = "MoveLeft";
-                //    //player.TurnOffAllHitboxes();
-                //    //player.idleHitbox.isActive = true;
-                //}
-                //else if (player.spriteDirectionX == 0)
-                //{
-                //    if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
-                //    {
-                //        player.nameOfCurrentAnimationSprite = "Idle";
-
-                //        //player.animatedSprite_Idle.Play("Idle");
-                //        //player.currentFrame = player.frameAndTag["Idle"].From;
-                //        //player.tagOfCurrentFrame = "Idle";
-                //        //player.TurnOffAllHitboxes();
-                //        //player.idleHitbox.isActive = true;
-                //    }
-                //    else if (player.previousSpriteDirectionX == -1)
-                //    {
-                //        player.nameOfCurrentAnimationSprite = "IdleLeft";
-
-                //        //player.animatedSprite_Idle.Play("IdleLeft");
-                //        //player.currentFrame = player.frameAndTag["IdleLeft"].From;
-                //        //player.tagOfCurrentFrame = "IdleLeft";
-                //        //player.TurnOffAllHitboxes();
-                //        //player.idleHitbox.isActive = true;
-                //    }
-                //}
 
 
             }
 
-            //player.animation_ClimbingLadder.OnAnimationEnd? = () =>
-            //{
-
-            //};
-
-            player.animation_ClimbingLadder.OnAnimationEnd = (Nullable) =>
-            {
-
-            };
-
-            //player.animation_Landed.OnAnimationLoop = (hello) =>
-            //{
-                
-            //    landedFlag = false;
-            //    player.animation_Idle.Play();
-            //    player.nameOfCurrentAnimationSprite = "Idle";
-            //    player.animation_Landed.OnAnimationLoop = null;
-            //};
-
-            //player.animatedSprite_Idle.OnAnimationLoop = () =>
-            //{
-            //    if (player.tagOfCurrentFrame == "Landed")
-            //    {
-            //        landedFlag = false;
-            //        player.animatedSprite_Idle.OnAnimationLoop = null;
-            //    }
-            //    //if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
-            //    //{
-            //    //    player.animatedSprite.Play("Idle");
-            //    //    player.currentFrame = player.frameAndTag["Idle"].From;
-            //    //    player.tagOfCurrentFrame = "Idle";
-            //    //    player.TurnOffAllHitboxes();
-            //    //    player.idleHitbox.isActive = true;
-            //    //    player.animatedSprite.OnAnimationLoop = null;
-            //    //}
-            //    //else if (player.previousSpriteDirectionX == -1)
-            //    //{
-            //    //    player.animatedSprite.Play("IdleLeft");
-            //    //    player.currentFrame = player.frameAndTag["IdleLeft"].From;
-            //    //    player.tagOfCurrentFrame = "IdleLeft";
-            //    //    player.TurnOffAllHitboxes();
-            //    //    player.idleHitbox.isActive = true;
-            //    //    player.animatedSprite.OnAnimationLoop = null;
-            //    //}
-
-            //};
-
+            
        
 
         }
 
        
 
-        //if (player.jump < 0)
-        //{
-        //    if (player.previousSpriteDirectionX == 1)
-        //    {
-        //        player.animatedSprite.Play("JumpRight");
-        //        player.currentFrame = player.frameAndTag["JumpRight"].From;
-        //        player.tagOfCurrentFrame = "JumpRight";
-        //        player.TurnOffAllHitboxes();
-        //        player.idleHitbox.isActive = true;
-        //    }
-        //    else if (player.previousSpriteDirectionX == -1)
-        //    {
-        //        player.animatedSprite.Play("JumpLeft");
-        //        player.currentFrame = player.frameAndTag["JumpLeft"].From;
-        //        player.tagOfCurrentFrame = "JumpLeft";
-        //        player.TurnOffAllHitboxes();
-        //        player.idleHitbox.isActive = true;
-        //    }
-        //    else
-        //    {
-        //        player.animatedSprite.Play("JumpRight");
-        //        player.currentFrame = player.frameAndTag["JumpRight"].From;
-        //        player.tagOfCurrentFrame = "JumpRight";
-        //        player.TurnOffAllHitboxes();
-        //        player.idleHitbox.isActive = true;
-        //    }
-        //}
-
-        //if (player.spriteDirectionX == 1)
-        //{
-        //    if (player.jump < 0)
-        //    {
-        //        player.animatedSprite.Play("JumpRight");
-        //        player.currentFrame = player.frameAndTag["JumpRight"].From;
-        //        player.tagOfCurrentFrame = "JumpRight";
-        //        player.TurnOffAllHitboxes();
-        //        player.idleHitbox.isActive = true;
-        //    }
-        //    else
-        //    {
-        //        if (player.runButtonPressed)
-        //        {
-        //            player.animatedSprite.Play("MoveRightRun");
-        //            player.currentFrame = player.frameAndTag["MoveRightRun"].From;
-        //            player.tagOfCurrentFrame = "MoveRightRun";
-        //            player.TurnOffAllHitboxes();
-        //            player.idleHitbox.isActive = true;
-        //        }
-        //        else
-        //        {
-        //            player.animatedSprite.Play("MoveRight");
-        //            player.currentFrame = player.frameAndTag["MoveRight"].From;
-        //            player.tagOfCurrentFrame = "MoveRight";
-        //            player.TurnOffAllHitboxes();
-        //            player.idleHitbox.isActive = true;
-        //        }
-
-        //    }
-        //}
-
-        //if (player.spriteDirectionX == -1)
-        //{
-        //    if (player.jump < 0)
-        //    {
-        //        player.animatedSprite.Play("JumpLeft");
-        //        player.currentFrame = player.frameAndTag["JumpLeft"].From;
-        //        player.tagOfCurrentFrame = "JumpLeft";
-        //        player.TurnOffAllHitboxes();
-        //        player.idleHitbox.isActive = true;
-        //    }
-        //    else
-        //    {
-        //        if (player.runButtonPressed)
-        //        {
-        //            player.animatedSprite.Play("MoveLeftRun");
-        //            player.currentFrame = player.frameAndTag["MoveLeftRun"].From;
-        //            player.tagOfCurrentFrame = "MoveLeftRun";
-        //            player.TurnOffAllHitboxes();
-        //            player.idleHitbox.isActive = true;
-        //        }
-        //        else
-        //        {
-        //            player.animatedSprite.Play("MoveLeft");
-        //            player.currentFrame = player.frameAndTag["MoveLeft"].From;
-        //            player.tagOfCurrentFrame = "MoveLeft";
-        //            player.TurnOffAllHitboxes();
-        //            player.idleHitbox.isActive = true;
-        //        }
-
-        //    }
-        //}
-
-        //if (player.spriteDirectionX == 0)
-        //{
-        //    if (player.previousSpriteDirectionX == 0 || player.previousSpriteDirectionX == 1)
-        //    {
-        //        player.animatedSprite.Play("Idle");
-        //        player.currentFrame = player.frameAndTag["Idle"].From;
-        //        player.tagOfCurrentFrame = "Idle";
-        //        player.TurnOffAllHitboxes();
-        //        player.idleHitbox.isActive = true;
-        //    }
-        //    else if (player.previousSpriteDirectionX == -1)
-        //    {
-        //        player.animatedSprite.Play("IdleLeft");
-        //        player.currentFrame = player.frameAndTag["IdleLeft"].From;
-        //        player.tagOfCurrentFrame = "IdleLeft";
-        //        player.TurnOffAllHitboxes();
-        //        player.idleHitbox.isActive = true;
-        //    }
-        //}
-
-
-
-
-
-
-
-
-
-        //}
-
-
-
+        
 
     }
 }

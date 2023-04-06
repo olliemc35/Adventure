@@ -9,7 +9,7 @@ namespace Adventure
 {
     public class ClimbingState : State
     {
-        public Sprite platform;
+        public AnimatedGameObject platform;
         public float climbingSpeed = 120;
         public float wallJumpSpeed = 120;
 
@@ -22,8 +22,8 @@ namespace Adventure
         {
             if (enterStateFlag)
             {
-                player.spriteVelocity.X = 0;
-                player.spriteVelocity.Y = 0;
+                player.velocity.X = 0;
+                player.velocity.Y = 0;
                 enterStateFlag = false;
             }
 
@@ -32,7 +32,7 @@ namespace Adventure
 
             UpdateVelocityAndDisplacement();
 
-            player.spriteCollider.AdjustForCollisionWithClimable(player, platform, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionWithClimable(player, platform, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
 
@@ -51,20 +51,20 @@ namespace Adventure
             {
                 exits = Exits.exitToNormalState;
 
-                if (player.SpriteCollidedOnLeft)
+                if (player.CollidedOnLeft)
                 {
-                    player.spriteVelocity.X = wallJumpSpeed;
-                    player.spriteVelocity.Y = -1 * player.jumpSpeed;
+                    player.velocity.X = wallJumpSpeed;
+                    player.velocity.Y = -1 * player.jumpSpeed;
 
                 }
-                else if (player.SpriteCollidedOnRight)
+                else if (player.CollidedOnRight)
                 {
-                    player.spriteVelocity.X = -wallJumpSpeed;
-                    player.spriteVelocity.Y = -1 * player.jumpSpeed;
+                    player.velocity.X = -wallJumpSpeed;
+                    player.velocity.Y = -1 * player.jumpSpeed;
                 }
-                else if (player.SpriteCollidedOnTop)
+                else if (player.CollidedOnTop)
                 {
-                    player.spriteVelocity.Y = 0;
+                    player.velocity.Y = 0;
                 }
 
                 return;
@@ -74,24 +74,24 @@ namespace Adventure
 
             if (player.idleHitbox.rectangle.Y <= platform.idleHitbox.rectangle.Y - player.distanceCanStartClimbing)
             {
-                if (player.SpriteCollidedOnRight && (player.spriteDirectionX == 1 || player.spriteDirectionY == -1))
+                if (player.CollidedOnRight && (player.spriteDirectionX == 1 || player.spriteDirectionY == -1))
                 {
                     player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X;
-                    player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                    player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
                     player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height;
-                    player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
-                    player.spriteVelocity.Y = 0;
+                    player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                    player.velocity.Y = 0;
                     exits = Exits.exitToNormalState;
                     return;
                 }
 
-                if (player.SpriteCollidedOnLeft && (player.spriteDirectionX == -1 || player.spriteDirectionY == -1))
+                if (player.CollidedOnLeft && (player.spriteDirectionX == -1 || player.spriteDirectionY == -1))
                 {
                     player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width - player.idleHitbox.rectangle.Width;
-                    player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                    player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
                     player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height;
-                    player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
-                    player.spriteVelocity.Y = 0;
+                    player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                    player.velocity.Y = 0;
                     exits = Exits.exitToNormalState;
                     return;
                 }
@@ -105,21 +105,21 @@ namespace Adventure
         {
             if (player.idleHitbox.rectangle.Y >= platform.idleHitbox.rectangle.Y + platform.idleHitbox.rectangle.Height - player.distanceCanStartClimbing)
             {
-                if (player.SpriteCollidedOnRight && (player.spriteDirectionX == 1 || player.spriteDirectionY == 1))
+                if (player.CollidedOnRight && (player.spriteDirectionX == 1 || player.spriteDirectionY == 1))
                 {
                     player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X;
-                    player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                    player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
                     player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y + platform.idleHitbox.rectangle.Height;
-                    player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                    player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
 
                 }
 
-                if (player.SpriteCollidedOnLeft && (player.spriteDirectionX == -1 || player.spriteDirectionY == 1))
+                if (player.CollidedOnLeft && (player.spriteDirectionX == -1 || player.spriteDirectionY == 1))
                 {
                     player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width - player.idleHitbox.rectangle.Width;
-                    player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                    player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
                     player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y + platform.idleHitbox.rectangle.Height;
-                    player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                    player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
 
                 }
             }
@@ -128,14 +128,14 @@ namespace Adventure
 
         public void TransitionFromUnderneathToSides()
         {
-            if (player.SpriteCollidedOnTop)
+            if (player.CollidedOnTop)
             {
                 if (player.idleHitbox.rectangle.X >= platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width - player.distanceCanStartClimbing)
                 {
                     player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width;
                     player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y + platform.idleHitbox.rectangle.Height - player.distanceCanStartClimbing;
-                    player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
-                    player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                    player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                    player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
 
 
                 }
@@ -144,8 +144,8 @@ namespace Adventure
                 {
                     player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X - player.idleHitbox.rectangle.Width;
                     player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y + platform.idleHitbox.rectangle.Height - player.distanceCanStartClimbing;
-                    player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
-                    player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                    player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                    player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
                 }
             }
         }
@@ -154,23 +154,23 @@ namespace Adventure
         public override void UpdateVelocityAndDisplacement()
         {
 
-            if (player.SpriteCollidedOnRight)
+            if (player.CollidedOnRight)
             {
-                player.spriteVelocity.Y = climbingSpeed * player.spriteDirectionY;
+                player.velocity.Y = climbingSpeed * player.spriteDirectionY;
                 player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X - player.idleHitbox.rectangle.Width;
-                player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
             }
-            else if (player.SpriteCollidedOnLeft)
+            else if (player.CollidedOnLeft)
             {
-                player.spriteVelocity.Y = climbingSpeed * player.spriteDirectionY;
+                player.velocity.Y = climbingSpeed * player.spriteDirectionY;
                 player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width;
-                player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
             }
-            else if (player.SpriteCollidedOnTop)
+            else if (player.CollidedOnTop)
             {
-                player.spriteVelocity.X = climbingSpeed * player.spriteDirectionX;
+                player.velocity.X = climbingSpeed * player.spriteDirectionX;
                 player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y + platform.idleHitbox.rectangle.Height;
-                player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
             }
 
             TransitionFromSidesToUnderneath();
@@ -178,7 +178,7 @@ namespace Adventure
 
 
 
-            player.spriteDisplacement = player.spriteVelocity * player.deltaTime;
+            player.displacement = player.velocity * player.deltaTime;
 
         }
 
@@ -194,34 +194,18 @@ namespace Adventure
             //    player.idleHitbox.isActive = true;
             //}
             //else 
-            if (player.SpriteCollidedOnLeft)
+            if (player.CollidedOnLeft)
             {
-                player.nameOfCurrentAnimationSprite = "SlideLeft";
-                //player.animatedSprite_Idle.Play("SlideLeft");
-                //player.currentFrame = player.frameAndTag["SlideLeft"].From;
-                //player.tagOfCurrentFrame = "SlideLeft";
-                //player.TurnOffAllHitboxes();
-                //player.idleHitbox.isActive = true;
-            }
-            else if (player.SpriteCollidedOnTop)
-            {
-                player.nameOfCurrentAnimationSprite = "ClimbTop";
+                player.UpdatePlayingAnimation(player.animation_SlideLeft);
 
-                //player.animatedSprite_Idle.Play("ClimbTop");
-                //player.currentFrame = player.frameAndTag["ClimbTop"].From;
-                //player.tagOfCurrentFrame = "ClimbTop";
-                //player.TurnOffAllHitboxes();
-                //player.idleHitbox.isActive = true;
             }
-            else if (player.SpriteCollidedOnRight)
+            else if (player.CollidedOnTop)
             {
-                player.nameOfCurrentAnimationSprite = "SlideRight";
-
-                //player.animatedSprite_Idle.Play("SlideRight");
-                //player.currentFrame = player.frameAndTag["SlideRight"].From;
-                //player.tagOfCurrentFrame = "SlideRight";
-                //player.TurnOffAllHitboxes();
-                //player.idleHitbox.isActive = true;
+                player.UpdatePlayingAnimation(player.animation_ClimbTop);
+            }
+            else if (player.CollidedOnRight)
+            {
+                player.UpdatePlayingAnimation(player.animation_SlideRight);
 
             }
 

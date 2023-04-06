@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
+
 
 namespace Adventure
 {
@@ -33,8 +35,8 @@ namespace Adventure
         public List<Beam> screenBeams = new List<Beam>();
         public List<BouncingOrb> screenBouncingOrbs = new List<BouncingOrb>();
         public List<HookPoint> screenHookPoints = new List<HookPoint>();
-        public List<Sprite> screenHazards = new List<Sprite>();
-        public List<Sprite> screenClimables = new List<Sprite>();
+        public List<AnimatedGameObject> screenHazards = new List<AnimatedGameObject>();
+        public List<AnimatedGameObject> screenClimables = new List<AnimatedGameObject>();
         public NoteShip screenNoteShip;
 
 

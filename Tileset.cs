@@ -12,10 +12,10 @@ namespace Adventure
 {
     public class Tileset
     {
-        public Sprite spriteMapOfTiles;
+        public AnimatedGameObject spriteMapOfTiles;
         public Color[,] colorMapOfSpriteSheet;
 
-        public Sprite spriteMapOfMarkers;
+        public AnimatedGameObject spriteMapOfMarkers;
         public Color[,] colorMapOfSpriteSheetMarkers;
 
         public List<GameObject> screenGameObjects = new List<GameObject>();
@@ -65,7 +65,7 @@ namespace Adventure
 
         public Tileset(string levelString)
         {
-            spriteMapOfTiles = new Sprite(levelString);
+            spriteMapOfTiles = new AnimatedGameObject(levelString);
             spriteMapOfTiles.LoadContent(References.content, References.graphicsDevice);
             BuildArrayOfTileSpriteFilenamesFromAsepriteFile();
 
@@ -73,9 +73,9 @@ namespace Adventure
 
         public Tileset(string levelString, string markerString)
         {
-            spriteMapOfTiles = new Sprite(levelString);
+            spriteMapOfTiles = new AnimatedGameObject(levelString);
             spriteMapOfTiles.LoadContent(References.content, References.graphicsDevice);
-            spriteMapOfMarkers = new Sprite(markerString);
+            spriteMapOfMarkers = new AnimatedGameObject(markerString);
             spriteMapOfMarkers.LoadContent(References.content, References.graphicsDevice);
             BuildArrayOfTileSpriteFilenamesFromAsepriteFile();
             BuildArrayOfGameObjectFilenamesFromAsepriteFile();
@@ -113,7 +113,7 @@ namespace Adventure
 
         public void BuildArrayOfTileSpriteFilenamesFromAsepriteFile()
         {
-            colorMapOfSpriteSheet = TextureTo2DArrayOfColors(spriteMapOfTiles.spriteTexture);
+            colorMapOfSpriteSheet = TextureTo2DArrayOfColors(spriteMapOfTiles.texture);
             arrayofTileSetSpriteFilenames = new string[colorMapOfSpriteSheet.GetLength(0), colorMapOfSpriteSheet.GetLength(1)];
             rows = colorMapOfSpriteSheet.GetLength(0);
             columns = colorMapOfSpriteSheet.GetLength(1);
@@ -178,7 +178,7 @@ namespace Adventure
 
         public void BuildArrayOfGameObjectFilenamesFromAsepriteFile()
         {
-            colorMapOfSpriteSheetMarkers = TextureTo2DArrayOfColors(spriteMapOfMarkers.spriteTexture);
+            colorMapOfSpriteSheetMarkers = TextureTo2DArrayOfColors(spriteMapOfMarkers.texture);
 
             for (int i = 0; i < colorMapOfSpriteSheetMarkers.GetLength(0); i++)
             {

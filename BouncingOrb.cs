@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class BouncingOrb : MovingSprite
+    public class BouncingOrb : MovingGameObject
     {
         public float speed;
 
@@ -42,23 +42,23 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            spriteDisplacement.X = speed * (float)Math.Cos(angle);
-            spriteDisplacement.Y = -speed * (float)Math.Sin(angle);
+            displacement.X = speed * (float)Math.Cos(angle);
+            displacement.Y = -speed * (float)Math.Sin(angle);
 
-            spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            base.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
-            if (SpriteCollidedOnBottom)
+            if (CollidedOnBottom)
             {
                 angle -= (float)Math.PI / 2;
             }
-            else if (SpriteCollidedOnTop)
+            else if (CollidedOnTop)
             {
                 angle += (float)Math.PI / 2;
             }
 
-            if (spritePosition.X <= -8)
+            if (position.X <= -8)
             {
-                spritePosition = initialPosition;
+                position = initialPosition;
                 angle = initialAngle;
             }
 

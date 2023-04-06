@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Bullet : MovingSprite
+    public class Bullet : MovingGameObject
     {
 
         public List<Rectangle> bulletPath = new List<Rectangle>();
@@ -32,35 +32,35 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            spriteVelocity = speed * direction;
-            spriteDisplacement = spriteVelocity * deltaTime;
-            spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesForAimLine, 1, 10);
+            velocity = speed * direction;
+            displacement = velocity * deltaTime;
+            colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesForAimLine, 1, 10);
 
-            if (SpriteCollidedOnRight)
+            if (CollidedOnRight)
             {
-                collisionPoint.X = DistanceToNearestInteger(spritePosition.X + 1);
-                collisionPoint.Y = DistanceToNearestInteger(spritePosition.Y);
+                collisionPoint.X = FindNearestInteger(position.X + 1);
+                collisionPoint.Y = FindNearestInteger(position.Y);
                 remove = true;
                 UpdateEnemyColorMap(collisionPoint);
             }
-            else if (SpriteCollidedOnLeft)
+            else if (CollidedOnLeft)
             {
-                collisionPoint.X = DistanceToNearestInteger(spritePosition.X - 1);
-                collisionPoint.Y = DistanceToNearestInteger(spritePosition.Y);
+                collisionPoint.X = FindNearestInteger(position.X - 1);
+                collisionPoint.Y = FindNearestInteger(position.Y);
                 remove = true;
                 UpdateEnemyColorMap(collisionPoint);
             }
-            else if (SpriteCollidedOnBottom)
+            else if (CollidedOnBottom)
             {
-                collisionPoint.X = DistanceToNearestInteger(spritePosition.X);
-                collisionPoint.Y = DistanceToNearestInteger(spritePosition.Y + 1);
+                collisionPoint.X = FindNearestInteger(position.X);
+                collisionPoint.Y = FindNearestInteger(position.Y + 1);
                 remove = true;
                 UpdateEnemyColorMap(collisionPoint);
             }
-            else if (SpriteCollidedOnTop)
+            else if (CollidedOnTop)
             {
-                collisionPoint.X = DistanceToNearestInteger(spritePosition.X);
-                collisionPoint.Y = DistanceToNearestInteger(spritePosition.Y - 1);
+                collisionPoint.X = FindNearestInteger(position.X);
+                collisionPoint.Y = FindNearestInteger(position.Y - 1);
                 remove = true;
                 UpdateEnemyColorMap(collisionPoint);
             }

@@ -12,7 +12,7 @@ namespace Adventure
     public class LocalTeleport : Teleport
     {
 
-        public List<Sprite> arrow = new List<Sprite>();
+        public List<AnimatedGameObject> arrow = new List<AnimatedGameObject>();
 
 
         public LocalTeleport(Vector2 initialPosition, string filename) : base(initialPosition, filename)
@@ -23,7 +23,7 @@ namespace Adventure
 
             for (int i = 0; i < 20; i++)
             {
-                Sprite sprite = new Sprite(initialPosition, "whiteDot");
+                AnimatedGameObject sprite = new AnimatedGameObject(initialPosition, "whiteDot");
                 arrow.Add(sprite);
 
             }
@@ -45,11 +45,11 @@ namespace Adventure
 
             if (InRange)
             {
-                Vector2 vec1 = References.player.spritePosition;
+                Vector2 vec1 = References.player.position;
                 vec1.X += References.player.idleHitbox.offsetX + 0.5f * References.player.idleHitbox.rectangle.Width;
                 vec1.Y += References.player.idleHitbox.offsetY + 0.5f * References.player.idleHitbox.rectangle.Height;
 
-                Vector2 vec2 = spritePosition;
+                Vector2 vec2 = position;
                 vec2.X += 0.5f * idleHitbox.rectangle.Width;
                 vec2.Y += 0.5f * idleHitbox.rectangle.Height;
 
@@ -59,19 +59,20 @@ namespace Adventure
                 direction.Normalize();
                 for (int i = 0; i < arrow.Count(); i++)
                 {
-                    arrow[i].spritePosition = spritePosition + i * direction;
-                    arrow[i].spritePosition.X += 0.5f * idleHitbox.rectangle.Width;
-                    arrow[i].spritePosition.Y += 0.5f * idleHitbox.rectangle.Height;
-                    arrow[i].spritePosition.X = DistanceToNearestInteger(arrow[i].spritePosition.X);
-                    arrow[i].spritePosition.Y = DistanceToNearestInteger(arrow[i].spritePosition.Y);
+                    arrow[i].position = position + i * direction;
+                    arrow[i].position.X += 0.5f * idleHitbox.rectangle.Width;
+                    arrow[i].position.Y += 0.5f * idleHitbox.rectangle.Height;
+                    arrow[i].position.X = FindNearestInteger(arrow[i].position.X);
+                    arrow[i].position.Y = FindNearestInteger(arrow[i].position.Y);
 
                 }
 
             }
-            if (Vector2.Distance(References.player.spritePosition, spritePosition) <= radius)
+            if (Vector2.Distance(References.player.position, position) <= radius)
             {
                 InRange = true;
-                nameOfCurrentAnimationSprite = "InRange";
+                UpdatePlayingAnimation(animation_InRange);
+                //nameOfCurrentAnimationSprite = "InRange";
 
                 //animatedSprite_Idle.Play("InRange");
                 //currentFrame = frameAndTag["InRange"].From;
@@ -80,7 +81,8 @@ namespace Adventure
             else
             {
                 InRange = false;
-                nameOfCurrentAnimationSprite = "Idle";
+                UpdatePlayingAnimation(animation_Idle);
+               // nameOfCurrentAnimationSprite = "Idle";
 
                 //animatedSprite_Idle.Play("Idle");
                 //currentFrame = frameAndTag["Idle"].From;

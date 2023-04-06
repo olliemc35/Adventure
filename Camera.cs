@@ -25,7 +25,7 @@ namespace Adventure
                 //Debug.WriteLine("here");
                 //var offset = Matrix.CreateTranslation(Game1.ScreenWidth / 2, Game1.ScreenHeight / 2, 0);
 
-                int x = DistanceToNearestInteger(player.spritePosition.X);
+                int x = DistanceToNearestInteger(player.position.X);
 
                 var position1 = Matrix.CreateTranslation(-x - player.idleHitbox.rectangle.Width / 2, 0, 0);
                 var position2 = Matrix.CreateTranslation(-screen.ScreenWidth + References.game.ScreenWidth / 2, 0, 0);
@@ -58,7 +58,7 @@ namespace Adventure
             }
             else if (screen.cameraBehaviourType4)
             {
-                var position1 = Matrix.CreateTranslation(-player.spritePosition.X - player.idleHitbox.rectangle.Width / 2, -player.spritePosition.Y - player.idleHitbox.rectangle.Height / 2, 0);
+                var position1 = Matrix.CreateTranslation(-player.position.X - player.idleHitbox.rectangle.Width / 2, -player.position.Y - player.idleHitbox.rectangle.Height / 2, 0);
                 var offset = Matrix.CreateTranslation(References.game.ScreenWidth / 2 - 120, References.game.ScreenHeight / 2 - 30, 0);
 
 
@@ -70,9 +70,9 @@ namespace Adventure
             else if (screen.cameraBehaviourType5)
             {
                 // Not right - want the camera to track the player until lands on noteShip
-                if (References.player.spritePosition.X < screen.screenNoteShip.spritePosition.X)
+                if (References.player.position.X < screen.screenNoteShip.position.X)
                 {
-                    int x1 = DistanceToNearestInteger(player.spritePosition.X);
+                    int x1 = DistanceToNearestInteger(player.position.X);
 
                     var position11 = Matrix.CreateTranslation(-x1 - player.idleHitbox.rectangle.Width / 2, 0, 0);
                     var position21 = Matrix.CreateTranslation(-screen.ScreenWidth + References.game.ScreenWidth / 2, 0, 0);
@@ -94,7 +94,7 @@ namespace Adventure
                     return;
                 }
 
-                int x = DistanceToNearestInteger(screen.screenNoteShip.spritePosition.X + screen.screenNoteShip.idleHitbox.rectangle.Width);
+                int x = DistanceToNearestInteger(screen.screenNoteShip.position.X + screen.screenNoteShip.idleHitbox.rectangle.Width);
 
                 var position1 = Matrix.CreateTranslation(-x - screen.screenNoteShip.idleHitbox.rectangle.Width / 2, 0, 0);
                 var position2 = Matrix.CreateTranslation(-screen.ScreenWidth + References.game.ScreenWidth / 2, 0, 0);

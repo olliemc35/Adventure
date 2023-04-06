@@ -9,74 +9,23 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class MovingSprite : AnimationSprite
+    public class MovingGameObject : AnimatedGameObject
     {
-        public Vector2 spriteVelocity;
-        public Vector2 spriteAcceleration;
-        public Vector2 previousSpriteVelocity;
-        public Vector2 previousSpriteAcceleration;
-        public Vector2 spriteDisplacement; // This is the displacement between NOW and the NEXT FRAME.
-        public Vector2 previousSpriteDisplacement;
-        public Vector2 spriteConstantSpeed;
+        public Vector2 velocity = new Vector2();
+        public Vector2 previousVelocity;
+        public Vector2 displacement; // This is the displacement between NOW and the NEXT FRAME.
+        public Vector2 previousDisplacement;        
+
+        public float maxHorizontalSpeed;
+        public float maxVerticalSpeed;
 
 
-        public float swingForceDuration;
-        public float swingAngle = 0;
-        public float swingAngleDot = 0;
-
-        public float length;
-        public float lengthDot = 0;
-        public float lengthForceDuration;
-        public float lengthForceMaximum;
-        public float lengthForce = 0;
-
-        public bool firstLoopOnSwing = true;
-        public float timeAngle = 0;
-        public float timeLength = 0;
-
-        public bool attachedToASwingingPivot = false;
-        public bool swinging = false;
-        public bool impulseWindow = false;
-        public float impulseAngle = 0;
-        public int swingDirection = 0;
-        public float swingDrivingForce = 0;
-        public float swingForceMaximum;
-        public float swingFrictionConstant = 0.5f;
-
-
-
-        public Vector2 totalForce = new Vector2(0, 0);
-
-
-        public Vector2 constantVelocity;
-        //public Vector2 previousSpriteVelocity;
-        //public Vector2 previousSpriteAcceleration;
-        //public Vector2 spriteDisplacementBetweenNowandNextFrame;
-        //public Vector2 spriteConstantSpeed;
-
-        public float terminalSpeedY;
-        public float terminalSpeedX;
-
-        public float initialVelocityX;
-        public float spriteMaxHorizontalSpeed;
-        public float spriteMaxVerticalSpeed;
-        public float maxSpriteAcceleration;
-
-        // These will be +/-1 or 0
-        public int spriteDirectionX;
-        public int spriteDirectionY;
-        public int previousSpriteDirectionX;
-        public int previousSpriteDirectionY;
-        public bool DirectionChangedX;
-        public bool DirectionChangedY;
 
         // These bools will keep a global record of whether I am currently collided with ANY sprite (e.g. the floor)
-        public bool SpriteCollidedOnTop = false;
-        public bool SpriteCollidedOnBottom = false;
-        public bool SpriteCollidedOnRight = false;
-        public bool SpriteCollidedOnLeft = false;
-
-        //public bool SpriteCollided = false;
+        public bool CollidedOnTop = false;
+        public bool CollidedOnBottom = false;
+        public bool CollidedOnRight = false;
+        public bool CollidedOnLeft = false;
 
         // These bools will FLAG when a GlobalCollider bool changes from FALSE to TRUE
         public bool flagCollidedOnTop = false;
@@ -85,95 +34,30 @@ namespace Adventure
         public bool flagCollidedOnLeft = false;
 
         public bool ResetColliderBools = true;
-        public bool FirstLoop = true;
 
 
-        public bool FirstLoopX = true;
-        public bool FirstLoopY = true;
-
-        public bool knockedBack = false;
-        public Vector2 knockBack = new Vector2();
-
-        public ColliderManager spriteCollider;
+        public ColliderManager colliderManager = new ColliderManager();
         public float deltaTime;
 
-        public float accelerationTime = 0f;
-        public float constantAcceleration;
-        public float acceleration = 0f;
-        public float constantDeceleration;
-        public float speedWhenDecelerationStarts = 0;
-        public float TimeWhenDecelerationStarts = 0;
-
-        public float groundFrictionConstant = 0;
-
-
-        public bool accelerating = false;
-        public bool decelerating = false;
-        public bool constantSpeed = false;
-
-        public float timeX = 0;
-        public float timeY = 0;
 
         public float gravityConstant;
         public float mass;
-        public float gravity = 0f;
-        public float timeSpentOffTheGround = 0f;
 
         public Color[] colorMapOfSpriteSheet;
         public List<List<HitboxRectangle>> hitboxesForGunlineForEachFrame = new List<List<HitboxRectangle>>();
 
-        public MovingSprite() : base()
+        public MovingGameObject() : base()
         {
-            spriteDirectionX = 0;
-            previousSpriteDirectionX = spriteDirectionX;
-            spriteVelocity = new Vector2(0, 0);
-            previousSpriteVelocity = spriteVelocity;
-            spriteAcceleration = new Vector2(0, 0);
-            previousSpriteAcceleration = spriteAcceleration;
-            DirectionChangedX = false;
-            spriteCollider = new ColliderManager();
-            deltaTime = 0;
-
-            constantVelocity = new Vector2(0, 0);
         }
 
-        public MovingSprite(Vector2 initialPosition) : base(initialPosition)
+        public MovingGameObject(Vector2 initialPosition) : base(initialPosition)
         {
-            spriteDirectionX = 0;
-            previousSpriteDirectionX = spriteDirectionX;
-            spriteVelocity = new Vector2(0, 0);
-            previousSpriteVelocity = spriteVelocity;
-            spriteAcceleration = new Vector2(0, 0);
-            previousSpriteAcceleration = spriteAcceleration;
-            DirectionChangedX = false;
-            spriteCollider = new ColliderManager();
-            deltaTime = 0;
-
-            constantVelocity = new Vector2(0, 0);
-
         }
 
-        public MovingSprite(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public MovingGameObject(Vector2 initialPosition, string filename) : base(initialPosition, filename)
         {
-            spriteDirectionX = 0;
-            previousSpriteDirectionX = spriteDirectionX;
-            spriteVelocity = new Vector2(0, 0);
-            previousSpriteVelocity = spriteVelocity;
-            spriteAcceleration = new Vector2(0, 0);
-            previousSpriteAcceleration = spriteAcceleration;
-            DirectionChangedX = false;
-            spriteCollider = new ColliderManager();
-            deltaTime = 0;
-
-            constantVelocity = new Vector2(0, 0);
-
         }
 
-
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
-        {
-            base.LoadContent(contentManager, graphicsDevice);
-        }
 
         public override void Update(GameTime gameTime)
         {
@@ -182,34 +66,7 @@ namespace Adventure
         }
 
 
-        public void FindGravityForce()
-        {
-            totalForce.Y += mass * gravityConstant;
-        }
-
-        public void FindNormalForces()
-        {
-            // These checks act like normal forces 
-
-            if (SpriteCollidedOnBottom && totalForce.Y >= 0)
-            {
-                totalForce.Y = 0;
-            }
-            if (SpriteCollidedOnTop && totalForce.Y <= 0)
-            {
-                totalForce.Y = 0;
-            }
-            if (SpriteCollidedOnRight && totalForce.X >= 0)
-            {
-                totalForce.X = 0;
-            }
-            if (SpriteCollidedOnLeft && totalForce.X <= 0)
-            {
-                //totalForce.Y -= totalForce.X;
-                totalForce.X = 0;
-            }
-
-        }
+       
 
 
 
@@ -234,19 +91,19 @@ namespace Adventure
         public void UpdateGunlineHitboxes()
         {
 
-            foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[previousFrameNumber])
-            {
-                hitbox.isActive = false;
-            }
+            //foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[previousFrameNumber])
+            //{
+            //    hitbox.isActive = false;
+            //}
 
-            for (int k = frameAndTag[tagOfCurrentFrame].From; k <= frameAndTag[tagOfCurrentFrame].To; k++)
-            {
-                foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[k])
-                {
-                    hitbox.rectangle.X = (int)spritePosition.X + hitbox.offsetX;
-                    hitbox.rectangle.Y = (int)spritePosition.Y + hitbox.offsetY;
-                }
-            }
+            //for (int k = frameAndTag[tagOfCurrentFrame].From; k <= frameAndTag[tagOfCurrentFrame].To; k++)
+            //{
+            //    foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[k])
+            //    {
+            //        hitbox.rectangle.X = (int)spritePosition.X + hitbox.offsetX;
+            //        hitbox.rectangle.Y = (int)spritePosition.Y + hitbox.offsetY;
+            //    }
+            //}
 
             //foreach (HitboxRectangle hitbox in hitboxesForGunlineForEachFrame[animatedSprite_Idle.CurrentFrameIndex])
             //{
@@ -423,8 +280,8 @@ namespace Adventure
                         newHitbox.offsetX = newHitbox.rectangle.X;
                         newHitbox.offsetY = newHitbox.rectangle.Y;
 
-                        newHitbox.rectangle.X = (int)spritePosition.X + newHitbox.offsetX;
-                        newHitbox.rectangle.Y = (int)spritePosition.Y + newHitbox.offsetY;
+                        newHitbox.rectangle.X = (int)position.X + newHitbox.offsetX;
+                        newHitbox.rectangle.Y = (int)position.Y + newHitbox.offsetY;
 
 
                         hitboxes.Add(newHitbox);

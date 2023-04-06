@@ -15,7 +15,7 @@ namespace Adventure
         public List<Note> notes;
         public Gate gate;
         public int indexWhichMustBePlayedNext = 0;
-        public AnimationSprite symbolPlate;
+        public AnimatedGameObject symbolPlate;
         public List<Symbol> symbols = new List<Symbol>();
 
 
@@ -23,7 +23,7 @@ namespace Adventure
         {
             this.notes = notes;
             this.gate = gate;
-            symbolPlate = new AnimationSprite(symbolPlatePosition, symbolPlateFilename);
+            symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename);
 
 
 
@@ -35,7 +35,7 @@ namespace Adventure
 
             for (int i = 0; i < notes.Count; i++)
             {
-                Symbol symbol = new Symbol(new Vector2(symbolPlate.spritePosition.X + 12 * (i + 1), symbolPlate.spritePosition.Y + 4), notes[i].symbolFilename);
+                Symbol symbol = new Symbol(new Vector2(symbolPlate.position.X + 12 * (i + 1), symbolPlate.position.Y + 4), notes[i].symbolFilename);
                 symbol.LoadContent(contentManager, graphicsDevice);
                 symbols.Add(symbol);
             }

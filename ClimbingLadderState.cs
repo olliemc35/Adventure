@@ -30,7 +30,7 @@ namespace Adventure
 
             UpdateAnimations();
             UpdateVelocityAndDisplacement();
-            player.spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
         }
 
@@ -48,15 +48,15 @@ namespace Adventure
             // I've climbed the ladder
             if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= ladder.positionOfTopLeftCorner.Y && player.spriteDirectionY != 1)
             {
-                player.spriteVelocity.Y = 0;
+                player.velocity.Y = 0;
                 exits = Exits.exitToNormalState;
                 return;
             }
 
             // I've hit the bottom and I'm not going up
-            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height > ladder.positionOfTopLeftCorner.Y && player.SpriteCollidedOnBottom && player.spriteDirectionY != -1)
+            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height > ladder.positionOfTopLeftCorner.Y && player.CollidedOnBottom && player.spriteDirectionY != -1)
             {
-                player.spriteVelocity.Y = 0;
+                player.velocity.Y = 0;
                 exits = Exits.exitToNormalState;
                 return;
             }
@@ -65,22 +65,18 @@ namespace Adventure
 
         public override void UpdateVelocityAndDisplacement()
         {
-            player.spriteVelocity.X = 0;
-            player.spriteDisplacement.X = 0;
-            player.spriteVelocity.Y = climbingSpeed * player.spriteDirectionY;
-            player.spriteDisplacement.Y = player.spriteVelocity.Y * player.deltaTime;
+            player.velocity.X = 0;
+            player.displacement.X = 0;
+            player.velocity.Y = climbingSpeed * player.spriteDirectionY;
+            player.displacement.Y = player.velocity.Y * player.deltaTime;
 
         }
 
 
         public override void UpdateAnimations()
         {
-            player.nameOfCurrentAnimationSprite = "ClimbingLadder";
-            //player.animatedSprite_Idle.Play("ClimbingLadder");
-            //player.currentFrame = player.frameAndTag["ClimbingLadder"].From;
-            //player.tagOfCurrentFrame = "ClimbingLadder";
-            //player.TurnOffAllHitboxes();
-            //player.idleHitbox.isActive = true;
+            player.UpdatePlayingAnimation(player.animation_ClimbingLadder);
+
         }
 
 

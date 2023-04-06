@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class HookPoint : AnimationSprite
+    public class HookPoint : AnimatedGameObject
     {
         public float radius;
         public bool InRange = false;
 
-        public AnimatedSprite animatedSprite_InRange;
+        public AnimatedSprite animation_InRange;
 
         public HookPoint(Vector2 initialPosition, string filename) : base(initialPosition, filename)
         {
@@ -25,31 +25,21 @@ namespace Adventure
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
             base.LoadContent(contentManager, graphicsDevice);
-
-            animatedSprite_InRange = spriteSheet.CreateAnimatedSprite("InRange");
-            animatedSpriteAndTag.Add("InRange", animatedSprite_InRange);
-
+            animation_InRange = spriteSheet.CreateAnimatedSprite("InRange");
         }
 
         public override void Update(GameTime gameTime)
         {
 
-            if (Vector2.Distance(References.player.spritePosition, spritePosition) <= radius)
+            if (Vector2.Distance(References.player.position, position) <= radius)
             {
                 InRange = true;
-                nameOfCurrentAnimationSprite = "InRange";
-
-                //animatedSprite_Idle.Play("InRange");
-                //currentFrame = frameAndTag["InRange"].From;
-                //tagOfCurrentFrame = "InRange";
+                UpdatePlayingAnimation(animation_InRange);
             }
             else
             {
                 InRange = false;
-                nameOfCurrentAnimationSprite = "Idle";
-                //animatedSprite_Idle.Play("Idle");
-                //currentFrame = frameAndTag["Idle"].From;
-                //tagOfCurrentFrame = "Idle";
+                UpdatePlayingAnimation(animation_Idle);
             }
 
             base.Update(gameTime);

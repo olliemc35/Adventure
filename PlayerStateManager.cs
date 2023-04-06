@@ -159,32 +159,32 @@ namespace Adventure
 
                     if (References.activeScreen.screenClimables != null)
                     {
-                        foreach (Sprite platform in References.activeScreen.screenClimables)
+                        foreach (AnimatedGameObject platform in References.activeScreen.screenClimables)
                         {
-                            if (player.spriteCollider.CheckForCollision(player.idleHitbox, platform.idleHitbox))
+                            if (player.colliderManager.CheckForCollision(player.idleHitbox, platform.idleHitbox))
                             {
-                                if (player.SpriteCollidedOnTop && player.spriteVelocity.Y < 0)
+                                if (player.CollidedOnTop && player.velocity.Y < 0)
                                 {
                                     DeactivatePlayerStates();
                                     climbingState.Activate();
                                     climbingState.platform = platform;
                                     return;
                                 }
-                                if (player.SpriteCollidedOnRight || player.SpriteCollidedOnLeft)
+                                if (player.CollidedOnRight || player.CollidedOnLeft)
                                 {
                                     DeactivatePlayerStates();
                                     climbingState.Activate();
                                     climbingState.platform = platform;
                                     return;
                                 }
-                                else if (player.SpriteCollidedOnBottom)
+                                else if (player.CollidedOnBottom)
                                 {
                                     if ((player.spriteDirectionX == 1 || player.spriteDirectionY == 1) && player.idleHitbox.rectangle.X >= platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width - player.distanceCanStartClimbing)
                                     {
                                         player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width;
                                         player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y;
-                                        player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
-                                        player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                                        player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                                        player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
                                         DeactivatePlayerStates();
                                         climbingState.Activate();
                                         climbingState.platform = platform;
@@ -194,8 +194,8 @@ namespace Adventure
                                     {
                                         player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X - player.idleHitbox.rectangle.Width;
                                         player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y;
-                                        player.spritePosition.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
-                                        player.spritePosition.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                                        player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                                        player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
                                         DeactivatePlayerStates();
                                         climbingState.Activate();
                                         climbingState.platform = platform;
@@ -259,7 +259,7 @@ namespace Adventure
                 {
                     foreach (Ladder ladder in References.activeScreen.screenLadders)
                     {
-                        if (player.spriteCollider.CheckForCollision(player.idleHitbox, ladder.idleHitbox))
+                        if (player.colliderManager.CheckForCollision(player.idleHitbox, ladder.idleHitbox))
                         {
                             // I'm climbing starting from the top
                             if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= ladder.positionOfTopLeftCorner.Y && player.spriteDirectionY == 1)
@@ -291,9 +291,9 @@ namespace Adventure
             {
                 if (References.activeScreen.screenHazards != null)
                 {
-                    foreach (Sprite sprite in References.activeScreen.screenHazards)
+                    foreach (AnimatedGameObject sprite in References.activeScreen.screenHazards)
                     {
-                        if (player.spriteCollider.CheckForCollision(player.idleHitbox, sprite.idleHitbox) && sprite.idleHitbox.isActive)
+                        if (player.colliderManager.CheckForCollision(player.idleHitbox, sprite.idleHitbox) && sprite.idleHitbox.isActive)
                         {
                             DeactivatePlayerStates();
                             deadState.Activate();

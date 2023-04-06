@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 namespace Adventure
 {
-    public class Orb : MovingSprite
+    public class Orb : MovingGameObject
     {
         public float speed;
         public OrbVessel orbVessel;
@@ -30,7 +30,7 @@ namespace Adventure
         {
 
 
-            if (spritePosition.X <= orbVessel.orbEndLeft)
+            if (position.X <= orbVessel.orbEndLeft)
             {
                 if (setToTurnInActive)
                 {
@@ -40,17 +40,17 @@ namespace Adventure
                 }
                 else
                 {
-                    spritePosition.X = orbVessel.orbEndRight;
+                    position.X = orbVessel.orbEndRight;
                 }
 
             }
             else
             {
-                spritePosition.X -= speed;
-                idleHitbox.rectangle.X = (int)spritePosition.X + idleHitbox.offsetX;
+                position.X -= speed;
+                idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
             }
 
-            if (spritePosition.X >= orbVessel.orbWindowLeft && spritePosition.X <= orbVessel.orbWindowRight)
+            if (position.X >= orbVessel.orbWindowLeft && position.X <= orbVessel.orbWindowRight)
             {
                 inWindow = true;
             }

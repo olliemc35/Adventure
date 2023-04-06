@@ -10,10 +10,11 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Note : Sprite
+    public class Note : AnimatedGameObject
     {
         public Key key;
 
+        public List<GameObject> attachedGameObjects;
 
         public string symbolFilename;
 
@@ -57,7 +58,7 @@ namespace Adventure
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
             key = new Key(keyPosition, keyFilename);
-            spriteFilename = null;
+            filename = null;
 
         }
 
@@ -68,7 +69,7 @@ namespace Adventure
             this.symbolFilename = symbolFilename;
             this.gates = gates;
             key = new Key(keyPosition, keyFilename);
-            spriteFilename = null;
+            filename = null;
 
         }
 
@@ -78,7 +79,7 @@ namespace Adventure
             this.symbolFilename = symbolFilename;
             this.movingPlatformsNoLoop = movingPlatformsNoLooping;
             key = new Key(keyPosition, keyFilename);
-            spriteFilename = null;
+            filename = null;
 
         }
 
@@ -87,7 +88,7 @@ namespace Adventure
             this.noteValue = noteValue;
             this.movingPlatformsOneLoop = movingPlatformsOneLoop;
             key = new Key(keyPosition, keyFilename);
-            spriteFilename = null;
+            filename = null;
 
         }
 
@@ -96,7 +97,7 @@ namespace Adventure
             this.noteValue = noteValue;
             this.movingPlatformsHalfLoop = movingPlatformsHalfLoop;
             key = new Key(keyPosition, keyFilename);
-            spriteFilename = null;
+            filename = null;
 
         }
 
@@ -107,7 +108,7 @@ namespace Adventure
             this.noteShip = noteShip;
             this.displacementScalingForNoteShip = displacementScalingForNoteShip;
             key = new Key(keyPosition, keyFilename);
-            spriteFilename = null;
+            filename = null;
 
         }
 
@@ -118,7 +119,7 @@ namespace Adventure
             this.noteValue = noteValue;
             this.launchPad = launchPad;
             key = new Key(keyPosition, keyFilename);
-            spriteFilename = null;
+            filename = null;
 
         }
 
@@ -132,7 +133,7 @@ namespace Adventure
             orbSpeed = speedOfOrb;
             this.orbFilename = orbFilename;
 
-            spriteFilename = null;
+            filename = null;
         }
 
 
@@ -157,8 +158,8 @@ namespace Adventure
             key.LoadContent(contentManager, graphicsDevice);
 
 
-
-            noteSound = contentManager.Load<SoundEffect>(noteValue);
+            noteSound = References.soundManager.soundEffects[noteValue];
+            //noteSound = contentManager.Load<SoundEffect>(noteValue);
 
             //Debug.WriteLine(noteSound.Duration.TotalSeconds);
 
@@ -276,7 +277,7 @@ namespace Adventure
                 {
                     if (movingPlatformsNoLoop[i].horizontalMovement)
                     {
-                        if (movingPlatformsNoLoop[i].spritePosition.X == movingPlatformsNoLoop[i].startPosition.X)
+                        if (movingPlatformsNoLoop[i].position.X == movingPlatformsNoLoop[i].startPosition.X)
                         {
                             indexofFirstPlatformNotMoving = i;
                             break;
@@ -284,7 +285,7 @@ namespace Adventure
                     }
                     else
                     {
-                        if (movingPlatformsNoLoop[i].spritePosition.Y == movingPlatformsNoLoop[i].startPosition.Y)
+                        if (movingPlatformsNoLoop[i].position.Y == movingPlatformsNoLoop[i].startPosition.Y)
                         {
                             indexofFirstPlatformNotMoving = i;
                             break;
@@ -328,41 +329,16 @@ namespace Adventure
         }
 
 
-        public void ManageAnimations()
+        public override void ManageAnimations()
         {
-            //if (key is HangingRopeWithWeightAttached bell)
-            //{
-            //    if (keyPlayInteractedAnimation)
-            //    {
-            //        bell.weight.animatedSprite.Play("Interacted");
-            //        bell.weight.currentFrame = bell.weight.frameAndTag["Interacted"].From;
-            //        bell.weight.tagOfCurrentFrame = "Interacted";
-            //    }
-            //    else
-            //    {
-            //        bell.weight.animatedSprite.Play("Idle");
-            //        bell.weight.currentFrame = bell.weight.frameAndTag["Idle"].From;
-            //        bell.weight.tagOfCurrentFrame = "Idle";
-            //    }
-            //}
-            //else
-            //{
 
             if (keyPlayInteractedAnimation)
             {
-                key.nameOfCurrentAnimationSprite = "Interacted";
-
-                //key.animatedSprite_Idle.Play("Interacted");
-                //key.currentFrame = key.frameAndTag["Interacted"].From;
-                //key.tagOfCurrentFrame = "Interacted";
+                key.UpdatePlayingAnimation(key.animation_Interacted);
             }
             else
             {
-                key.nameOfCurrentAnimationSprite = "Idle";
-
-                //key.animatedSprite_Idle.Play("Idle");
-                //key.currentFrame = key.frameAndTag["Idle"].From;
-                //key.tagOfCurrentFrame = "Idle";
+                key.UpdatePlayingAnimation(key.animation_Idle);
             }
 
 

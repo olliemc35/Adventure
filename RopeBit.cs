@@ -12,8 +12,13 @@ using System.Linq;
 
 namespace Adventure
 {
-    public class RopeBit : MovingSprite
+    public class RopeBit : MovingGameObject
     {
+        public Vector2 totalForce = new Vector2(0, 0);
+
+        public bool FirstLoopX = true;
+        public bool FirstLoopY = true;
+
         public Vector2 throwDirection;
         public int RopeBitNumber;
         public bool ThisIsTheRopeAnchor = false;
@@ -55,10 +60,7 @@ namespace Adventure
 
         public RopeBit(Vector2 initialPosition) : base(initialPosition)
         {
-            spriteFilename = "RedDot";
-            terminalSpeedY = 30f;
-            constantVelocity.X = 0;
-            constantVelocity.Y = 0;
+            filename = "RedDot";
             gravityConstant = 750;
             mass = 0.8f;
 
@@ -76,9 +78,6 @@ namespace Adventure
 
         public RopeBit(Vector2 initialPosition, string filename) : base(initialPosition, filename)
         {
-            terminalSpeedY = 30f;
-            constantVelocity.X = 0;
-            constantVelocity.Y = 0;
             gravityConstant = 750;
             mass = 0.8f;
         }
@@ -87,10 +86,7 @@ namespace Adventure
 
         public RopeBit(Vector2 initialPosition, int numberOfPreviousPositions) : base(initialPosition)
         {
-            spriteFilename = "RedDot";
-            terminalSpeedY = 30f;
-            constantVelocity.X = 0;
-            constantVelocity.Y = 0;
+            filename = "RedDot";
             gravityConstant = 750;
             mass = 0.8f;
             this.numberOfPreviousPositions = numberOfPreviousPositions;
@@ -108,16 +104,13 @@ namespace Adventure
 
         public RopeBit(Vector2 initialPosition, Vector2 direction) : base(initialPosition)
         {
-            spriteFilename = "RedDot";
-            terminalSpeedY = 30f;
+            filename = "RedDot";
             //constantVelocity.X = 120;
             //constantVelocity.Y = -128;
             gravityConstant = 750;
             mass = 0.8f;
             //gravityConstant = 256;
             throwDirection = direction;
-            constantVelocity.X = 120 * throwDirection.X;
-            constantVelocity.Y = 360 * throwDirection.Y;
             //References.activeScreen.screenSprites.Add(this);
         }
 
@@ -125,10 +118,10 @@ namespace Adventure
         {
             base.LoadContent(contentManager, graphicsDevice);
 
-            idleHitbox.rectangle.Width = (int)(((float)2 / 8) * baseFrame.Width);
-            idleHitbox.rectangle.Height = (int)(((float)2 / 8) * baseFrame.Height);
-            idleHitbox.offsetX = (int)(((float)3 / 8) * baseFrame.Width);
-            idleHitbox.offsetY = (int)(((float)3 / 8) * baseFrame.Height);
+            idleHitbox.rectangle.Width = (int)(((float)2 / 8) * animation_Idle.Width);
+            idleHitbox.rectangle.Height = (int)(((float)2 / 8) * animation_Idle.Height);
+            idleHitbox.offsetX = (int)(((float)3 / 8) * animation_Idle.Width);
+            idleHitbox.offsetY = (int)(((float)3 / 8) * animation_Idle.Height);
             idleHitbox.rectangle.X += idleHitbox.offsetX;
             idleHitbox.rectangle.Y += idleHitbox.offsetY;
             idleHitbox.isActive = true;
@@ -145,12 +138,12 @@ namespace Adventure
         {
             if (drawHitboxes)
             {
-                foreach (HitboxRectangle hitbox in spriteHitboxes)
+                foreach (HitboxRectangle hitbox in hitboxes)
                 {
                     if (hitbox.isActive)
                     {
 
-                        spriteBatch.Draw(spriteHitboxTexture, hitbox.rectangle, Color.Red);
+                        spriteBatch.Draw(idleHitbox.texture, hitbox.rectangle, Color.Red);
                     }
                 }
             }
@@ -169,7 +162,34 @@ namespace Adventure
 
 
 
+        public void FindGravityForce()
+        {
+            totalForce.Y += mass * gravityConstant;
+        }
 
+        public void FindNormalForces()
+        {
+            // These checks act like normal forces 
+
+            if (CollidedOnBottom && totalForce.Y >= 0)
+            {
+                totalForce.Y = 0;
+            }
+            if (CollidedOnTop && totalForce.Y <= 0)
+            {
+                totalForce.Y = 0;
+            }
+            if (CollidedOnRight && totalForce.X >= 0)
+            {
+                totalForce.X = 0;
+            }
+            if (CollidedOnLeft && totalForce.X <= 0)
+            {
+                //totalForce.Y -= totalForce.X;
+                totalForce.X = 0;
+            }
+
+        }
 
     }
 }

@@ -12,7 +12,7 @@ using MonoGame.Aseprite;
 
 namespace Adventure
 {
-    public class Pivot : Sprite
+    public class Pivot : AnimatedGameObject
     {
         public bool TopRight = false;
         public bool TopLeft = false;

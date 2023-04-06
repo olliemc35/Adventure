@@ -45,9 +45,9 @@ namespace Adventure
                 firstLoopOnSwing = true;
                 timeAngle = 0;
 
-                hook = new Hook(hookPoint.spritePosition, player);
+                hook = new Hook(hookPoint.position, player);
                 hook.LoadContent(References.content, References.graphicsDevice);
-                swingRadius = Vector2.Distance(hookPoint.spritePosition, player.ropeAnchor);
+                swingRadius = Vector2.Distance(hookPoint.position, player.ropeAnchor);
             }
 
             UpdateAnimations();
@@ -93,7 +93,7 @@ namespace Adventure
             {
                 int sign;
 
-                if (player.ropeAnchor.X <= hookPoint.spritePosition.X)
+                if (player.ropeAnchor.X <= hookPoint.position.X)
                 {
                     sign = 1;
                 }
@@ -102,22 +102,22 @@ namespace Adventure
                     sign = -1;
                 }
 
-                Vector2 direction1 = player.ropeAnchor - hookPoint.spritePosition;
+                Vector2 direction1 = player.ropeAnchor - hookPoint.position;
                 direction1.Normalize();
                 Vector2 direction2 = new Vector2(0, 1);
                 float initialSwingAngle = sign * (float)Math.Acos(Vector2.Dot(direction1, direction2));
-                float initialAngleDot = -sign * player.spriteVelocity.Length() / swingRadius;
+                float initialAngleDot = -sign * player.velocity.Length() / swingRadius;
 
                 player.swingAngleDot = initialAngleDot + player.deltaTime * (-player.gravityConstant * (float)Math.Sin(player.swingAngle) / swingRadius - swingDrivingForce * (float)Math.Cos(player.swingAngle) - (swingFrictionConstant / player.mass) * player.swingAngleDot);
                 player.swingAngle = initialSwingAngle + player.deltaTime * player.swingAngleDot;
 
 
-                player.spriteVelocity.X = -swingRadius * player.swingAngleDot * (float)Math.Cos(player.swingAngle);
-                player.spriteVelocity.Y = -swingRadius * player.swingAngleDot * (float)Math.Sin(player.swingAngle);
+                player.velocity.X = -swingRadius * player.swingAngleDot * (float)Math.Cos(player.swingAngle);
+                player.velocity.Y = -swingRadius * player.swingAngleDot * (float)Math.Sin(player.swingAngle);
 
-                player.spriteDisplacement.X = hookPoint.spritePosition.X - swingRadius * (float)Math.Sin(player.swingAngle) - player.ropeAnchor.X;
-                player.spriteDisplacement.Y = hookPoint.spritePosition.Y + swingRadius * (float)Math.Cos(player.swingAngle) - player.ropeAnchor.Y;
-                player.spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                player.displacement.X = hookPoint.position.X - swingRadius * (float)Math.Sin(player.swingAngle) - player.ropeAnchor.X;
+                player.displacement.Y = hookPoint.position.Y + swingRadius * (float)Math.Cos(player.swingAngle) - player.ropeAnchor.Y;
+                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
                 firstLoopOnSwing = false;
 
@@ -128,11 +128,11 @@ namespace Adventure
                 player.swingAngleDot += player.deltaTime * (-player.gravityConstant * (float)Math.Sin(player.swingAngle) / swingRadius - swingDrivingForce * (float)Math.Cos(player.swingAngle) - (swingFrictionConstant / player.mass) * player.swingAngleDot);
                 player.swingAngle += player.deltaTime * player.swingAngleDot;
 
-                player.spriteVelocity.X = -swingRadius * player.swingAngleDot * (float)Math.Cos(player.swingAngle);
-                player.spriteVelocity.Y = -swingRadius * player.swingAngleDot * (float)Math.Sin(player.swingAngle);
-                player.spriteDisplacement.X = hookPoint.spritePosition.X - swingRadius * (float)Math.Sin(player.swingAngle) - player.ropeAnchor.X;
-                player.spriteDisplacement.Y = hookPoint.spritePosition.Y + swingRadius * (float)Math.Cos(player.swingAngle) - player.ropeAnchor.Y;
-                player.spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                player.velocity.X = -swingRadius * player.swingAngleDot * (float)Math.Cos(player.swingAngle);
+                player.velocity.Y = -swingRadius * player.swingAngleDot * (float)Math.Sin(player.swingAngle);
+                player.displacement.X = hookPoint.position.X - swingRadius * (float)Math.Sin(player.swingAngle) - player.ropeAnchor.X;
+                player.displacement.Y = hookPoint.position.Y + swingRadius * (float)Math.Cos(player.swingAngle) - player.ropeAnchor.Y;
+                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
             }
 
@@ -145,10 +145,10 @@ namespace Adventure
             if (!impulseWindow)
             {
 
-                if (Math.Sign(player.spriteVelocity.X) != Math.Sign(player.previousSpriteVelocity.X) || Math.Abs(player.spriteVelocity.X) <= 0.5)
+                if (Math.Sign(player.velocity.X) != Math.Sign(player.previousVelocity.X) || Math.Abs(player.velocity.X) <= 0.5)
                 {
                     impulseWindow = true;
-                    Vector2 direction1 = player.ropeAnchor - hookPoint.spritePosition;
+                    Vector2 direction1 = player.ropeAnchor - hookPoint.position;
                     direction1.Normalize();
                     Vector2 direction2 = new Vector2(0, 1);
                     impulseAngle = (float)Math.Acos(Vector2.Dot(direction1, direction2));
@@ -159,7 +159,7 @@ namespace Adventure
             }
             else
             {
-                Vector2 direction1 = player.ropeAnchor - hookPoint.spritePosition;
+                Vector2 direction1 = player.ropeAnchor - hookPoint.position;
                 direction1.Normalize();
                 Vector2 direction2 = new Vector2(0, 1);
                 float angle = (float)Math.Acos(Vector2.Dot(direction1, direction2));
@@ -219,7 +219,7 @@ namespace Adventure
                     }
                     else
                     {
-                        if (player.spriteDirectionX != 0 && player.spriteDirectionX == Math.Sign(player.spriteVelocity.X))
+                        if (player.spriteDirectionX != 0 && player.spriteDirectionX == Math.Sign(player.velocity.X))
                         {
                             swingDirection = player.spriteDirectionX;
                             swingDrivingForce = swingForceMaximum * swingForceDuration * swingDirection;
@@ -242,12 +242,7 @@ namespace Adventure
 
         public override void UpdateAnimations()
         {
-            player.nameOfCurrentAnimationSprite = "Idle";
-            //player.animatedSprite_Idle.Play("Idle");
-            //player.currentFrame = player.frameAndTag["Idle"].From;
-            //player.tagOfCurrentFrame = "Idle";
-            //player.TurnOffAllHitboxes();
-            //player.idleHitbox.isActive = true;
+            player.UpdatePlayingAnimation(player.animation_Idle);
         }
 
 

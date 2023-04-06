@@ -12,6 +12,7 @@ namespace Adventure
     {
         public Rectangle rectangle;
 
+        public Texture2D texture;
 
         public bool isActive;
 

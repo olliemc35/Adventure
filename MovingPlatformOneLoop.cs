@@ -30,7 +30,7 @@ namespace Adventure
 
                 if (horizontalMovement)
                 {
-                    if (spritePosition.X == startPosition.X)
+                    if (position.X == startPosition.X)
                     {
                         movePlatform = false;
                         timeStationaryCounter = timeStationaryAtEndPoints;
@@ -38,7 +38,7 @@ namespace Adventure
                 }
                 else if (verticalMovement)
                 {
-                    if (spritePosition.Y == startPosition.Y)
+                    if (position.Y == startPosition.Y)
                     {
                         movePlatform = false;
                         timeStationaryCounter = timeStationaryAtEndPoints;

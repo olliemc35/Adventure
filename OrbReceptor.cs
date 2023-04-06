@@ -10,9 +10,9 @@ using MonoGame.Aseprite.Sprites;
 
 namespace Adventure
 {
-    public class OrbReceptor : AnimationSprite
+    public class OrbReceptor : AnimatedGameObject
     {
-        public AnimatedSprite animatedSprite_Hit;
+        public AnimatedSprite animation_Hit;
 
         public OrbReceptor(Vector2 position, string filename) : base(position, filename)
         {
@@ -23,8 +23,12 @@ namespace Adventure
         {
             base.LoadContent(contentManager, graphicsDevice);
 
-            animatedSprite_Hit = spriteSheet.CreateAnimatedSprite("Hit");
-            animatedSpriteAndTag.Add("Hit", animatedSprite_Hit);
+            animation_Hit = spriteSheet.CreateAnimatedSprite("Hit");
+
+            animation_Hit.OnAnimationEnd = (hello) =>
+            {
+                UpdatePlayingAnimation(animation_Idle);
+            };
 
         }
 

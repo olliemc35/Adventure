@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class OrbVessel : Sprite
+    public class OrbVessel : AnimatedGameObject
     {
         public int orbWindowLeft;
         public int orbWindowRight;
         public int orbEndLeft;
         public int orbEndRight;
 
-        public List<AnimationSprite> listOfParts = new List<AnimationSprite>();
+        public List<AnimatedGameObject> listOfParts = new List<AnimatedGameObject>();
 
 
 
@@ -32,27 +32,27 @@ namespace Adventure
             {
                 if (i == 0)
                 {
-                    listOfParts.Add(new AnimationSprite(new Vector2(8 * i, 0), "OrbVesselEndLeft"));
+                    listOfParts.Add(new AnimatedGameObject(new Vector2(8 * i, 0), "OrbVesselEndLeft"));
                 }
                 else if (i == 39)
                 {
-                    listOfParts.Add(new AnimationSprite(new Vector2(8 * i, 0), "OrbVesselEndRight"));
+                    listOfParts.Add(new AnimatedGameObject(new Vector2(8 * i, 0), "OrbVesselEndRight"));
                 }
                 else if (i == 4)
                 {
-                    listOfParts.Add(new AnimationSprite(new Vector2(8 * i, 0), "OrbWindowLeft"));
+                    listOfParts.Add(new AnimatedGameObject(new Vector2(8 * i, 0), "OrbWindowLeft"));
                 }
                 else if (i >= 5 && i <= 8)
                 {
-                    listOfParts.Add(new AnimationSprite(new Vector2(8 * i, 0), "OrbWindowMiddle"));
+                    listOfParts.Add(new AnimatedGameObject(new Vector2(8 * i, 0), "OrbWindowMiddle"));
                 }
                 else if (i == 9)
                 {
-                    listOfParts.Add(new AnimationSprite(new Vector2(8 * i, 0), "OrbWindowRight"));
+                    listOfParts.Add(new AnimatedGameObject(new Vector2(8 * i, 0), "OrbWindowRight"));
                 }
                 else
                 {
-                    listOfParts.Add(new AnimationSprite(new Vector2(8 * i, 0), "OrbMiddle"));
+                    listOfParts.Add(new AnimatedGameObject(new Vector2(8 * i, 0), "OrbMiddle"));
                 }
             }
         }

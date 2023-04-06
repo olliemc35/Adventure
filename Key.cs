@@ -14,17 +14,15 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Adventure
 {
-    public class Key : MovingSprite
+    public class Key : MovingGameObject
     {
-        public AnimatedSprite animatedSprite_Interacted;
+        public AnimatedSprite animation_Interacted;
         public Key(Vector2 position, string filename):base(position, filename) { }
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
             base.LoadContent(contentManager, graphicsDevice);
-
-            animatedSprite_Interacted = spriteSheet.CreateAnimatedSprite("Interacted");
-            animatedSpriteAndTag.Add("Interacted", animatedSprite_Interacted);
+            animation_Interacted = spriteSheet.CreateAnimatedSprite("Interacted");
         }
 
 

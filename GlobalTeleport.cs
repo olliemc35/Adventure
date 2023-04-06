@@ -21,13 +21,13 @@ namespace Adventure
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
             base.LoadContent(contentManager, graphicsDevice);
+            UpdatePlayingAnimation(animation_InRange);
         }
 
 
         public override void Update(GameTime gameTime)
         {
-            InRange = true;
-            nameOfCurrentAnimationSprite = "InRange";
+           
 
             //animatedSprite_Idle.Play("InRange");
             //currentFrame = frameAndTag["InRange"].From;

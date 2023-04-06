@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Adventure
 {
-    public class Spike : Sprite
+    public class Spike : AnimatedGameObject
     {
         public Spike() : base()
         {

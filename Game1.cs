@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 
 namespace Adventure
 {
@@ -11,6 +12,8 @@ namespace Adventure
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         public ScreenManager screenManager;
+        public SoundManager soundManager;
+
         public AssetManager assetManager;
         public int ScreenHeight;
         public int ScreenWidth;
@@ -36,7 +39,10 @@ namespace Adventure
             //graphics.ApplyChanges();
 
             assetManager = new AssetManager();
+            soundManager = new SoundManager();
+
             References.assetManager = assetManager;
+            References.soundManager = soundManager;
 
             References.content = Content;
             References.game = this;
@@ -67,7 +73,6 @@ namespace Adventure
             graphics.ApplyChanges();
 
             renderTarget = new RenderTarget2D(GraphicsDevice, 320, 180, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
-
             base.Initialize();
             //renderTarget = new RenderTarget2D(graphics.GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
@@ -77,8 +82,8 @@ namespace Adventure
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             screenManager = new ScreenManager(spriteBatch);
-
             assetManager.LoadContent(Content, GraphicsDevice);
+            soundManager.LoadContent(Content);
             screenManager.LoadScreens(Content);
 
         }
@@ -106,7 +111,7 @@ namespace Adventure
 
         }
 
-   
+
 
         // SEE: https://community.monogame.net/t/transforming-objects-for-a-rendertarget2d/13959
 

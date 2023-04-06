@@ -17,7 +17,7 @@ namespace Adventure
         public ColliderManager colliderManager = new ColliderManager();
         // It is important, for the draw order, that we add the tiles FIRST - so that these are drawn in the background
         public Tileset tileset;
-        public Sprite[,] arrayofTiles;
+        public AnimatedGameObject[,] arrayofTiles;
 
 
 
@@ -33,7 +33,7 @@ namespace Adventure
             this.tileset = tileset;
             this.keyboardState = keyboard;
             this.oldKeyboardState = oldKeyboard;
-            arrayofTiles = new Sprite[tileset.rows, tileset.columns];
+            arrayofTiles = new AnimatedGameObject[tileset.rows, tileset.columns];
             ScreenWidth = 8 * tileset.columns;
             ScreenHeight = 8 * tileset.rows;
         }
@@ -41,6 +41,8 @@ namespace Adventure
 
         public override void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
         {
+            //Debug.WriteLine("here");
+
             // Build tile sprites and add these to screenSprites FIRST so they are drawn first i.e. in the background
             BuildTileSet();
             BuildHitboxSet();
@@ -52,14 +54,14 @@ namespace Adventure
                     gameObject.LoadContent(References.content, References.graphicsDevice);
                     screenGameObjects.Add(gameObject);
 
-                    if (gameObject is Sprite sprite)
+                    if (gameObject is AnimatedGameObject sprite)
                     {
                         if (sprite.climable)
                         {
                             screenClimables.Add(sprite);
                         }
 
-                        if (sprite.CollisionSprite)
+                        if (sprite.CollisionObject)
                         {
                             hitboxesToCheckCollisionsWith.Add(sprite.idleHitbox);
                         }
@@ -279,7 +281,7 @@ namespace Adventure
                         {
                             if (!player.ribbonInHand)
                             {
-                                Ribbon ribbon = new Ribbon(player, player.spritePosition);
+                                Ribbon ribbon = new Ribbon(player, player.position);
                                 ribbon.FixRibbonToNote(note);
                                 ribbon.LoadContent(References.content, References.graphicsDevice);
                                 screenGameObjects.Add(ribbon);
@@ -298,7 +300,7 @@ namespace Adventure
                             if (!player.bombPlanted)
                             {
                                 player.bombPlanted = true;
-                                Bomb bomb = new Bomb(player.spritePosition, "NoteBomb", note);
+                                Bomb bomb = new Bomb(player.position, "NoteBomb", note);
                                 bomb.LoadContent(References.content, References.graphicsDevice);
                                 screenGameObjects.Add(bomb);
                                 screenBombs.Add(bomb);
@@ -380,11 +382,11 @@ namespace Adventure
                 for (int j = 0; j < tileset.arrayofTileSetSpriteFilenames.GetLength(1); j++)
                 {
 
-                    Sprite tile = new Sprite(new Vector2(8 * j, 8 * i), tileset.arrayofTileSetSpriteFilenames[i, j]);
+                    AnimatedGameObject tile = new AnimatedGameObject(new Vector2(8 * j, 8 * i), tileset.arrayofTileSetSpriteFilenames[i, j]);
 
                     tile.LoadContent(References.content, References.graphicsDevice);
 
-                    if (tile.spriteFilename == "Tile_air")
+                    if (tile.filename == "Tile_air")
                     {
                         tile.idleHitbox.isActive = false;
                     }

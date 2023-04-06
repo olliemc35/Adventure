@@ -34,22 +34,22 @@ namespace Adventure
 
                     if (horizontalMovement)
                     {
-                        if (spritePosition.X == endPosition.X)
+                        if (position.X == endPosition.X)
                         {
                             movePlatform = false;
                             timeStationaryCounter = 0;
                             firstLoop = true;
-                            spritePosition.X = startPosition.X;
+                            position.X = startPosition.X;
                         }
                     }
                     else if (verticalMovement)
                     {
-                        if (spritePosition.Y == endPosition.Y)
+                        if (position.Y == endPosition.Y)
                         {
                             movePlatform = false;
                             timeStationaryCounter = 0;
                             firstLoop = true;
-                            spritePosition.Y = startPosition.Y;
+                            position.Y = startPosition.Y;
                         }
                     }
                 }

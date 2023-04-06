@@ -14,7 +14,7 @@ namespace Adventure
         public List<Note> notes;
         public Gate gate;
         public OrbVessel orbVessel;
-        public AnimationSprite symbolPlate;
+        public AnimatedGameObject symbolPlate;
         public List<Symbol> symbols = new List<Symbol>();
         public List<Orb> orbs = new List<Orb>();
 
@@ -38,7 +38,7 @@ namespace Adventure
             this.notes = notes;
             this.gate = gate;
             this.orbVessel = orbVessel;
-            symbolPlate = new AnimationSprite(symbolPlatePosition, symbolPlateFilename);
+            symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename);
         }
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
@@ -50,7 +50,7 @@ namespace Adventure
 
             for (int i = 0; i < notes.Count; i++)
             {
-                Symbol symbol = new Symbol(new Vector2(symbolPlate.spritePosition.X + 12 * (i + 1), symbolPlate.spritePosition.Y + 4), notes[i].symbolFilename);
+                Symbol symbol = new Symbol(new Vector2(symbolPlate.position.X + 12 * (i + 1), symbolPlate.position.Y + 4), notes[i].symbolFilename);
                 symbol.LoadContent(contentManager, graphicsDevice);
                 symbols.Add(symbol);
             }
@@ -150,7 +150,7 @@ namespace Adventure
 
                 indexWhichMustBePlayed = indexWhichMustBePlayedNext;
                 orbs[indexWhichMustBePlayed].isActive = true;
-                orbs[indexWhichMustBePlayed].spritePosition.X = orbVessel.orbEndRight;
+                orbs[indexWhichMustBePlayed].position.X = orbVessel.orbEndRight;
             }
 
 
@@ -184,7 +184,7 @@ namespace Adventure
 
                             orbs[indexWhichMustBePlayed].setToTurnInActive = false;
                             orbs[indexWhichMustBePlayed].isActive = false;
-                            orbs[0].spritePosition.X = orbs[indexWhichMustBePlayed].spritePosition.X;
+                            orbs[0].position.X = orbs[indexWhichMustBePlayed].position.X;
                             orbs[0].isActive = true;
                             indexWhichMustBePlayed = 0;
                             indexWhichMustBePlayedNext = 0;

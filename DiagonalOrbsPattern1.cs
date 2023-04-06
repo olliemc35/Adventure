@@ -71,8 +71,8 @@ namespace Adventure
 
             for (int i = 0; i < 3; i++)
             {
-                orbReceptors.Add(new OrbReceptor(new Vector2(startStream.X, startStream.Y - 8 * i * verticalSpacing), "orbReceptors"));
-                orbReceptors.Add(new OrbReceptor(new Vector2(endStream.X, endStream.Y - 8 * i * verticalSpacing), "orbReceptors"));
+                orbReceptors.Add(new OrbReceptor(new Vector2(startStream.X, startStream.Y - 8 * i * verticalSpacing), "OrbReceptors"));
+                orbReceptors.Add(new OrbReceptor(new Vector2(endStream.X, endStream.Y - 8 * i * verticalSpacing), "OrbReceptors"));
             }
 
 
@@ -89,7 +89,7 @@ namespace Adventure
                 orb.idleHitbox.offsetY = 2;
             }
 
-            foreach (AnimationSprite sprite in orbReceptors)
+            foreach (AnimatedGameObject sprite in orbReceptors)
             {
                 sprite.LoadContent(contentManager, graphicsDevice);
             }
@@ -98,7 +98,7 @@ namespace Adventure
         public override void Update(GameTime gameTime)
         {
 
-            if (Vector2.Distance(orbs[indexOfOrbClosestToStart].spritePosition, orbs[indexOfOrbClosestToStart].startPosition) >= 8 * horizontalSpacing)
+            if (Vector2.Distance(orbs[indexOfOrbClosestToStart].position, orbs[indexOfOrbClosestToStart].startPosition) >= 8 * horizontalSpacing)
             {
                 if (indexOfOrbClosestToStart == orbs.Count - 1)
                 {
@@ -121,26 +121,30 @@ namespace Adventure
                 {
                     orb.hitFlag = false;
 
-                    if (orb.spritePosition.Y == startStream.Y)
+                    if (orb.position.Y == startStream.Y)
                     {
-                        orbReceptors[1].nameOfCurrentAnimationSprite = "Hit";
+                        orbReceptors[1].UpdatePlayingAnimation(orbReceptors[1].animation_Hit, 1);
+                        //orbReceptors[1].nameOfCurrentAnimationSprite = "Hit";
 
                         //orbReceptors[1].animatedSprite_Idle.Play("Hit");
                         //orbReceptors[1].currentFrame = orbReceptors[1].frameAndTag["Hit"].From;
                         //orbReceptors[1].tagOfCurrentFrame = "Hit";
                     }
-                    else if (orb.spritePosition.Y == startStream.Y - 8 * verticalSpacing)
+                    else if (orb.position.Y == startStream.Y - 8 * verticalSpacing)
                     {
-                        orbReceptors[3].nameOfCurrentAnimationSprite = "Hit";
+                        orbReceptors[3].UpdatePlayingAnimation(orbReceptors[3].animation_Hit, 1);
+                        //orbReceptors[3].nameOfCurrentAnimationSprite = "Hit";
 
                         //orbReceptors[3].animatedSprite_Idle.Play("Hit");
                         //orbReceptors[3].currentFrame = orbReceptors[3].frameAndTag["Hit"].From;
                         //orbReceptors[3].tagOfCurrentFrame = "Hit";
 
                     }
-                    else if (orb.spritePosition.Y == startStream.Y - 2 * 8 * verticalSpacing)
+                    else if (orb.position.Y == startStream.Y - 2 * 8 * verticalSpacing)
                     {
-                        orbReceptors[5].nameOfCurrentAnimationSprite = "Hit";
+                        orbReceptors[5].UpdatePlayingAnimation(orbReceptors[5].animation_Hit, 1);
+
+                        //orbReceptors[5].nameOfCurrentAnimationSprite = "Hit";
 
                         //orbReceptors[5].animatedSprite_Idle.Play("Hit");
                         //orbReceptors[5].currentFrame = orbReceptors[5].frameAndTag["Hit"].From;
@@ -154,11 +158,7 @@ namespace Adventure
             {
                 orbReceptor.Update(gameTime);
 
-                orbReceptor.animatedSprite_Hit.OnAnimationLoop = (hello) =>
-                {
-                    orbReceptor.nameOfCurrentAnimationSprite = "Idle";
-                    orbReceptor.animatedSprite_Hit.OnAnimationLoop = null;
-                };
+                
 
 
                 //sprite.animatedSprite_Idle.OnAnimationLoop = () =>
@@ -185,7 +185,7 @@ namespace Adventure
                 orb.Draw(spriteBatch);
             }
 
-            foreach (AnimationSprite sprite in orbReceptors)
+            foreach (AnimatedGameObject sprite in orbReceptors)
             {
                 sprite.Draw(spriteBatch);
             }

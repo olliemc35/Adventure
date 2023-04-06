@@ -30,7 +30,7 @@ namespace Adventure
         {
             this.player = player;
 
-            CollisionSprite = true;
+            CollisionObject = true;
 
             IndexOfRopeBitInPlayersHand = 0;
             IndexOfFirstFixedRopeBit = 0;
@@ -57,7 +57,7 @@ namespace Adventure
             LengthBetweenRopeBits = 8;
             distanceTilEquilibriumY = 1.1f * LengthBetweenRopeBits;
             distanceStretchRequiredToOvercomeFriction = 1.1f * LengthBetweenRopeBits;
-            springConstant = DistanceToNearestInteger(rope[0].mass * rope[0].gravityConstant / (float)(distanceTilEquilibriumY - LengthBetweenRopeBits));
+            springConstant = FindNearestInteger(rope[0].mass * rope[0].gravityConstant / (float)(distanceTilEquilibriumY - LengthBetweenRopeBits));
             groundFrictionNormalConstant = (float)(distanceStretchRequiredToOvercomeFriction - LengthBetweenRopeBits) / (distanceTilEquilibriumY - LengthBetweenRopeBits);
 
             acc = 10;
@@ -66,7 +66,7 @@ namespace Adventure
             {
                 RopeBit ropeBit = new RopeBit(initialPosition);
                 ropeBit.Enabled = false;
-                ropeBit.spriteFilename = "YellowDot";
+                ropeBit.filename = "YellowDot";
                 ropeBit.idleHitbox.rectangle.Width = 1;
                 ropeBit.idleHitbox.rectangle.Height = 1;
                 ropeBit.idleHitbox.offsetX = 3;
@@ -104,12 +104,12 @@ namespace Adventure
         {
             if (drawHitboxes)
             {
-                foreach (HitboxRectangle hitbox in spriteHitboxes)
+                foreach (HitboxRectangle hitbox in hitboxes)
                 {
                     if (hitbox.isActive)
                     {
 
-                        spriteBatch.Draw(spriteHitboxTexture, hitbox.rectangle, Color.Red);
+                        spriteBatch.Draw(idleHitbox.texture, hitbox.rectangle, Color.Red);
                     }
                 }
             }
@@ -122,8 +122,8 @@ namespace Adventure
 
                 foreach (Pivot pivot in rope[i].pivotsBetweenThisRopeBitandOnePlus)
                 {
-                    Rectangle rect = new Rectangle((int)pivot.spritePosition.X, (int)pivot.spritePosition.Y, 2, 2);
-                    spriteBatch.Draw(player.spriteHitboxTexture, rect, Color.Blue);
+                    Rectangle rect = new Rectangle((int)pivot.position.X, (int)pivot.position.Y, 2, 2);
+                    spriteBatch.Draw(player.idleHitbox.texture, rect, Color.Blue);
                 }
 
             }
@@ -175,13 +175,13 @@ namespace Adventure
 
                 rope[i].totalForce.X = 0;
                 rope[i].totalForce.Y = 0;
-                rope[i].previousSpriteVelocity = rope[i].spriteVelocity;
-                rope[i].previousSpritePosition = rope[i].spritePosition;
+                rope[i].previousVelocity = rope[i].velocity;
+                rope[i].previousPosition = rope[i].position;
 
                 if (rope[i].isFixed)
                 {
-                    rope[i].spriteVelocity.X = 0;
-                    rope[i].spriteVelocity.Y = 0;
+                    rope[i].velocity.X = 0;
+                    rope[i].velocity.Y = 0;
                     //rope[i].animatedSprite_Idle.Position = rope[i].spritePosition;
                 }
 
@@ -190,7 +190,7 @@ namespace Adventure
 
             if (!rope[IndexOfRopeBitInPlayersHand].isFixed)
             {
-                rope[IndexOfRopeBitInPlayersHand].spritePosition = player.ropeAnchor;
+                rope[IndexOfRopeBitInPlayersHand].position = player.ropeAnchor;
                 //rope[IndexOfRopeBitInPlayersHand].animatedSprite_Idle.Position = rope[IndexOfRopeBitInPlayersHand].spritePosition;
             }
 
@@ -199,7 +199,7 @@ namespace Adventure
             {
 
 
-                if (Vector2.Distance(rope[i].spritePosition, rope[i + 1].spritePosition) >= LengthBetweenRopeBits)
+                if (Vector2.Distance(rope[i].position, rope[i + 1].position) >= LengthBetweenRopeBits)
                 {
                     FindSpringForcesPairWise(rope[i], rope[i + 1], LengthBetweenRopeBits);
                     FindSpringFrictionPairWise(rope[i], rope[i + 1]);
@@ -228,14 +228,14 @@ namespace Adventure
 
 
 
-            if (!maxDistanceFound && Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].spritePosition, rope[IndexOfFirstFixedRopeBit].spritePosition) < Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].previousSpritePosition, rope[IndexOfFirstFixedRopeBit].spritePosition))
+            if (!maxDistanceFound && Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].position, rope[IndexOfFirstFixedRopeBit].position) < Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].previousPosition, rope[IndexOfFirstFixedRopeBit].position))
             {
-                maxDistanceFromFixedRopeBit = Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].previousSpritePosition, rope[IndexOfFirstFixedRopeBit].spritePosition);
+                maxDistanceFromFixedRopeBit = Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].previousPosition, rope[IndexOfFirstFixedRopeBit].position);
                 maxDistanceFound = true;
             }
 
 
-            if (maxDistanceFound && Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].spritePosition, rope[IndexOfFirstFixedRopeBit].spritePosition) > maxDistanceFromFixedRopeBit)
+            if (maxDistanceFound && Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].position, rope[IndexOfFirstFixedRopeBit].position) > maxDistanceFromFixedRopeBit)
             {
                 maxDistanceFromFixedRopeBit = 0;
                 maxDistanceFound = false;
@@ -261,10 +261,10 @@ namespace Adventure
 
 
 
-            if (Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].spritePosition, rope[IndexOfRopeBitInPlayersHand - 1].spritePosition) >= LengthBetweenRopeBits && Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].spritePosition, rope[IndexOfFirstFixedRopeBit].spritePosition) > maxDistanceFromFixedRopeBit)
+            if (Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].position, rope[IndexOfRopeBitInPlayersHand - 1].position) >= LengthBetweenRopeBits && Vector2.Distance(rope[IndexOfRopeBitInPlayersHand].position, rope[IndexOfFirstFixedRopeBit].position) > maxDistanceFromFixedRopeBit)
             {
-                Vector2 displacementVec = rope[IndexOfRopeBitInPlayersHand].spritePosition - rope[IndexOfRopeBitInPlayersHand - 1].spritePosition;
-                int MaxInt = DistanceToNearestInteger(displacementVec.Length() / LengthBetweenRopeBits);
+                Vector2 displacementVec = rope[IndexOfRopeBitInPlayersHand].position - rope[IndexOfRopeBitInPlayersHand - 1].position;
+                int MaxInt = FindNearestInteger(displacementVec.Length() / LengthBetweenRopeBits);
                 int count = 0;
 
 
@@ -286,16 +286,16 @@ namespace Adventure
 
                 if (count >= 1)
                 {
-                    rope[IndexOfRopeBitInPlayersHand + count].spritePosition = rope[IndexOfRopeBitInPlayersHand].spritePosition;
+                    rope[IndexOfRopeBitInPlayersHand + count].position = rope[IndexOfRopeBitInPlayersHand].position;
 
                     for (int i = 1; i <= count; i++)
                     {
                         Vector2 vec = displacementVec * LengthBetweenRopeBits * i;
 
                         rope[IndexOfRopeBitInPlayersHand - 1 + i].Enabled = true;
-                        rope[IndexOfRopeBitInPlayersHand - 1 + i].spritePosition = rope[IndexOfRopeBitInPlayersHand - 1].spritePosition + vec;
+                        rope[IndexOfRopeBitInPlayersHand - 1 + i].position = rope[IndexOfRopeBitInPlayersHand - 1].position + vec;
                         //rope[IndexOfRopeBitInPlayersHand - 1 + i].animatedSprite_Idle.Position = rope[IndexOfRopeBitInPlayersHand - 1 + i].spritePosition;
-                        rope[IndexOfRopeBitInPlayersHand - 1 + i].spriteVelocity = rope[IndexOfRopeBitInPlayersHand].spriteVelocity;
+                        rope[IndexOfRopeBitInPlayersHand - 1 + i].velocity = rope[IndexOfRopeBitInPlayersHand].velocity;
 
                     }
 
@@ -321,11 +321,11 @@ namespace Adventure
 
             maxDistanceFromFixedRopeBit = 0;
 
-            rope[IndexOfRopeBitInPlayersHand].spritePosition = player.spritePosition;
-            rope[IndexOfRopeBitInPlayersHand].spritePosition.X += 0.5f * player.idleHitbox.rectangle.Width;
-            rope[IndexOfRopeBitInPlayersHand].spritePosition.Y += 0.5f * player.idleHitbox.rectangle.Height;
-            rope[IndexOfRopeBitInPlayersHand].spriteVelocity.X = 0;
-            rope[IndexOfRopeBitInPlayersHand].spriteVelocity.Y = 0;
+            rope[IndexOfRopeBitInPlayersHand].position = player.position;
+            rope[IndexOfRopeBitInPlayersHand].position.X += 0.5f * player.idleHitbox.rectangle.Width;
+            rope[IndexOfRopeBitInPlayersHand].position.Y += 0.5f * player.idleHitbox.rectangle.Height;
+            rope[IndexOfRopeBitInPlayersHand].velocity.X = 0;
+            rope[IndexOfRopeBitInPlayersHand].velocity.Y = 0;
 
 
             rope[IndexOfRopeBitInPlayersHand].isFixed = true;
@@ -335,7 +335,7 @@ namespace Adventure
             if (IndexOfRopeBitInPlayersHand <= NumberOfRopeBits - 2)
             {
                 rope[IndexOfRopeBitInPlayersHand + 1].Enabled = true;
-                rope[IndexOfRopeBitInPlayersHand + 1].spritePosition = player.ropeAnchor;
+                rope[IndexOfRopeBitInPlayersHand + 1].position = player.ropeAnchor;
                 IndexOfRopeBitInPlayersHand += 1;
             }
             else

@@ -33,24 +33,24 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            if (!movePlatform && References.player.spritePosition.X < originalPosition.X + 2 * idleHitbox.rectangle.Width)
+            if (!movePlatform && References.player.position.X < originalPosition.X + 2 * idleHitbox.rectangle.Width)
             {
-                if (spriteCollider.CheckForCollision(this.idleHitbox, References.player.idleHitbox))
+                if (colliderManager.CheckForCollision(this.idleHitbox, References.player.idleHitbox))
                 {
                     movePlatform = true;
                 }
             }
-            else if (!movePlatform && spritePosition.Y != originalPosition.Y)
+            else if (!movePlatform && position.Y != originalPosition.Y)
             {
                 base.Update(gameTime);
 
-                spriteVelocity.Y = Math.Sign(originalPosition.Y - spritePosition.Y) * 60 * speed;
-                spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                velocity.Y = Math.Sign(originalPosition.Y - position.Y) * 60 * speed;
+                base.displacement.Y = velocity.Y * deltaTime;
 
-                if (spritePosition.Y == originalPosition.Y)
+                if (position.Y == originalPosition.Y)
                 {
-                    spriteVelocity.Y = 0;
-                    spriteDisplacement.Y = 0;
+                    velocity.Y = 0;
+                    base.displacement.Y = 0;
                 }
             }
 
@@ -65,13 +65,13 @@ namespace Adventure
 
                 if (moveVertically)
                 {
-                    spriteVelocity.Y = Math.Sign(originalPosition.Y + displacementScaling * displacement - spritePosition.Y) * 60 * speed * 2;
-                    spriteDisplacement.Y = spriteVelocity.Y * deltaTime;
+                    velocity.Y = Math.Sign(originalPosition.Y + displacementScaling * displacement - position.Y) * 60 * speed * 2;
+                    base.displacement.Y = velocity.Y * deltaTime;
 
-                    if (spritePosition.Y == originalPosition.Y + displacementScaling * displacement)
+                    if (position.Y == originalPosition.Y + displacementScaling * displacement)
                     {
-                        spriteVelocity.Y = 0;
-                        spriteDisplacement.Y = 0;
+                        velocity.Y = 0;
+                        base.displacement.Y = 0;
                         moveVertically = false;
                     }
 
@@ -79,10 +79,10 @@ namespace Adventure
                 }
 
 
-                if (spritePosition.X == endPosition.X)
+                if (position.X == endPosition.X)
                 {
-                    spriteVelocity.X = 0;
-                    spriteDisplacement.X = 0;
+                    velocity.X = 0;
+                    base.displacement.X = 0;
                     movePlatform = false;
                     horizontalMovement = false;
                 }

@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Bomb : AnimationSprite
+    public class Bomb : AnimatedGameObject
     {
         public bool detonate = false;
         public bool readyToRemove = false;
         public Note attachedNote;
 
-        public AnimatedSprite animatedSprite_Detonate;
-        public AnimatedSprite animatedSprite_Planted;
+        public AnimatedSprite animation_Detonate;
+        public AnimatedSprite animation_Planted;
 
 
         public Bomb() : base()
@@ -44,10 +44,16 @@ namespace Adventure
         {
             base.LoadContent(contentManager, graphicsDevice);
 
-            animatedSprite_Detonate = spriteSheet.CreateAnimatedSprite("Detonate");
-            animatedSpriteAndTag.Add("Detonate", animatedSprite_Detonate);
-            animatedSprite_Planted = spriteSheet.CreateAnimatedSprite("Planted");
-            animatedSpriteAndTag.Add("Planted", animatedSprite_Planted);
+            animation_Detonate = spriteSheet.CreateAnimatedSprite("Detonate");
+            animation_Planted = spriteSheet.CreateAnimatedSprite("Planted");
+
+            animation_Detonate.OnAnimationLoop = (animatedSprite_Detonate) =>
+            {
+
+                readyToRemove = true;
+                animatedSprite_Detonate.OnAnimationLoop = null;
+
+            };
 
         }
 
@@ -56,28 +62,15 @@ namespace Adventure
         {
             if (detonate)
             {
-                nameOfCurrentAnimationSprite = "Detonate";
-                //animatedSprite_Idle.Play("Detonate");
-                //currentFrame = frameAndTag["Detonate"].From;
-                //tagOfCurrentFrame = "Detonate";
+                UpdatePlayingAnimation(animation_Detonate);
             }
             else
             {
-                nameOfCurrentAnimationSprite = "Planted";
-
-                //animatedSprite_Idle.Play("Planted");
-                //currentFrame = frameAndTag["Planted"].From;
-                //tagOfCurrentFrame = "Planted";
+                UpdatePlayingAnimation(animation_Planted);
             }
 
 
-            animatedSprite_Detonate.OnAnimationLoop = (animatedSprite_Detonate) =>
-            {
-                
-                    readyToRemove = true;
-                    animatedSprite_Detonate.OnAnimationLoop = null;
-                
-            };
+      
 
             base.Update(gameTime);
         }

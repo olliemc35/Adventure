@@ -9,26 +9,26 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Door : Sprite
+    public class Door : AnimatedGameObject
     {
         public int ScreenNumberToMoveTo = 0;
         public int DoorNumberToMoveTo = 0;
         public Door(Vector2 initialPosition) : base(initialPosition)
         {
-            CollisionSprite = true;
+            CollisionObject = true;
         }
 
         public Door(Vector2 initialPosition, int x) : base(initialPosition)
         {
             ScreenNumberToMoveTo = x;
-            CollisionSprite = true;
+            CollisionObject = true;
         }
 
         public Door(Vector2 initialPosition, string filename, int x, int y) : base(initialPosition, filename)
         {
             ScreenNumberToMoveTo = x;
             DoorNumberToMoveTo = y;
-            CollisionSprite = true;
+            CollisionObject = true;
         }
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)

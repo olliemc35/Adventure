@@ -36,13 +36,13 @@ namespace Adventure
 
             if (horizontalMovement)
             {
-                if (spritePosition.X == endPosition.X)
+                if (position.X == endPosition.X)
                 {
                     startPosition = positions[(indexOfCurrentStartPosition + 1) % 4];
                     endPosition = positions[(indexOfCurrentStartPosition + 2) % 4];
                     horizontalMovement = false;
-                    spriteVelocity.X = 0;
-                    spriteDisplacement.X = 0;
+                    velocity.X = 0;
+                    displacement.X = 0;
                     movingRight = false;
                     movingLeft = false;
                     firstLoop = true;
@@ -65,13 +65,13 @@ namespace Adventure
             }
             else
             {
-                if (spritePosition.Y == endPosition.Y)
+                if (position.Y == endPosition.Y)
                 {
                     startPosition = positions[(indexOfCurrentStartPosition + 1) % 4];
                     endPosition = positions[(indexOfCurrentStartPosition + 2) % 4];
                     horizontalMovement = true;
-                    spriteVelocity.Y = 0;
-                    spriteDisplacement.Y = 0;
+                    velocity.Y = 0;
+                    displacement.Y = 0;
                     movingUp = false;
                     movingDown = false;
                     firstLoop = true;

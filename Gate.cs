@@ -27,8 +27,8 @@ namespace Adventure
             base.LoadContent(contentManager, graphicsDevice);
 
 
-            animationPosition.X = DistanceToNearestInteger(spritePosition.X);
-            animationPosition.Y = DistanceToNearestInteger(spritePosition.Y);
+            animationPosition.X = FindNearestInteger(position.X);
+            animationPosition.Y = FindNearestInteger(position.Y);
             //animatedSprite_Idle.Position = animationPosition;
 
         }
@@ -42,14 +42,14 @@ namespace Adventure
 
                 if (horizontalMovement)
                 {
-                    if (spritePosition.X == endPosition.X)
+                    if (position.X == endPosition.X)
                     {
                         opened = true;
                     }
                 }
                 else if (verticalMovement)
                 {
-                    if (spritePosition.Y == endPosition.Y)
+                    if (position.Y == endPosition.Y)
                     {
                         opened = true;
                     }
@@ -62,14 +62,14 @@ namespace Adventure
 
                 if (horizontalMovement)
                 {
-                    if (spritePosition.X == startPosition.X)
+                    if (position.X == startPosition.X)
                     {
                         opened = false;
                     }
                 }
                 else if (verticalMovement)
                 {
-                    if (spritePosition.Y == startPosition.Y)
+                    if (position.Y == startPosition.Y)
                     {
                         opened = false;
                     }

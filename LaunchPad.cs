@@ -10,10 +10,10 @@ using MonoGame.Aseprite.Sprites;
 
 namespace Adventure
 {
-    public class LaunchPad : MovingSprite
+    public class LaunchPad : MovingGameObject
     {
-        public AnimatedSprite animatedSprite_Compress;
-        public AnimatedSprite animatedSprite_Launch;
+        public AnimatedSprite animation_Compress;
+        public AnimatedSprite animation_Launch;
 
         public bool compress;
         public bool breakOutOfCompressFlag;
@@ -32,17 +32,15 @@ namespace Adventure
 
         public LaunchPad(Vector2 initialPosition, string filename) : base(initialPosition, filename)
         {
-            CollisionSprite = true;
+            CollisionObject = true;
         }
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
             base.LoadContent(contentManager, graphicsDevice);
 
-            animatedSprite_Compress = spriteSheet.CreateAnimatedSprite("Compress");
-            animatedSpriteAndTag.Add("Compress", animatedSprite_Compress);
-            animatedSprite_Launch = spriteSheet.CreateAnimatedSprite("Launch");
-            animatedSpriteAndTag.Add("Launch", animatedSprite_Launch);
+            animation_Compress = spriteSheet.CreateAnimatedSprite("Compress");
+            animation_Launch = spriteSheet.CreateAnimatedSprite("Launch");
 
             idleHitbox.rectangle.Height = 12;
             idleHitbox.rectangle.Y += 4;
@@ -50,6 +48,38 @@ namespace Adventure
 
             initialHeight = idleHitbox.rectangle.Height;
             initialY = idleHitbox.rectangle.Y;
+
+            animation_Compress.OnFrameEnd = (hello) =>
+            {
+                idleHitbox.rectangle.Y += 1;
+                idleHitbox.rectangle.Height -= 1;
+                References.player.position.Y += 1;
+                launchSpeedMultiplier += launchSpeedMultiplierIncrement;
+            };
+          
+
+            animation_Compress.OnAnimationLoop = (hello) =>
+            {
+                compress = false;
+                UpdatePlayingAnimation(animation_Idle);
+
+
+                idleHitbox.rectangle.Y = initialY;
+                idleHitbox.rectangle.Height = initialHeight;
+                References.player.position.Y = idleHitbox.rectangle.Y - References.player.idleHitbox.rectangle.Height - References.player.idleHitbox.offsetY;
+                References.player.idleHitbox.rectangle.Y = (int)References.player.position.Y + References.player.idleHitbox.offsetY;
+                launchSpeedMultiplier = 1;
+
+                needToJumpAgain = true;
+
+                animation_Compress.OnAnimationLoop = null;
+            };
+
+            animation_Launch.OnAnimationLoop = (hello) =>
+            {
+                UpdatePlayingAnimation(animation_Idle);
+                animation_Launch.OnAnimationLoop = null;
+            };
 
         }
 
@@ -61,7 +91,7 @@ namespace Adventure
             {
                 //Debug.WriteLine("here");
 
-                if (!spriteCollider.CheckForCollision(References.player.idleHitbox, idleHitbox))
+                if (!colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox))
                 {
                     needToJumpAgain = false;
                 }
@@ -69,7 +99,7 @@ namespace Adventure
             else
             {
                 // Not capturing behaviour as player is collided on ground
-                if (spriteCollider.CheckForCollision(References.player.idleHitbox, idleHitbox) && References.player.SpriteCollidedOnBottom)
+                if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox) && References.player.CollidedOnBottom)
                 {
                     compress = true;
                 }
@@ -94,9 +124,9 @@ namespace Adventure
         public void Launch()
         {
 
-            if (spriteCollider.CheckForCollision(References.player.idleHitbox, idleHitbox) && References.player.SpriteCollidedOnBottom)
+            if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox) && References.player.CollidedOnBottom)
             {
-                References.player.spriteVelocity.Y = -launchSpeed * launchSpeedMultiplier;
+                References.player.velocity.Y = -launchSpeed * launchSpeedMultiplier;
                 References.player.launchFlag = true;
             }
         }
@@ -107,10 +137,7 @@ namespace Adventure
         {
             if (compress)
             {
-                nameOfCurrentAnimationSprite = "Compress";
-                //animatedSprite_Idle.Play("Compress");
-                //currentFrame = frameAndTag["Compress"].From;
-                //tagOfCurrentFrame = "Compress";
+                UpdatePlayingAnimation(animation_Compress);
             }
             else if (breakOutOfCompressFlag)
             {
@@ -119,141 +146,20 @@ namespace Adventure
                 idleHitbox.rectangle.Height = initialHeight;
                 launchSpeedMultiplier = 1;
 
-                nameOfCurrentAnimationSprite = "Idle";
-
-                //animatedSprite_Idle.Play("Idle");
-                //currentFrame = frameAndTag["Idle"].From;
-                //tagOfCurrentFrame = "Idle";
+                UpdatePlayingAnimation(animation_Idle);
             }
             else if (launchFlag)
             {
-                nameOfCurrentAnimationSprite = "Launch";
-
-                //animatedSprite_Idle.Play("Launch");
-                //currentFrame = frameAndTag["Launch"].From;
-                //tagOfCurrentFrame = "Launch";
+                UpdatePlayingAnimation(animation_Launch);
             }
             else
             {
-                nameOfCurrentAnimationSprite = "Idle";
-
-                //animatedSprite_Idle.Play("Idle");
-                //currentFrame = frameAndTag["Idle"].From;
-                //tagOfCurrentFrame = "Idle";
+                UpdatePlayingAnimation(animation_Idle);
             }
 
-            animatedSprite_Compress.OnFrameEnd = (hello) =>
-            {
-                idleHitbox.rectangle.Y += 1;
-                idleHitbox.rectangle.Height -= 1;
-                References.player.spritePosition.Y += 1;
-                launchSpeedMultiplier += launchSpeedMultiplierIncrement;
-            };
+            
 
-            //animatedSprite_Idle.OnFrameEnd = () =>
-            //{
-            //    if (tagOfCurrentFrame == "Compress")
-            //    {
-            //        idleHitbox.rectangle.Y += 1;
-            //        idleHitbox.rectangle.Height -= 1;
-            //        References.player.spritePosition.Y += 1;
-            //        launchSpeedMultiplier += launchSpeedMultiplierIncrement;
-
-            //    }
-            //};
-
-
-
-            //animatedSprite.OnAnimationEnd = () =>
-            //{
-            //    Debug.WriteLine("here");
-
-
-            //    if (tagOfCurrentFrame == "Launch")
-            //    {
-            //        animatedSprite.Play("Idle");
-            //        currentFrame = frameAndTag["Idle"].From;
-            //        tagOfCurrentFrame = "Idle";
-            //    }
-
-            //    if (tagOfCurrentFrame == "Compress")
-            //    {
-            //        Debug.WriteLine("here");
-            //        compress = false;
-
-            //        animatedSprite.Play("Idle");
-            //        currentFrame = frameAndTag["Idle"].From;
-            //        tagOfCurrentFrame = "Idle";
-
-            //        idleHitbox.rectangle.Y = initialY;
-            //        idleHitbox.rectangle.Height = initialHeight;
-            //        References.player.spritePosition.Y = idleHitbox.rectangle.Y - References.player.idleHitbox.rectangle.Height - References.player.idleHitbox.offsetY;
-            //        References.player.idleHitbox.rectangle.Y = (int)References.player.spritePosition.Y + References.player.idleHitbox.offsetY;
-            //        launchSpeedMultiplier = 1;
-
-            //        needToJumpAgain = true;
-
-            //    }
-
-            //};
-
-            animatedSprite_Compress.OnAnimationLoop = (hello) =>
-            {
-                compress = false;
-                nameOfCurrentAnimationSprite = "Idle";
-
-
-                idleHitbox.rectangle.Y = initialY;
-                idleHitbox.rectangle.Height = initialHeight;
-                References.player.spritePosition.Y = idleHitbox.rectangle.Y - References.player.idleHitbox.rectangle.Height - References.player.idleHitbox.offsetY;
-                References.player.idleHitbox.rectangle.Y = (int)References.player.spritePosition.Y + References.player.idleHitbox.offsetY;
-                launchSpeedMultiplier = 1;
-
-                needToJumpAgain = true;
-
-                animatedSprite_Compress.OnAnimationLoop = null;
-            };
-
-            animatedSprite_Launch.OnAnimationLoop = (hello) =>
-            {
-                nameOfCurrentAnimationSprite = "Idle";
-                animatedSprite_Launch.OnAnimationLoop = null;
-            };
-
-            //animatedSprite_Idle.OnAnimationLoop = () =>
-            //{
-            //    if (tagOfCurrentFrame == "Launch")
-            //    {
-            //        animatedSprite_Idle.Play("Idle");
-            //        currentFrame = frameAndTag["Idle"].From;
-            //        tagOfCurrentFrame = "Idle";
-
-            //        animatedSprite_Idle.OnAnimationLoop = null;
-
-            //    }
-
-            //    if (tagOfCurrentFrame == "Compress")
-            //    {
-            //        compress = false;
-
-            //        animatedSprite_Idle.Play("Idle");
-            //        currentFrame = frameAndTag["Idle"].From;
-            //        tagOfCurrentFrame = "Idle";
-
-            //        idleHitbox.rectangle.Y = initialY;
-            //        idleHitbox.rectangle.Height = initialHeight;
-            //        References.player.spritePosition.Y = idleHitbox.rectangle.Y - References.player.idleHitbox.rectangle.Height - References.player.idleHitbox.offsetY;
-            //        References.player.idleHitbox.rectangle.Y = (int)References.player.spritePosition.Y + References.player.idleHitbox.offsetY;
-            //        launchSpeedMultiplier = 1;
-
-            //        needToJumpAgain = true;
-
-            //        animatedSprite_Idle.OnAnimationLoop = null;
-
-            //    }
-
-
-            //};
+           
 
         }
 

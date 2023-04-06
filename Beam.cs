@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Beam : Sprite
+    public class Beam : AnimatedGameObject
     {
 
         public bool horizontalBeam = false;
         public bool verticalBeam = false;
         public Vector2 startPosition = new Vector2();
         public Vector2 endPosition = new Vector2();
-        public List<AnimationSprite> listOfBeamSquares = new List<AnimationSprite>();
+        public List<AnimatedGameObject> listOfBeamSquares = new List<AnimatedGameObject>();
         public int IndexOfBeamToUpdateTo = 0;
 
         public HitboxRectangle startHitbox;
@@ -47,17 +47,17 @@ namespace Adventure
 
                     if (i == 0)
                     {
-                        listOfBeamSquares.Add(new AnimationSprite(location, "TopBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "TopBeam"));
 
                     }
                     else if (i == numberOfBeams)
                     {
-                        listOfBeamSquares.Add(new AnimationSprite(location, "BottomBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "BottomBeam"));
 
                     }
                     else
                     {
-                        listOfBeamSquares.Add(new AnimationSprite(location, "Beam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam"));
                     }
                 }
 
@@ -75,24 +75,24 @@ namespace Adventure
 
                     if (i == 0)
                     {
-                        listOfBeamSquares.Add(new AnimationSprite(location, "TopBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "TopBeam"));
 
                     }
                     else if (i == numberOfBeams)
                     {
-                        listOfBeamSquares.Add(new AnimationSprite(location, "BottomBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "BottomBeam"));
 
                     }
                     else
                     {
-                        listOfBeamSquares.Add(new AnimationSprite(location, "Beam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam"));
                     }
                 }
 
 
             }
 
-            foreach (Sprite sprite in listOfBeamSquares)
+            foreach (AnimatedGameObject sprite in listOfBeamSquares)
             {
                 sprite.LoadContent(contentManager, graphicsDevice);
             }

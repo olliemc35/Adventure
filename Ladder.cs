@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Ladder : Sprite
+    public class Ladder : AnimatedGameObject
     {
         public int numberOfRungs;
 
 
         public Vector2 positionOfTopLeftCorner = new Vector2();
-        public List<AnimationSprite> listOfRungs = new List<AnimationSprite>();
+        public List<AnimatedGameObject> listOfRungs = new List<AnimatedGameObject>();
 
         public bool topRungActive = true;
 
@@ -29,7 +29,7 @@ namespace Adventure
 
         public Ladder(Vector2 initialPosition, int numberOfRungs) : base(initialPosition)
         {
-            CollisionSprite = true;
+            CollisionObject = true;
 
             this.numberOfRungs = numberOfRungs;
 
@@ -43,15 +43,15 @@ namespace Adventure
 
                 if (j == 0)
                 {
-                    listOfRungs.Add(new AnimationSprite(location, "LadderTopRung"));
+                    listOfRungs.Add(new AnimatedGameObject(location, "LadderTopRung"));
                 }
                 else if (j == numberOfRungs - 1)
                 {
-                    listOfRungs.Add(new AnimationSprite(location, "LadderBottomRung"));
+                    listOfRungs.Add(new AnimatedGameObject(location, "LadderBottomRung"));
                 }
                 else
                 {
-                    listOfRungs.Add(new AnimationSprite(location, "Ladder"));
+                    listOfRungs.Add(new AnimatedGameObject(location, "Ladder"));
                 }
 
             }
@@ -59,18 +59,18 @@ namespace Adventure
             positionOfTopLeftCorner.X = initialPosition.X;
             positionOfTopLeftCorner.Y = initialPosition.Y;
 
-            spriteFilename = "Ladder";
+            filename = "Ladder";
 
         }
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
         {
-            foreach (Sprite rung in listOfRungs)
+            foreach (AnimatedGameObject rung in listOfRungs)
             {
                 rung.LoadContent(contentManager, graphicsDevice);
             }
 
-            idleHitbox = new HitboxRectangle((int)positionOfTopLeftCorner.X, (int)positionOfTopLeftCorner.Y, listOfRungs[0].baseFrame.Width, listOfRungs[0].baseFrame.Height * numberOfRungs);
+            idleHitbox = new HitboxRectangle((int)positionOfTopLeftCorner.X, (int)positionOfTopLeftCorner.Y, listOfRungs[0].idleHitbox.rectangle.Width, listOfRungs[0].idleHitbox.rectangle.Height * numberOfRungs);
             idleHitbox.isActive = true;
 
         }
@@ -80,7 +80,7 @@ namespace Adventure
         {
             base.Update(gameTime);
 
-            foreach (Sprite rung in listOfRungs)
+            foreach (AnimatedGameObject rung in listOfRungs)
             {
                 rung.Update(gameTime);
             }
@@ -106,7 +106,7 @@ namespace Adventure
 
             //spriteBatch.Draw(References.player.spriteHitboxTexture, idleHitbox.rectangle, Color.Red);
 
-            foreach (Sprite rung in listOfRungs)
+            foreach (AnimatedGameObject rung in listOfRungs)
             {
                 rung.Draw(spriteBatch);
             }

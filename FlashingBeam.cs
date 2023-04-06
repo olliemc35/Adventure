@@ -91,10 +91,17 @@ namespace Adventure
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            listOfBeamSquares[0].Draw(spriteBatch);
+            listOfBeamSquares[listOfBeamSquares.Count - 1].Draw(spriteBatch);
+
             if (on)
             {
-                base.Draw(spriteBatch);
+                for (int i = 1; i <= IndexOfBeamToUpdateTo; i++)
+                {
+                    listOfBeamSquares[i].Draw(spriteBatch);
+                }
             }
+
         }
 
 

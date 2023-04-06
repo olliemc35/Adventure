@@ -31,7 +31,7 @@ namespace Adventure
                 {
                     if (TravellingFromStartPoint)
                     {
-                        if (spritePosition.X == endPosition.X)
+                        if (position.X == endPosition.X)
                         {
                             movePlatform = false;
                             TravellingFromStartPoint = false;
@@ -39,7 +39,7 @@ namespace Adventure
                     }
                     else
                     {
-                        if (spritePosition.X == startPosition.X)
+                        if (position.X == startPosition.X)
                         {
                             movePlatform = false;
                             TravellingFromStartPoint = true;
@@ -50,7 +50,7 @@ namespace Adventure
                 {
                     if (TravellingFromStartPoint)
                     {
-                        if (spritePosition.Y == endPosition.Y)
+                        if (position.Y == endPosition.Y)
                         {
                             movePlatform = false;
                             TravellingFromStartPoint = false;
@@ -58,7 +58,7 @@ namespace Adventure
                     }
                     else
                     {
-                        if (spritePosition.Y == startPosition.Y)
+                        if (position.Y == startPosition.Y)
                         {
                             movePlatform = false;
                             TravellingFromStartPoint = true;

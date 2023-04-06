@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Gun : Sprite
+    public class Gun : AnimatedGameObject
     {
         public Player player;
 
@@ -85,7 +85,7 @@ namespace Adventure
         {
             foreach (Rectangle rectangle in aimLine)
             {
-                spriteBatch.Draw(player.spriteHitboxTexture, rectangle, Color.YellowGreen);
+                spriteBatch.Draw(player.idleHitbox.texture, rectangle, Color.YellowGreen);
             }
 
             if (bullets.Count() > 0)
@@ -101,7 +101,7 @@ namespace Adventure
         {
 
 
-            gunStartPoint = player.spritePosition;
+            gunStartPoint = player.position;
             gunStartPoint.X += player.idleHitbox.rectangle.Width - 1;
             gunStartPoint.Y += 0.5f * player.idleHitbox.rectangle.Height + 1;
 
