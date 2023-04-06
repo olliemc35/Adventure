@@ -265,7 +265,7 @@ namespace Adventure
 
             weight.previousPosition = weight.position;
 
-            weight.swingAngleDot += weight.deltaTime * (-weight.gravityConstant * (float)Math.Sin(weight.swingAngle) / weight.length - weight.swingDrivingForce * (float)Math.Cos(weight.swingAngle) - (weight.swingFrictionConstant / weight.mass) * weight.swingAngleDot);
+            weight.swingAngleDot += weight.deltaTime * (-weight.gravityConstant * (float)Math.Sin(weight.swingAngle) / weight.length - weight.swingDrivingForce * (float)Math.Cos(weight.swingAngle) - weight.swingFrictionConstant / weight.mass * weight.swingAngleDot);
             weight.swingAngle += weight.deltaTime * weight.swingAngleDot;
 
             weight.lengthDot += weight.deltaTime * weight.lengthForce;
@@ -345,7 +345,7 @@ namespace Adventure
 
             weight.previousPosition = weight.position;
 
-            weight.swingAngleDot += weight.deltaTime * (-weight.gravityConstant * (float)Math.Sin(weight.swingAngle) / lengthOfTheRopeAtRest - weight.swingDrivingForce * (float)Math.Cos(weight.swingAngle) - (weight.swingFrictionConstant / weight.mass) * weight.swingAngleDot);
+            weight.swingAngleDot += weight.deltaTime * (-weight.gravityConstant * (float)Math.Sin(weight.swingAngle) / lengthOfTheRopeAtRest - weight.swingDrivingForce * (float)Math.Cos(weight.swingAngle) - weight.swingFrictionConstant / weight.mass * weight.swingAngleDot);
             weight.swingAngle += weight.deltaTime * weight.swingAngleDot;
 
             weight.velocity.X = -RopeLength * weight.swingAngleDot * (float)Math.Cos(weight.swingAngle);

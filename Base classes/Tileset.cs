@@ -215,7 +215,7 @@ namespace Adventure
                     // Check if notes
                     if (color.R == 160 && color.G == 0 && color.B == 0 && color.A == 255)
                     {
-                        screenNotes.Add(new Note(new Vector2(i, j), "AKeyRound", "rune_A", "A"));
+                        screenNotes.Add(new Note(new Vector2(i, j), "AKeyRound", "A", null, "rune_A"));
                         continue;
                     }
 

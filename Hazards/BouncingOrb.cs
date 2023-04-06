@@ -31,7 +31,7 @@ namespace Adventure
             this.initialPosition = initialPosition;
             this.speed = speed;
             this.angle = angle;
-            this.initialAngle = angle;
+            initialAngle = angle;
         }
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)

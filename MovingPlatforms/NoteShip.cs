@@ -18,6 +18,8 @@ namespace Adventure
         public Vector2 originalPosition;
 
 
+
+
         public NoteShip(Vector2 initialPosition) : base(initialPosition)
         {
 

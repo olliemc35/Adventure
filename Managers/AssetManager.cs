@@ -22,9 +22,9 @@ namespace Adventure
         public Texture2D hitboxTexture;
         public IDictionary<string, SpriteSheet> spriteSheets = new Dictionary<string, SpriteSheet>();
 
-        public AssetManager() 
-        {         
-            
+        public AssetManager()
+        {
+
 
 
             spriteFilenames = new List<string>()
@@ -108,8 +108,8 @@ namespace Adventure
                 spriteSheets.Add(filename, spriteSheet);
             }
 
-       
-            
+
+
         }
 
 

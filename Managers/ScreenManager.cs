@@ -8,6 +8,7 @@ using MonoGame.Aseprite;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
 
+
 namespace Adventure
 {
     public class ScreenManager
@@ -184,7 +185,7 @@ namespace Adventure
                 }
             }
 
-            activeScreen = screens[33];
+            activeScreen = screens[29];
             activeScreen.Show();
 
             player.LoadContent(content, References.graphicsDevice);
@@ -387,9 +388,9 @@ namespace Adventure
 
             List<Note> screen6Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 22, 8 * 16), "TuningForkC", "rune_C", "C"),
-                new Note(new Vector2(8 * 18, 8 * 17), "TuningForkE", "rune_E", "E"),
-                new Note(new Vector2(8 * 14, 8 * 16), "TuningForkG", "rune_G", "G")
+                new Note(new Vector2(8 * 22, 8 * 16), "TuningForkC", "C", null, "rune_C"),
+                new Note(new Vector2(8 * 18, 8 * 17), "TuningForkE", "E", null, "rune_E"),
+                new Note(new Vector2(8 * 14, 8 * 16), "TuningForkG", "G", null, "rune_G")
             };
 
             Gate screen6Gate = new Gate(new Vector2(8 * 30, 8 * 14), "AncientDoor", new Vector2(8 * 30, 8 * 10));
@@ -426,9 +427,9 @@ namespace Adventure
 
             List<Note> screen7Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 22, 8 * 16), "TuningForkC", "rune_C", "C", "Orb", 3f),
-                new Note(new Vector2(8 * 18, 8 * 17), "TuningForkE", "rune_E", "E", "Orb", 3f),
-                new Note(new Vector2(8 * 14, 8 * 16), "TuningForkG", "rune_G", "G", "Orb", 3f)
+                new Note(new Vector2(8 * 22, 8 * 16), "TuningForkC", "C", null, "rune_C", "Orb", 3f),
+                new Note(new Vector2(8 * 18, 8 * 17), "TuningForkE", "E", null,  "rune_E", "Orb", 3f),
+                new Note(new Vector2(8 * 14, 8 * 16), "TuningForkG", "G", null, "rune_G", "Orb", 3f)
             };
 
             Gate screen7Gate = new Gate(new Vector2(8 * 30, 8 * 14), "AncientDoor", new Vector2(8 * 30, 8 * 10));
@@ -507,8 +508,8 @@ namespace Adventure
 
             List<Note> screen10Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 30, 8 * 16), "TuningForkC", "rune_C", "C", "Orb", 4f),
-                new Note(new Vector2(8 * 6, 8 * 16), "TuningForkG", "rune_G", "G", "Orb", 4f)
+                new Note(new Vector2(8 * 30, 8 * 16), "TuningForkC", "C", null, "rune_C", "Orb", 4f),
+                new Note(new Vector2(8 * 6, 8 * 16), "TuningForkG", "G", null, "rune_G", "Orb", 4f)
             };
 
             Gate screen10Gate = new Gate(new Vector2(8 * 35, 8 * 14), "AncientDoor", new Vector2(8 * 35, 8 * 10));
@@ -549,9 +550,9 @@ namespace Adventure
 
             List<Note> screen11Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 26, 8 * 13), "FKeyRound", "rune_F", "F"),
-                new Note(new Vector2(8 * 10, 8 * 13), "AKeyRound", "rune_A", "A"),
-                new Note(new Vector2(8 * 18, 8 * 13), "CKeyRound", "rune_C", "C")
+                new Note(new Vector2(8 * 26, 8 * 13), "FKeyRound", "F", null, "rune_F"),
+                new Note(new Vector2(8 * 10, 8 * 13), "AKeyRound", "A", null, "rune_A"),
+                new Note(new Vector2(8 * 18, 8 * 13), "CKeyRound", "C", null, "rune_C")
             };
 
             Gate screen11Gate = new Gate(new Vector2(8 * 35, 8 * 9), "AncientDoor", new Vector2(8 * 35, 8 * 4));
@@ -596,9 +597,9 @@ namespace Adventure
 
             List<Note> screen12Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 26, 8 * 13), "FKeyRound", "rune_F", "F", "Orb", 4f ),
-                new Note(new Vector2(8 * 10, 8 * 13), "AKeyRound", "rune_A", "A", "Orb", 4f),
-                new Note(new Vector2(8 * 18, 8 * 13), "CKeyRound", "rune_C", "C", "Orb", 4f)
+                new Note(new Vector2(8 * 26, 8 * 13), "FKeyRound", "F", null, "rune_F", "Orb", 4f),
+                new Note(new Vector2(8 * 10, 8 * 13), "AKeyRound", "A", null, "rune_A", "Orb", 4f),
+                new Note(new Vector2(8 * 18, 8 * 13), "CKeyRound", "C", null, "rune_C", "Orb", 4f)
             };
 
             Gate screen12Gate = new Gate(new Vector2(8 * 35, 8 * 9), "AncientDoor", new Vector2(8 * 35, 8 * 4));
@@ -629,7 +630,7 @@ namespace Adventure
             };
 
 
-            List<MovingPlatformOneLoop> screen13MovingPlatforms = new List<MovingPlatformOneLoop>()
+            List<GameObject> screen13GameObjectsForNotes = new List<GameObject>()
             {
                 new MovingPlatformOneLoop(new Vector2(8 * 20, 8 * 19), "movingPlatform1", new Vector2(8 * 20, 8 * 16), 0, 1),
                 new MovingPlatformOneLoop(new Vector2(8 * 25, 8 * 16), "movingPlatform1", new Vector2(8 * 25, 8 * 13), 0, 1),
@@ -639,12 +640,12 @@ namespace Adventure
 
             List<Note> screen13Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 16, 8 * 16), "TuningForkC", "C", new List<MovingPlatformOneLoop>(){screen13MovingPlatforms[0]}),
-                new Note(new Vector2(8 * 12, 8 * 17), "TuningForkE", "E",  new List<MovingPlatformOneLoop>(){screen13MovingPlatforms[1]}),
-                new Note(new Vector2(8 * 8, 8 * 16), "TuningForkG", "G",  new List<MovingPlatformOneLoop>(){screen13MovingPlatforms[2]})
+                new Note(new Vector2(8 * 16, 8 * 16), "TuningForkC", "C", new List<GameObject>(){ screen13GameObjectsForNotes[0]}),
+                new Note(new Vector2(8 * 12, 8 * 17), "TuningForkE", "E",  new List<GameObject>(){ screen13GameObjectsForNotes[1]}),
+                new Note(new Vector2(8 * 8, 8 * 16), "TuningForkG", "G",  new List<GameObject>(){ screen13GameObjectsForNotes[2]})
             };
 
-            screen13GameObjects.AddRange(screen13MovingPlatforms);
+            screen13GameObjects.AddRange(screen13GameObjectsForNotes);
             screen13GameObjects.AddRange(screen13Notes);
 
 
@@ -677,9 +678,9 @@ namespace Adventure
 
             List<Note> screen14Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 8, 8 * 17), "FKeyRound", "rune_F", "F", new List<Gate>(){screen14Gates[0]}),
-                new Note(new Vector2(8 * 18, 8 * 17), "AKeyRound", "rune_A", "A", new List<Gate>(){screen14Gates[0]}),
-                new Note(new Vector2(8 * 30, 8 * 17), "CKeyRound", "rune_C", "C")
+                new Note(new Vector2(8 * 8, 8 * 17), "FKeyRound", "F", new List<GameObject>(){screen14Gates[0]}, "rune_F"),
+                new Note(new Vector2(8 * 18, 8 * 17), "AKeyRound", "A", new List<GameObject>(){screen14Gates[0]}, "rune_A"),
+                new Note(new Vector2(8 * 30, 8 * 17), "CKeyRound", "C", null, "rune_C")
             };
 
             NoteAndGatePuzzle screen14NoteAndGatePuzzle = new NoteAndGatePuzzle(new Vector2(8 * 17 - 4, 8 * 3 - 4), "symbolPlate", screen14Notes, screen14Gates[1]);
@@ -719,10 +720,10 @@ namespace Adventure
             List<Note> screen15Notes = new List<Note>()
             {
 
-                new Note(new Vector2(8 * 2, 8 * 17), "CKeyRound", "rune_C", "C", new List<Gate>(){screen15Gates[0],screen15Gates[2]}),
-                new Note(new Vector2(8 * 22, 8 * 17), "AKeyRound", "rune_A", "A", new List<Gate>(){screen15Gates[0],screen15Gates[1]}),
-                new Note(new Vector2(8 * 13, 8 * 17), "FKeyRound", "rune_F", "F", new List<Gate>(){screen15Gates[1]}),
-                new Note(new Vector2(8 * 30, 8 * 17), "TuningForkE", "rune_E", "E"),
+                new Note(new Vector2(8 * 2, 8 * 17), "CKeyRound", "C", new List<GameObject>(){screen15Gates[0],screen15Gates[2]}, "rune_C"),
+                new Note(new Vector2(8 * 22, 8 * 17), "AKeyRound", "A", new List<GameObject>(){screen15Gates[0],screen15Gates[1]},  "rune_A"),
+                new Note(new Vector2(8 * 13, 8 * 17), "FKeyRound", "F", new List<GameObject>(){screen15Gates[1]}, "rune_F"),
+                new Note(new Vector2(8 * 30, 8 * 17), "TuningForkE", "E", null, "rune_E"),
 
             };
 
@@ -757,7 +758,7 @@ namespace Adventure
                 screen16GameObjects.Add(new Spike(new Vector2(8 * i, 21 * 8), "Spike"));
             }
 
-            List<MovingPlatformNoLoop> screen16MovingPlatformsNoLoop = new List<MovingPlatformNoLoop>()
+            List<GameObject> screen16MovingPlatformsNoLoop = new List<GameObject>()
             {
                 new MovingPlatformNoLoop(new Vector2(8 * 40, 8 * 17), "movingPlatform1", new Vector2(8 * -4, 8 * 17), 0, 2),
                 new MovingPlatformNoLoop(new Vector2(8 * 40, 8 * 17), "movingPlatform1", new Vector2(8 * -4, 8 * 17), 0, 2),
@@ -765,7 +766,7 @@ namespace Adventure
 
             };
 
-            screen16GameObjects.Add(new Note(new Vector2(8 * 4, 8 * 12), "AKeyRound", "rune_A", "A", screen16MovingPlatformsNoLoop));
+            screen16GameObjects.Add(new Note(new Vector2(8 * 4, 8 * 12), "AKeyRound", "A", screen16MovingPlatformsNoLoop, "rune_A"));
             screen16GameObjects.AddRange(screen16MovingPlatformsNoLoop);
 
             screen16 = new ActionScreen(spriteBatch, menuFont, player, screen16GameObjects, tileSetScreen16, keyboardState, oldKeyboardState)
@@ -794,7 +795,7 @@ namespace Adventure
             }
 
 
-            List<MovingPlatformNoLoop> screen17MovingPlatformsNoLoop = new List<MovingPlatformNoLoop>()
+            List<GameObject> screen17MovingPlatformsNoLoop = new List<GameObject>()
             {
                 new MovingPlatformNoLoop(new Vector2(8 * 40, 8 * 17), "movingPlatform1", new Vector2(8 * -4, 8 * 17), 0, 2),
                 new MovingPlatformNoLoop(new Vector2(8 * 40, 8 * 17), "movingPlatform1", new Vector2(8 * -4, 8 * 17), 0, 2),
@@ -804,9 +805,9 @@ namespace Adventure
 
             List<Note> screen17Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 4, 8 * 12), "AKeyRound", "rune_A", "A", screen17MovingPlatformsNoLoop),
-                new Note(new Vector2(8 * 18, 8 * 14), "FKeyRound", "rune_F", "F"),
-                new Note(new Vector2(8 * 32, 8 * 12), "CKeyRound", "rune_C", "C")
+                new Note(new Vector2(8 * 4, 8 * 12), "AKeyRound", "A", screen17MovingPlatformsNoLoop, "rune_A"),
+                new Note(new Vector2(8 * 18, 8 * 14), "FKeyRound", "F", null, "rune_F"),
+                new Note(new Vector2(8 * 32, 8 * 12), "CKeyRound", "C", null,  "rune_C")
             };
 
             Gate screen17Gate = new Gate(new Vector2(8 * 35, 8 * 9), "AncientDoor", new Vector2(8 * 35, 8 * 4));
@@ -843,10 +844,10 @@ namespace Adventure
 
             List<Note> screen18Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 10, 8 * 8), "FKeyRound", "rune_F", "F",  "OrangeOrb", 5f ),
-                new Note(new Vector2(8 * 28, 8 * 18), "TuningForkE", "rune_E", "E", "OrangeOrb", 5f),
-                new Note(new Vector2(8 * 28, 8 * 8), "AKeyRound", "rune_A", "A", "OrangeOrb", 5f),
-                new Note(new Vector2(8 * 10, 8 * 18), "CKeyRound", "rune_C", "C", "OrangeOrb", 5f)
+                new Note(new Vector2(8 * 10, 8 * 8), "FKeyRound", "F",  null, "rune_F","OrangeOrb", 5f ),
+                new Note(new Vector2(8 * 28, 8 * 18), "TuningForkE", "E", null, "rune_E","OrangeOrb", 5f),
+                new Note(new Vector2(8 * 28, 8 * 8), "AKeyRound", "A", null, "rune_A","OrangeOrb", 5f),
+                new Note(new Vector2(8 * 10, 8 * 18), "CKeyRound", "C", null, "rune_C","OrangeOrb", 5f)
             };
 
             Gate screen18Gate = new Gate(new Vector2(8 * 35, 8 * 15), "AncientDoor", new Vector2(8 * 35, 8 * 4));
@@ -884,7 +885,7 @@ namespace Adventure
                 new Gate(new Vector2( 8 * 10, 8 * 18), "WoodenGateHorizontal", new Vector2( 8 * 4, 8 * 18)),
             };
 
-            screen19GameObjects.Add(new Note(new Vector2(8 * 5, 8 * 1), "CKeyRound", "Rune_C", "C", new List<Gate>() { screen19Gates[0], screen19Gates[1] }));
+            screen19GameObjects.Add(new Note(new Vector2(8 * 5, 8 * 1), "CKeyRound", "C", new List<GameObject>() { screen19Gates[0], screen19Gates[1] }, "Rune_C"));
             screen19GameObjects.AddRange(screen19Gates);
 
             for (int i = 10; i < 16; i++)
@@ -942,8 +943,8 @@ namespace Adventure
 
             List<Note> screen21Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 25, 8 * 14), "AKeyRound", "rune_A", "A"),
-                new Note(new Vector2(8 * 15, 8 * 14), "FKeyRound", "rune_F", "F"),
+                new Note(new Vector2(8 * 25, 8 * 14), "AKeyRound", "A", null, "rune_A"),
+                new Note(new Vector2(8 * 15, 8 * 14), "FKeyRound", "F", null, "rune_F"),
             };
 
             Gate screen21Gate = new Gate(new Vector2(8 * 35, 8 * 11), "AncientDoor", new Vector2(8 * 35, 8 * 4));
@@ -984,7 +985,7 @@ namespace Adventure
 
             List<Note> screen22Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 19, 8 * 19), "FKeyRound", "rune_F", "F")
+                new Note(new Vector2(8 * 19, 8 * 19), "FKeyRound", "F", null,  "rune_F")
             };
 
             Gate screen22Gate = new Gate(new Vector2(8 * 35, 8 * 8), "AncientDoor", new Vector2(8 * 35, 8 * 4));
@@ -1078,11 +1079,11 @@ namespace Adventure
             };
 
             LaunchPad screen25LaunchPad1 = new LaunchPad(new Vector2(8 * 10, 8 * 18 + 4), "LaunchPad");
-            Note screen25Note1 = new Note(new Vector2(8 * 10, 8 * 16), "FKeyRound", "F", screen25LaunchPad1);
+            Note screen25Note1 = new Note(new Vector2(8 * 10, 8 * 16), "FKeyRound", "F", new List<GameObject>() { screen25LaunchPad1 });
 
 
             LaunchPad screen25LaunchPad2 = new LaunchPad(new Vector2(8 * 26, 8 * 18 + 4), "LaunchPad");
-            Note screen25Note2 = new Note(new Vector2(8 * 18, 8 * 6), "CKeyRound", "C", screen25LaunchPad2);
+            Note screen25Note2 = new Note(new Vector2(8 * 18, 8 * 6), "CKeyRound", "C", new List<GameObject>() { screen25LaunchPad2 });
 
             screen25GameObjects.Add(screen25LaunchPad1);
             screen25GameObjects.Add(screen25Note1);
@@ -1113,10 +1114,10 @@ namespace Adventure
 
             List<Note> screen26Notes = new List<Note>()
             {
-                new Note(new Vector2(8 * 15, 8 * 13), "CKeyRound", "rune_C", "C", "Orb", 3f),
-                new Note(new Vector2(8 * 23, 8 * 13), "FKeyRound", "rune_F", "FHigh", "Orb", 3f),
-                new Note(new Vector2(8 * 15, 8 * 7), "GKeyRound", "rune_G", "GLow", "Orb", 3f),
-                new Note(new Vector2(8 * 23, 8 * 7), "EKeyRound", "rune_E", "E", "Orb", 3f)
+                new Note(new Vector2(8 * 15, 8 * 13), "CKeyRound", "C", null, "rune_C", "Orb", 3f),
+                new Note(new Vector2(8 * 23, 8 * 13), "FKeyRound", "FHigh",null, "rune_F", "Orb", 3f),
+                new Note(new Vector2(8 * 15, 8 * 7), "GKeyRound", "GLow", null, "rune_G", "Orb", 3f),
+                new Note(new Vector2(8 * 23, 8 * 7), "EKeyRound", "E", null, "rune_E", "Orb", 3f)
             };
 
             Gate screen26Gate = new Gate(new Vector2(8 * 26, 8 * 10), "AncientDoor", new Vector2(8 * 26, 8 * 5));
@@ -1225,13 +1226,30 @@ namespace Adventure
                 new Door(new Vector2(8 * 37, 8 * 13), "Door", 31, 1)
             };
 
-            List<MovingPlatformHalfLoop> screen30MovingPlatforms = new List<MovingPlatformHalfLoop>()
+            Note screen30Note = new Note(new Vector2(8 * 10, 8 * 11), "TuningForkC", "C", null, "rune_C");
+
+            List<GameObject> screen30MovingPlatforms = new List<GameObject>()
             {
-                new MovingPlatformHalfLoop(new Vector2(8 * 9, 8 * 15), "movingPlatform1", new Vector2(8 * 26-4, 8 * 15), 0, 2)
+                new MovingPlatformHalfLoop(new Vector2(8 * 9, 8 * 15), "movingPlatform1", new Vector2(8 * 26-4, 8 * 15), 0, 2){spritesOnPlatform = new List<GameObject>() {screen30Note } }
             };
 
-            Note screen30Note = new Note(new Vector2(8 * 10, 8 * 11), "TuningForkC", "C", screen30MovingPlatforms);
-            screen30MovingPlatforms[0].spritesOnPlatform = new List<AnimatedGameObject>() { screen30Note };
+            screen30Note.attachedGameObjects = screen30MovingPlatforms;
+
+            //Note screen30Note = new Note(new Vector2(8 * 10, 8 * 11), "TuningForkC", "C", screen30MovingPlatforms);
+
+            //(MovingPlatformHalfLoop)screen30MovingPlatforms[0].spritesOnPlatform = new List<AnimatedGameObject>() { screen30Note };
+
+
+            //Note screen30Note = new Note(new Vector2(8 * 10, 8 * 11), "TuningForkC", "C", screen30MovingPlatforms);
+
+            //List<GameObject> screen30MovingPlatforms = new List<GameObject>()
+            //{
+            //    new MovingPlatformHalfLoop(new Vector2(8 * 9, 8 * 15), "movingPlatform1", new Vector2(8 * 26-4, 8 * 15), 0, 2)
+            //};
+
+            //Note screen30Note = new Note(new Vector2(8 * 10, 8 * 11), "TuningForkC", "C", screen30MovingPlatforms);
+
+            //(MovingPlatformHalfLoop)screen30MovingPlatforms[0].spritesOnPlatform = new List<AnimatedGameObject>() { screen30Note };
 
             screen30GameObjects.AddRange(screen30MovingPlatforms);
             screen30GameObjects.Add(screen30Note);
@@ -1279,11 +1297,13 @@ namespace Adventure
 
             NoteShip screen31NoteShip = new NoteShip(new Vector2(8 * 9, 8 * 11), "movingPlatform1Long", new Vector2(8 * 102, 8 * 11), 0, 2, 8 * 6);
 
-            List<AnimatedGameObject> screen31Notes = new List<AnimatedGameObject>()
+            List<GameObject> screen31NoteShipAsList = new List<GameObject>() { screen31NoteShip };
+
+            List<GameObject> screen31Notes = new List<GameObject>()
             {
-                new Note (new Vector2(8 * 9, 8* 9), "FKeyRound", "F", screen31NoteShip, 1),
-                new Note (new Vector2(8 * 13, 8* 9), "AKeyRound", "A", screen31NoteShip, 0),
-                new Note (new Vector2(8 * 17, 8* 9), "CKeyRound", "C", screen31NoteShip, -1),
+                new Note (new Vector2(8 * 9, 8* 9), "FKeyRound", "F", screen31NoteShipAsList, null, null, 0, 1),
+                new Note (new Vector2(8 * 13, 8* 9), "AKeyRound", "A", screen31NoteShipAsList, null, null, 0, 0),
+                new Note (new Vector2(8 * 17, 8* 9), "CKeyRound", "C", screen31NoteShipAsList, null, null, 0, -1),
 
             };
 
@@ -1319,7 +1339,7 @@ namespace Adventure
             };
 
             LaunchPad screen32LaunchPad = new LaunchPad(new Vector2(8 * 19, 8 * 20 + 4), "LaunchPad");
-            Note screen32Note = new Note(new Vector2(8 * 30, 8 * 19), "FKeyRound", "TimpaniC", screen32LaunchPad);
+            Note screen32Note = new Note(new Vector2(8 * 30, 8 * 19), "FKeyRound", "TimpaniC", new List<GameObject>() { screen32LaunchPad });
             screen32GameObjects.Add(screen32LaunchPad);
             screen32GameObjects.Add(screen32Note);
 
@@ -1347,7 +1367,7 @@ namespace Adventure
                 new Beam(new Vector2(8*32, 8*5), new Vector2(8*7, 8*5))
             };
 
-            List<MovingPlatformOneLoop> screen33Platforms = new List<MovingPlatformOneLoop>()
+            List<GameObject> screen33Platforms = new List<GameObject>()
             {
                 new MovingPlatformOneLoop(new Vector2(8 * 23, 8 * 5), "ClimableBox", new Vector2(8 * 23, 8 * 16), 60, 1){ climable = true },
                 new MovingPlatformOneLoop(new Vector2(8 * 13, 8 * 16), "ClimableBox", new Vector2(8 * 13, 8 * 5), 60, 1){ climable = true }
@@ -1379,7 +1399,7 @@ namespace Adventure
                 new Beam(new Vector2(8*32, 8*8), new Vector2(8*7, 8*8))
             };
 
-            List<MovingPlatformHalfLoop> screen34Platforms = new List<MovingPlatformHalfLoop>()
+            List<GameObject> screen34Platforms = new List<GameObject>()
             {
                 new MovingPlatformHalfLoop(new Vector2(8 * 19, 8 * 8), "ClimableBox", new Vector2(8 * 19, 8 * 14), 0, 1){ climable = true },
                 new MovingPlatformHalfLoop(new Vector2(8 * 13, 8 * 14), "ClimableBox", new Vector2(8 * 13, 8 * 8), 0, 1){ climable = true },

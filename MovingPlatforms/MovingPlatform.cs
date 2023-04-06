@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonoGame.Aseprite.Sprites;
 
+
 namespace Adventure
 {
     public class MovingPlatform : MovingGameObject
@@ -42,7 +43,7 @@ namespace Adventure
 
         public bool movePlayerToo = false;
 
-        public List<AnimatedGameObject> spritesOnPlatform;
+        public List<GameObject> spritesOnPlatform;
 
 
 
@@ -102,7 +103,7 @@ namespace Adventure
 
         }
 
-        public MovingPlatform(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, List<AnimatedGameObject> spritesOnPlatform) : base(initialPosition, filename)
+        public MovingPlatform(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, List<GameObject> spritesOnPlatform) : base(initialPosition, filename)
         {
             CollisionObject = true;
             beforeDelay = false;
@@ -259,18 +260,17 @@ namespace Adventure
             if (spritesOnPlatform != null)
             {
 
-                foreach (AnimatedGameObject sprite in spritesOnPlatform)
+                foreach (GameObject gameObject in spritesOnPlatform)
                 {
-                    if (sprite is Note note)
+                    if (gameObject is Note note)
                     {
                         note.key.position.X += displacement.X;
                         note.key.idleHitbox.rectangle.X = (int)note.key.position.X + note.key.idleHitbox.offsetX;
                         note.key.position.Y += displacement.Y;
                         note.key.idleHitbox.rectangle.Y = (int)note.key.position.Y + note.key.idleHitbox.offsetY;
                     }
-                    else
+                    else if (gameObject is AnimatedGameObject sprite)
                     {
-
                         sprite.position.X += displacement.X;
                         sprite.idleHitbox.rectangle.X = (int)sprite.position.X + sprite.idleHitbox.offsetX;
                         sprite.position.Y += displacement.Y;
