@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Adventure
 {
@@ -54,8 +55,11 @@ namespace Adventure
 
         int numberOfFramesBetweenPlayerInteractions = 60;
 
-        public Note(Vector2 keyPosition, string keyFilename, string noteValue, List<GameObject> gameObjects = null, string symbolFilename = null, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
+        public Note(Vector2 keyPosition, string keyFilename, string noteValue, ColliderManager colliderManager, InputManager inputManager, List<GameObject> gameObjects = null, string symbolFilename = null, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
         {
+            this.colliderManager = colliderManager;
+            this.inputManager = inputManager;
+
             key = new Key(keyPosition, keyFilename);
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
@@ -83,6 +87,69 @@ namespace Adventure
                 CreateAndPlayNote();
 
             }
+
+            if (!playerInteractedWith)
+            {
+                if (colliderManager.CheckForCollision(References.player.idleHitbox, key.idleHitbox) && (inputManager.OnKeyUp(Keys.E) || inputManager.OnKeyUp(Keys.Up)))
+                {
+                    if (ribbonAttached)
+                    {
+                        foreach (Ribbon ribbon in References.player.ribbons)
+                        {
+                            if (ribbon.listOfNotes.Contains(this))
+                            {
+                                ribbon.playNotes = true;
+                                ribbon.indexOfNoteToPlay = ribbon.listOfNotes.IndexOf(this);
+
+                            }
+                        }
+                    }
+                    else
+                    {
+                        flagPlayerInteractedWith = true;
+
+                    }
+                }
+
+                
+            }
+
+            //    // BOMB CODE
+
+            //if (!References.player.bombPlanted)
+            //{
+            //    if (colliderManager.CheckForCollision(References.player.idleHitbox, key.idleHitbox) && inputManager.OnKeyUp(Keys.B))
+            //    {
+            //        if (!References.player.bombPlanted)
+            //        {
+            //            References.player.bombPlanted = true;
+            //            References.player.bomb.position = References.player.position;
+            //            References.player.bomb.attachedNote = this;
+            //        }
+
+            //    }
+            //}
+
+            //    // RIBBON CODE
+
+            if (colliderManager.CheckForCollision(References.player.idleHitbox, key.idleHitbox) && inputManager.OnKeyUp(Keys.R))
+            {
+                if (!References.player.ribbonInHand)
+                {
+                    References.player.ribbonInHand = true;
+                    References.player.ribbons[References.player.ribbonIndex].inPlayersHand = true;
+                    References.player.ribbons[References.player.ribbonIndex].Enabled = true;
+                    References.player.ribbons[References.player.ribbonIndex].position = References.player.position;
+                    References.player.ribbons[References.player.ribbonIndex].FixRibbonToNote(this);
+                }
+                else
+                {
+                    References.player.ribbons[References.player.ribbonIndex].FixRibbonToNote(this);
+                }
+            }
+
+
+          
 
             if (playerInteractedWith && counter < numberOfFramesBetweenPlayerInteractions)
             {

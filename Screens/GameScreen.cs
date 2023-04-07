@@ -46,6 +46,8 @@ namespace Adventure
         public List<GameObject> screenGameObjects = new List<GameObject>();
         public List<GameObject> screenGameObjectsToLoadIn = new List<GameObject>();
 
+        public List<GameObject> gameObjectsDrawOnly = new List<GameObject>();
+
         public List<HitboxRectangle> hitboxesToCheckCollisionsWith = new List<HitboxRectangle>();
         public List<HitboxRectangle> hitboxesForAimLine = new List<HitboxRectangle>();
 
@@ -201,11 +203,17 @@ namespace Adventure
                     }
                 }
 
+                foreach (GameObject gameObject in gameObjectsDrawOnly)
+                {
+                    gameObject.Draw(spriteBatch);
+                }
+
                 foreach (GameObject gameObject in screenGameObjects)
                 {
                     gameObject.Draw(spriteBatch);
                 }
 
+                
 
             }
         }

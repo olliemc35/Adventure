@@ -13,8 +13,9 @@ namespace Adventure
         private SpriteBatch spriteBatch;
         public ScreenManager screenManager;
         public SoundManager soundManager;
-
+        public ColliderManager colliderManager;
         public AssetManager assetManager;
+        public InputManager inputManager;
         public int ScreenHeight;
         public int ScreenWidth;
 
@@ -40,9 +41,12 @@ namespace Adventure
 
             assetManager = new AssetManager();
             soundManager = new SoundManager();
+            colliderManager = new ColliderManager();
+            inputManager = new InputManager();
 
             References.assetManager = assetManager;
             References.soundManager = soundManager;
+            References.colliderManager = colliderManager;
 
             References.content = Content;
             References.game = this;
@@ -81,7 +85,7 @@ namespace Adventure
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            screenManager = new ScreenManager(spriteBatch);
+            screenManager = new ScreenManager(spriteBatch, colliderManager, inputManager);
             assetManager.LoadContent(Content, GraphicsDevice);
             soundManager.LoadContent(Content);
             screenManager.LoadScreens(Content);
@@ -99,6 +103,7 @@ namespace Adventure
             // Only update every 60FPS
             if (Math.Abs(gameTime.ElapsedGameTime.TotalMilliseconds - TargetElapsedTime.TotalMilliseconds) < 1)
             {
+                inputManager.Update();
                 screenManager.Update(gameTime);
                 base.Update(gameTime);
             }

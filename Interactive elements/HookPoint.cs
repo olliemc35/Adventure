@@ -42,6 +42,13 @@ namespace Adventure
                 UpdatePlayingAnimation(animation_Idle);
             }
 
+            if (!References.player.playerStateManager.swingingState.Active && InRange && References.player.flagHookButtonPressed)
+            {
+                References.player.playerStateManager.DeactivatePlayerStates();
+                References.player.playerStateManager.swingingState.Activate();
+                References.player.playerStateManager.swingingState.hookPoint = this;
+            }
+
             base.Update(gameTime);
         }
     }

@@ -192,11 +192,11 @@ namespace Adventure
 
                         if (colorMapOfSpriteSheet[i, j + 1].A == 202)
                         {
-                            screenGameObjects.Add(new Door(new Vector2(i, j), "Door", 1, 1));
+                            //screenGameObjects.Add(new Door(new Vector2(i, j), "Door", 1, 1));
                         }
                         else if (colorMapOfSpriteSheet[i, j + 1].A == 118)
                         {
-                            screenGameObjects.Add(new Door(new Vector2(i, j), "Door", 1, 2));
+                           // screenGameObjects.Add(new Door(new Vector2(i, j), "Door", 1, 2));
                         }
 
                         continue;
@@ -206,7 +206,7 @@ namespace Adventure
                     // Check if spikes
                     if (color.R == 255 && color.G == 255 && color.B == 255 && color.A == 255)
                     {
-                        screenGameObjects.Add(new Spike(new Vector2(8 * j, 8 * i), "Spike"));
+                        //screenGameObjects.Add(new Spike(new Vector2(8 * j, 8 * i), "Spike"));
                         continue;
 
                     }
@@ -215,7 +215,7 @@ namespace Adventure
                     // Check if notes
                     if (color.R == 160 && color.G == 0 && color.B == 0 && color.A == 255)
                     {
-                        screenNotes.Add(new Note(new Vector2(i, j), "AKeyRound", "A", null, "rune_A"));
+                        //screenNotes.Add(new Note(new Vector2(i, j), "AKeyRound", "A", colliderManager, inputManager, null, "rune_A"));
                         continue;
                     }
 

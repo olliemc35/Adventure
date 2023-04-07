@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
 
 namespace Adventure
 {
@@ -17,7 +18,9 @@ namespace Adventure
 
         public float maxDistanceFromFixedRopeBit = 0;
         public bool maxDistanceFound = false;
-        public bool inPlayersHand = true;
+        public bool inPlayersHand = false;
+        //public bool inPlayersHand = true;
+        public bool fixedAtNote = false;
 
         public bool playNotes = false;
 
@@ -26,8 +29,10 @@ namespace Adventure
         public int indexOfNoteToPlay;
 
 
-        public Ribbon(Player player, Vector2 initialPosition)
+        public Ribbon(Player player, Vector2 initialPosition, ColliderManager colliderManager, InputManager inputManager)
         {
+            this.colliderManager = colliderManager;
+            this.inputManager = inputManager;
             this.player = player;
 
             CollisionObject = true;
@@ -114,19 +119,21 @@ namespace Adventure
                 }
             }
 
+           
 
-            for (int i = 0; i <= IndexOfRopeBitInPlayersHand; i++)
-            {
-                rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
-
-
-                foreach (Pivot pivot in rope[i].pivotsBetweenThisRopeBitandOnePlus)
+                for (int i = 0; i <= IndexOfRopeBitInPlayersHand; i++)
                 {
-                    Rectangle rect = new Rectangle((int)pivot.position.X, (int)pivot.position.Y, 2, 2);
-                    spriteBatch.Draw(player.idleHitbox.texture, rect, Color.Blue);
-                }
+                    rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
 
-            }
+
+                    foreach (Pivot pivot in rope[i].pivotsBetweenThisRopeBitandOnePlus)
+                    {
+                        Rectangle rect = new Rectangle((int)pivot.position.X, (int)pivot.position.Y, 2, 2);
+                        spriteBatch.Draw(player.idleHitbox.texture, rect, Color.Blue);
+                    }
+
+                }
+            
 
 
 
@@ -136,9 +143,53 @@ namespace Adventure
 
         public override void Update(GameTime gametime)
         {
-            //Debug.WriteLine(IndexOfRopeBitInPlayersHand);
-            //Debug.WriteLine(inPlayersHand);
-            Debug.WriteLine(listOfNotes.Count);
+           
+            if (inPlayersHand)
+            {
+                bool test = true;
+
+                if (References.activeScreen.screenNotes.Count > 0)
+                {
+                    foreach (Note note in References.activeScreen.screenNotes)
+                    {
+
+                        if (colliderManager.CheckForCollision(player.idleHitbox, note.key.idleHitbox))
+                        {
+                            test = false;
+                            break;
+                        }
+
+                    }
+
+                    if (test)
+                    {
+                        if (inputManager.OnKeyUp(Keys.R))
+                        {
+                            if (listOfNotes.Count == 1)
+                            {
+                                inPlayersHand = false;
+                                Enabled = false;
+                                References.player.ribbonInHand = false;
+                                ClearNoteBools();
+
+                            }
+                            else
+                            {
+                                inPlayersHand = false;
+                                fixedAtNote = true;
+                                FixRibbonAtLastNote();
+                                References.player.ribbonInHand = false;
+                                player.ribbonIndex = (player.ribbonIndex + 1) % 3;
+                            }
+                        }
+                    }
+
+
+                }
+
+            }
+
+
 
             SimulateRibbon();
 

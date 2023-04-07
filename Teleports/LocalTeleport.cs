@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Adventure
 {
@@ -72,22 +73,24 @@ namespace Adventure
             {
                 InRange = true;
                 UpdatePlayingAnimation(animation_InRange);
-                //nameOfCurrentAnimationSprite = "InRange";
-
-                //animatedSprite_Idle.Play("InRange");
-                //currentFrame = frameAndTag["InRange"].From;
-                //tagOfCurrentFrame = "InRange";
             }
             else
             {
                 InRange = false;
                 UpdatePlayingAnimation(animation_Idle);
-               // nameOfCurrentAnimationSprite = "Idle";
-
-                //animatedSprite_Idle.Play("Idle");
-                //currentFrame = frameAndTag["Idle"].From;
-                //tagOfCurrentFrame = "Idle";
             }
+
+            if (!References.player.playerStateManager.teleportState.Active)
+            {
+                if (InRange && References.player.flagTeleportButtonPressed)
+                {
+                    References.player.playerStateManager.DeactivatePlayerStates();
+                    References.player.playerStateManager.teleportState.Activate();
+                    References.player.playerStateManager.teleportState.portal = this;
+                    References.player.playerStateManager.teleportState.isTeleportGlobal = false;
+                }
+            }
+            
 
             base.Update(gameTime);
         }

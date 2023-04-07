@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame.Framework.Utilities.Deflate;
 
 namespace Adventure
 {
@@ -27,8 +28,10 @@ namespace Adventure
         {
         }
 
-        public Ladder(Vector2 initialPosition, int numberOfRungs) : base(initialPosition)
+        public Ladder(Vector2 initialPosition, int numberOfRungs, ColliderManager colliderManager) : base(initialPosition)
         {
+            this.colliderManager = colliderManager;
+
             CollisionObject = true;
 
             this.numberOfRungs = numberOfRungs;
@@ -78,7 +81,8 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            // this causes error - try to call animation_playing which is null
+            //base.Update(gameTime);
 
             foreach (AnimatedGameObject rung in listOfRungs)
             {
@@ -96,9 +100,30 @@ namespace Adventure
             }
 
 
+            if (!References.player.playerStateManager.climbingLadderState.Active)
+            {
+                if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox))
+                {
+                    // I'm climbing starting from the top
+                    if (References.player.idleHitbox.rectangle.Y + References.player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && References.player.spriteDirectionY == 1)
+                    {
+                        References.player.playerStateManager.climbingLadderState.ladder = this;
+                        idleHitbox.isActive = false;
+                        References.player.playerStateManager.DeactivatePlayerStates();
+                        References.player.playerStateManager.climbingLadderState.Activate();
+                        return;
+                    }
 
-
-
+                    // I'm climbing starting from somewhere below the top
+                    if (References.player.idleHitbox.rectangle.Y + References.player.idleHitbox.rectangle.Height > positionOfTopLeftCorner.Y && References.player.spriteDirectionY != 0)
+                    {
+                        References.player.playerStateManager.climbingLadderState.ladder = this;
+                        References.player.playerStateManager.DeactivatePlayerStates();
+                        References.player.playerStateManager.climbingLadderState.Activate();
+                        return;
+                    }
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)

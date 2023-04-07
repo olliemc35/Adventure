@@ -134,8 +134,10 @@ namespace Adventure
         public Vector2 velocityOffSetDueToMovingPlatform = new Vector2(0, 0);
 
         public bool ribbonInHand = false;
-        public List<Ribbon> ribbons = new List<Ribbon>();
+        public List<Ribbon> ribbons;
+        public int ribbonIndex = 0;
 
+        public Bomb bomb;
         public bool bombPlanted = false;
 
 
@@ -145,8 +147,12 @@ namespace Adventure
 
 
 
-        public Player(Vector2 initialPosition) : base(initialPosition)
+        public Player(Vector2 initialPosition, string filename, ColliderManager colliderManager, InputManager inputManager) : base(initialPosition, filename)
         {
+            this.colliderManager = colliderManager;
+            this.inputManager = inputManager;
+
+
             maxHorizontalSpeed = 60;
 
             jumpDuration = 0.5f;
@@ -181,6 +187,14 @@ namespace Adventure
             //Highlight = true;
             rope = new RopeForPlayer(position, this);
             gun = new Gun(this);
+            bomb = new Bomb(position, "NoteBomb", this.colliderManager, this.inputManager);
+            ribbons = new List<Ribbon>()
+            {
+                new Ribbon(this, position, colliderManager, inputManager){Enabled = false },
+                new Ribbon(this, position, colliderManager, inputManager){Enabled = false },
+                new Ribbon(this, position, colliderManager, inputManager){Enabled = false },
+            };
+
             //rope.LoadContent(References.content, References.graphicsDevice);
 
 
@@ -192,8 +206,6 @@ namespace Adventure
 
 
             playerStateManager = new PlayerStateManager(this);
-
-
 
 
 
@@ -210,6 +222,8 @@ namespace Adventure
 
         public void ReturnToRespawnAnimation(AnimatedSprite animation)
         {
+            //Debug.WriteLine("here");
+            //Dead = false;
             UpdatePlayingAnimation(animation_Respawn, 1);
             position.X = References.activeScreen.respawnPoint.X;
             position.Y = References.activeScreen.respawnPoint.Y;
@@ -480,21 +494,21 @@ namespace Adventure
            // Debug.WriteLine(spriteVelocity.X);
 
 
-            if (References.activeScreen.screenRibbons.Count > 0)
-            {
-                foreach (Ribbon ribbon in References.activeScreen.screenRibbons)
-                {
-                    if (ribbon.inPlayersHand)
-                    {
-                        ribbonInHand = true;
-                        break;
-                    }
-                    else
-                    {
-                        ribbonInHand = false;
-                    }
-                }
-            }
+            //if (References.activeScreen.screenRibbons.Count > 0)
+            //{
+            //    foreach (Ribbon ribbon in References.activeScreen.screenRibbons)
+            //    {
+            //        if (ribbon.inPlayersHand)
+            //        {
+            //            ribbonInHand = true;
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            ribbonInHand = false;
+            //        }
+            //    }
+            //}
 
 
 
@@ -518,6 +532,14 @@ namespace Adventure
             //Debug.WriteLine(spriteVelocity.Y);
 
             gun.Update(gameTime);
+            bomb.Update(gameTime);
+            foreach (Ribbon ribbon in ribbons)
+            {
+                if (ribbon.Enabled)
+                {
+                    ribbon.Update(gameTime);
+                }
+            }
 
             ropeAnchor.X = position.X + idleHitbox.offsetX + 1;
             ropeAnchor.Y = position.Y + idleHitbox.offsetY + idleHitbox.rectangle.Height / 2 - 2;
@@ -566,6 +588,15 @@ namespace Adventure
             //animatedSpriteAndTag[nameOfCurrentAnimationSprite].Draw(spriteBatch, animationPosition);
             rope.Draw(spriteBatch);
 
+            bomb.Draw(spriteBatch);
+
+            foreach(Ribbon ribbon in ribbons)
+            {
+                if (ribbon.Enabled)
+                {
+                    ribbon.Draw(spriteBatch);
+                }
+            }
 
             gun.Draw(spriteBatch);
 

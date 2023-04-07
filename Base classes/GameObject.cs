@@ -16,6 +16,21 @@ namespace Adventure
         // This will be managed by ScreenManager - only gameObjects on the current screen will have Enabled set to true - otherwise false
         public bool Enabled = true;
 
+        // Some GameObjects we only need to draw every frame - we do not need to update every frame. E.g. background tiles, spikes etc.
+        public bool DrawOnly = false;
+
+
+        // // The following references may be passed in when created a new GameObject instance:
+
+        // Some GameObjects will need to detect collisions - e.g. player, spikes, doors etc.
+        public ColliderManager colliderManager;
+
+        // Some GameObjects will need to detect keyboard input - e.g. player, doors etc.
+        public InputManager inputManager;
+
+        // Some GameObjects will need to access information about the screen we are on - e.g. doors, bombs (to look for notes) etc.
+        public GameScreen gameScreen;
+
         public GameObject()
         {
         }
@@ -31,6 +46,9 @@ namespace Adventure
         public virtual void Draw(SpriteBatch spriteBatch)
         {
         }
+
+
+       
 
     }
 }

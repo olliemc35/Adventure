@@ -15,6 +15,9 @@ namespace Adventure
 
         public static ContentManager content;
         public static AssetManager assetManager;
+
+        public static ColliderManager colliderManager;
+
         public static GraphicsDevice graphicsDevice;
         public static Game1 game;
 
@@ -27,6 +30,7 @@ namespace Adventure
         public static int ScreenNumber;
         public static int PreviousScreenNumber;
         public static int DoorNumberToMoveTo;
+
 
 
         public static SoundManager soundManager;

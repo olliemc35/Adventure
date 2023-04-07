@@ -27,11 +27,18 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-           
 
-            //animatedSprite_Idle.Play("InRange");
-            //currentFrame = frameAndTag["InRange"].From;
-            //tagOfCurrentFrame = "InRange";
+
+            if (!References.player.playerStateManager.teleportState.Active)
+            {
+                if (References.player.flagTeleportButtonPressed)
+                {
+                    References.player.playerStateManager.DeactivatePlayerStates();
+                    References.player.playerStateManager.teleportState.Activate();
+                    References.player.playerStateManager.teleportState.portal = this;
+                    References.player.playerStateManager.teleportState.isTeleportGlobal = true;
+                }
+            }
 
             base.Update(gameTime);
         }
