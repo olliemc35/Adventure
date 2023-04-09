@@ -104,6 +104,16 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/LaunchPad.aseprite;LaunchPad.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/Level1.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level1.aseprite;Level1.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level2.aseprite;Level2.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/Level36.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor

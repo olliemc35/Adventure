@@ -31,6 +31,9 @@ namespace Adventure
         // Some GameObjects will need to access information about the screen we are on - e.g. doors, bombs (to look for notes) etc.
         public GameScreen gameScreen;
 
+        // Some GameObjects will need a reference to the player - e.g. doors, spikes etc.
+        public Player player;
+
         public GameObject()
         {
         }

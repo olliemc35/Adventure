@@ -35,7 +35,7 @@ namespace Adventure
         {
             velocity = speed * direction;
             displacement = velocity * deltaTime;
-            colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesForAimLine, 1, 10);
+           // colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesForAimLine, 1, 10);
 
             if (CollidedOnRight)
             {
@@ -81,56 +81,56 @@ namespace Adventure
         // This codes is now incorrect - have to think about the right co-ords on the color map
         public void UpdateEnemyColorMap(Vector2 collisionPoint)
         {
-            if (References.activeScreen.screenNotes.Count > 0)
-            {
+            //if (References.activeScreen.screenNotes.Count > 0)
+            //{
 
-                foreach (Note note in References.activeScreen.screenNotes)
-                {
-                    bool targetThisWeight = false;
+            //    foreach (Note note in References.activeScreen.screenNotes)
+            //    {
+            //        bool targetThisWeight = false;
 
 
-                    //if (note.key is HangingRopeWithWeightAttached bell)
-                    //{
-                    //    foreach (List<HitboxRectangle> hitboxes in bell.weight.hitboxesForGunlineForEachFrame)
-                    //    {
-                    //        foreach (HitboxRectangle hitbox in hitboxes)
-                    //        {
-                    //            if (hitbox.rectangle.Contains(collisionPoint))
-                    //            {
-                    //                targetThisWeight = true;
-                    //                break;
-                    //            }
-                    //        }
-                    //        if (targetThisWeight)
-                    //        {
-                    //            break;
-                    //        }
-                    //    }
+            //        //if (note.key is HangingRopeWithWeightAttached bell)
+            //        //{
+            //        //    foreach (List<HitboxRectangle> hitboxes in bell.weight.hitboxesForGunlineForEachFrame)
+            //        //    {
+            //        //        foreach (HitboxRectangle hitbox in hitboxes)
+            //        //        {
+            //        //            if (hitbox.rectangle.Contains(collisionPoint))
+            //        //            {
+            //        //                targetThisWeight = true;
+            //        //                break;
+            //        //            }
+            //        //        }
+            //        //        if (targetThisWeight)
+            //        //        {
+            //        //            break;
+            //        //        }
+            //        //    }
 
-                    //    if (targetThisWeight)
-                    //    {
-                    //        bell.giveImpulse = true;
-                    //        Vector2 unitVec = new Vector2(0, -1);
-                    //        bell.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVec));
+            //        //    if (targetThisWeight)
+            //        //    {
+            //        //        bell.giveImpulse = true;
+            //        //        Vector2 unitVec = new Vector2(0, -1);
+            //        //        bell.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVec));
 
-                    //        if (collisionPoint.X > bell.weight.spritePosition.X + 0.5f * bell.weight.idleHitbox.rectangle.Width)
-                    //        {
-                    //            bell.impulseAngle *= -1;
-                    //        }
+            //        //        if (collisionPoint.X > bell.weight.spritePosition.X + 0.5f * bell.weight.idleHitbox.rectangle.Width)
+            //        //        {
+            //        //            bell.impulseAngle *= -1;
+            //        //        }
 
-                    //        if (!note.playerInteractedWith)
-                    //        {
-                    //            note.playerInteractedWith = true;
-                    //            note.flagPlayerInteractedWith = true;
-                    //            note.keyPlayInteractedAnimation = true;
-                    //        }
+            //        //        if (!note.playerInteractedWith)
+            //        //        {
+            //        //            note.playerInteractedWith = true;
+            //        //            note.flagPlayerInteractedWith = true;
+            //        //            note.keyPlayInteractedAnimation = true;
+            //        //        }
 
-                    //    }
-                    //}
+            //        //    }
+            //        //}
 
-                }
+            //    }
 
-            }
+            //}
 
             //foreach (HangingRopeWithWeightAttached rope in References.activeScreen.screenRopesWithWeights)
             //{

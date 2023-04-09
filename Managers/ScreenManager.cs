@@ -146,6 +146,7 @@ namespace Adventure
 
         public int ScreenNumber = 0;
         public int PreviousScreenNumber = 0;
+        public int DoorNumberToMoveTo = 0;
 
 
         public ScreenManager(SpriteBatch spriteBatch)
@@ -176,39 +177,32 @@ namespace Adventure
         }
 
 
-        public void LoadScreens(ContentManager content)
+        public void LoadScreens(ContentManager content, GraphicsDevice graphicsDevice)
         {
             menuFont = content.Load<SpriteFont>("menufont");
 
 
-            CreateScreens();
-
-            //activeScreen = new GameScreen(spriteBatch);
-            //previousActiveScreen = activeScreen;
-
-            //screens.Add(previousActiveScreen);
-            //screens.Add(activeScreen);
-
+            CreateScreens(content, graphicsDevice);
 
             foreach (GameScreen screen in screens)
             {
                 if (screen != null)
                 {
                     //Debug.WriteLine("here");
-                    screen.LoadContent(content, References.graphicsDevice);
+                    screen.LoadContent(content, graphicsDevice);
                     screen.Hide();
                 }
             }
 
-            activeScreen = screens[1];
+            activeScreen = screens[0];
             activeScreen.Show();
 
-            player.LoadContent(content, References.graphicsDevice);
-            player.bomb.LoadContent(content, References.graphicsDevice);
+            player.LoadContent(content, graphicsDevice);
+            player.bomb.LoadContent(content, graphicsDevice);
 
             foreach (Ribbon ribbon in player.ribbons)
             {
-                ribbon.LoadContent(content, References.graphicsDevice);
+                ribbon.LoadContent(content, graphicsDevice);
             }
 
             player.position = activeScreen.respawnPoint;
@@ -226,16 +220,14 @@ namespace Adventure
 
             activeScreen.Update(gameTime);
 
-            if (activeScreen.ChangeScreen)
+            if (activeScreen.ChangeScreenFlag)
             {
-                activeScreen.ChangeScreen = false;
-                ScreenNumber = References.ScreenNumber;
-                PreviousScreenNumber = References.PreviousScreenNumber;
+                activeScreen.ChangeScreenFlag = false;
                 activeScreen = screens[ScreenNumber - 1];
-                References.activeScreen = activeScreen;
+                References.activeScreen = activeScreen; // I do all collision w.r.t References.activeScreen so can't remove just yet - want to change this to just activeScreen by passing in references
                 DisableShowScreenTransition(screens[PreviousScreenNumber - 1], screens[ScreenNumber - 1]);
-                player.position.X = activeScreen.screenDoors[References.DoorNumberToMoveTo - 1].position.X;
-                player.position.Y = activeScreen.screenDoors[References.DoorNumberToMoveTo - 1].position.Y;
+                player.position.X = activeScreen.screenDoors[DoorNumberToMoveTo - 1].position.X;
+                player.position.Y = activeScreen.screenDoors[DoorNumberToMoveTo - 1].position.Y;
             }
 
             //soundManager.Update(gameTime);
@@ -283,99 +275,136 @@ namespace Adventure
             return keyboardState.IsKeyUp(theKey) && oldKeyboardState.IsKeyDown(theKey);
         }
 
-        public void CreateScreens()
+        public void CreateScreens(ContentManager content, GraphicsDevice graphicsDevice)
         {
+            screens = new List<GameScreen>();
 
 
-            // Create screen 1
-            string tileSetStringScreen1 = "ABABCACACACACABACBC";
-            List<int> tileSetCounterScreen1 = new List<int>() { 600, 2, 36, 2, 2, 36, 4, 36, 4, 36, 4, 36, 4, 19, 3, 14, 4, 38, 40 };
-            tileSetScreen1 = new Tileset(tileSetStringScreen1, tileSetCounterScreen1);
-
-            List<GameObject> screen1GameObjects = new List<GameObject>()
+            for (int i = 1; i <= 2; i++)
             {
-                new Door(new Vector2(8 * 21 + 4, 8 * 18), "Door", 2, 1, colliderManager, inputManager)
-            };
+                ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), colliderManager, inputManager, this, player);
+                level.LoadContent(content, graphicsDevice);
 
-            screen1 = new ActionScreen(spriteBatch, menuFont, player, screen1GameObjects, tileSetScreen1, keyboardState, oldKeyboardState)
-            {
-                respawnPoint = new Vector2(8, 0),
-                screenNumber = 1,
-                cameraBehaviourType1 = true
-            };
+                screens.Add(
+                    new ActionScreen(spriteBatch, menuFont, player, level.gameObjects, level.backgroundObjects, keyboardState, oldKeyboardState)
+                    {
+                        respawnPoint = new Vector2(8 * 19, 8 * 8),
+                        screenNumber = i,
+                        cameraBehaviourType1 = true
+                    });
 
-
-
-            // Create screen 2
-            string tileSetStringScreen2 = "AABAABAABABACACC";
-            List<int> tileSetCounterScreen2 = new List<int>() { 680, 20, 6, 14, 14, 3, 23, 8, 3, 29, 5, 35, 5, 35, 5, 35 };
-            tileSetScreen2 = new Tileset(tileSetStringScreen2, tileSetCounterScreen2);
-
-            List<GameObject> screen2GameObjects = new List<GameObject>()
-            {
-                new MovingPlatform(new Vector2(8 * 28, 8 * 17), "movingPlatform1", new Vector2(8 * 28, 8 * 7), 0, 1),
-                new MovingPlatform(new Vector2(8 * 12, 8 * 7), "movingPlatform1", new Vector2(8 * 22, 8 * 7), 0, 1),
-                new Door(new Vector2(8 * 1, 8 * 18), "Door", 1, 1, colliderManager, inputManager),
-                new Door(new Vector2(8 * 22, 8 * 15), "Door", 3, 1, colliderManager, inputManager)
-            };
-
-            for (int i = 5; i < 40; i++)
-            {
-                screen2GameObjects.Add(new Spike(new Vector2(8 * i, 21 * 8), "Spike", colliderManager));
             }
 
 
-            screen2 = new ActionScreen(spriteBatch, menuFont, player, screen2GameObjects, tileSetScreen2, keyboardState, oldKeyboardState)
-            {
-                respawnPoint = new Vector2(8 * 1, 8 * 14),
-                screenNumber = 2,
-                cameraBehaviourType1 = true
-            };
+
+            //ActionScreenBuilder level1 = new ActionScreenBuilder("Level1", colliderManager, inputManager, this, player);
+            //level1.LoadContent(content, graphicsDevice);
+            //screen1 = new ActionScreen(spriteBatch, menuFont, player, level1.gameObjects, level1.backgroundObjects, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8 * 19, 8 * 8),
+            //    screenNumber = 1,
+            //    cameraBehaviourType1 = true
+            //};
+
+            //ActionScreenBuilder level2 = new ActionScreenBuilder("Level2", colliderManager, inputManager, this, player);
+            //level2.LoadContent(content, graphicsDevice);
+            //screen2 = new ActionScreen(spriteBatch, menuFont, player, level2.gameObjects, level2.backgroundObjects, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8 * 19, 8 * 8),
+            //    screenNumber = 2,
+            //    cameraBehaviourType1 = true
+            //};
+
+
+            //// Create screen 1
+            //string tileSetStringScreen1 = "ABABCACACACACABACBC";
+            //List<int> tileSetCounterScreen1 = new List<int>() { 600, 2, 36, 2, 2, 36, 4, 36, 4, 36, 4, 36, 4, 19, 3, 14, 4, 38, 40 };
+            //tileSetScreen1 = new Tileset(tileSetStringScreen1, tileSetCounterScreen1);
+
+            //List<GameObject> screen1GameObjects = new List<GameObject>()
+            //{
+            //    new Door(new Vector2(8 * 21 + 4, 8 * 18), "Door", 2, 1, colliderManager, inputManager)
+            //};
+
+            //screen1 = new ActionScreen(spriteBatch, menuFont, player, screen1GameObjects, tileSetScreen1, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8, 0),
+            //    screenNumber = 1,
+            //    cameraBehaviourType1 = true
+            //};
 
 
 
-            // Create screen 3
-            string tileSetStringScreen3 = "AABACACACACACACBCCC";
-            List<int> tileSetCounterScreen3 = new List<int>() { 520, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 40, 40 };
-            tileSetScreen3 = new Tileset(tileSetStringScreen3, tileSetCounterScreen3);
+            //// Create screen 2
+            //string tileSetStringScreen2 = "AABAABAABABACACC";
+            //List<int> tileSetCounterScreen2 = new List<int>() { 680, 20, 6, 14, 14, 3, 23, 8, 3, 29, 5, 35, 5, 35, 5, 35 };
+            //tileSetScreen2 = new Tileset(tileSetStringScreen2, tileSetCounterScreen2);
 
-            List<GameObject> screen3GameObjects = new List<GameObject>()
-            {
-                new AnimatedGameObject(new Vector2(8 * 30, 8 * 12), "Post"),
-                new Door(new Vector2(8 * 1, 8 * 18), "Door", 2, 2, colliderManager, inputManager),
-                new Door(new Vector2(8 * 36, 8 * 11), "Door", 4, 1, colliderManager, inputManager)
-            };
+            //List<GameObject> screen2GameObjects = new List<GameObject>()
+            //{
+            //    new MovingPlatform(new Vector2(8 * 28, 8 * 17), "movingPlatform1", new Vector2(8 * 28, 8 * 7), 0, 1),
+            //    new MovingPlatform(new Vector2(8 * 12, 8 * 7), "movingPlatform1", new Vector2(8 * 22, 8 * 7), 0, 1),
+            //    new Door(new Vector2(8 * 1, 8 * 18), "Door", 1, 1, colliderManager, inputManager),
+            //    new Door(new Vector2(8 * 22, 8 * 15), "Door", 3, 1, colliderManager, inputManager)
+            //};
 
-
-
-            screen3 = new ActionScreen(spriteBatch, menuFont, player, screen3GameObjects, tileSetScreen3, keyboardState, oldKeyboardState)
-            {
-                respawnPoint = new Vector2(8 * 1, 8 * 14),
-                screenNumber = 3,
-                cameraBehaviourType1 = true
-            };
+            //for (int i = 5; i < 40; i++)
+            //{
+            //    screen2GameObjects.Add(new Spike(new Vector2(8 * i, 21 * 8), "Spike", colliderManager));
+            //}
 
 
-            // Create screen 4
-            string tileSetStringScreen4 = "CCACACCACCACCACCACCACCACCBACCACCACCACCACCACCABCCACCACCACCACCBCC";
-            List<int> tileSetCounterScreen4 = new List<int>() { 120, 3, 15, 3, 16, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 8, 26, 3, 11, 26, 3, 11, 26, 3, 11, 26, 3, 11, 26, 3, 11, 26, 3, 11, 16, 10, 3, 11, 16, 13, 11, 16, 13, 11, 16, 13, 11, 16, 13, 11, 16, 13, 40 };
-            tileSetScreen4 = new Tileset(tileSetStringScreen4, tileSetCounterScreen4);
+            //screen2 = new ActionScreen(spriteBatch, menuFont, player, screen2GameObjects, tileSetScreen2, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8 * 1, 8 * 14),
+            //    screenNumber = 2,
+            //    cameraBehaviourType1 = true
+            //};
 
-            List<GameObject> screen4GameObjects = new List<GameObject>()
-            {
-                new HookPoint(new Vector2(8 * 19, 8 *4), "PostDown"),
-                new Ladder(new Vector2(8 * 11, 8 * 10), 11, colliderManager),
-                new Door(new Vector2(8 * 5, 8 * 8), "Door", 3, 2, colliderManager, inputManager),
-                new Door(new Vector2(8 * 33, 8 * 14), "Door", 5, 1, colliderManager, inputManager)
 
-            };
 
-            screen4 = new ActionScreen(spriteBatch, menuFont, player, screen4GameObjects, tileSetScreen4, keyboardState, oldKeyboardState)
-            {
-                respawnPoint = new Vector2(8 * 5, 8 * 8),
-                screenNumber = 4,
-                cameraBehaviourType1 = true
-            };
+            //// Create screen 3
+            //string tileSetStringScreen3 = "AABACACACACACACBCCC";
+            //List<int> tileSetCounterScreen3 = new List<int>() { 520, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 30, 10, 40, 40 };
+            //tileSetScreen3 = new Tileset(tileSetStringScreen3, tileSetCounterScreen3);
+
+            //List<GameObject> screen3GameObjects = new List<GameObject>()
+            //{
+            //    new AnimatedGameObject(new Vector2(8 * 30, 8 * 12), "Post"),
+            //    new Door(new Vector2(8 * 1, 8 * 18), "Door", 2, 2, colliderManager, inputManager),
+            //    new Door(new Vector2(8 * 36, 8 * 11), "Door", 4, 1, colliderManager, inputManager)
+            //};
+
+
+
+            //screen3 = new ActionScreen(spriteBatch, menuFont, player, screen3GameObjects, tileSetScreen3, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8 * 1, 8 * 14),
+            //    screenNumber = 3,
+            //    cameraBehaviourType1 = true
+            //};
+
+
+            //// Create screen 4
+            //string tileSetStringScreen4 = "CCACACCACCACCACCACCACCACCBACCACCACCACCACCACCABCCACCACCACCACCBCC";
+            //List<int> tileSetCounterScreen4 = new List<int>() { 120, 3, 15, 3, 16, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 34, 3, 3, 8, 26, 3, 11, 26, 3, 11, 26, 3, 11, 26, 3, 11, 26, 3, 11, 26, 3, 11, 16, 10, 3, 11, 16, 13, 11, 16, 13, 11, 16, 13, 11, 16, 13, 11, 16, 13, 40 };
+            //tileSetScreen4 = new Tileset(tileSetStringScreen4, tileSetCounterScreen4);
+
+            //List<GameObject> screen4GameObjects = new List<GameObject>()
+            //{
+            //    new HookPoint(new Vector2(8 * 19, 8 *4), "PostDown"),
+            //    new Ladder(new Vector2(8 * 11, 8 * 10), 11, colliderManager),
+            //    new Door(new Vector2(8 * 5, 8 * 8), "Door", 3, 2, colliderManager, inputManager),
+            //    new Door(new Vector2(8 * 33, 8 * 14), "Door", 5, 1, colliderManager, inputManager)
+
+            //};
+
+            //screen4 = new ActionScreen(spriteBatch, menuFont, player, screen4GameObjects, tileSetScreen4, keyboardState, oldKeyboardState)
+            //{
+            //    respawnPoint = new Vector2(8 * 5, 8 * 8),
+            //    screenNumber = 4,
+            //    cameraBehaviourType1 = true
+            //};
 
             //// Create screen 5
             //string tileSetStringScreen5 = "ABCC";
@@ -1511,11 +1540,10 @@ namespace Adventure
             //activeScreen = new GameScreen(spriteBatch);
             //previousActiveScreen = activeScreen;
 
-            screens = new List<GameScreen>();
-            screens.Add(screen1);
-            screens.Add(screen2);
-            screens.Add(screen3);
-            screens.Add(screen4);
+            //screens.Add(screen1);
+            //screens.Add(screen2);
+            //screens.Add(screen3);
+            //screens.Add(screen4);
             //screens.Add(screen5);
             //screens.Add(screen6);
             //screens.Add(screen7);

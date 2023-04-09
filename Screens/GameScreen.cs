@@ -24,14 +24,12 @@ namespace Adventure
 
         public List<Door> screenDoors = new List<Door>();
         public List<Spike> screenSpikes = new List<Spike>();
-        public List<Ladder> screenLadders = new List<Ladder>();
         public List<Note> screenNotes = new List<Note>();
         public List<Gate> screenGates = new List<Gate>();
         public List<NoteAndGatePuzzle> noteAndGatePuzzles = new List<NoteAndGatePuzzle>();
         public List<NoteAndGateAndOrbPuzzle> noteAndGateAndOrbPuzzles = new List<NoteAndGateAndOrbPuzzle>();
         public List<HangingRopeWithWeightAttached> screenHangingRopes = new List<HangingRopeWithWeightAttached>();
         public List<MovingPlatform> screenMovingPlatforms = new List<MovingPlatform>();
-        public List<Teleport> screenTeleports = new List<Teleport>();
         public List<Beam> screenBeams = new List<Beam>();
         public List<BouncingOrb> screenBouncingOrbs = new List<BouncingOrb>();
         public List<HookPoint> screenHookPoints = new List<HookPoint>();
@@ -40,8 +38,6 @@ namespace Adventure
         public NoteShip screenNoteShip;
 
 
-        public List<Bomb> screenBombs = new List<Bomb>();
-        public List<Bomb> screenBombsToRemove = new List<Bomb>();
 
         public List<GameObject> screenGameObjects = new List<GameObject>();
         public List<GameObject> screenGameObjectsToLoadIn = new List<GameObject>();
@@ -51,8 +47,7 @@ namespace Adventure
         public List<HitboxRectangle> hitboxesToCheckCollisionsWith = new List<HitboxRectangle>();
         public List<HitboxRectangle> hitboxesForAimLine = new List<HitboxRectangle>();
 
-        public List<Ribbon> screenRibbons = new List<Ribbon>();
-        public List<Ribbon> screenRibbonsToRemove = new List<Ribbon>();
+        
 
 
         public Texture2D Background { get; set; }
@@ -69,7 +64,7 @@ namespace Adventure
         public int ScreenHeight = 0;
         public int ScreenWidth = 0;
 
-        public bool ChangeScreen = false;
+        public bool ChangeScreenFlag = false;
 
         public Vector2 respawnPoint;
 
@@ -149,28 +144,11 @@ namespace Adventure
 
             }
 
-            if (screenRibbonsToRemove != null)
-            {
-                foreach (Ribbon ribbon in screenRibbonsToRemove)
-                {
-                    screenRibbons.Remove(ribbon);
-                }
-
-                screenRibbonsToRemove.Clear();
-            }
+          
 
 
 
-            if (screenBombsToRemove != null)
-            {
-                foreach (Bomb bomb in screenBombsToRemove)
-                {
-                    screenBombs.Remove(bomb);
-                }
-
-                screenBombsToRemove.Clear();
-            }
-
+          
 
 
 

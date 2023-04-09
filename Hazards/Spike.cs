@@ -16,7 +16,7 @@ namespace Adventure
     public class Spike : Hazard
     {
 
-        public Spike(Vector2 initialPosition, string filename, ColliderManager colliderManager) : base(initialPosition, filename, colliderManager)
+        public Spike(Vector2 initialPosition, string filename, ColliderManager colliderManager, Player player) : base(initialPosition, filename, colliderManager, player)
         {
         }
 

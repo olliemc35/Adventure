@@ -19,6 +19,9 @@ namespace Adventure
         public Tileset tileset;
         public AnimatedGameObject[,] arrayofTiles;
 
+        public AnimatedGameObject[,] backgroundObjects;
+
+        ActionScreenBuilder screenBuilder;
 
 
         public KeyboardState keyboardState;
@@ -37,6 +40,40 @@ namespace Adventure
             ScreenWidth = 8 * tileset.columns;
             ScreenHeight = 8 * tileset.rows;
         }
+        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, List<GameObject> gameObjects, KeyboardState keyboard, KeyboardState oldKeyboard) : base(spriteBatch)
+        {
+            this.player = player;
+            this.screenGameObjectsToLoadIn = gameObjects;
+            this.keyboardState = keyboard;
+            this.oldKeyboardState = oldKeyboard;
+            ScreenWidth = 8 * 40;
+            ScreenHeight = 8 * 23;
+        }
+
+        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, List<GameObject> gameObjects, AnimatedGameObject[,] backgroundObjects, KeyboardState keyboard, KeyboardState oldKeyboard) : base(spriteBatch)
+        {
+            this.player = player;
+            this.screenGameObjectsToLoadIn = gameObjects;
+            this.backgroundObjects = backgroundObjects;
+            this.keyboardState = keyboard;
+            this.oldKeyboardState = oldKeyboard;
+            ScreenWidth = 8 * 40;
+            ScreenHeight = 8 * 23;
+        }
+
+        //public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, string screenBuilderFilename, KeyboardState keyboard, KeyboardState oldKeyboard) : base(spriteBatch)
+        //{
+        //    this.player = player;
+
+        //    screenBuilder = new ActionScreenBuilder(screenBuilderFilename, colliderManager, inputManager, this, player);
+        //    level1.LoadContent(References.content, References.graphicsDevice);
+
+        //    this.keyboardState = keyboard;
+        //    this.oldKeyboardState = oldKeyboard;
+        //    ScreenWidth = 8 * 40;
+        //    ScreenHeight = 8 * 23;
+        //}
+
 
 
         public override void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
@@ -44,8 +81,12 @@ namespace Adventure
             //Debug.WriteLine("here");
 
             // Build tile sprites and add these to screenSprites FIRST so they are drawn first i.e. in the background
-            BuildTileSet();
-            BuildHitboxSet();
+            //BuildTileSet();
+            //BuildHitboxSet();
+
+            BuildBackground();
+            BuildBackgroundHitboxSet();
+
 
             if (screenGameObjectsToLoadIn != null)
             {
@@ -78,12 +119,8 @@ namespace Adventure
                         screenDoors.Add(door);
                     }
 
-                    if (gameObject is Ladder ladder)
-                    {
-                        screenLadders.Add(ladder);
-                    }
 
-       
+
 
                     //if (gameObject is FlashingBeam beam)
                     //{
@@ -177,17 +214,17 @@ namespace Adventure
                         }
                     }
 
-                    if (gameObject is Teleport teleport)
-                    {
-                        screenTeleports.Add(teleport);
-                    }
+
 
 
                 }
 
             }
 
-            screenGameObjectsToLoadIn.Clear();
+            if (screenGameObjectsToLoadIn != null)
+            {
+                screenGameObjectsToLoadIn.Clear();
+            }
 
             // We add the player to screenGameObjects LAST
             screenGameObjects.Add(player);
@@ -335,11 +372,129 @@ namespace Adventure
             }
         }
 
-
-        private bool CheckKey(Keys theKey)
+        public void BuildBackground()
         {
-            return keyboardState.IsKeyUp(theKey) && oldKeyboardState.IsKeyDown(theKey);
+            for (int i = 0; i < backgroundObjects.GetLength(0); i++)
+            {
+
+                for (int j = 0; j < backgroundObjects.GetLength(1); j++)
+                {
+
+                    backgroundObjects[i, j].LoadContent(References.content, References.graphicsDevice);
+
+                    if (backgroundObjects[i, j].filename == "Tile_air")
+                    {
+                        backgroundObjects[i, j].idleHitbox.isActive = false;
+                    }
+                    else
+                    {
+                        backgroundObjects[i, j].idleHitbox.isActive = true;
+                    }
+
+                    gameObjectsDrawOnly.Add(backgroundObjects[i, j]);
+                }
+            }
         }
+
+        public void BuildBackgroundHitboxSet()
+        {
+
+            for (int i = 0; i < backgroundObjects.GetLength(0); i++)
+            {
+                for (int j = 0; j < backgroundObjects.GetLength(1); j++)
+                {
+
+                    bool GotHeight = false;
+
+                    if (backgroundObjects[i, j].idleHitbox.isActive)
+                    {
+                        HitboxRectangle newHitbox = new HitboxRectangle(0, 0, 0, 0);
+                        newHitbox.rectangle.X = backgroundObjects[i, j].idleHitbox.rectangle.X;
+                        newHitbox.rectangle.Y = backgroundObjects[i, j].idleHitbox.rectangle.Y;
+
+
+                        // Get correct width
+                        if (i < backgroundObjects.GetLength(0) - 1)
+                        {
+                            for (int k = i + 1; k < backgroundObjects.GetLength(0); k++)
+                            {
+                                if (!backgroundObjects[k, j].idleHitbox.isActive)
+                                {
+                                    newHitbox.rectangle.Width = (k - i) * 8;
+                                    break;
+                                }
+
+                                if (k == backgroundObjects.GetLength(1) - 1 && backgroundObjects[k, j].idleHitbox.isActive)
+                                {
+                                    newHitbox.rectangle.Width = (k - i + 1) * 8;
+                                    break;
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            newHitbox.rectangle.Width = 1;
+                        }
+
+
+                        // Get correct height
+                        if (j < backgroundObjects.GetLength(1) - 1)
+                        {
+                            for (int h = j + 1; h < backgroundObjects.GetLength(1); h++)
+                            {
+                                for (int l = i; l < i + newHitbox.rectangle.Width / 8; l++)
+                                {
+                                    if (!backgroundObjects[l, h].idleHitbox.isActive)
+                                    {
+                                        newHitbox.rectangle.Height = (h - j) * 8;
+                                        GotHeight = true;
+                                        break;
+                                    }
+                                }
+
+                                if (GotHeight)
+                                {
+                                    break;
+                                }
+
+                                // I only reach this point if everything is fine
+                                if (h == backgroundObjects.GetLength(1) - 1)
+                                {
+                                    newHitbox.rectangle.Height = (h - j + 1) * 8;
+                                }
+
+                            }
+
+                        }
+                        else
+                        {
+                            newHitbox.rectangle.Height = 1;
+                        }
+
+                        for (int i2 = i; i2 < i + newHitbox.rectangle.Width / 8; i2++)
+                        {
+                            for (int j2 = j; j2 < j + newHitbox.rectangle.Height / 8; j2++)
+                            {
+                                backgroundObjects[i2, j2].idleHitbox.isActive = false;
+                            }
+                        }
+
+
+
+
+                        newHitbox.isActive = true;
+                        hitboxesToCheckCollisionsWith.Add(newHitbox);
+                        hitboxesForAimLine.Add(newHitbox);
+
+                    }
+                }
+
+
+            }
+        }
+
+       
 
 
     }

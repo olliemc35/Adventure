@@ -15,7 +15,7 @@ namespace Adventure
     {
         public int ScreenNumberToMoveTo;
         public int DoorNumberToMoveTo;
-     
+        public ScreenManager screenManager;
 
         public Door(Vector2 initialPosition, string filename, int x, int y) : base(initialPosition, filename)
         {
@@ -23,13 +23,15 @@ namespace Adventure
             DoorNumberToMoveTo = y;
             CollisionObject = true;
         }
-        public Door(Vector2 initialPosition, string filename, int x, int y, ColliderManager colliderManager, InputManager inputManager) : base(initialPosition, filename)
+        public Door(Vector2 initialPosition, string filename, int x, int y, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player) : base(initialPosition, filename)
         {
             ScreenNumberToMoveTo = x;
             DoorNumberToMoveTo = y;
             CollisionObject = true;
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
+            this.screenManager = screenManager;
+            this.player = player;
         }
 
         public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
@@ -42,12 +44,12 @@ namespace Adventure
             base.Update(gameTime);
 
 
-            if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox) && inputManager.OnKeyUp(Keys.Up))
+            if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox) && inputManager.OnKeyUp(Keys.Up))
             {
-                References.activeScreen.ChangeScreen = true;
-                References.PreviousScreenNumber = References.activeScreen.screenNumber;
-                References.ScreenNumber = ScreenNumberToMoveTo;
-                References.DoorNumberToMoveTo = DoorNumberToMoveTo;
+                screenManager.activeScreen.ChangeScreenFlag = true;
+                screenManager.PreviousScreenNumber = screenManager.activeScreen.screenNumber;
+                screenManager.ScreenNumber = ScreenNumberToMoveTo;
+                screenManager.DoorNumberToMoveTo = DoorNumberToMoveTo;
             }
 
 

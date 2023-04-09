@@ -15,20 +15,20 @@ namespace Adventure
 {
     public class Hazard : AnimatedGameObject
     {
-        public Hazard(Vector2 initialPosition, string filename, ColliderManager colliderManager) : base(initialPosition, filename, colliderManager)
+        public Hazard(Vector2 initialPosition, string filename, ColliderManager colliderManager, Player player) : base(initialPosition, filename, colliderManager)
         {
-
+            this.player = player;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
 
-            if (!References.player.playerStateManager.deadState.Active && colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox))
+            if (!player.playerStateManager.deadState.Active && colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
             {
-                References.player.Dead = true;
-                References.player.playerStateManager.DeactivatePlayerStates();
-                References.player.playerStateManager.deadState.Activate();
+                player.Dead = true;
+                player.playerStateManager.DeactivatePlayerStates();
+                player.playerStateManager.deadState.Activate();
             }
         }
 
