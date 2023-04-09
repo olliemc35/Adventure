@@ -36,7 +36,6 @@ namespace Adventure
         public bool ResetColliderBools = true;
 
 
-        public ColliderManager colliderManager = new ColliderManager();
         public float deltaTime;
 
 
@@ -54,7 +53,7 @@ namespace Adventure
         {
         }
 
-        public MovingGameObject(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public MovingGameObject(Vector2 position, string filename, AssetManager assetManager, ColliderManager colliderManager = null, InputManager inputManager = null, ScreenManager screenManager = null, Player player = null) : base (position, filename, assetManager, colliderManager, inputManager, screenManager, player)
         {
         }
 

@@ -70,7 +70,7 @@ namespace Adventure
             else if (screen.cameraBehaviourType5)
             {
                 // Not right - want the camera to track the player until lands on noteShip
-                if (References.player.position.X < screen.screenNoteShip.position.X)
+                if (player.position.X < screen.screenNoteShip.position.X)
                 {
                     int x1 = DistanceToNearestInteger(player.position.X);
 

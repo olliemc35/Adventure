@@ -11,16 +11,14 @@ namespace Adventure
 {
     public class GlobalTeleport : Teleport
     {
-        Vector2 shootOffDirection = new Vector2();
-
-        public GlobalTeleport(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public GlobalTeleport(Vector2 initialPosition, string filename, AssetManager assetManager, Player player) : base(initialPosition, filename, assetManager, player)
         {
             InRange = true;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
             UpdatePlayingAnimation(animation_InRange);
         }
 
@@ -29,14 +27,14 @@ namespace Adventure
         {
 
 
-            if (!References.player.playerStateManager.teleportState.Active)
+            if (!player.playerStateManager.teleportState.Active)
             {
-                if (References.player.flagTeleportButtonPressed)
+                if (player.flagTeleportButtonPressed)
                 {
-                    References.player.playerStateManager.DeactivatePlayerStates();
-                    References.player.playerStateManager.teleportState.Activate();
-                    References.player.playerStateManager.teleportState.portal = this;
-                    References.player.playerStateManager.teleportState.isTeleportGlobal = true;
+                    player.playerStateManager.DeactivatePlayerStates();
+                    player.playerStateManager.teleportState.Activate();
+                    player.playerStateManager.teleportState.portal = this;
+                    player.playerStateManager.teleportState.isTeleportGlobal = true;
                 }
             }
 

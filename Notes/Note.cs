@@ -55,12 +55,14 @@ namespace Adventure
 
         int numberOfFramesBetweenPlayerInteractions = 60;
 
-        public Note(Vector2 keyPosition, string keyFilename, string noteValue, ColliderManager colliderManager, InputManager inputManager, List<GameObject> gameObjects = null, string symbolFilename = null, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
+        public Note(Vector2 keyPosition, string keyFilename, string noteValue, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, SoundManager soundManager, Player player, List<GameObject> gameObjects = null, string symbolFilename = null, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
         {
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
-
-            key = new Key(keyPosition, keyFilename);
+            this.soundManager = soundManager;
+            this.assetManager = assetManager;
+            this.player = player;
+            key = new Key(keyPosition, keyFilename, assetManager);
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
             this.displacementScalingForNoteShip = displacementScalingForNoteShip;
@@ -72,10 +74,10 @@ namespace Adventure
 
 
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            key.LoadContent(contentManager, graphicsDevice);
-            noteSound = References.soundManager.soundEffects[noteValue];
+            key.LoadContent();
+            noteSound = soundManager.soundEffects[noteValue];
         }
 
 
@@ -90,11 +92,11 @@ namespace Adventure
 
             if (!playerInteractedWith)
             {
-                if (colliderManager.CheckForCollision(References.player.idleHitbox, key.idleHitbox) && (inputManager.OnKeyUp(Keys.E) || inputManager.OnKeyUp(Keys.Up)))
+                if (colliderManager.CheckForCollision(player.idleHitbox, key.idleHitbox) && (inputManager.OnKeyUp(Keys.E) || inputManager.OnKeyUp(Keys.Up)))
                 {
                     if (ribbonAttached)
                     {
-                        foreach (Ribbon ribbon in References.player.ribbons)
+                        foreach (Ribbon ribbon in player.ribbons)
                         {
                             if (ribbon.listOfNotes.Contains(this))
                             {
@@ -132,19 +134,19 @@ namespace Adventure
 
             //    // RIBBON CODE
 
-            if (colliderManager.CheckForCollision(References.player.idleHitbox, key.idleHitbox) && inputManager.OnKeyUp(Keys.R))
+            if (colliderManager.CheckForCollision(player.idleHitbox, key.idleHitbox) && inputManager.OnKeyUp(Keys.R))
             {
-                if (!References.player.ribbonInHand)
+                if (!player.ribbonInHand)
                 {
-                    References.player.ribbonInHand = true;
-                    References.player.ribbons[References.player.ribbonIndex].inPlayersHand = true;
-                    References.player.ribbons[References.player.ribbonIndex].Enabled = true;
-                    References.player.ribbons[References.player.ribbonIndex].position = References.player.position;
-                    References.player.ribbons[References.player.ribbonIndex].FixRibbonToNote(this);
+                    player.ribbonInHand = true;
+                    player.ribbons[player.ribbonIndex].inPlayersHand = true;
+                    player.ribbons[player.ribbonIndex].Enabled = true;
+                    player.ribbons[player.ribbonIndex].position = player.position;
+                    player.ribbons[player.ribbonIndex].FixRibbonToNote(this);
                 }
                 else
                 {
-                    References.player.ribbons[References.player.ribbonIndex].FixRibbonToNote(this);
+                    player.ribbons[player.ribbonIndex].FixRibbonToNote(this);
                 }
             }
 

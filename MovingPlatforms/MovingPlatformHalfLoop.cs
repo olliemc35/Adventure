@@ -16,7 +16,7 @@ namespace Adventure
 
         }
 
-        public MovingPlatformHalfLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed)
+        public MovingPlatformHalfLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, player, delay, attachedGameObjects)
         {
 
         }

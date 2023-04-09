@@ -42,14 +42,13 @@ namespace Adventure
 
         public float maxForce = 0;
 
-        public Player player;
 
 
         public bool noMoreIndices = false;
 
         public int IndexWhenRopeAttached;
 
-        public RopeForPlayer(Vector2 spritePosition, Player player) : base(spritePosition)
+        public RopeForPlayer(Vector2 spritePosition, Player player, AssetManager assetManager, ScreenManager screenManager) : base(spritePosition, assetManager, screenManager)
         {
             IndexOfFirstEnabledRopeBit = 0;
             IndexOfFirstRopeBitAnchor = 1;
@@ -67,7 +66,7 @@ namespace Adventure
 
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                RopeBit ropeBit = new RopeBit(spritePosition, numberOfPreviousPositions);
+                RopeBit ropeBit = new RopeBit(spritePosition, numberOfPreviousPositions, assetManager);
                 ropeBit.Enabled = false;
                 ropeBit.MaxDistanceFromRopeAnchor = LengthBetweenRopeBits * (NumberOfRopeBits - 1 - i);
                 rope.Add(ropeBit);
@@ -100,7 +99,7 @@ namespace Adventure
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                RopeBit ropeBit = new RopeBit(spritePosition);
+                RopeBit ropeBit = new RopeBit(spritePosition, assetManager);
                 ropeBit.Enabled = false;
                 ropeBit.filename = "YellowDot";
 
@@ -110,17 +109,17 @@ namespace Adventure
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].LoadContent(contentManager, graphicsDevice);
+                rope[i].LoadContent();
 
             }
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                ropeBitsDrawnOnScreen[i].LoadContent(contentManager, graphicsDevice);
+                ropeBitsDrawnOnScreen[i].LoadContent();
                 ropeBitsDrawnOnScreen[i].idleHitbox.rectangle.Width = 1;
                 ropeBitsDrawnOnScreen[i].idleHitbox.rectangle.Height = 1;
                 ropeBitsDrawnOnScreen[i].idleHitbox.offsetX = 3;
@@ -148,11 +147,11 @@ namespace Adventure
                 //Debug.WriteLine("x" + rope[3].spriteVelocity.X);
                 //Debug.WriteLine("y" + rope[3].spriteVelocity.Y);
 
-                if (References.activeScreen.screenGameObjects != null)
+                if (screenManager.activeScreen.screenGameObjects != null)
                 {
                     bool resetReadyToAttach = true;
 
-                    foreach (GameObject gameObject in References.activeScreen.screenGameObjects)
+                    foreach (GameObject gameObject in screenManager.activeScreen.screenGameObjects)
                     {
                         if (gameObject is AnimatedGameObject sprite)
                         {
@@ -410,7 +409,7 @@ namespace Adventure
             }
 
 
-            spriteCollider.AdjustForRopeAgainstListOfSpritesForward(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForRopeAgainstListOfSpritesForward(this, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
             if (IndexOfFirstEnabledRopeBit <= NumberOfRopeBits - 2)
@@ -485,7 +484,7 @@ namespace Adventure
                 }
             }
 
-            spriteCollider.AdjustForRopeAgainstListOfSpritesBackward(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForRopeAgainstListOfSpritesBackward(this, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
         }
 
@@ -550,7 +549,7 @@ namespace Adventure
             }
 
 
-            spriteCollider.AdjustForRopeAgainstListOfSpritesBackward(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForRopeAgainstListOfSpritesBackward(this, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
 

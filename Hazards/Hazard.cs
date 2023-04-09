@@ -15,7 +15,7 @@ namespace Adventure
 {
     public class Hazard : AnimatedGameObject
     {
-        public Hazard(Vector2 initialPosition, string filename, ColliderManager colliderManager, Player player) : base(initialPosition, filename, colliderManager)
+        public Hazard(Vector2 initialPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition, filename, assetManager, colliderManager)
         {
             this.player = player;
         }

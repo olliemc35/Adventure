@@ -13,9 +13,8 @@ namespace Adventure
     {
         public bool hookAttached = false;
         public Vector2 hookPosition = new Vector2();
-        public Player player;
 
-        public Hook(Vector2 hookPosition, Player player) : base(hookPosition)
+        public Hook(Vector2 hookPosition, Player player, AssetManager assetManager, ScreenManager screenManager) : base(hookPosition, assetManager, screenManager)
         {
             this.hookPosition = hookPosition;
             this.player = player;
@@ -28,7 +27,7 @@ namespace Adventure
 
             for (int i = 0; i < distance / LengthBetweenRopeBits; i++)
             {
-                RopeBit ropeBit = new RopeBit(hookPosition + LengthBetweenRopeBits * i * displacement)
+                RopeBit ropeBit = new RopeBit(hookPosition + LengthBetweenRopeBits * i * displacement, assetManager)
                 {
                     Enabled = true
                 };
@@ -60,7 +59,7 @@ namespace Adventure
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                RopeBit ropeBit = new RopeBit(position);
+                RopeBit ropeBit = new RopeBit(position, assetManager);
                 ropeBit.Enabled = false;
                 ropeBit.filename = "YellowDot";
 
@@ -70,17 +69,17 @@ namespace Adventure
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].LoadContent(contentManager, graphicsDevice);
+                rope[i].LoadContent();
 
             }
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                ropeBitsDrawnOnScreen[i].LoadContent(contentManager, graphicsDevice);
+                ropeBitsDrawnOnScreen[i].LoadContent();
                 ropeBitsDrawnOnScreen[i].idleHitbox.rectangle.Width = 1;
                 ropeBitsDrawnOnScreen[i].idleHitbox.rectangle.Height = 1;
                 ropeBitsDrawnOnScreen[i].idleHitbox.offsetX = 3;
@@ -198,7 +197,7 @@ namespace Adventure
             }
 
 
-            spriteCollider.AdjustForRopeAgainstListOfSpritesBackward(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForRopeAgainstListOfSpritesBackward(this, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
 

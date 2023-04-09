@@ -147,10 +147,11 @@ namespace Adventure
 
 
 
-        public Player(Vector2 initialPosition, string filename, ColliderManager colliderManager, InputManager inputManager) : base(initialPosition, filename)
+        public Player(Vector2 initialPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager) : base(initialPosition, filename, assetManager)
         {
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
+            this.screenManager = screenManager;
 
 
             maxHorizontalSpeed = 60;
@@ -185,14 +186,14 @@ namespace Adventure
 
 
             //Highlight = true;
-            rope = new RopeForPlayer(position, this);
-            gun = new Gun(this);
-            bomb = new Bomb(position, "NoteBomb", this.colliderManager, this.inputManager);
+            rope = new RopeForPlayer(position, this, assetManager, screenManager);
+            //gun = new Gun(this, assetManager);
+            bomb = new Bomb(position, "NoteBomb", assetManager, colliderManager, inputManager, screenManager, this);
             ribbons = new List<Ribbon>()
             {
-                new Ribbon(this, position, colliderManager, inputManager){Enabled = false },
-                new Ribbon(this, position, colliderManager, inputManager){Enabled = false },
-                new Ribbon(this, position, colliderManager, inputManager){Enabled = false },
+                new Ribbon(this, position, assetManager, colliderManager, inputManager, screenManager){Enabled = false },
+                new Ribbon(this, position, assetManager, colliderManager, inputManager, screenManager){Enabled = false },
+                new Ribbon(this, position, assetManager,colliderManager, inputManager, screenManager){Enabled = false },
             };
 
             //rope.LoadContent(References.content, References.graphicsDevice);
@@ -205,7 +206,7 @@ namespace Adventure
 
 
 
-            playerStateManager = new PlayerStateManager(this);
+            playerStateManager = new PlayerStateManager(this, screenManager, assetManager);
 
 
 
@@ -225,8 +226,8 @@ namespace Adventure
             //Debug.WriteLine("here");
             //Dead = false;
             UpdatePlayingAnimation(animation_Respawn, 1);
-            position.X = References.activeScreen.respawnPoint.X;
-            position.Y = References.activeScreen.respawnPoint.Y;
+            position.X = screenManager.activeScreen.respawnPoint.X;
+            position.Y = screenManager.activeScreen.respawnPoint.Y;
             idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
             idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
             //player.animatedSprite_Idle.Position = player.spritePosition;
@@ -239,10 +240,10 @@ namespace Adventure
         //    animation_Idle.Play();
         //}
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
 
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
 
             
 
@@ -269,17 +270,6 @@ namespace Adventure
             animation_Respawn.OnAnimationEnd = ReturnToIdleAnimation;
             animation_Dead.OnAnimationEnd = ReturnToRespawnAnimation;
 
-
-            idleHitbox.texture = References.assetManager.hitboxTexture;
-
-
-
-            //idleHitbox.rectangle.Width = 10; ;
-            //idleHitbox.offsetX = 3;
-            //idleHitbox.rectangle.Height = 14;
-            //idleHitbox.offsetY = 1;
-
-            // For hoodedoldman sprite
             idleHitbox.rectangle.Width = 10;
             idleHitbox.offsetX = 3;
             idleHitbox.rectangle.Height = 14;
@@ -512,26 +502,26 @@ namespace Adventure
 
 
 
-            if (flagGunButtonPressed)
-            {
-                if (!gunEquipped)
-                {
-                    gunEquipped = true;
+            //if (flagGunButtonPressed)
+            //{
+            //    if (!gunEquipped)
+            //    {
+            //        gunEquipped = true;
 
-                }
-                else
-                {
-                    gunEquipped = false;
-                    gun.aimLine.Clear();
+            //    }
+            //    else
+            //    {
+            //        gunEquipped = false;
+            //        gun.aimLine.Clear();
 
-                }
-            }
+            //    }
+            //}
 
             //Debug.WriteLine(normalState.Active);
             //Debug.WriteLine(normalState.constantVelocityLeft);
             //Debug.WriteLine(spriteVelocity.Y);
 
-            gun.Update(gameTime);
+            //gun.Update(gameTime);
             bomb.Update(gameTime);
             foreach (Ribbon ribbon in ribbons)
             {
@@ -598,7 +588,7 @@ namespace Adventure
                 }
             }
 
-            gun.Draw(spriteBatch);
+            //gun.Draw(spriteBatch);
 
         }
     }

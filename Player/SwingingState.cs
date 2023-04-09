@@ -31,7 +31,7 @@ namespace Adventure
 
 
         public bool swinging = false;
-        public SwingingState(Player player) : base(player)
+        public SwingingState(Player player, ScreenManager screenManager, AssetManager assetManager) : base(player, screenManager, assetManager)
         {
         }
 
@@ -45,8 +45,8 @@ namespace Adventure
                 firstLoopOnSwing = true;
                 timeAngle = 0;
 
-                hook = new Hook(hookPoint.position, player);
-                hook.LoadContent(References.content, References.graphicsDevice);
+                hook = new Hook(hookPoint.position, player, assetManager, screenManager);
+                hook.LoadContent();
                 swingRadius = Vector2.Distance(hookPoint.position, player.ropeAnchor);
             }
 
@@ -117,7 +117,7 @@ namespace Adventure
 
                 player.displacement.X = hookPoint.position.X - swingRadius * (float)Math.Sin(player.swingAngle) - player.ropeAnchor.X;
                 player.displacement.Y = hookPoint.position.Y + swingRadius * (float)Math.Cos(player.swingAngle) - player.ropeAnchor.Y;
-                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
                 firstLoopOnSwing = false;
 
@@ -132,7 +132,7 @@ namespace Adventure
                 player.velocity.Y = -swingRadius * player.swingAngleDot * (float)Math.Sin(player.swingAngle);
                 player.displacement.X = hookPoint.position.X - swingRadius * (float)Math.Sin(player.swingAngle) - player.ropeAnchor.X;
                 player.displacement.Y = hookPoint.position.Y + swingRadius * (float)Math.Cos(player.swingAngle) - player.ropeAnchor.Y;
-                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
             }
 

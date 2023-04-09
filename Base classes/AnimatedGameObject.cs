@@ -70,12 +70,15 @@ namespace Adventure
         }
 
 
-        public AnimatedGameObject(Vector2 position, string filename, ColliderManager colliderManager = null, InputManager inputManager = null)
+        public AnimatedGameObject(Vector2 position, string filename, AssetManager assetManager, ColliderManager colliderManager = null, InputManager inputManager = null, ScreenManager screenManager = null, Player player = null)
         {
             this.position = position;
             this.filename = filename;
+            this.assetManager = assetManager;
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
+            this.screenManager = screenManager;
+            this.player = player;
             previousPosition = position;
             animationPosition = FindNearestIntegerVector(position);
 
@@ -86,10 +89,10 @@ namespace Adventure
             this.filename = filename;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             // Obtain the correct spritesheet from the assetManager
-            spriteSheet = References.assetManager.spriteSheets[filename];
+            spriteSheet = assetManager.spriteSheets[filename];
             // We then form AnimatedSprites from each animation in the spritesheet - these are called by the tag names we give the animation in Aseprite
             animation_Idle = spriteSheet.CreateAnimatedSprite("Idle");
             animation_Idle.Play();
@@ -97,7 +100,7 @@ namespace Adventure
 
             // Create the idleHitbox
             idleHitbox = new HitboxRectangle((int)position.X, (int)position.Y, animation_Idle.Width, animation_Idle.Height);
-            idleHitbox.texture = References.assetManager.hitboxTexture;
+            idleHitbox.texture = assetManager.hitboxTexture;
             hitboxes.Add(idleHitbox);
 
             if (climable)
@@ -184,48 +187,48 @@ namespace Adventure
         // SEPARATE THIS OUT INTO ITS OWN CLASS
         public void UpdateClimable()
         {
-            if (!References.player.playerStateManager.climbingState.Active)
+            if (!player.playerStateManager.climbingState.Active)
             {
 
 
-                if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox))
+                if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
                 {
-                    if (References.player.CollidedOnTop && References.player.velocity.Y < 0)
+                    if (player.CollidedOnTop && player.velocity.Y < 0)
                     {
-                        References.player.playerStateManager.DeactivatePlayerStates();
-                        References.player.playerStateManager.climbingState.Activate();
-                        References.player.playerStateManager.climbingState.platform = this;
+                        player.playerStateManager.DeactivatePlayerStates();
+                        player.playerStateManager.climbingState.Activate();
+                        player.playerStateManager.climbingState.platform = this;
                         return;
                     }
-                    if (References.player.CollidedOnRight || References.player.CollidedOnLeft)
+                    if (player.CollidedOnRight || player.CollidedOnLeft)
                     {
-                        References.player.playerStateManager.DeactivatePlayerStates();
-                        References.player.playerStateManager.climbingState.Activate();
-                        References.player.playerStateManager.climbingState.platform = this;
+                        player.playerStateManager.DeactivatePlayerStates();
+                        player.playerStateManager.climbingState.Activate();
+                        player.playerStateManager.climbingState.platform = this;
                         return;
                     }
-                    else if (References.player.CollidedOnBottom)
+                    else if (player.CollidedOnBottom)
                     {
-                        if ((References.player.spriteDirectionX == 1 || References.player.spriteDirectionY == 1) && References.player.idleHitbox.rectangle.X >= idleHitbox.rectangle.X + idleHitbox.rectangle.Width - References.player.distanceCanStartClimbing)
+                        if ((player.spriteDirectionX == 1 || player.spriteDirectionY == 1) && player.idleHitbox.rectangle.X >= idleHitbox.rectangle.X + idleHitbox.rectangle.Width - player.distanceCanStartClimbing)
                         {
-                            References.player.idleHitbox.rectangle.X = idleHitbox.rectangle.X + idleHitbox.rectangle.Width;
-                            References.player.idleHitbox.rectangle.Y = idleHitbox.rectangle.Y;
-                            References.player.position.X = References.player.idleHitbox.rectangle.X - References.player.idleHitbox.offsetX;
-                            References.player.position.Y = References.player.idleHitbox.rectangle.Y - References.player.idleHitbox.offsetY;
-                            References.player.playerStateManager.DeactivatePlayerStates();
-                            References.player.playerStateManager.climbingState.Activate();
-                            References.player.playerStateManager.climbingState.platform = this;
+                            player.idleHitbox.rectangle.X = idleHitbox.rectangle.X + idleHitbox.rectangle.Width;
+                            player.idleHitbox.rectangle.Y = idleHitbox.rectangle.Y;
+                            player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                            player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                            player.playerStateManager.DeactivatePlayerStates();
+                            player.playerStateManager.climbingState.Activate();
+                            player.playerStateManager.climbingState.platform = this;
                             return;
                         }
-                        else if ((References.player.spriteDirectionX == -1 || References.player.spriteDirectionY == 1) && References.player.idleHitbox.rectangle.X <= idleHitbox.rectangle.X - References.player.distanceCanStartClimbing)
+                        else if ((player.spriteDirectionX == -1 || player.spriteDirectionY == 1) && player.idleHitbox.rectangle.X <= idleHitbox.rectangle.X - player.distanceCanStartClimbing)
                         {
-                            References.player.idleHitbox.rectangle.X = idleHitbox.rectangle.X - References.player.idleHitbox.rectangle.Width;
-                            References.player.idleHitbox.rectangle.Y = idleHitbox.rectangle.Y;
-                            References.player.position.X = References.player.idleHitbox.rectangle.X - References.player.idleHitbox.offsetX;
-                            References.player.position.Y = References.player.idleHitbox.rectangle.Y - References.player.idleHitbox.offsetY;
-                            References.player.playerStateManager.DeactivatePlayerStates();
-                            References.player.playerStateManager.climbingState.Activate();
-                            References.player.playerStateManager.climbingState.platform = this;
+                            player.idleHitbox.rectangle.X = idleHitbox.rectangle.X - player.idleHitbox.rectangle.Width;
+                            player.idleHitbox.rectangle.Y = idleHitbox.rectangle.Y;
+                            player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
+                            player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+                            player.playerStateManager.DeactivatePlayerStates();
+                            player.playerStateManager.climbingState.Activate();
+                            player.playerStateManager.climbingState.platform = this;
                             return;
                         }
 

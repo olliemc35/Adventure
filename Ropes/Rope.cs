@@ -18,7 +18,6 @@ namespace Adventure
         public List<RopeBit> ropeBitsDrawnOnScreen = new List<RopeBit>();
         public Vector2 ropeAnchor = new Vector2();
 
-        public ColliderManager spriteCollider = new ColliderManager();
 
         public int NumberOfRopeBits = 8;
         public int LengthBetweenRopeBits = 8; // currently we move 2 pixels horizontally every frame so make it even so when we update indices we can detect exactly when a new one should be enabled
@@ -50,8 +49,10 @@ namespace Adventure
 
         }
 
-        public Rope(Vector2 initialPosition) : base(initialPosition)
+        public Rope(Vector2 initialPosition, AssetManager assetManager, ScreenManager screenManager) : base(initialPosition)
         {
+            this.assetManager = assetManager;
+            this.screenManager = screenManager;
         }
 
         public override void Update(GameTime gametime)

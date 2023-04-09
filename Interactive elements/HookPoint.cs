@@ -17,21 +17,22 @@ namespace Adventure
 
         public AnimatedSprite animation_InRange;
 
-        public HookPoint(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public HookPoint(Vector2 initialPosition, string filename, AssetManager assetManager, Player player) : base(initialPosition, filename, assetManager)
         {
+            this.player = player;
             radius = 8 * 10;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
             animation_InRange = spriteSheet.CreateAnimatedSprite("InRange");
         }
 
         public override void Update(GameTime gameTime)
         {
 
-            if (Vector2.Distance(References.player.position, position) <= radius)
+            if (Vector2.Distance(player.position, position) <= radius)
             {
                 InRange = true;
                 UpdatePlayingAnimation(animation_InRange);
@@ -42,11 +43,11 @@ namespace Adventure
                 UpdatePlayingAnimation(animation_Idle);
             }
 
-            if (!References.player.playerStateManager.swingingState.Active && InRange && References.player.flagHookButtonPressed)
+            if (!player.playerStateManager.swingingState.Active && InRange && player.flagHookButtonPressed)
             {
-                References.player.playerStateManager.DeactivatePlayerStates();
-                References.player.playerStateManager.swingingState.Activate();
-                References.player.playerStateManager.swingingState.hookPoint = this;
+                player.playerStateManager.DeactivatePlayerStates();
+                player.playerStateManager.swingingState.Activate();
+                player.playerStateManager.swingingState.hookPoint = this;
             }
 
             base.Update(gameTime);

@@ -19,11 +19,14 @@ namespace Adventure
         public int numberOfOrbs;
         public int indexOfOrbClosestToStart = 0;
 
-        public DiagonalOrbsPattern2(Vector2 startStream, Vector2 endStream, float horizontalSpacing, float verticalSpacing, float speed) : base()
+        public DiagonalOrbsPattern2(Vector2 startStream, Vector2 endStream, float horizontalSpacing, float verticalSpacing, float speed, SoundManager soundManager, AssetManager assetManager, Player player) : base()
         {
             this.horizontalSpacing = horizontalSpacing;
             this.verticalSpacing = verticalSpacing;
             this.startStream = startStream;
+            this.soundManager = soundManager;
+            this.assetManager = assetManager;
+            this.player = player;
 
             // This is minimum number
             numberOfOrbs = (int)Math.Floor(Math.Abs(startStream.X - endStream.X) / (8 * horizontalSpacing));
@@ -45,7 +48,7 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y;
                     endPosition.Y = endStream.Y;
-                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighCBell");
+                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighCBell", soundManager, assetManager, player);
                     orbs.Add(orb);
 
                 }
@@ -53,14 +56,14 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y - 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 8 * verticalSpacing;
-                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighEflatBell");
+                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighEflatBell", soundManager, assetManager, player);
                     orbs.Add(orb);
                 }
                 else if (i % 3 == 2)
                 {
                     startPosition.Y = startStream.Y - 2 * 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 2 * 8 * verticalSpacing;
-                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighGBell");
+                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighGBell", soundManager, assetManager, player);
                     orbs.Add(orb);
                 }
 
@@ -71,18 +74,18 @@ namespace Adventure
 
             for (int i = 0; i < 3; i++)
             {
-                orbReceptors.Add(new OrbReceptor(new Vector2(startStream.X, startStream.Y - 8 * i * verticalSpacing), "OrbReceptors"));
-                orbReceptors.Add(new OrbReceptor(new Vector2(endStream.X, endStream.Y - 8 * i * verticalSpacing), "OrbReceptors"));
+                orbReceptors.Add(new OrbReceptor(new Vector2(startStream.X, startStream.Y - 8 * i * verticalSpacing), "OrbReceptors", assetManager));
+                orbReceptors.Add(new OrbReceptor(new Vector2(endStream.X, endStream.Y - 8 * i * verticalSpacing), "OrbReceptors", assetManager));
             }
 
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             foreach (MusicalMovingPlatformNoLoop orb in orbs)
             {
-                orb.LoadContent(contentManager, graphicsDevice);
+                orb.LoadContent();
                 orb.idleHitbox.rectangle.Width = 4;
                 orb.idleHitbox.rectangle.Height = 4;
                 orb.idleHitbox.offsetX = 2;
@@ -91,7 +94,7 @@ namespace Adventure
 
             foreach (AnimatedGameObject sprite in orbReceptors)
             {
-                sprite.LoadContent(contentManager, graphicsDevice);
+                sprite.LoadContent();
             }
         }
 

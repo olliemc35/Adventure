@@ -43,7 +43,7 @@ namespace Adventure
 
         public bool movePlayerToo = false;
 
-        public List<GameObject> spritesOnPlatform;
+        public List<GameObject> attachedGameObjects;
 
 
 
@@ -60,142 +60,59 @@ namespace Adventure
 
         }
 
-        public MovingPlatform(Vector2 startPosition, string filename, Vector2 endPosition, int timeStationaryAtEndPoints, float speed) : base(startPosition, filename)
+        public MovingPlatform(Vector2 startPosition, string filename, Vector2 endPosition, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, Player player, float delay = 0, List<GameObject> spritesOnPlatform = null) : base(startPosition, filename, assetManager)
         {
             CollisionObject = true;
             beforeDelay = false;
+            this.attachedGameObjects = spritesOnPlatform;
 
             this.startPosition = startPosition;
             this.endPosition = endPosition;
             this.timeStationaryAtEndPoints = timeStationaryAtEndPoints;
             this.speed = speed;
-
-            if (startPosition.X == endPosition.X)
-            {
-                verticalMovement = true;
-
-                if (startPosition.Y > endPosition.Y)
-                {
-                    movingUp = true;
-                }
-                else
-                {
-                    movingDown = true;
-                }
-            }
-            else
-            {
-                horizontalMovement = true;
-
-                if (startPosition.X < endPosition.X)
-                {
-                    movingRight = true;
-                }
-                else
-                {
-                    movingLeft = true;
-                }
-
-            }
-
-
-            deltaTime = 1f / 60;
-
-        }
-
-        public MovingPlatform(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, List<GameObject> spritesOnPlatform) : base(initialPosition, filename)
-        {
-            CollisionObject = true;
-            beforeDelay = false;
-
-            this.spritesOnPlatform = spritesOnPlatform;
-
-            startPosition = initialPosition;
-            this.endPosition = endPoint;
-            this.timeStationaryAtEndPoints = timeStationaryAtEndPoints;
-            this.speed = speed;
-
-            if (startPosition.X == endPosition.X)
-            {
-                verticalMovement = true;
-
-                if (startPosition.Y > endPosition.Y)
-                {
-                    movingUp = true;
-                }
-                else
-                {
-                    movingDown = true;
-                }
-            }
-            else
-            {
-                horizontalMovement = true;
-
-                if (startPosition.X < endPosition.X)
-                {
-                    movingRight = true;
-                }
-                else
-                {
-                    movingLeft = true;
-                }
-
-            }
-
-
-            deltaTime = 1f / 60;
-
-        }
-
-        public MovingPlatform(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, float delay) : base(initialPosition, filename)
-        {
-            startPosition = initialPosition;
-            beforeDelay = true;
-
-            this.endPosition = endPoint;
-            this.timeStationaryAtEndPoints = timeStationaryAtEndPoints;
-            this.speed = speed;
-
-            if (startPosition.X == endPosition.X)
-            {
-                verticalMovement = true;
-
-                if (startPosition.Y > endPosition.Y)
-                {
-                    movingUp = true;
-                }
-                else
-                {
-                    movingDown = true;
-                }
-            }
-            else
-            {
-                horizontalMovement = true;
-
-                if (startPosition.X < endPosition.X)
-                {
-                    movingRight = true;
-                }
-                else
-                {
-                    movingLeft = true;
-                }
-
-            }
-
             this.delay = delay;
+            this.player = player;
+
+            if (startPosition.X == endPosition.X)
+            {
+                verticalMovement = true;
+
+                if (startPosition.Y > endPosition.Y)
+                {
+                    movingUp = true;
+                }
+                else
+                {
+                    movingDown = true;
+                }
+            }
+            else
+            {
+                horizontalMovement = true;
+
+                if (startPosition.X < endPosition.X)
+                {
+                    movingRight = true;
+                }
+                else
+                {
+                    movingLeft = true;
+                }
+
+            }
+
 
             deltaTime = 1f / 60;
 
         }
 
+              
 
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
 
             animation_Moving = spriteSheet.CreateAnimatedSprite("Moving");
             CollisionObject = true;
@@ -238,7 +155,7 @@ namespace Adventure
             position.Y = FindNearestInteger(position.Y);
 
             // This needs to be done BEFORE idleHitbox is updated
-            if (colliderManager.CheckForEdgesMeeting(this.idleHitbox, References.player.idleHitbox))
+            if (colliderManager.CheckForEdgesMeeting(idleHitbox, player.idleHitbox))
             {
                 movePlayerToo = true;
             }
@@ -252,15 +169,15 @@ namespace Adventure
 
             if (movePlayerToo)
             {
-                References.player.position.X += displacement.X;
-                References.player.position.Y += displacement.Y;
-                References.player.velocityOffSetDueToMovingPlatform.X = velocity.X;
-                References.player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
+                player.position.X += displacement.X;
+                player.position.Y += displacement.Y;
+                player.velocityOffSetDueToMovingPlatform.X = velocity.X;
+                player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
             }
-            if (spritesOnPlatform != null)
+            if (attachedGameObjects != null)
             {
 
-                foreach (GameObject gameObject in spritesOnPlatform)
+                foreach (GameObject gameObject in attachedGameObjects)
                 {
                     if (gameObject is Note note)
                     {
@@ -293,24 +210,7 @@ namespace Adventure
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-
-
-
-            //if (!drawHitboxes)
-            //{
-            //foreach (HitboxRectangle hitbox in spriteHitboxes)
-            //{
-            //    if (hitbox.isActive)
-            //    {
-            //        spriteBatch.Draw(spriteHitboxTexture, hitbox.rectangle, Color.Red);
-            //    }
-            //}
-
-            //}
             base.Draw(spriteBatch);
-            //animatedSprite_Idle.Render(spriteBatch);
-
-
         }
 
 

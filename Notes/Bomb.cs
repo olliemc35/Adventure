@@ -31,14 +31,14 @@ namespace Adventure
 
         }
 
-        public Bomb(Vector2 initialPosition, string filename, ColliderManager colliderManager, InputManager inputManager) : base(initialPosition, filename, colliderManager, inputManager)
+        public Bomb(Vector2 initialPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player) : base(initialPosition, filename, assetManager, colliderManager, inputManager, screenManager, player)
         {
         }
 
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
 
             animation_Detonate = spriteSheet.CreateAnimatedSprite("Detonate");
             animation_Planted = spriteSheet.CreateAnimatedSprite("Planted");
@@ -67,17 +67,17 @@ namespace Adventure
 
 
 
-            if (!References.player.bombPlanted)
+            if (!player.bombPlanted)
             {
-                if (References.activeScreen.screenNotes.Count > 0)
+                if (screenManager.activeScreen.screenNotes.Count > 0)
                 {
-                    foreach (Note note in References.activeScreen.screenNotes)
+                    foreach (Note note in screenManager.activeScreen.screenNotes)
                     {
                         // What to do if I press B next to a note (i.e. bomb)
-                        if (colliderManager.CheckForCollision(References.player.idleHitbox, note.key.idleHitbox) && inputManager.OnKeyUp(Keys.B))
+                        if (colliderManager.CheckForCollision(player.idleHitbox, note.key.idleHitbox) && inputManager.OnKeyUp(Keys.B))
                         {
-                            References.player.bombPlanted = true;
-                            position = References.player.position;
+                            player.bombPlanted = true;
+                            position = player.position;
                             attachedNote = note;
                         }
 
@@ -89,27 +89,19 @@ namespace Adventure
                 if (inputManager.OnKeyUp(Keys.B))
                 {
                     detonate = true;
-                    References.player.bombPlanted = false;
+                    player.bombPlanted = false;
                     attachedNote.flagPlayerInteractedWith = true;
                 }
             }
 
-            //if (References.player.bombPlanted)
-            //{
-            //    if (inputManager.OnKeyUp(Keys.B))
-            //    {
-            //        detonate = true;
-            //        References.player.bombPlanted = false;
-            //        attachedNote.flagPlayerInteractedWith = true;
-            //    }
-            //}
+
 
             base.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (References.player.bombPlanted || detonate)
+            if (player.bombPlanted || detonate)
             {
                 base.Draw(spriteBatch);
             }

@@ -22,16 +22,17 @@ namespace Adventure
         public HitboxRectangle startHitbox;
         public HitboxRectangle endHitbox;
 
-        public ColliderManager colliderManager = new ColliderManager();
 
-
-        public Beam(Vector2 startPosition, Vector2 endPosition) : base()
+        public Beam(Vector2 startPosition, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager) : base()
         {
             this.startPosition = startPosition;
             this.endPosition = endPosition;
+            this.colliderManager = colliderManager;
+            this.assetManager = assetManager;
+            this.screenManager = screenManager;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
 
             if (startPosition.X == endPosition.X)
@@ -47,17 +48,17 @@ namespace Adventure
 
                     if (i == 0)
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "TopBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "TopBeam", assetManager));
 
                     }
                     else if (i == numberOfBeams)
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "BottomBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "BottomBeam", assetManager));
 
                     }
                     else
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam", assetManager));
                     }
                 }
 
@@ -75,17 +76,17 @@ namespace Adventure
 
                     if (i == 0)
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "TopBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "TopBeam", assetManager));
 
                     }
                     else if (i == numberOfBeams)
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "BottomBeam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "BottomBeam", assetManager));
 
                     }
                     else
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam"));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam", assetManager));
                     }
                 }
 
@@ -94,7 +95,7 @@ namespace Adventure
 
             foreach (AnimatedGameObject sprite in listOfBeamSquares)
             {
-                sprite.LoadContent(contentManager, graphicsDevice);
+                sprite.LoadContent();
             }
 
             startHitbox = listOfBeamSquares[0].idleHitbox;
@@ -156,7 +157,7 @@ namespace Adventure
             {
                 bool breakEarly = false;
 
-                foreach (HitboxRectangle hitbox in References.activeScreen.hitboxesToCheckCollisionsWith)
+                foreach (HitboxRectangle hitbox in screenManager.activeScreen.hitboxesToCheckCollisionsWith)
                 {
                     if (colliderManager.CheckForOverlap(hitbox, listOfBeamSquares[i].idleHitbox))
                     {

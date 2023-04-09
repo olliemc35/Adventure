@@ -16,13 +16,13 @@ namespace Adventure
     public class Spike : Hazard
     {
 
-        public Spike(Vector2 initialPosition, string filename, ColliderManager colliderManager, Player player) : base(initialPosition, filename, colliderManager, player)
+        public Spike(Vector2 initialPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition, filename, assetManager, colliderManager, player)
         {
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
             idleHitbox.isActive = true;
 
             

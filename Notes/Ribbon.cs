@@ -14,7 +14,6 @@ namespace Adventure
     public class Ribbon : Rope
     {
         public List<Note> listOfNotes = new List<Note>();
-        public Player player;
 
         public float maxDistanceFromFixedRopeBit = 0;
         public bool maxDistanceFound = false;
@@ -29,10 +28,12 @@ namespace Adventure
         public int indexOfNoteToPlay;
 
 
-        public Ribbon(Player player, Vector2 initialPosition, ColliderManager colliderManager, InputManager inputManager)
+        public Ribbon(Player player, Vector2 initialPosition, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager)
         {
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
+            this.screenManager = screenManager;
+            this.assetManager = assetManager;
             this.player = player;
 
             CollisionObject = true;
@@ -53,7 +54,7 @@ namespace Adventure
             // Create them all so we do not have to load content everytime
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                RopeBit ropeBit = new RopeBit(initialPosition);
+                RopeBit ropeBit = new RopeBit(initialPosition, assetManager);
                 ropeBit.Enabled = false;
                 rope.Add(ropeBit);
 
@@ -69,7 +70,7 @@ namespace Adventure
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                RopeBit ropeBit = new RopeBit(initialPosition);
+                RopeBit ropeBit = new RopeBit(initialPosition, assetManager);
                 ropeBit.Enabled = false;
                 ropeBit.filename = "YellowDot";
                 ropeBit.idleHitbox.rectangle.Width = 1;
@@ -89,17 +90,17 @@ namespace Adventure
         }
 
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].LoadContent(contentManager, graphicsDevice);
+                rope[i].LoadContent();
 
             }
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                ropeBitsDrawnOnScreen[i].LoadContent(contentManager, graphicsDevice);
+                ropeBitsDrawnOnScreen[i].LoadContent();
             }
 
 
@@ -148,9 +149,9 @@ namespace Adventure
             {
                 bool test = true;
 
-                if (References.activeScreen.screenNotes.Count > 0)
+                if (screenManager.activeScreen.screenNotes.Count > 0)
                 {
-                    foreach (Note note in References.activeScreen.screenNotes)
+                    foreach (Note note in screenManager.activeScreen.screenNotes)
                     {
 
                         if (colliderManager.CheckForCollision(player.idleHitbox, note.key.idleHitbox))
@@ -169,7 +170,7 @@ namespace Adventure
                             {
                                 inPlayersHand = false;
                                 Enabled = false;
-                                References.player.ribbonInHand = false;
+                                player.ribbonInHand = false;
                                 ClearNoteBools();
 
                             }
@@ -178,7 +179,7 @@ namespace Adventure
                                 inPlayersHand = false;
                                 fixedAtNote = true;
                                 FixRibbonAtLastNote();
-                                References.player.ribbonInHand = false;
+                                player.ribbonInHand = false;
                                 player.ribbonIndex = (player.ribbonIndex + 1) % 3;
                             }
                         }
@@ -270,7 +271,7 @@ namespace Adventure
                     rope[i].FindNormalForces();
                     FindVelocityAndDisplacementForRopeBitX(i);
                     FindVelocityAndDisplacementForRopeBitY(i);
-                    spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(rope[i], References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                    colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(rope[i], screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
                 }

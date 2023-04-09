@@ -29,6 +29,7 @@ namespace Adventure
         public ColliderManager colliderManager;
         public InputManager inputManager;
         public ScreenManager screenManager;
+        public AssetManager assetManager;
         public Player player;
 
         public Color[] colors;
@@ -43,11 +44,12 @@ namespace Adventure
 
 
 
-        public ActionScreenBuilder(string filename, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player, int screenWidth = 40, int screenHeight = 23)
+        public ActionScreenBuilder(string filename, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player, int screenWidth = 40, int screenHeight = 23)
         {
             this.filename = filename;
             this.screenHeight = screenHeight;
             this.screenWidth = screenWidth;
+            this.assetManager = assetManager;
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
             this.screenManager = screenManager;
@@ -111,15 +113,15 @@ namespace Adventure
 
                     if (backgroundColorArray[i, j].R == 199 && backgroundColorArray[i, j].G == 245 && backgroundColorArray[i, j].B == 255)
                     {
-                        backgroundObjects[i, j] = new AnimatedGameObject(position, "Tile_air");
+                        backgroundObjects[i, j] = new AnimatedGameObject(position, "Tile_air", assetManager);
                     }
                     else if (backgroundColorArray[i, j].R == 75 && backgroundColorArray[i, j].G == 105 && backgroundColorArray[i, j].B == 47)
                     {
-                        backgroundObjects[i, j] = new AnimatedGameObject(position, "Tile_grass");
+                        backgroundObjects[i, j] = new AnimatedGameObject(position, "Tile_grass", assetManager);
                     }
                     else if (backgroundColorArray[i, j].R == 102 && backgroundColorArray[i, j].G == 57 && backgroundColorArray[i, j].B == 49)
                     {
-                        backgroundObjects[i, j] = new AnimatedGameObject(position, "Tile_ground");
+                        backgroundObjects[i, j] = new AnimatedGameObject(position, "Tile_ground", assetManager);
 
                     }
                 }
@@ -137,11 +139,11 @@ namespace Adventure
                     {                       
                         if (gameObjectColorArray[i, j].R == 255 && gameObjectColorArray[i, j].G == 157 && gameObjectColorArray[i, j].B == 4)
                         {
-                            gameObjects.Add(new Door(position, "Door", 255 - gameObjectColorArray[i, j+1].A, 255 - gameObjectColorArray[i+1, j+1].A, colliderManager, inputManager, screenManager, player));
+                            gameObjects.Add(new Door(position, "Door", 255 - gameObjectColorArray[i, j+1].A, 255 - gameObjectColorArray[i+1, j+1].A, assetManager, colliderManager, inputManager, screenManager, player));
                         }
                         else if (gameObjectColorArray[i, j].R == 255 && gameObjectColorArray[i, j].G == 255 && gameObjectColorArray[i, j].B == 255)
                         {
-                            gameObjects.Add(new Spike(position, "Spike", colliderManager, player));
+                            gameObjects.Add(new Spike(position, "Spike", assetManager, colliderManager, player));
                         }
                     }
                 }

@@ -15,15 +15,8 @@ namespace Adventure
     {
         public int ScreenNumberToMoveTo;
         public int DoorNumberToMoveTo;
-        public ScreenManager screenManager;
 
-        public Door(Vector2 initialPosition, string filename, int x, int y) : base(initialPosition, filename)
-        {
-            ScreenNumberToMoveTo = x;
-            DoorNumberToMoveTo = y;
-            CollisionObject = true;
-        }
-        public Door(Vector2 initialPosition, string filename, int x, int y, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player) : base(initialPosition, filename)
+        public Door(Vector2 initialPosition, string filename, int x, int y, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player) : base(initialPosition, filename, assetManager)
         {
             ScreenNumberToMoveTo = x;
             DoorNumberToMoveTo = y;
@@ -34,10 +27,6 @@ namespace Adventure
             this.player = player;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
-        {
-            base.LoadContent(contentManager, graphicsDevice);
-        }
 
         public override void Update(GameTime gameTime)
         {

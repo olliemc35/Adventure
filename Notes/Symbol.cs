@@ -17,12 +17,12 @@ namespace Adventure
         public bool TurnedOn = false;
         public AnimatedSprite animation_Interacted;
 
-        public Symbol(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public Symbol(Vector2 initialPosition, string filename, AssetManager assetManager) : base(initialPosition, filename, assetManager)
         {
         }
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
             animation_Interacted = spriteSheet.CreateAnimatedSprite("Interacted");
 
         }

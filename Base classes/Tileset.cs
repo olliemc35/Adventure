@@ -66,7 +66,7 @@ namespace Adventure
         public Tileset(string levelString)
         {
             spriteMapOfTiles = new AnimatedGameObject(levelString);
-            spriteMapOfTiles.LoadContent(References.content, References.graphicsDevice);
+            //spriteMapOfTiles.LoadContent(References.content, References.graphicsDevice);
             BuildArrayOfTileSpriteFilenamesFromAsepriteFile();
 
         }
@@ -74,9 +74,9 @@ namespace Adventure
         public Tileset(string levelString, string markerString)
         {
             spriteMapOfTiles = new AnimatedGameObject(levelString);
-            spriteMapOfTiles.LoadContent(References.content, References.graphicsDevice);
+            //spriteMapOfTiles.LoadContent(References.content, References.graphicsDevice);
             spriteMapOfMarkers = new AnimatedGameObject(markerString);
-            spriteMapOfMarkers.LoadContent(References.content, References.graphicsDevice);
+            //spriteMapOfMarkers.LoadContent(References.content, References.graphicsDevice);
             BuildArrayOfTileSpriteFilenamesFromAsepriteFile();
             BuildArrayOfGameObjectFilenamesFromAsepriteFile();
 
@@ -225,8 +225,8 @@ namespace Adventure
 
                         if (test.R == 41 && test.G == 20 && test.B == 52)
                         {
-                            MovingPlatformOneLoop plat = new MovingPlatformOneLoop(new Vector2(i, j), "movingPlatform1", new Vector2(i, j - test.A), 0, 1);
-                            screenTriggerables.Add(plat);
+                           // MovingPlatformOneLoop plat = new MovingPlatformOneLoop(new Vector2(i, j), "movingPlatform1", new Vector2(i, j - test.A), 0, 1);
+                            //screenTriggerables.Add(plat);
                         }
 
                     }

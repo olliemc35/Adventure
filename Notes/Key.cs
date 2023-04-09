@@ -17,11 +17,11 @@ namespace Adventure
     public class Key : MovingGameObject
     {
         public AnimatedSprite animation_Interacted;
-        public Key(Vector2 position, string filename):base(position, filename) { }
+        public Key(Vector2 position, string filename, AssetManager assetManager):base(position, filename, assetManager) { }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
             animation_Interacted = spriteSheet.CreateAnimatedSprite("Interacted");
         }
 

@@ -22,14 +22,20 @@ namespace Adventure
 
         // // The following references may be passed in when created a new GameObject instance:
 
+        // Some GameObjects will need to access the AssetManager to "load-in" - e.g. player, doors etc
+        public AssetManager assetManager;
+
         // Some GameObjects will need to detect collisions - e.g. player, spikes, doors etc.
         public ColliderManager colliderManager;
 
         // Some GameObjects will need to detect keyboard input - e.g. player, doors etc.
         public InputManager inputManager;
 
-        // Some GameObjects will need to access information about the screen we are on - e.g. doors, bombs (to look for notes) etc.
-        public GameScreen gameScreen;
+        // Some GameObjects will need to access the SoundManager - e.g. notes and musical platforms etc.
+        public SoundManager soundManager;
+
+        // Some GameObjects will need to access the ScreenManager so we can get information about the screen we are on - e.g. doors, bombs (to look for notes), player etc.
+        public ScreenManager screenManager;
 
         // Some GameObjects will need a reference to the player - e.g. doors, spikes etc.
         public Player player;
@@ -38,7 +44,7 @@ namespace Adventure
         {
         }
 
-        public virtual void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public virtual void LoadContent()
         {
         }
 

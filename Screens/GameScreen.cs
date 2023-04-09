@@ -23,18 +23,7 @@ namespace Adventure
         public List<GameObject> screenGameObjectsToRemove = new List<GameObject>();
 
         public List<Door> screenDoors = new List<Door>();
-        public List<Spike> screenSpikes = new List<Spike>();
         public List<Note> screenNotes = new List<Note>();
-        public List<Gate> screenGates = new List<Gate>();
-        public List<NoteAndGatePuzzle> noteAndGatePuzzles = new List<NoteAndGatePuzzle>();
-        public List<NoteAndGateAndOrbPuzzle> noteAndGateAndOrbPuzzles = new List<NoteAndGateAndOrbPuzzle>();
-        public List<HangingRopeWithWeightAttached> screenHangingRopes = new List<HangingRopeWithWeightAttached>();
-        public List<MovingPlatform> screenMovingPlatforms = new List<MovingPlatform>();
-        public List<Beam> screenBeams = new List<Beam>();
-        public List<BouncingOrb> screenBouncingOrbs = new List<BouncingOrb>();
-        public List<HookPoint> screenHookPoints = new List<HookPoint>();
-        public List<AnimatedGameObject> screenHazards = new List<AnimatedGameObject>();
-        public List<AnimatedGameObject> screenClimables = new List<AnimatedGameObject>();
         public NoteShip screenNoteShip;
 
 
@@ -115,11 +104,11 @@ namespace Adventure
             }
         }
 
-        public virtual void LoadContent(ContentManager content, GraphicsDevice graphicsDevice)
+        public virtual void LoadContent()
         {
             foreach (GameObject gameObject in screenGameObjects)
             {
-                gameObject.LoadContent(content, graphicsDevice);
+                gameObject.LoadContent();
             }
         }
 
@@ -163,7 +152,6 @@ namespace Adventure
                 }
             }
 
-            camera.UpdateTransform(this, References.player);
         }
 
         // The spriteBatch.Begin() and spriteBatch.End() commands, which need to sandwich the code below, are called in the ScreenManager Draw method.

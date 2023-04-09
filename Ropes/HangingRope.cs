@@ -13,7 +13,7 @@ namespace Adventure
     {
 
 
-        public HangingRope(Vector2 initialPosition, int NumberOfRopeBits, int LengthBetweenRopeBits) : base(initialPosition)
+        public HangingRope(Vector2 initialPosition, int NumberOfRopeBits, int LengthBetweenRopeBits, AssetManager assetManager, ScreenManager screenManager) : base(initialPosition, assetManager, screenManager)
         {
             this.NumberOfRopeBits = NumberOfRopeBits;
             this.LengthBetweenRopeBits = LengthBetweenRopeBits;
@@ -30,14 +30,14 @@ namespace Adventure
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
                 Vector2 position = new Vector2(initialPosition.X, initialPosition.Y + (NumberOfRopeBits - i - 1) * LengthBetweenRopeBits);
-                RopeBit ropeBit = new RopeBit(position, "RedDot");
+                RopeBit ropeBit = new RopeBit(position, "RedDot", assetManager);
                 rope.Add(ropeBit);
 
             }
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                RopeBit ropeBit = new RopeBit(position);
+                RopeBit ropeBit = new RopeBit(position, assetManager);
                 ropeBit.Enabled = false;
                 ropeBit.filename = "YellowDot";
                 ropeBit.idleHitbox.rectangle.Width = 1;
@@ -50,17 +50,17 @@ namespace Adventure
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].LoadContent(contentManager, graphicsDevice);
+                rope[i].LoadContent();
 
             }
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                ropeBitsDrawnOnScreen[i].LoadContent(contentManager, graphicsDevice);
+                ropeBitsDrawnOnScreen[i].LoadContent();
             }
 
 
@@ -145,7 +145,7 @@ namespace Adventure
 
             }
 
-            spriteCollider.AdjustForRopeAgainstListOfSpritesBackward(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForRopeAgainstListOfSpritesBackward(this, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
         }
 

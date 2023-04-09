@@ -18,25 +18,25 @@ namespace Adventure
         public AnimatedGameObject symbolPlate;
         public List<Symbol> symbols = new List<Symbol>();
 
-
-        public NoteAndGatePuzzle(Vector2 symbolPlatePosition, string symbolPlateFilename, List<Note> notes, Gate gate)
+        public NoteAndGatePuzzle(Vector2 symbolPlatePosition, string symbolPlateFilename, List<Note> notes, Gate gate, AssetManager assetManager)
         {
             this.notes = notes;
             this.gate = gate;
-            symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename);
+            this.assetManager = assetManager;
+            symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename, assetManager);
 
 
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            symbolPlate.LoadContent(contentManager, graphicsDevice);
+            symbolPlate.LoadContent();
 
             for (int i = 0; i < notes.Count; i++)
             {
-                Symbol symbol = new Symbol(new Vector2(symbolPlate.position.X + 12 * (i + 1), symbolPlate.position.Y + 4), notes[i].symbolFilename);
-                symbol.LoadContent(contentManager, graphicsDevice);
+                Symbol symbol = new Symbol(new Vector2(symbolPlate.position.X + 12 * (i + 1), symbolPlate.position.Y + 4), notes[i].symbolFilename, assetManager);
+                symbol.LoadContent();
                 symbols.Add(symbol);
             }
         }

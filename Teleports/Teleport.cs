@@ -20,14 +20,14 @@ namespace Adventure
 
         public AnimatedSprite animation_InRange;
 
-        public Teleport(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public Teleport(Vector2 initialPosition, string filename, AssetManager assetManager, Player player) : base(initialPosition, filename, assetManager, null, null, null, player)
         {
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
 
             animation_InRange = spriteSheet.CreateAnimatedSprite("InRange");
         }

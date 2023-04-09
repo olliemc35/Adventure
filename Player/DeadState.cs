@@ -11,7 +11,7 @@ namespace Adventure
 {
     public class DeadState : State
     {
-        public DeadState(Player player) : base(player)
+        public DeadState(Player player, ScreenManager screenManager) : base(player, screenManager)
         {
          
         }

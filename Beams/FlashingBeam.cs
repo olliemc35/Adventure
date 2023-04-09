@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Adventure
 {
@@ -19,24 +20,14 @@ namespace Adventure
         public bool on;
 
 
-        public FlashingBeam(Vector2 startPosition, int durationOn, int durationOff, Vector2 endPosition) : base(startPosition, endPosition)
-        {
-            this.durationOn = durationOn;
-            this.durationOff = durationOff;
-            delay = 0;
-            beforeDelay = false;
-            on = true;
-        }
-
-        public FlashingBeam(Vector2 startPosition, int durationOn, int durationOff, int delay, Vector2 endPosition) : base(startPosition, endPosition)
+        public FlashingBeam(Vector2 startPosition, int durationOn, int durationOff, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, int delay = 0) : base(startPosition, endPosition, assetManager, colliderManager, screenManager)
         {
             this.durationOn = durationOn;
             this.durationOff = durationOff;
             this.delay = delay;
-            beforeDelay = true;
-            on = false;
+            beforeDelay = false;
+            on = true;
         }
-
 
 
 

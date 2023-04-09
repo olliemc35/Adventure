@@ -28,9 +28,11 @@ namespace Adventure
         {
         }
 
-        public Ladder(Vector2 initialPosition, int numberOfRungs, ColliderManager colliderManager) : base(initialPosition)
+        public Ladder(Vector2 initialPosition, int numberOfRungs, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition)
         {
             this.colliderManager = colliderManager;
+            this.assetManager = assetManager;
+            this.player = player;
 
             CollisionObject = true;
 
@@ -46,15 +48,15 @@ namespace Adventure
 
                 if (j == 0)
                 {
-                    listOfRungs.Add(new AnimatedGameObject(location, "LadderTopRung"));
+                    listOfRungs.Add(new AnimatedGameObject(location, "LadderTopRung", assetManager));
                 }
                 else if (j == numberOfRungs - 1)
                 {
-                    listOfRungs.Add(new AnimatedGameObject(location, "LadderBottomRung"));
+                    listOfRungs.Add(new AnimatedGameObject(location, "LadderBottomRung", assetManager));
                 }
                 else
                 {
-                    listOfRungs.Add(new AnimatedGameObject(location, "Ladder"));
+                    listOfRungs.Add(new AnimatedGameObject(location, "Ladder", assetManager));
                 }
 
             }
@@ -66,11 +68,11 @@ namespace Adventure
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             foreach (AnimatedGameObject rung in listOfRungs)
             {
-                rung.LoadContent(contentManager, graphicsDevice);
+                rung.LoadContent();
             }
 
             idleHitbox = new HitboxRectangle((int)positionOfTopLeftCorner.X, (int)positionOfTopLeftCorner.Y, listOfRungs[0].idleHitbox.rectangle.Width, listOfRungs[0].idleHitbox.rectangle.Height * numberOfRungs);
@@ -90,7 +92,7 @@ namespace Adventure
             }
 
             // This is allowing the player to stand on the top of a ladder, but move from underneath the ladder 
-            if (References.player.idleHitbox.rectangle.Y + References.player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && References.player.spriteDirectionY != 1)
+            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && player.spriteDirectionY != 1)
             {
                 idleHitbox.isActive = true;
             }
@@ -100,26 +102,26 @@ namespace Adventure
             }
 
 
-            if (!References.player.playerStateManager.climbingLadderState.Active)
+            if (!player.playerStateManager.climbingLadderState.Active)
             {
-                if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox))
+                if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
                 {
                     // I'm climbing starting from the top
-                    if (References.player.idleHitbox.rectangle.Y + References.player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && References.player.spriteDirectionY == 1)
+                    if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && player.spriteDirectionY == 1)
                     {
-                        References.player.playerStateManager.climbingLadderState.ladder = this;
+                        player.playerStateManager.climbingLadderState.ladder = this;
                         idleHitbox.isActive = false;
-                        References.player.playerStateManager.DeactivatePlayerStates();
-                        References.player.playerStateManager.climbingLadderState.Activate();
+                        player.playerStateManager.DeactivatePlayerStates();
+                        player.playerStateManager.climbingLadderState.Activate();
                         return;
                     }
 
                     // I'm climbing starting from somewhere below the top
-                    if (References.player.idleHitbox.rectangle.Y + References.player.idleHitbox.rectangle.Height > positionOfTopLeftCorner.Y && References.player.spriteDirectionY != 0)
+                    if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height > positionOfTopLeftCorner.Y && player.spriteDirectionY != 0)
                     {
-                        References.player.playerStateManager.climbingLadderState.ladder = this;
-                        References.player.playerStateManager.DeactivatePlayerStates();
-                        References.player.playerStateManager.climbingLadderState.Activate();
+                        player.playerStateManager.climbingLadderState.ladder = this;
+                        player.playerStateManager.DeactivatePlayerStates();
+                        player.playerStateManager.climbingLadderState.Activate();
                         return;
                     }
                 }
@@ -128,8 +130,6 @@ namespace Adventure
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-
-            //spriteBatch.Draw(References.player.spriteHitboxTexture, idleHitbox.rectangle, Color.Red);
 
             foreach (AnimatedGameObject rung in listOfRungs)
             {

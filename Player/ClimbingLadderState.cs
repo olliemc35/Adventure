@@ -16,7 +16,7 @@ namespace Adventure
         public Ladder ladder;
         public float climbingSpeed = 60;
 
-        public ClimbingLadderState(Player player) : base(player)
+        public ClimbingLadderState(Player player, ScreenManager screenManager) : base(player, screenManager)
         {
         }
 
@@ -30,7 +30,7 @@ namespace Adventure
 
             UpdateAnimations();
             UpdateVelocityAndDisplacement();
-            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
         }
 

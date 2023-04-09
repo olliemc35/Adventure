@@ -10,31 +10,19 @@ namespace Adventure
 {
     public static class References
     {
-        public static Player player;
 
 
-        public static ContentManager content;
-        public static AssetManager assetManager;
-
-        public static ColliderManager colliderManager;
-
-        public static GraphicsDevice graphicsDevice;
         public static Game1 game;
 
-        public static GameScreen activeScreen;
 
         public static Camera camera;
 
-        public static RenderTarget2D renderTarget;
 
-        public static int ScreenNumber;
-        public static int PreviousScreenNumber;
-        public static int DoorNumberToMoveTo;
+       
 
 
 
-        public static SoundManager soundManager;
-
+        // DEBUGGING tool
         public static int counter;
 
 

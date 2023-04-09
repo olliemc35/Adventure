@@ -49,7 +49,7 @@ namespace Adventure
 
 
 
-        public NormalState(Player player) : base(player)
+        public NormalState(Player player, ScreenManager screenManager) : base(player, screenManager)
         {
             statesX = StatesX.atRestX;
             statesY = StatesY.atRestY;
@@ -113,7 +113,7 @@ namespace Adventure
 
 
                 UpdateVelocityAndDisplacement();
-                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
                 return;
 
             }
@@ -124,7 +124,7 @@ namespace Adventure
             UpdateStatesX();
             UpdateStatesY();
             UpdateVelocityAndDisplacement();
-            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
         }
 
         public override void UpdateVelocityAndDisplacement()

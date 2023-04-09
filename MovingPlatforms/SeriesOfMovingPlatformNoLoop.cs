@@ -13,19 +13,19 @@ namespace Adventure
     {
         public List<MovingPlatformNoLoop> platforms;
 
-        public SeriesOfMovingPlatformNoLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, int number)
+        public SeriesOfMovingPlatformNoLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, int number, AssetManager assetManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null)
         {
             for (int i = 0; i < number; i++)
             {
-                platforms.Add(new MovingPlatformNoLoop(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed));
+                platforms.Add(new MovingPlatformNoLoop(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, player, delay, attachedGameObjects));
             }
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             foreach (MovingPlatformNoLoop platform in platforms)
             {
-                platform.LoadContent(contentManager, graphicsDevice);
+                platform.LoadContent();
             }
         }
 

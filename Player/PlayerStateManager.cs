@@ -25,6 +25,8 @@ namespace Adventure
         public ClimbingState climbingState;
         public DeadState deadState;
 
+        public ScreenManager screenManager;
+        public AssetManager assetManager;
 
 
 
@@ -32,18 +34,19 @@ namespace Adventure
 
 
 
-
-        public PlayerStateManager(Player player)
+        public PlayerStateManager(Player player, ScreenManager screenManager, AssetManager assetManager)
         {
             this.player = player;
+            this.screenManager = screenManager;
+            this.assetManager = assetManager;
 
-            normalState = new NormalState(player);
-            teleportState = new TeleportState(player);
-            swingingState = new SwingingState(player);
-            climbingLadderState = new ClimbingLadderState(player);
-            slidingOnWallState = new SlidingOnWallState(player);
-            climbingState = new ClimbingState(player);
-            deadState = new DeadState(player);
+            normalState = new NormalState(player, screenManager);
+            teleportState = new TeleportState(player, screenManager);
+            swingingState = new SwingingState(player, screenManager, assetManager);
+            climbingLadderState = new ClimbingLadderState(player, screenManager);
+            slidingOnWallState = new SlidingOnWallState(player, screenManager);
+            climbingState = new ClimbingState(player, screenManager);
+            deadState = new DeadState(player, screenManager);
 
             playerStates = new List<State>()
             {

@@ -12,200 +12,200 @@ namespace Adventure
     public class Bullet : MovingGameObject
     {
 
-        public List<Rectangle> bulletPath = new List<Rectangle>();
-        public bool remove = false;
-        public Vector2 collisionPoint = new Vector2();
+    //    public List<Rectangle> bulletPath = new List<Rectangle>();
+    //    public bool remove = false;
+    //    public Vector2 collisionPoint = new Vector2();
 
-        public Vector2 direction = new Vector2();
-        public float speed = 300;
+    //    public Vector2 direction = new Vector2();
+    //    public float speed = 300;
 
-        public Bullet(Vector2 initialPosition, string str, List<Rectangle> bulletPath) : base(initialPosition, str)
-        {
-            this.bulletPath = bulletPath.ToList();
-        }
+    //    public Bullet(Vector2 initialPosition, string str, List<Rectangle> bulletPath) : base(initialPosition, str)
+    //    {
+    //        this.bulletPath = bulletPath.ToList();
+    //    }
 
-        public Bullet(Vector2 initialPosition, string str, Vector2 endPoint) : base(initialPosition, str)
-        {
-            direction = endPoint - initialPosition;
-            direction.Normalize();
-            deltaTime = 1f / 60;
-        }
+    //    public Bullet(Vector2 initialPosition, string str, Vector2 endPoint) : base(initialPosition, str)
+    //    {
+    //        direction = endPoint - initialPosition;
+    //        direction.Normalize();
+    //        deltaTime = 1f / 60;
+    //    }
 
-        public override void Update(GameTime gameTime)
-        {
-            velocity = speed * direction;
-            displacement = velocity * deltaTime;
-           // colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesForAimLine, 1, 10);
+    //    public override void Update(GameTime gameTime)
+    //    {
+    //        velocity = speed * direction;
+    //        displacement = velocity * deltaTime;
+    //       // colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesForAimLine, 1, 10);
 
-            if (CollidedOnRight)
-            {
-                collisionPoint.X = FindNearestInteger(position.X + 1);
-                collisionPoint.Y = FindNearestInteger(position.Y);
-                remove = true;
-                UpdateEnemyColorMap(collisionPoint);
-            }
-            else if (CollidedOnLeft)
-            {
-                collisionPoint.X = FindNearestInteger(position.X - 1);
-                collisionPoint.Y = FindNearestInteger(position.Y);
-                remove = true;
-                UpdateEnemyColorMap(collisionPoint);
-            }
-            else if (CollidedOnBottom)
-            {
-                collisionPoint.X = FindNearestInteger(position.X);
-                collisionPoint.Y = FindNearestInteger(position.Y + 1);
-                remove = true;
-                UpdateEnemyColorMap(collisionPoint);
-            }
-            else if (CollidedOnTop)
-            {
-                collisionPoint.X = FindNearestInteger(position.X);
-                collisionPoint.Y = FindNearestInteger(position.Y - 1);
-                remove = true;
-                UpdateEnemyColorMap(collisionPoint);
-            }
-
-
-
-            base.Update(gameTime);
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            base.Draw(spriteBatch);
-        }
+    //        if (CollidedOnRight)
+    //        {
+    //            collisionPoint.X = FindNearestInteger(position.X + 1);
+    //            collisionPoint.Y = FindNearestInteger(position.Y);
+    //            remove = true;
+    //            UpdateEnemyColorMap(collisionPoint);
+    //        }
+    //        else if (CollidedOnLeft)
+    //        {
+    //            collisionPoint.X = FindNearestInteger(position.X - 1);
+    //            collisionPoint.Y = FindNearestInteger(position.Y);
+    //            remove = true;
+    //            UpdateEnemyColorMap(collisionPoint);
+    //        }
+    //        else if (CollidedOnBottom)
+    //        {
+    //            collisionPoint.X = FindNearestInteger(position.X);
+    //            collisionPoint.Y = FindNearestInteger(position.Y + 1);
+    //            remove = true;
+    //            UpdateEnemyColorMap(collisionPoint);
+    //        }
+    //        else if (CollidedOnTop)
+    //        {
+    //            collisionPoint.X = FindNearestInteger(position.X);
+    //            collisionPoint.Y = FindNearestInteger(position.Y - 1);
+    //            remove = true;
+    //            UpdateEnemyColorMap(collisionPoint);
+    //        }
 
 
 
-        // This codes is now incorrect - have to think about the right co-ords on the color map
-        public void UpdateEnemyColorMap(Vector2 collisionPoint)
-        {
-            //if (References.activeScreen.screenNotes.Count > 0)
-            //{
+    //        base.Update(gameTime);
+    //    }
 
-            //    foreach (Note note in References.activeScreen.screenNotes)
-            //    {
-            //        bool targetThisWeight = false;
+    //    public override void Draw(SpriteBatch spriteBatch)
+    //    {
+    //        base.Draw(spriteBatch);
+    //    }
 
 
-            //        //if (note.key is HangingRopeWithWeightAttached bell)
-            //        //{
-            //        //    foreach (List<HitboxRectangle> hitboxes in bell.weight.hitboxesForGunlineForEachFrame)
-            //        //    {
-            //        //        foreach (HitboxRectangle hitbox in hitboxes)
-            //        //        {
-            //        //            if (hitbox.rectangle.Contains(collisionPoint))
-            //        //            {
-            //        //                targetThisWeight = true;
-            //        //                break;
-            //        //            }
-            //        //        }
-            //        //        if (targetThisWeight)
-            //        //        {
-            //        //            break;
-            //        //        }
-            //        //    }
 
-            //        //    if (targetThisWeight)
-            //        //    {
-            //        //        bell.giveImpulse = true;
-            //        //        Vector2 unitVec = new Vector2(0, -1);
-            //        //        bell.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVec));
+    //    // This codes is now incorrect - have to think about the right co-ords on the color map
+    //    public void UpdateEnemyColorMap(Vector2 collisionPoint)
+    //    {
+    //        //if (References.activeScreen.screenNotes.Count > 0)
+    //        //{
 
-            //        //        if (collisionPoint.X > bell.weight.spritePosition.X + 0.5f * bell.weight.idleHitbox.rectangle.Width)
-            //        //        {
-            //        //            bell.impulseAngle *= -1;
-            //        //        }
+    //        //    foreach (Note note in References.activeScreen.screenNotes)
+    //        //    {
+    //        //        bool targetThisWeight = false;
 
-            //        //        if (!note.playerInteractedWith)
-            //        //        {
-            //        //            note.playerInteractedWith = true;
-            //        //            note.flagPlayerInteractedWith = true;
-            //        //            note.keyPlayInteractedAnimation = true;
-            //        //        }
 
-            //        //    }
-            //        //}
+    //        //        //if (note.key is HangingRopeWithWeightAttached bell)
+    //        //        //{
+    //        //        //    foreach (List<HitboxRectangle> hitboxes in bell.weight.hitboxesForGunlineForEachFrame)
+    //        //        //    {
+    //        //        //        foreach (HitboxRectangle hitbox in hitboxes)
+    //        //        //        {
+    //        //        //            if (hitbox.rectangle.Contains(collisionPoint))
+    //        //        //            {
+    //        //        //                targetThisWeight = true;
+    //        //        //                break;
+    //        //        //            }
+    //        //        //        }
+    //        //        //        if (targetThisWeight)
+    //        //        //        {
+    //        //        //            break;
+    //        //        //        }
+    //        //        //    }
 
-            //    }
+    //        //        //    if (targetThisWeight)
+    //        //        //    {
+    //        //        //        bell.giveImpulse = true;
+    //        //        //        Vector2 unitVec = new Vector2(0, -1);
+    //        //        //        bell.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVec));
 
-            //}
+    //        //        //        if (collisionPoint.X > bell.weight.spritePosition.X + 0.5f * bell.weight.idleHitbox.rectangle.Width)
+    //        //        //        {
+    //        //        //            bell.impulseAngle *= -1;
+    //        //        //        }
 
-            //foreach (HangingRopeWithWeightAttached rope in References.activeScreen.screenRopesWithWeights)
-            //{
-            //    bool targetThisWeight = false;
+    //        //        //        if (!note.playerInteractedWith)
+    //        //        //        {
+    //        //        //            note.playerInteractedWith = true;
+    //        //        //            note.flagPlayerInteractedWith = true;
+    //        //        //            note.keyPlayInteractedAnimation = true;
+    //        //        //        }
 
-            //    foreach (List<HitboxRectangle> hitboxes in rope.weight.hitboxesForGunlineForEachFrame)
-            //    {
-            //        foreach (HitboxRectangle hitbox in hitboxes)
-            //        {
-            //            if (hitbox.rectangle.Contains(collisionPoint))
-            //            {
-            //                targetThisWeight = true;
-            //                break;
-            //            }
-            //        }
-            //        if (targetThisWeight)
-            //        {
-            //            break;
-            //        }
-            //    }
+    //        //        //    }
+    //        //        //}
 
-            //    if (targetThisWeight)
-            //    {
-            //        rope.giveImpulse = true;
+    //        //    }
 
-            //        //Vector2 unitVectorPointingToRopeHanging = new Vector2((float)Math.Sin(rope.weight.swingAngle), (float)Math.Cos(rope.weight.swingAngle));
-            //        Vector2 unitVec = new Vector2(0, -1);
-            //        rope.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVec));
+    //        //}
 
-            //        //rope.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVectorPointingToRopeHanging));
+    //        //foreach (HangingRopeWithWeightAttached rope in References.activeScreen.screenRopesWithWeights)
+    //        //{
+    //        //    bool targetThisWeight = false;
 
-            //        if (collisionPoint.X > rope.weight.spritePosition.X + 0.5f * rope.weight.idleHitbox.rectangle.Width)
-            //        {
-            //            rope.impulseAngle *= -1;
-            //        }
+    //        //    foreach (List<HitboxRectangle> hitboxes in rope.weight.hitboxesForGunlineForEachFrame)
+    //        //    {
+    //        //        foreach (HitboxRectangle hitbox in hitboxes)
+    //        //        {
+    //        //            if (hitbox.rectangle.Contains(collisionPoint))
+    //        //            {
+    //        //                targetThisWeight = true;
+    //        //                break;
+    //        //            }
+    //        //        }
+    //        //        if (targetThisWeight)
+    //        //        {
+    //        //            break;
+    //        //        }
+    //        //    }
 
-            //        //if (collisionPoint.X <= rope.weight.spritePosition.X + rope.weight.idleHitbox.offsetX + 0.5f * rope.weight.idleHitbox.rectangle.Width)
-            //        //{
-            //        //    rope.impulseDirection = 1;
-            //        //}
-            //        //else
-            //        //{
-            //        //    rope.impulseDirection = -1;
-            //        //}
+    //        //    if (targetThisWeight)
+    //        //    {
+    //        //        rope.giveImpulse = true;
 
-            //    }
+    //        //        //Vector2 unitVectorPointingToRopeHanging = new Vector2((float)Math.Sin(rope.weight.swingAngle), (float)Math.Cos(rope.weight.swingAngle));
+    //        //        Vector2 unitVec = new Vector2(0, -1);
+    //        //        rope.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVec));
 
-            //}
+    //        //        //rope.impulseAngle = (float)Math.Acos(Vector2.Dot(direction, unitVectorPointingToRopeHanging));
 
-            //foreach (Enemy enemy in References.activeScreen.screenEnemies)
-            //{
-            //    bool targetThisEnemy = false;
+    //        //        if (collisionPoint.X > rope.weight.spritePosition.X + 0.5f * rope.weight.idleHitbox.rectangle.Width)
+    //        //        {
+    //        //            rope.impulseAngle *= -1;
+    //        //        }
 
-            //    foreach (List<HitboxRectangle> hitboxes in enemy.hitboxesForGunlineForEachFrame)
-            //    {
-            //        foreach (HitboxRectangle hitbox in hitboxes)
-            //        {
-            //            if (!enemy.Dead && hitbox.rectangle.Contains(collisionPoint))
-            //            {
-            //                targetThisEnemy = true;
-            //                break;
-            //            }
-            //        }
-            //        if (targetThisEnemy)
-            //        {
-            //            break;
-            //        }
-            //    }
+    //        //        //if (collisionPoint.X <= rope.weight.spritePosition.X + rope.weight.idleHitbox.offsetX + 0.5f * rope.weight.idleHitbox.rectangle.Width)
+    //        //        //{
+    //        //        //    rope.impulseDirection = 1;
+    //        //        //}
+    //        //        //else
+    //        //        //{
+    //        //        //    rope.impulseDirection = -1;
+    //        //        //}
 
-            //    if (targetThisEnemy)
-            //    {
-            //        enemy.HandleGunshot(collisionPoint);
-            //    }
+    //        //    }
 
-            //}
-        }
+    //        //}
+
+    //        //foreach (Enemy enemy in References.activeScreen.screenEnemies)
+    //        //{
+    //        //    bool targetThisEnemy = false;
+
+    //        //    foreach (List<HitboxRectangle> hitboxes in enemy.hitboxesForGunlineForEachFrame)
+    //        //    {
+    //        //        foreach (HitboxRectangle hitbox in hitboxes)
+    //        //        {
+    //        //            if (!enemy.Dead && hitbox.rectangle.Contains(collisionPoint))
+    //        //            {
+    //        //                targetThisEnemy = true;
+    //        //                break;
+    //        //            }
+    //        //        }
+    //        //        if (targetThisEnemy)
+    //        //        {
+    //        //            break;
+    //        //        }
+    //        //    }
+
+    //        //    if (targetThisEnemy)
+    //        //    {
+    //        //        enemy.HandleGunshot(collisionPoint);
+    //        //    }
+
+    //        //}
+    //    }
     }
 }

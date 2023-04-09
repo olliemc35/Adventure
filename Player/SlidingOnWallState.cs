@@ -21,7 +21,7 @@ namespace Adventure
         public int numberOfFramesToLeaveWall = 10;
 
 
-        public SlidingOnWallState(Player player) : base(player)
+        public SlidingOnWallState(Player player, ScreenManager screenManager) : base(player, screenManager)
         {
         }
 
@@ -34,7 +34,7 @@ namespace Adventure
 
             UpdateAnimations();
             FindVelocityAndDisplacement();
-            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
         }
 

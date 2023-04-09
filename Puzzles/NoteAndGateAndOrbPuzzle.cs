@@ -11,6 +11,8 @@ namespace Adventure
 {
     public class NoteAndGateAndOrbPuzzle : GameObject
     {
+        public AssetManager assetManager;
+
         public List<Note> notes;
         public Gate gate;
         public OrbVessel orbVessel;
@@ -33,32 +35,33 @@ namespace Adventure
         public bool winConditionSet = false;
 
 
-        public NoteAndGateAndOrbPuzzle(Vector2 symbolPlatePosition, string symbolPlateFilename, List<Note> notes, Gate gate, OrbVessel orbVessel)
+        public NoteAndGateAndOrbPuzzle(Vector2 symbolPlatePosition, string symbolPlateFilename, List<Note> notes, Gate gate, OrbVessel orbVessel, AssetManager assetManager)
         {
             this.notes = notes;
             this.gate = gate;
             this.orbVessel = orbVessel;
-            symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename);
+            symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename, assetManager);
+            this.assetManager = assetManager;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
 
-            orbVessel.LoadContent(contentManager, graphicsDevice);
+            orbVessel.LoadContent();
 
-            symbolPlate.LoadContent(contentManager, graphicsDevice);
+            symbolPlate.LoadContent();
 
             for (int i = 0; i < notes.Count; i++)
             {
-                Symbol symbol = new Symbol(new Vector2(symbolPlate.position.X + 12 * (i + 1), symbolPlate.position.Y + 4), notes[i].symbolFilename);
-                symbol.LoadContent(contentManager, graphicsDevice);
+                Symbol symbol = new Symbol(new Vector2(symbolPlate.position.X + 12 * (i + 1), symbolPlate.position.Y + 4), notes[i].symbolFilename, assetManager);
+                symbol.LoadContent();
                 symbols.Add(symbol);
             }
 
             for (int i = 0; i < notes.Count; i++)
             {
-                Orb orb = new Orb(new Vector2(orbVessel.orbEndRight, 0), notes[i].orbFilename, notes[i].orbSpeed, orbVessel);
-                orb.LoadContent(contentManager, graphicsDevice);
+                Orb orb = new Orb(new Vector2(orbVessel.orbEndRight, 0), notes[i].orbFilename, notes[i].orbSpeed, orbVessel, assetManager);
+                orb.LoadContent();
                 orbs.Add(orb);
             }
 

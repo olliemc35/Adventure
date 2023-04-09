@@ -41,7 +41,7 @@ namespace Adventure
         {
         }
 
-        public SwingingGameObject(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public SwingingGameObject(Vector2 position, string filename, AssetManager assetManager, ColliderManager colliderManager = null, InputManager inputManager = null, ScreenManager screenManager = null, Player player = null) : base(position, filename, assetManager, colliderManager, inputManager, screenManager, player)
         {
         }
 

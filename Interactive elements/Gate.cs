@@ -17,21 +17,11 @@ namespace Adventure
         public bool moveHorizontally = false;
         public bool moveVertically = false;
 
-        public Gate(Vector2 initialPosition, string filename, Vector2 endPosition) : base(initialPosition, filename, endPosition, 0, 1)
+        public Gate(Vector2 initialPosition, string filename, Vector2 endPosition, AssetManager assetManager, Player player) : base(initialPosition, filename, endPosition, 0, 1, assetManager, player)
         {
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
-        {
-            base.LoadContent(contentManager, graphicsDevice);
-
-
-            animationPosition.X = FindNearestInteger(position.X);
-            animationPosition.Y = FindNearestInteger(position.Y);
-            //animatedSprite_Idle.Position = animationPosition;
-
-        }
 
         public override void Update(GameTime gameTime)
         {

@@ -19,24 +19,25 @@ namespace Adventure
         public Vector2 initialPosition = new Vector2();
         public float initialAngle;
 
-        public ColliderManager colliderManager = new ColliderManager();
 
         public BouncingOrb() : base()
         {
 
         }
 
-        public BouncingOrb(Vector2 initialPosition, string filename, float speed, float angle) : base(initialPosition, filename)
+        public BouncingOrb(Vector2 initialPosition, string filename, float speed, float angle, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager) : base(initialPosition, filename, assetManager)
         {
             this.initialPosition = initialPosition;
+            this.screenManager = screenManager;
+            this.colliderManager = colliderManager;
             this.speed = speed;
             this.angle = angle;
             initialAngle = angle;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
             idleHitbox.isActive = true;
         }
 
@@ -45,7 +46,7 @@ namespace Adventure
             displacement.X = speed * (float)Math.Cos(angle);
             displacement.Y = -speed * (float)Math.Sin(angle);
 
-            base.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(this, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
             if (CollidedOnBottom)
             {

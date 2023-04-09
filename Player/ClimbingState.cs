@@ -13,7 +13,7 @@ namespace Adventure
         public float climbingSpeed = 120;
         public float wallJumpSpeed = 120;
 
-        public ClimbingState(Player player) : base(player)
+        public ClimbingState(Player player, ScreenManager screenManager) : base(player, screenManager)
         {
 
         }
@@ -32,7 +32,7 @@ namespace Adventure
 
             UpdateVelocityAndDisplacement();
 
-            player.colliderManager.AdjustForCollisionWithClimable(player, platform, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            player.colliderManager.AdjustForCollisionWithClimable(player, platform, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
 

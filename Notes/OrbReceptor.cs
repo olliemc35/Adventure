@@ -14,14 +14,14 @@ namespace Adventure
     {
         public AnimatedSprite animation_Hit;
 
-        public OrbReceptor(Vector2 position, string filename) : base(position, filename)
+        public OrbReceptor(Vector2 position, string filename, AssetManager assetManager) : base(position, filename, assetManager)
         {
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
 
             animation_Hit = spriteSheet.CreateAnimatedSprite("Hit");
 

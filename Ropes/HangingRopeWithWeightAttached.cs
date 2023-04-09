@@ -27,8 +27,11 @@ namespace Adventure
         public float impulseAngle = 0;
 
 
-        public HangingRopeWithWeightAttached(string filename, float impulseForceMax, float impulseForceDuration, Vector2 ropeAnchor, int NumberOfRopeBits, int LengthBetweenRopeBits)
+        public HangingRopeWithWeightAttached(string filename, float impulseForceMax, float impulseForceDuration, Vector2 ropeAnchor, int NumberOfRopeBits, int LengthBetweenRopeBits, AssetManager assetManager, ScreenManager screenManager)
         {
+            this.assetManager = assetManager;
+            this.screenManager = screenManager;
+
             this.NumberOfRopeBits = NumberOfRopeBits;
             this.LengthBetweenRopeBits = LengthBetweenRopeBits;
             this.ropeAnchor = ropeAnchor;
@@ -43,7 +46,7 @@ namespace Adventure
             this.impulseForceMax = 1000;
             this.impulseForceDuration = 1f;
 
-            rope.Add(new RopeBit(ropeAnchor, "RedDot"));
+            rope.Add(new RopeBit(ropeAnchor, "RedDot", assetManager));
 
             distanceTilEquilibriumY = 1.1f * LengthBetweenRopeBits;
             distanceStretchRequiredToOvercomeFriction = 1.1f * LengthBetweenRopeBits;
@@ -59,14 +62,14 @@ namespace Adventure
                     Y = rope[i - 1].position.Y + adjustment
                 };
 
-                RopeBit ropeBit = new RopeBit(position, "RedDot");
+                RopeBit ropeBit = new RopeBit(position, "RedDot", assetManager);
                 rope.Add(ropeBit);
 
                 lengthOfTheRopeAtRest += adjustment;
 
             }
 
-            weight = new SwingingGameObject(rope[NumberOfRopeBits - 1].position, filename);
+            weight = new SwingingGameObject(rope[NumberOfRopeBits - 1].position, filename, assetManager);
 
 
 
@@ -75,7 +78,7 @@ namespace Adventure
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                RopeBit ropeBit = new RopeBit(position);
+                RopeBit ropeBit = new RopeBit(position, assetManager);
                 ropeBit.Enabled = false;
                 ropeBit.filename = "YellowDot";
                 ropeBitsDrawnOnScreen.Add(ropeBit);
@@ -83,26 +86,26 @@ namespace Adventure
 
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
 
 
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].LoadContent(contentManager, graphicsDevice);
+                rope[i].LoadContent();
 
             }
 
             for (int i = 0; i < 2 * RopeLength; i++)
             {
-                ropeBitsDrawnOnScreen[i].LoadContent(contentManager, graphicsDevice);
+                ropeBitsDrawnOnScreen[i].LoadContent();
                 ropeBitsDrawnOnScreen[i].idleHitbox.rectangle.Width = 1;
                 ropeBitsDrawnOnScreen[i].idleHitbox.rectangle.Height = 1;
                 ropeBitsDrawnOnScreen[i].idleHitbox.offsetX = 3;
                 ropeBitsDrawnOnScreen[i].idleHitbox.offsetY = 3;
             }
 
-            weight.LoadContent(contentManager, graphicsDevice);
+            weight.LoadContent();
             //weight.CreateHitboxesForGunLine();
             weight.EnableGunlineHitboxes();
 
@@ -213,7 +216,7 @@ namespace Adventure
                 rope[i].FindNormalForces();
                 FindVelocityAndDisplacementForRopeBitX(i);
                 FindVelocityAndDisplacementForRopeBitY(i);
-                spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(rope[i], References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+                colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(rope[i], screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
             }
 
@@ -278,7 +281,7 @@ namespace Adventure
             weight.velocity.Y = -weight.length * weight.swingAngleDot * (float)Math.Sin(weight.swingAngle);
             weight.displacement.X = rope[0].position.X - weight.length * (float)Math.Sin(weight.swingAngle) - weight.position.X;
             weight.displacement.Y = rope[0].position.Y + weight.length * (float)Math.Cos(weight.swingAngle) - weight.position.Y;
-            spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(weight, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(weight, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
 
@@ -352,7 +355,7 @@ namespace Adventure
             weight.velocity.Y = -RopeLength * weight.swingAngleDot * (float)Math.Sin(weight.swingAngle);
             weight.displacement.X = rope[0].position.X - lengthOfTheRopeAtRest * (float)Math.Sin(weight.swingAngle) - weight.position.X;
             weight.displacement.Y = rope[0].position.Y + lengthOfTheRopeAtRest * (float)Math.Cos(weight.swingAngle) - weight.position.Y;
-            spriteCollider.AdjustForCollisionsMovingSpriteAgainstListOfSprites(weight, References.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
+            colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(weight, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
 
 
 

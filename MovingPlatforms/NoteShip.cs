@@ -25,7 +25,7 @@ namespace Adventure
 
         }
 
-        public NoteShip(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, int displacement) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed)
+        public NoteShip(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, int displacement, AssetManager assetManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, player, delay, attachedGameObjects)
         {
             horizontalMovement = true;
             this.displacement = displacement;
@@ -35,9 +35,9 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            if (!movePlatform && References.player.position.X < originalPosition.X + 2 * idleHitbox.rectangle.Width)
+            if (!movePlatform && player.position.X < originalPosition.X + 2 * idleHitbox.rectangle.Width)
             {
-                if (colliderManager.CheckForCollision(this.idleHitbox, References.player.idleHitbox))
+                if (colliderManager.CheckForCollision(idleHitbox, player.idleHitbox))
                 {
                     movePlatform = true;
                 }
@@ -62,8 +62,6 @@ namespace Adventure
             {
                 base.Update(gameTime);
 
-                //spritePosition.Y += spriteDisplacement.Y;
-                //spritePosition.Y = DistanceToNearestInteger(spritePosition.Y);
 
                 if (moveVertically)
                 {

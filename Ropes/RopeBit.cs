@@ -58,8 +58,9 @@ namespace Adventure
         public bool isFixed = false;
 
 
-        public RopeBit(Vector2 initialPosition) : base(initialPosition)
+        public RopeBit(Vector2 initialPosition, AssetManager assetManager) : base(initialPosition)
         {
+            this.assetManager = assetManager;
             filename = "RedDot";
             gravityConstant = 750;
             mass = 0.8f;
@@ -76,7 +77,7 @@ namespace Adventure
         }
 
 
-        public RopeBit(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public RopeBit(Vector2 initialPosition, string filename, AssetManager assetManager) : base(initialPosition, filename, assetManager)
         {
             gravityConstant = 750;
             mass = 0.8f;
@@ -84,8 +85,9 @@ namespace Adventure
 
 
 
-        public RopeBit(Vector2 initialPosition, int numberOfPreviousPositions) : base(initialPosition)
+        public RopeBit(Vector2 initialPosition, int numberOfPreviousPositions, AssetManager assetManager) : base(initialPosition)
         {
+            this.assetManager = assetManager;
             filename = "RedDot";
             gravityConstant = 750;
             mass = 0.8f;
@@ -102,8 +104,9 @@ namespace Adventure
             }
         }
 
-        public RopeBit(Vector2 initialPosition, Vector2 direction) : base(initialPosition)
+        public RopeBit(Vector2 initialPosition, Vector2 direction, AssetManager assetManager) : base(initialPosition)
         {
+            this.assetManager = assetManager;
             filename = "RedDot";
             //constantVelocity.X = 120;
             //constantVelocity.Y = -128;
@@ -114,9 +117,9 @@ namespace Adventure
             //References.activeScreen.screenSprites.Add(this);
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
 
             idleHitbox.rectangle.Width = (int)(((float)2 / 8) * animation_Idle.Width);
             idleHitbox.rectangle.Height = (int)(((float)2 / 8) * animation_Idle.Height);

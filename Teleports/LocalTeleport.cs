@@ -15,7 +15,7 @@ namespace Adventure
         public List<AnimatedGameObject> arrow = new List<AnimatedGameObject>();
 
 
-        public LocalTeleport(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public LocalTeleport(Vector2 initialPosition, string filename, AssetManager assetManager, Player player) : base(initialPosition, filename, assetManager, player)
         {
             radius = 8 * 10;
             speedBoost = 100;
@@ -23,20 +23,20 @@ namespace Adventure
 
             for (int i = 0; i < 20; i++)
             {
-                AnimatedGameObject sprite = new AnimatedGameObject(initialPosition, "whiteDot");
+                AnimatedGameObject sprite = new AnimatedGameObject(initialPosition, "whiteDot", assetManager);
                 arrow.Add(sprite);
 
             }
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
             for (int i = 0; i < arrow.Count(); i++)
             {
-                arrow[i].LoadContent(contentManager, graphicsDevice);
+                arrow[i].LoadContent();
             }
 
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
         }
 
 
@@ -45,9 +45,9 @@ namespace Adventure
 
             if (InRange)
             {
-                Vector2 vec1 = References.player.position;
-                vec1.X += References.player.idleHitbox.offsetX + 0.5f * References.player.idleHitbox.rectangle.Width;
-                vec1.Y += References.player.idleHitbox.offsetY + 0.5f * References.player.idleHitbox.rectangle.Height;
+                Vector2 vec1 = player.position;
+                vec1.X += player.idleHitbox.offsetX + 0.5f * player.idleHitbox.rectangle.Width;
+                vec1.Y += player.idleHitbox.offsetY + 0.5f * player.idleHitbox.rectangle.Height;
 
                 Vector2 vec2 = position;
                 vec2.X += 0.5f * idleHitbox.rectangle.Width;
@@ -68,7 +68,7 @@ namespace Adventure
                 }
 
             }
-            if (Vector2.Distance(References.player.position, position) <= radius)
+            if (Vector2.Distance(player.position, position) <= radius)
             {
                 InRange = true;
                 UpdatePlayingAnimation(animation_InRange);
@@ -79,14 +79,14 @@ namespace Adventure
                 UpdatePlayingAnimation(animation_Idle);
             }
 
-            if (!References.player.playerStateManager.teleportState.Active)
+            if (!player.playerStateManager.teleportState.Active)
             {
-                if (InRange && References.player.flagTeleportButtonPressed)
+                if (InRange && player.flagTeleportButtonPressed)
                 {
-                    References.player.playerStateManager.DeactivatePlayerStates();
-                    References.player.playerStateManager.teleportState.Activate();
-                    References.player.playerStateManager.teleportState.portal = this;
-                    References.player.playerStateManager.teleportState.isTeleportGlobal = false;
+                    player.playerStateManager.DeactivatePlayerStates();
+                    player.playerStateManager.teleportState.Activate();
+                    player.playerStateManager.teleportState.portal = this;
+                    player.playerStateManager.teleportState.isTeleportGlobal = false;
                 }
             }
             
@@ -97,7 +97,7 @@ namespace Adventure
         public override void Draw(SpriteBatch spriteBatch)
         {
 
-            if (InRange && !References.player.playerStateManager.teleportState.Active)
+            if (InRange && !player.playerStateManager.teleportState.Active)
             {
                 for (int i = 0; i < arrow.Count(); i++)
                 {

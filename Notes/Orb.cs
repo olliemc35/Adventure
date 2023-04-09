@@ -20,7 +20,7 @@ namespace Adventure
         public bool setToTurnInActive = false;
 
 
-        public Orb(Vector2 initialPosition, string filename, float speed, OrbVessel orbVessel) : base(initialPosition, filename)
+        public Orb(Vector2 initialPosition, string filename, float speed, OrbVessel orbVessel, AssetManager assetManager) : base(initialPosition, filename, assetManager)
         {
             this.speed = speed;
             this.orbVessel = orbVessel;

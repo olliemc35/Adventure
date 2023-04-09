@@ -44,11 +44,7 @@ namespace Adventure
             colliderManager = new ColliderManager();
             inputManager = new InputManager();
 
-            References.assetManager = assetManager;
-            References.soundManager = soundManager;
-            References.colliderManager = colliderManager;
 
-            References.content = Content;
             References.game = this;
 
             //IsFixedTimeStep = false;
@@ -57,7 +53,6 @@ namespace Adventure
 
         protected override void Initialize()
         {
-            References.graphicsDevice = GraphicsDevice;
 
             //graphics.HardwareModeSwitch = false;
             ////
@@ -85,8 +80,8 @@ namespace Adventure
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            screenManager = new ScreenManager(spriteBatch, colliderManager, inputManager);
             assetManager.LoadContent(Content, GraphicsDevice);
+            screenManager = new ScreenManager(spriteBatch, assetManager, colliderManager, inputManager);
             soundManager.LoadContent(Content);
             screenManager.LoadScreens(Content, GraphicsDevice);
 

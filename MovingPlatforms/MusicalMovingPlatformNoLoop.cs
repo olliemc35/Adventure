@@ -20,16 +20,16 @@ namespace Adventure
         public List<SoundEffectInstance> noteInstances = new List<SoundEffectInstance>();
 
 
-        public MusicalMovingPlatformNoLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, string noteValue) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed)
+        public MusicalMovingPlatformNoLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, string noteValue, SoundManager soundManager, AssetManager assetManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, player, delay, attachedGameObjects)
         {
+            this.soundManager = soundManager;
             this.noteValue = noteValue;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
-            noteSound = References.soundManager.soundEffects[noteValue];
-            //noteSound = contentManager.Load<SoundEffect>(noteValue);
+            base.LoadContent();
+            noteSound = soundManager.soundEffects[noteValue];
         }
 
 

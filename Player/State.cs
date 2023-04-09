@@ -12,6 +12,8 @@ namespace Adventure
     {
         public bool Active = false;
         public bool enterStateFlag;
+        public ScreenManager screenManager;
+        public AssetManager assetManager;
 
         public enum Exits
         {
@@ -25,10 +27,12 @@ namespace Adventure
 
         public Player player;
 
-        public State(Player player)
+        public State(Player player, ScreenManager screenManager, AssetManager assetManager = null)
         {
             this.player = player;
-        }
+            this.screenManager = screenManager;
+            this.assetManager = assetManager;
+        }   
 
         public virtual void Deactivate()
         {

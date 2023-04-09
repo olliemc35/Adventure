@@ -30,14 +30,16 @@ namespace Adventure
         public int initialHeight;
         public int initialY;
 
-        public LaunchPad(Vector2 initialPosition, string filename) : base(initialPosition, filename)
+        public LaunchPad(Vector2 initialPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition, filename, assetManager)
         {
+            this.player = player;
+            this.colliderManager = colliderManager;
             CollisionObject = true;
         }
 
-        public override void LoadContent(ContentManager contentManager, GraphicsDevice graphicsDevice)
+        public override void LoadContent()
         {
-            base.LoadContent(contentManager, graphicsDevice);
+            base.LoadContent();
 
             animation_Compress = spriteSheet.CreateAnimatedSprite("Compress");
             animation_Launch = spriteSheet.CreateAnimatedSprite("Launch");
@@ -53,7 +55,7 @@ namespace Adventure
             {
                 idleHitbox.rectangle.Y += 1;
                 idleHitbox.rectangle.Height -= 1;
-                References.player.position.Y += 1;
+                player.position.Y += 1;
                 launchSpeedMultiplier += launchSpeedMultiplierIncrement;
             };
           
@@ -66,8 +68,8 @@ namespace Adventure
 
                 idleHitbox.rectangle.Y = initialY;
                 idleHitbox.rectangle.Height = initialHeight;
-                References.player.position.Y = idleHitbox.rectangle.Y - References.player.idleHitbox.rectangle.Height - References.player.idleHitbox.offsetY;
-                References.player.idleHitbox.rectangle.Y = (int)References.player.position.Y + References.player.idleHitbox.offsetY;
+                player.position.Y = idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height - player.idleHitbox.offsetY;
+                player.idleHitbox.rectangle.Y = (int)player.position.Y + player.idleHitbox.offsetY;
                 launchSpeedMultiplier = 1;
 
                 needToJumpAgain = true;
@@ -91,7 +93,7 @@ namespace Adventure
             {
                 //Debug.WriteLine("here");
 
-                if (!colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox))
+                if (!colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
                 {
                     needToJumpAgain = false;
                 }
@@ -99,7 +101,7 @@ namespace Adventure
             else
             {
                 // Not capturing behaviour as player is collided on ground
-                if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox) && References.player.CollidedOnBottom)
+                if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox) && player.CollidedOnBottom)
                 {
                     compress = true;
                 }
@@ -124,10 +126,10 @@ namespace Adventure
         public void Launch()
         {
 
-            if (colliderManager.CheckForCollision(References.player.idleHitbox, idleHitbox) && References.player.CollidedOnBottom)
+            if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox) && player.CollidedOnBottom)
             {
-                References.player.velocity.Y = -launchSpeed * launchSpeedMultiplier;
-                References.player.launchFlag = true;
+                player.velocity.Y = -launchSpeed * launchSpeedMultiplier;
+                player.launchFlag = true;
             }
         }
 

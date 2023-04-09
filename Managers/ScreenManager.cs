@@ -137,6 +137,7 @@ namespace Adventure
 
         public ColliderManager colliderManager;
         public InputManager inputManager;
+        public AssetManager assetManager;
 
         public KeyboardState keyboardState = new KeyboardState();
         public KeyboardState oldKeyboardState = new KeyboardState();
@@ -149,30 +150,17 @@ namespace Adventure
         public int DoorNumberToMoveTo = 0;
 
 
-        public ScreenManager(SpriteBatch spriteBatch)
-        {
-            this.spriteBatch = spriteBatch;
+     
 
-            player = new Player(new Vector2(8, 0), "hoodedoldmanv2", colliderManager, inputManager);
-
-
-            References.ScreenNumber = this.ScreenNumber;
-            References.PreviousScreenNumber = this.ScreenNumber;
-
-        }
-
-        public ScreenManager(SpriteBatch spriteBatch, ColliderManager colliderManager, InputManager inputManager)
+        public ScreenManager(SpriteBatch spriteBatch, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager)
         {
             this.spriteBatch = spriteBatch;
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
+            this.assetManager = assetManager;
 
-            player = new Player(new Vector2(8, 0), "hoodedoldmanv2", colliderManager, inputManager);
+            player = new Player(new Vector2(8, 0), "hoodedoldmanv2", assetManager, colliderManager, inputManager, this);
 
-
-
-            References.ScreenNumber = this.ScreenNumber;
-            References.PreviousScreenNumber = this.ScreenNumber;
             this.inputManager = inputManager;
         }
 
@@ -189,7 +177,7 @@ namespace Adventure
                 if (screen != null)
                 {
                     //Debug.WriteLine("here");
-                    screen.LoadContent(content, graphicsDevice);
+                    screen.LoadContent();
                     screen.Hide();
                 }
             }
@@ -197,19 +185,17 @@ namespace Adventure
             activeScreen = screens[0];
             activeScreen.Show();
 
-            player.LoadContent(content, graphicsDevice);
-            player.bomb.LoadContent(content, graphicsDevice);
+            player.LoadContent();
+            player.bomb.LoadContent();
 
             foreach (Ribbon ribbon in player.ribbons)
             {
-                ribbon.LoadContent(content, graphicsDevice);
+                ribbon.LoadContent();
             }
 
             player.position = activeScreen.respawnPoint;
 
 
-            References.activeScreen = activeScreen;
-            References.player = player;
 
 
         }
@@ -224,7 +210,6 @@ namespace Adventure
             {
                 activeScreen.ChangeScreenFlag = false;
                 activeScreen = screens[ScreenNumber - 1];
-                References.activeScreen = activeScreen; // I do all collision w.r.t References.activeScreen so can't remove just yet - want to change this to just activeScreen by passing in references
                 DisableShowScreenTransition(screens[PreviousScreenNumber - 1], screens[ScreenNumber - 1]);
                 player.position.X = activeScreen.screenDoors[DoorNumberToMoveTo - 1].position.X;
                 player.position.Y = activeScreen.screenDoors[DoorNumberToMoveTo - 1].position.Y;
@@ -282,11 +267,11 @@ namespace Adventure
 
             for (int i = 1; i <= 2; i++)
             {
-                ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), colliderManager, inputManager, this, player);
+                ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), assetManager, colliderManager, inputManager, this, player);
                 level.LoadContent(content, graphicsDevice);
 
                 screens.Add(
-                    new ActionScreen(spriteBatch, menuFont, player, level.gameObjects, level.backgroundObjects, keyboardState, oldKeyboardState)
+                    new ActionScreen(spriteBatch, menuFont, player, level.gameObjects, level.backgroundObjects)
                     {
                         respawnPoint = new Vector2(8 * 19, 8 * 8),
                         screenNumber = i,
