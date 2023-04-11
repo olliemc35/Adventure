@@ -19,13 +19,14 @@ namespace Adventure
         public int numberOfOrbs;
         public int indexOfOrbClosestToStart = 0;
 
-        public DiagonalOrbsPattern2(Vector2 startStream, Vector2 endStream, float horizontalSpacing, float verticalSpacing, float speed, SoundManager soundManager, AssetManager assetManager, Player player) : base()
+        public DiagonalOrbsPattern2(Vector2 startStream, Vector2 endStream, float horizontalSpacing, float verticalSpacing, float speed, SoundManager soundManager, AssetManager assetManager, ColliderManager colliderManager, Player player) : base()
         {
             this.horizontalSpacing = horizontalSpacing;
             this.verticalSpacing = verticalSpacing;
             this.startStream = startStream;
             this.soundManager = soundManager;
             this.assetManager = assetManager;
+            this.colliderManager = colliderManager;
             this.player = player;
 
             // This is minimum number
@@ -48,7 +49,7 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y;
                     endPosition.Y = endStream.Y;
-                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighCBell", soundManager, assetManager, player);
+                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighCBell", soundManager, assetManager, colliderManager, player);
                     orbs.Add(orb);
 
                 }
@@ -56,14 +57,14 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y - 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 8 * verticalSpacing;
-                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighEflatBell", soundManager, assetManager, player);
+                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighEflatBell", soundManager, assetManager, colliderManager, player);
                     orbs.Add(orb);
                 }
                 else if (i % 3 == 2)
                 {
                     startPosition.Y = startStream.Y - 2 * 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 2 * 8 * verticalSpacing;
-                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighGBell", soundManager, assetManager, player);
+                    MusicalMovingPlatformNoLoop orb = new MusicalMovingPlatformNoLoop(startPosition, "RedSquare", endPosition, 0, speed, "HighGBell", soundManager, assetManager, colliderManager, player);
                     orbs.Add(orb);
                 }
 

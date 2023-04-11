@@ -14,7 +14,7 @@ namespace Adventure
 
         }
 
-        public MovingPlatformOneLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, player, delay, attachedGameObjects)
+        public MovingPlatformOneLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, colliderManager, player, delay, attachedGameObjects)
         {
             timeStationaryCounter = timeStationaryAtEndPoints;
         }

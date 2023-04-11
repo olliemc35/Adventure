@@ -25,7 +25,10 @@ namespace Adventure
         public Vector2 animationPosition;
 
         // If the object can be climbed upon this will be set to true
-        public bool climable = false;
+        public bool Climable = false;
+
+        // If the object is a hazard - i.e. kills player on contact - this will be set to true
+        public bool Hazard = false;
 
         // Every sprite will have a list of hitboxes (nearly all sprites will only have a single one)
         public List<HitboxRectangle> hitboxes = new List<HitboxRectangle>();
@@ -103,7 +106,7 @@ namespace Adventure
             idleHitbox.texture = assetManager.hitboxTexture;
             hitboxes.Add(idleHitbox);
 
-            if (climable)
+            if (Climable)
             {
                 idleHitbox.isActive = true;
             }
@@ -123,9 +126,14 @@ namespace Adventure
             animation_playing.Update(gameTime);
             animationPosition = FindNearestIntegerVector(position);
 
-            if (climable)
+            if (Climable)
             {
                 UpdateClimable();
+            }
+
+            if (Hazard)
+            {
+                UpdateHazard();
             }
         }
 
@@ -236,6 +244,19 @@ namespace Adventure
                 }
             }
 
+        }
+
+        public void UpdateHazard()
+        {
+            if (!player.playerStateManager.deadState.Active)
+            {
+                if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
+                {
+                    player.Dead = true;
+                    player.playerStateManager.DeactivatePlayerStates();
+                    player.playerStateManager.deadState.Activate();
+                }
+            }
         }
     }
 }

@@ -13,26 +13,21 @@ using System.Xml;
 
 namespace Adventure
 {
-    public class Spike : Hazard
+    public class Spike : AnimatedGameObject
     {
 
-        public Spike(Vector2 initialPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition, filename, assetManager, colliderManager, player)
+        public Spike(Vector2 initialPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition, filename, assetManager, colliderManager)
         {
+            this.player = player;
+            Hazard = true;
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
             idleHitbox.isActive = true;
-
             
         }
 
-
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-            
-        }
     }
 }

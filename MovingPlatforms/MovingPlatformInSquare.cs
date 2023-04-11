@@ -13,7 +13,7 @@ namespace Adventure
         public int indexOfCurrentStartPosition = 0;
 
 
-        public MovingPlatformInSquare(Vector2 firstPosition, string filename, Vector2 secondPosition, Vector2 thirdPosition, Vector2 fourthPosition, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(firstPosition, filename, secondPosition, timeStationaryAtEndPoints, speed, assetManager, player, delay, attachedGameObjects)
+        public MovingPlatformInSquare(Vector2 firstPosition, string filename, Vector2 secondPosition, Vector2 thirdPosition, Vector2 fourthPosition, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(firstPosition, filename, secondPosition, timeStationaryAtEndPoints, speed, assetManager, colliderManager, player, delay, attachedGameObjects)
         {
 
             positions.Add(firstPosition);

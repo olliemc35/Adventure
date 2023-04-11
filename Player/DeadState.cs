@@ -20,7 +20,6 @@ namespace Adventure
         {
             if (enterStateFlag)
             {
-                Debug.WriteLine("here");
                 player.UpdatePlayingAnimation(player.animation_Dead, 1);
                 enterStateFlag = false;
             }

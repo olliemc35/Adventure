@@ -17,7 +17,7 @@ namespace Adventure
         public bool moveHorizontally = false;
         public bool moveVertically = false;
 
-        public Gate(Vector2 initialPosition, string filename, Vector2 endPosition, AssetManager assetManager, Player player) : base(initialPosition, filename, endPosition, 0, 1, assetManager, player)
+        public Gate(Vector2 initialPosition, string filename, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition, filename, endPosition, 0, 1, assetManager, colliderManager, player)
         {
 
         }

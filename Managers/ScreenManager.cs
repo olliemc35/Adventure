@@ -262,10 +262,15 @@ namespace Adventure
 
         public void CreateScreens(ContentManager content, GraphicsDevice graphicsDevice)
         {
+            
             screens = new List<GameScreen>();
+            //ActionScreenBuilder level = new ActionScreenBuilder("levelTest2", assetManager, colliderManager, inputManager, this, player, 2, 2);
+            //level.LoadContent(content, graphicsDevice);
 
 
-            for (int i = 1; i <= 2; i++)
+
+
+            for (int i = 3; i <= 3; i++)
             {
                 ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), assetManager, colliderManager, inputManager, this, player);
                 level.LoadContent(content, graphicsDevice);

@@ -60,11 +60,18 @@ namespace Adventure
 
         }
 
-        public MovingPlatform(Vector2 startPosition, string filename, Vector2 endPosition, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, Player player, float delay = 0, List<GameObject> spritesOnPlatform = null) : base(startPosition, filename, assetManager)
+        public MovingPlatform(Vector2 initialPosition, string filename, AssetManager assetManager) : base(initialPosition, filename, assetManager)
+        {
+            CollisionObject = true;
+            beforeDelay = false;
+        }
+
+        public MovingPlatform(Vector2 startPosition, string filename, Vector2 endPosition, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, float delay = 0, List<GameObject> spritesOnPlatform = null) : base(startPosition, filename, assetManager)
         {
             CollisionObject = true;
             beforeDelay = false;
             this.attachedGameObjects = spritesOnPlatform;
+            this.colliderManager = colliderManager;
 
             this.startPosition = startPosition;
             this.endPosition = endPosition;

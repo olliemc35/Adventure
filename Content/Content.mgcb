@@ -114,6 +114,11 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Level2.aseprite;Level2.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/Level3.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level3.aseprite;Level3.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/Level36.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -128,6 +133,21 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Level37Markers.aseprite;Level37Markers.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level3Test.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level3Test.aseprite;Level3Test.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/levelTest.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/levelTest.aseprite;levelTest.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/levelTest2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/levelTest2.aseprite;levelTest2.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/MovingClimablePlatform.aseprite
 /importer:AsepriteFileContentImporter

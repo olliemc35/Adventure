@@ -13,11 +13,11 @@ namespace Adventure
     {
         public List<MovingPlatformNoLoop> platforms;
 
-        public SeriesOfMovingPlatformNoLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, int number, AssetManager assetManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null)
+        public SeriesOfMovingPlatformNoLoop(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, int number, AssetManager assetManager, ColliderManager colliderManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null)
         {
             for (int i = 0; i < number; i++)
             {
-                platforms.Add(new MovingPlatformNoLoop(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, player, delay, attachedGameObjects));
+                platforms.Add(new MovingPlatformNoLoop(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, colliderManager, player, delay, attachedGameObjects));
             }
         }
 
