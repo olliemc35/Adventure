@@ -16,24 +16,16 @@ namespace Adventure
     {
         public Key key;
 
-        public List<GameObject> attachedGameObjects;
-
         public string symbolFilename;
 
-        public List<MovingPlatformOneLoop> movingPlatformsOneLoop;
-        public List<MovingPlatformNoLoop> movingPlatformsNoLoop;
-        public List<MovingPlatformHalfLoop> movingPlatformsHalfLoop;
-        public NoteShip noteShip;
         public int displacementScalingForNoteShip;
 
-        public List<Gate> gates;
         public LaunchPad launchPad;
 
         public float orbSpeed;
         public string orbFilename;
 
 
-        public List<int> indicesOfAttachedGates = new List<int>();
 
         public bool ribbonAttached = false;
         public Vector2 ribbonPosition = new Vector2();
@@ -69,6 +61,8 @@ namespace Adventure
             attachedGameObjects = gameObjects;
             orbSpeed = speedOfOrb;
             this.orbFilename = orbFilename;
+
+            attachedGameObjects = new List<GameObject>();
         }
 
 

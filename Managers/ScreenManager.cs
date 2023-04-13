@@ -138,6 +138,7 @@ namespace Adventure
         public ColliderManager colliderManager;
         public InputManager inputManager;
         public AssetManager assetManager;
+        public SoundManager soundManager;
 
         public KeyboardState keyboardState = new KeyboardState();
         public KeyboardState oldKeyboardState = new KeyboardState();
@@ -152,7 +153,7 @@ namespace Adventure
 
      
 
-        public ScreenManager(SpriteBatch spriteBatch, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager)
+        public ScreenManager(SpriteBatch spriteBatch, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, SoundManager soundManager)
         {
             this.spriteBatch = spriteBatch;
             this.colliderManager = colliderManager;
@@ -162,6 +163,7 @@ namespace Adventure
             player = new Player(new Vector2(8, 0), "hoodedoldmanv2", assetManager, colliderManager, inputManager, this);
 
             this.inputManager = inputManager;
+            this.soundManager = soundManager;
         }
 
 
@@ -182,7 +184,7 @@ namespace Adventure
                 }
             }
 
-            activeScreen = screens[0];
+            activeScreen = screens[5];
             activeScreen.Show();
 
             player.LoadContent();
@@ -270,15 +272,17 @@ namespace Adventure
 
 
 
-            for (int i = 3; i <= 3; i++)
+            for (int i = 1; i <= 6; i++)
             {
-                ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), assetManager, colliderManager, inputManager, this, player);
+                //ActionScreenBuilder level = new ActionScreenBuilder("Level1_TEST", assetManager, colliderManager, inputManager, this, soundManager, player);
+
+                ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), assetManager, colliderManager, inputManager, this, soundManager, player);
                 level.LoadContent(content, graphicsDevice);
 
                 screens.Add(
-                    new ActionScreen(spriteBatch, menuFont, player, level.gameObjects, level.backgroundObjects)
+                    new ActionScreen(spriteBatch, menuFont, player, level.gameObjectsAsList, level.backgroundObjects)
                     {
-                        respawnPoint = new Vector2(8 * 19, 8 * 8),
+                        respawnPoint = new Vector2(8 * 8, 8 * 8),
                         screenNumber = i,
                         cameraBehaviourType1 = true
                     });

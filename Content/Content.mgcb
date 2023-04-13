@@ -104,6 +104,11 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/LaunchPad.aseprite;LaunchPad.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/Level1_TEST.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level1_TEST.aseprite;Level1_TEST.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/Level1.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -138,6 +143,21 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Level3Test.aseprite;Level3Test.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level4.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level4.aseprite;Level4.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level5.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level5.aseprite;Level5.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level6.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level6.aseprite;Level6.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/levelTest.aseprite
 /importer:AsepriteFileContentImporter

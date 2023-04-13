@@ -40,6 +40,9 @@ namespace Adventure
         // Some GameObjects will need a reference to the player - e.g. doors, spikes etc.
         public Player player;
 
+        // Some GameObejcts will need a reference to a list of other GameObjects - e.g. notes may need reference to gates, moving platforms need reference to any GameObjects on the platform (so they move at the same time) etc.
+        public List<GameObject> attachedGameObjects;
+
         public GameObject()
         {
         }

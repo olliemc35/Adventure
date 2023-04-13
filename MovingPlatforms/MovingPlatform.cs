@@ -43,27 +43,27 @@ namespace Adventure
 
         public bool movePlayerToo = false;
 
-        public List<GameObject> attachedGameObjects;
 
 
 
         public MovingPlatform() : base()
         {
             CollisionObject = true;
-
+            attachedGameObjects = new List<GameObject>();
         }
 
         public MovingPlatform(Vector2 initialPosition) : base(initialPosition)
         {
             CollisionObject = true;
             beforeDelay = false;
-
+            attachedGameObjects = new List<GameObject>();
         }
 
         public MovingPlatform(Vector2 initialPosition, string filename, AssetManager assetManager) : base(initialPosition, filename, assetManager)
         {
             CollisionObject = true;
             beforeDelay = false;
+            attachedGameObjects = new List<GameObject>();
         }
 
         public MovingPlatform(Vector2 startPosition, string filename, Vector2 endPosition, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, float delay = 0, List<GameObject> spritesOnPlatform = null) : base(startPosition, filename, assetManager)
@@ -72,6 +72,7 @@ namespace Adventure
             beforeDelay = false;
             this.attachedGameObjects = spritesOnPlatform;
             this.colliderManager = colliderManager;
+            attachedGameObjects = new List<GameObject>();
 
             this.startPosition = startPosition;
             this.endPosition = endPosition;

@@ -81,8 +81,8 @@ namespace Adventure
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
             assetManager.LoadContent(Content, GraphicsDevice);
-            screenManager = new ScreenManager(spriteBatch, assetManager, colliderManager, inputManager);
             soundManager.LoadContent(Content);
+            screenManager = new ScreenManager(spriteBatch, assetManager, colliderManager, inputManager, soundManager);
             screenManager.LoadScreens(Content, GraphicsDevice);
 
         }

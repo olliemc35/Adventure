@@ -16,6 +16,7 @@ namespace Adventure
         public int ScreenNumberToMoveTo;
         public int DoorNumberToMoveTo;
 
+
         public Door(Vector2 initialPosition, string filename, int x, int y, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player) : base(initialPosition, filename, assetManager)
         {
             ScreenNumberToMoveTo = x;
