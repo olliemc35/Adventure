@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class NoteShip : MovingPlatform
+    public class NoteShip : MovingPlatformLooping
     {
         public int displacement;
         public int displacementScaling = 0;

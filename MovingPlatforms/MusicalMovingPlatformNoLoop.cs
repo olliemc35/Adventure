@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Adventure
 {
-    public class MusicalMovingPlatformNoLoop : MovingPlatform
+    public class MusicalMovingPlatformNoLoop : MovingPlatformLooping
     {
         public string noteValue;
         public bool hitFlag;

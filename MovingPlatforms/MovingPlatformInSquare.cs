@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class MovingPlatformInSquare : MovingPlatform
+    public class MovingPlatformInSquare : MovingPlatformLooping
     {
         public List<Vector2> positions = new List<Vector2>();
         public int indexOfCurrentStartPosition = 0;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class MovingPlatformOneLoop : MovingPlatform
+    public class MovingPlatformOneLoop : MovingPlatformLooping
     {
         public MovingPlatformOneLoop(Vector2 initialPosition) : base(initialPosition)
         {

@@ -59,7 +59,7 @@ namespace Adventure
         public Color color_MovingPlatformPreMultiplyAlpha;
         public Color color_BeamPreMultiplyAlpha;
 
-        public Color color_Add4Y = new Color(255, 255, 156, 255);
+        public Color color_AdjustPosition = new Color(255, 255, 156, 255);
 
 
         public Color color_NoteTrigger1 = new Color(255, 0, 255, 255);
@@ -97,6 +97,7 @@ namespace Adventure
             gameObjectDictionary.Add(new Color(255, 255, 255, 255), "Spike"); // White
             gameObjectDictionary.Add(new Color(41, 20, 52, 255), "movingPlatform1"); // Very dark purple
             gameObjectDictionary.Add(new Color(72, 37, 91, 255), "movingPlatformHalfLoop"); // Dark purple
+            gameObjectDictionary.Add(new Color(97, 52, 121, 255), "movingPlatformNoLoopSeries"); // Purple
             gameObjectDictionary.Add(new Color(104, 104, 104, 255), "LaunchPad"); // Grey
             gameObjectDictionary.Add(new Color(192, 0, 0, 255), "CKeyRound"); // Reds ...
             gameObjectDictionary.Add(new Color(240, 0, 0, 255), "FKeyRound");
@@ -143,9 +144,13 @@ namespace Adventure
                 {
                     HandleGameObjectLayer(layer, data[layer]);
                 }
-                else if (layer.Name == "AdjustByFour")
+                else if (layer.Name == "AdjustHorizontal")
                 {
-                    HandleAdjustByFourLayer(layer, data[layer]);
+                    HandleAdjustHorizontalLayer(layer, data[layer]);
+                }
+                else if (layer.Name == "AdjustVertical")
+                {
+                    HandleAdjustVerticalLayer(layer, data[layer]);
                 }
                 else if (layer.Name.Contains("NoteTriggers"))
                 {
@@ -225,13 +230,21 @@ namespace Adventure
                         {
                             int[] ints = ParseMovingPlatformString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatform(position, "movingPlatform1", endPosition, ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
+                            gameObjects[i, j] = new MovingPlatformLooping2(position, endPosition, "movingPlatform1", ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
+                            //gameObjects[i, j] = new MovingPlatformLooping(position, "movingPlatform1", endPosition, ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "movingPlatformHalfLoop")
                         {
                             int[] ints = ParseMovingPlatformString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatformHalfLoop(position, "movingPlatform1", endPosition, ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
+                            gameObjects[i, j] = new MovingPlatformHalfLoop(position, endPosition, "movingPlatform1", 1, assetManager, colliderManager, player, null);
+                            //gameObjects[i, j] = new MovingPlatformHalfLoop(position, "movingPlatform1", endPosition, ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
+                        }
+                        else if (gameObjectDictionary[colors[i,j]] == "movingPlatformNoLoopSeries")
+                        {
+                            int[] ints = ParseSeriesOfMovingPlatformString(ref info);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
+                            gameObjects[i, j] = new SeriesOfMovingPlatformNoLoop(position, "movingPlatform1", endPosition, ints[1], ints[2], ints[4], ints[5], assetManager, colliderManager, player, ints[3], null);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "FKeyRound")
                         {
@@ -249,7 +262,7 @@ namespace Adventure
                         {
                             int[] ints = ParseBeamString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_BeamPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new Beam(position, endPosition, assetManager, colliderManager, screenManager);
+                            gameObjects[i, j] = new Beam(position, endPosition, assetManager, colliderManager, screenManager, player);
                         }
                     }
 
@@ -260,23 +273,101 @@ namespace Adventure
         }
 
 
-        public void HandleAdjustByFourLayer(AsepriteLayer layer, Color[,] colors)
+        public void HandleAdjustHorizontalLayer(AsepriteLayer layer, Color[,] colors)
         {
+            string info = layer.UserData.Text;
+            List<int> ints = ParseAdjustString(ref info);
+            int index = 0;
+            //Debug.WriteLine(ints[1]);
+
             for (int i = 0; i < colors.GetLength(0); i++)
             {
                 for (int j = 0; j < colors.GetLength(1); j++)
                 {
-                    if (colors[i, j] == color_Add4Y)
+                    if (colors[i, j] == color_AdjustPosition)
                     {
+
                         if (gameObjects[i, j] is AnimatedGameObject test)
                         {
-                            test.position.Y += 4;
+
+                            test.position.X += ints[index];
+
+                            if (test is MovingPlatformLooping platform)
+                            {
+                                platform.startPosition.X += ints[index];
+                            }
+
+                            index += 1;
+
+
                         }
+
+                        if (gameObjects[i,j] is SeriesOfMovingPlatformNoLoop series)
+                        {
+
+                            foreach (MovingPlatformNoLoop platform in series.platforms)
+                            {
+                                platform.startPosition.X += ints[index];
+                                platform.endPosition.X += ints[index + 1];
+                                platform.position.X += ints[index];
+
+                            }
+
+                            index += 2;
+
+                        }
+
+
+
+
                     }
 
                 }
             }
         }
+
+        public void HandleAdjustVerticalLayer(AsepriteLayer layer, Color[,] colors)
+        {
+            string info = layer.UserData.Text;
+            List<int> ints = ParseAdjustString(ref info);
+            int index = 0;
+
+            for (int i = 0; i < colors.GetLength(0); i++)
+            {
+                for (int j = 0; j < colors.GetLength(1); j++)
+                {
+                    if (colors[i, j] == color_AdjustPosition)
+                    {
+                        if (gameObjects[i, j] is AnimatedGameObject test)
+                        {
+                            test.position.Y += ints[index];
+
+                            if (test is MovingPlatformLooping platform)
+                            {
+                                platform.startPosition.Y += ints[index];
+                            }
+
+                        }                       
+                        
+                        if (gameObjects[i, j] is SeriesOfMovingPlatformNoLoop series)
+                        {
+                            foreach (MovingPlatformNoLoop platform in series.platforms)
+                            {
+                                platform.startPosition.Y += ints[index];
+                                platform.endPosition.Y += ints[index + 1];
+                                platform.position.Y += ints[index];
+
+                            }
+                        }
+
+                        index += 1;
+
+                    }
+
+                }
+            }
+        }
+
 
         // This is a generic method - we feed in a parameter Type T and behaviour can alter depending on the value of T
         public void FormAttachments<T>(List<List<GameObject>> list)
@@ -291,6 +382,19 @@ namespace Adventure
                         {
                             if (gameObject1 is not T)
                             {
+
+                                //if (gameObject.GetType() == typeof(Note))
+                                //{
+                                //    gameObject1.playerControlled = true;
+                                //}
+                                //if (typeof(T) is Note)
+                                //{
+                                //    if (typeof(gameObject1) is MovingPlatform)
+                                //    {
+                                //        // gameObject1.PlayerControlled = true;
+                                //    }
+                                //}
+
                                 gameObject.attachedGameObjects.Add(gameObject1);
                             }
                         }
@@ -303,6 +407,7 @@ namespace Adventure
 
         public void HandleNoteTriggerLayer(AsepriteLayer layer, Color[,] colors)
         {
+
 
             for (int i = 0; i < colors.GetLength(0); i++)
             {
@@ -356,7 +461,7 @@ namespace Adventure
         {
             stringToAdd += str[0];
 
-            for (int i = 1; i <= 2; i++)
+            for (int i = 1; i <= Math.Min(str.Count() - 1, 10); i++)
             {
                 if (str[i] != ',')
                 {
@@ -369,6 +474,30 @@ namespace Adventure
                 }
             }
         }
+
+        public List<int> ParseAdjustString(ref string adjust)
+        {
+            List<int> result = new List<int>();
+
+            for (int k = 0; k < 10; k++)
+            {
+                if (adjust.Count() > 0)
+                {
+                    string test = "";
+                    ParseUntilNextComma(ref test, ref adjust);
+                    result.Add(int.Parse(test));
+
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return result;
+
+        }
+
 
         // We pass in a string by reference as we want the original input to be modified 
         // This is important as when we loop over on to other doors on the screen we want the string to change
@@ -386,9 +515,6 @@ namespace Adventure
             result[1] = int.Parse(doorNumber);
 
             return result;
-
-
-
 
         }
 
@@ -419,6 +545,39 @@ namespace Adventure
 
         }
 
+        public int[] ParseSeriesOfMovingPlatformString(ref string platform)
+        {
+            string direction = "";
+            string timeStationaryAtEndPoints = "";
+            string speed = "";
+            string delay = "";
+            string number = "";
+            string horizontalSpacing = "";
+
+            direction += platform[0];
+            platform = platform.Remove(0, 2);
+
+            ParseUntilNextComma(ref timeStationaryAtEndPoints, ref platform);
+            ParseUntilNextComma(ref speed, ref platform);
+            ParseUntilNextComma(ref delay, ref platform);
+            ParseUntilNextComma(ref number, ref platform);
+            ParseUntilNextComma(ref horizontalSpacing, ref platform);
+
+
+            int[] result = new int[6];
+            result[0] = int.Parse(direction);
+            result[1] = int.Parse(timeStationaryAtEndPoints);
+            result[2] = int.Parse(speed);
+            result[3] = int.Parse(delay);
+            result[4] = int.Parse(number);
+            result[5] = int.Parse(horizontalSpacing);
+
+            return result;
+
+
+        }
+
+
         public int[] ParseBeamString(ref string beam)
         {
             int[] result = new int[1];
@@ -426,7 +585,9 @@ namespace Adventure
             return result;
         }
 
-       
+
+        
+
 
         public Vector2 FindEndPointForGameObject(Color[,] colors, Color color, int i, int j, int direction)
         {

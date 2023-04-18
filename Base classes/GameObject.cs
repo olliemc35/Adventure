@@ -40,8 +40,11 @@ namespace Adventure
         // Some GameObjects will need a reference to the player - e.g. doors, spikes etc.
         public Player player;
 
-        // Some GameObejcts will need a reference to a list of other GameObjects - e.g. notes may need reference to gates, moving platforms need reference to any GameObjects on the platform (so they move at the same time) etc.
+        // Some GameObjects will need a reference to a list of other GameObjects - e.g. notes may need reference to gates, moving platforms need reference to any GameObjects on the platform (so they move at the same time) etc.
         public List<GameObject> attachedGameObjects;
+
+        // Some GameObjects e.g. moving platforms can either be controlled by the player (via a Note) or act according to themselves. This bool determines which case is true.
+        public bool playerControlled = false;
 
         public GameObject()
         {

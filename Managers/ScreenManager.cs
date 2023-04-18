@@ -184,7 +184,7 @@ namespace Adventure
                 }
             }
 
-            activeScreen = screens[5];
+            activeScreen = screens[4];
             activeScreen.Show();
 
             player.LoadContent();
@@ -282,7 +282,7 @@ namespace Adventure
                 screens.Add(
                     new ActionScreen(spriteBatch, menuFont, player, level.gameObjectsAsList, level.backgroundObjects)
                     {
-                        respawnPoint = new Vector2(8 * 8, 8 * 8),
+                        respawnPoint = new Vector2(8 * 1, 8 * 1),
                         screenNumber = i,
                         cameraBehaviourType1 = true
                     });

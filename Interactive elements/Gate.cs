@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Gate : MovingPlatform
+    public class Gate : MovingPlatformLooping
     {
         public bool open = false;
         public bool opened = false;

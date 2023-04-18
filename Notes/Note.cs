@@ -41,6 +41,9 @@ namespace Adventure
         public bool flagPlayerInteractedWith = false;
         public bool movePlatform = false;
         public bool symbolTurnedOn = false;
+
+        public bool changeDirection = true;
+
         int counter = 0;
 
         public List<int> indicesToRemove = new List<int>();
@@ -229,36 +232,78 @@ namespace Adventure
                     }
                     else if (gameObject is SeriesOfMovingPlatformNoLoop movingPlatformsNoLoop)
                     {
-                        int indexofFirstPlatformNotMoving = -1;
 
-                        for (int i = 0; i < movingPlatformsNoLoop.platforms.Count; i++)
+                        if (changeDirection)
                         {
-                            if (movingPlatformsNoLoop.platforms[i].horizontalMovement)
+                            int test2 = 0;
+                            for (int k = 0; k< movingPlatformsNoLoop.numberOfPlatforms; k++)
                             {
-                                if (movingPlatformsNoLoop.platforms[i].position.X == movingPlatformsNoLoop.platforms[i].startPosition.X)
+                                if (movingPlatformsNoLoop.platforms[k].movePlatform)
                                 {
-                                    indexofFirstPlatformNotMoving = i;
+                                    test2 = k;
+                                }
+                                else
+                                {
                                     break;
                                 }
                             }
-                            else
-                            {
-                                if (movingPlatformsNoLoop.platforms[i].position.Y == movingPlatformsNoLoop.platforms[i].startPosition.Y)
-                                {
-                                    indexofFirstPlatformNotMoving = i;
-                                    break;
-                                }
-                            }
-                        }
 
-                        if (indexofFirstPlatformNotMoving == -1)
-                        {
-                            // do nothing - I need to supply more platforms so this doesn't happen
-                            Debug.WriteLine("SUPPLY MORE PLATFORMS");
+                            movingPlatformsNoLoop.indexOfPlatformClosestToStart = (test2 + 1) % movingPlatformsNoLoop.numberOfPlatforms;
+                            movingPlatformsNoLoop.platforms[movingPlatformsNoLoop.indexOfPlatformClosestToStart].movePlatform = true;
+
+                            foreach (MovingPlatformNoLoop platform in movingPlatformsNoLoop.platforms)
+                            {
+                                if (platform.movingRight)
+                                {
+                                    platform.movingRight = false;
+                                    platform.movingLeft = true;
+                                }
+                                else
+                                {
+                                    platform.movingRight = true;
+                                    platform.movingLeft = false;
+                                }
+
+                                Vector2 test = platform.startPosition;
+                                platform.startPosition = platform.endPosition;
+                                platform.endPosition = test;
+
+                            }
                         }
                         else
                         {
-                            movingPlatformsNoLoop.platforms[indexofFirstPlatformNotMoving].movePlatform = true;
+
+                            int indexofFirstPlatformNotMoving = -1;
+
+                            for (int i = 0; i < movingPlatformsNoLoop.platforms.Count; i++)
+                            {
+                                if (movingPlatformsNoLoop.platforms[i].horizontalMovement)
+                                {
+                                    if (movingPlatformsNoLoop.platforms[i].position.X == movingPlatformsNoLoop.platforms[i].startPosition.X)
+                                    {
+                                        indexofFirstPlatformNotMoving = i;
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (movingPlatformsNoLoop.platforms[i].position.Y == movingPlatformsNoLoop.platforms[i].startPosition.Y)
+                                    {
+                                        indexofFirstPlatformNotMoving = i;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (indexofFirstPlatformNotMoving == -1)
+                            {
+                                // do nothing - I need to supply more platforms so this doesn't happen
+                                Debug.WriteLine("SUPPLY MORE PLATFORMS");
+                            }
+                            else
+                            {
+                                movingPlatformsNoLoop.platforms[indexofFirstPlatformNotMoving].movePlatform = true;
+                            }
                         }
                     }
                     else if (gameObject is NoteShip noteShip)

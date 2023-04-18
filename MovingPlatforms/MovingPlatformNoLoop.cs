@@ -1,13 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class MovingPlatformNoLoop : MovingPlatform
+    public class MovingPlatformNoLoop : MovingPlatformLooping
     {
         public MovingPlatformNoLoop(Vector2 initialPosition) : base(initialPosition)
         {
@@ -22,40 +23,77 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            if (movePlatform)
-            {
-                if (delayCounter < delay)
-                {
-                    delayCounter += 1;
-                }
-                else
-                {
-                    base.Update(gameTime);
+            //if (playerControlled)
+            //{
 
-                    if (horizontalMovement)
+                if (movePlatform)
+                {
+                    if (delayCounter < delay)
                     {
-                        if (position.X == endPosition.X)
+                        delayCounter += 1;
+                    }
+                    else
+                    {
+                        base.Update(gameTime);
+
+                        if (horizontalMovement)
                         {
-                            movePlatform = false;
-                            timeStationaryCounter = 0;
-                            firstLoop = true;
-                            position.X = startPosition.X;
+                            if (position.X == endPosition.X)
+                            {
+                                movePlatform = false;
+                                timeStationaryCounter = 0;
+                                firstLoop = true;
+                                position.X = startPosition.X;
+                            }
+                        }
+                        else if (verticalMovement)
+                        {
+                            if (position.Y == endPosition.Y)
+                            {
+                                movePlatform = false;
+                                timeStationaryCounter = 0;
+                                firstLoop = true;
+                                position.Y = startPosition.Y;
+                            }
                         }
                     }
-                    else if (verticalMovement)
-                    {
-                        if (position.Y == endPosition.Y)
-                        {
-                            movePlatform = false;
-                            timeStationaryCounter = 0;
-                            firstLoop = true;
-                            position.Y = startPosition.Y;
-                        }
-                    }
+
+
                 }
+            //}
+            //else
+            //{
+            //        if (delayCounter < delay)
+            //        {
+            //            delayCounter += 1;
+            //        }
+            //        else
+            //        {
+            //            base.Update(gameTime);
+
+            //            if (horizontalMovement)
+            //            {
+            //                if (position.X == endPosition.X)
+            //                {
+            //                    timeStationaryCounter = 0;
+            //                    firstLoop = true;
+            //                    position.X = startPosition.X;
+            //                }
+            //            }
+            //            else if (verticalMovement)
+            //            {
+            //                if (position.Y == endPosition.Y)
+            //                {
+            //                    timeStationaryCounter = 0;
+            //                    firstLoop = true;
+            //                    position.Y = startPosition.Y;
+            //                }
+            //            }
+            //        }
 
 
-            }
+                
+            //}
 
 
 

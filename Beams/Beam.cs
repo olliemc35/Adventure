@@ -23,13 +23,14 @@ namespace Adventure
         public HitboxRectangle endHitbox;
 
 
-        public Beam(Vector2 startPosition, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager) : base()
+        public Beam(Vector2 startPosition, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base()
         {
             this.startPosition = startPosition;
             this.endPosition = endPosition;
             this.colliderManager = colliderManager;
             this.assetManager = assetManager;
             this.screenManager = screenManager;
+            this.player = player;
         }
 
         public override void LoadContent()
@@ -58,7 +59,7 @@ namespace Adventure
                     }
                     else
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam", assetManager));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam", assetManager, colliderManager, null, null, player) { Hazard = true });
                     }
                 }
 
@@ -86,7 +87,7 @@ namespace Adventure
                     }
                     else
                     {
-                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam", assetManager));
+                        listOfBeamSquares.Add(new AnimatedGameObject(location, "Beam", assetManager, colliderManager, null, null, player) { Hazard = true});
                     }
                 }
 

@@ -1,187 +1,283 @@
-﻿using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MonoGame.Aseprite.Sprites;
-
+using System.Collections.Generic;
 
 namespace Adventure
 {
     public class MovingPlatform : MovingGameObject
     {
-
+        // Every MovingPlatform will have a "moving" animation
         public AnimatedSprite animation_Moving;
 
-        public Vector2 startPosition;
-        public Vector2 endPosition;
-        public Vector2 positionOffset = new Vector2(0, 0);
-        public bool verticalMovement = false;
-        public bool horizontalMovement = false;
-        public bool movingRight = false;
-        public bool movingLeft = false;
-        public bool movingUp = false;
-        public bool movingDown = false;
-        public bool firstLoop = true;
+        // A MovingPlatform object can either move horizontally or vertically, in straight lines
+        public enum Direction
+        {
+            moveRight,
+            moveLeft,
+            moveUp,
+            moveDown,
+            stationary
+        };
+        public Direction direction;
 
-        public int timeStationaryAtEndPoints;
-        public float timeStationaryCounter = 0;
+        // It proves useful to keep track of our "global" direction.
+        public enum GlobalDirection
+        {
+            horizontal,
+            vertical
+        };
+        public GlobalDirection globalDirection;
 
+        // Every MovingPlatform will contain a list of positions it will travel to. There will always be at least two positions.
+        public List<Vector2> positions = new List<Vector2>();
+        // We will also give a list of ints corresponding to the indices we move to. At the end of the list we loop back to the start.
+        // E.g. suppose there are 3 positions. Then indexes = {0,1,2,1,2} means we go 0 - 1 - 2 - 1 - 2 - 0 - ... etc.
+        public List<int> indexes = new List<int>();
+        public int currentIndex = 0;
 
-        public float delay = 0;
-        public float delayCounter = 0;
-        public bool beforeDelay;
-
+        // Every MovingPlatform will have a speed
         public float speed;
 
-        // This is a trigger for the derived classes to use
+        // We may want the MovingPlatform to remain stationary for a few frames when it reaches the next position in the sequence
+        public int timeStationaryAtEndPoints; // counted in frames
+        public int timeStationaryCounter = 0;
+        public bool thereIsStationaryTime;
+
+        // We may want to delay the movement of the MovingPlatform for a few frames before any movement begins
+        public int delay = 0; // counted in frames
+        public int delayCounter = 0;
+        public bool thereIsADelay;
+
+        // There is a slightly annoying technicality with the code where we must treat the first time we UpdateStationaryPoints separately to the rest, hence we use this bool
+        public bool firstLoop = true;
+
+        // Certaing MovingPlatforms will have behaviour that is triggered by the player and we incorporate a trigger via this bool. (This is for derived classes to use.)
         public bool movePlatform = false;
 
 
-        public bool movePlayerToo = false;
 
 
 
-
-        public MovingPlatform() : base()
+        public MovingPlatform(List<Vector2> positions, List<int> indexes, string filename, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, int delay = 0, List<GameObject> spritesOnPlatform = null) : base(positions[0], filename, assetManager)
         {
             CollisionObject = true;
-            attachedGameObjects = new List<GameObject>();
-        }
 
-        public MovingPlatform(Vector2 initialPosition) : base(initialPosition)
-        {
-            CollisionObject = true;
-            beforeDelay = false;
-            attachedGameObjects = new List<GameObject>();
-        }
-
-        public MovingPlatform(Vector2 initialPosition, string filename, AssetManager assetManager) : base(initialPosition, filename, assetManager)
-        {
-            CollisionObject = true;
-            beforeDelay = false;
-            attachedGameObjects = new List<GameObject>();
-        }
-
-        public MovingPlatform(Vector2 startPosition, string filename, Vector2 endPosition, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, float delay = 0, List<GameObject> spritesOnPlatform = null) : base(startPosition, filename, assetManager)
-        {
-            CollisionObject = true;
-            beforeDelay = false;
-            this.attachedGameObjects = spritesOnPlatform;
-            this.colliderManager = colliderManager;
+            attachedGameObjects = spritesOnPlatform;
             attachedGameObjects = new List<GameObject>();
 
-            this.startPosition = startPosition;
-            this.endPosition = endPosition;
+            this.colliderManager = colliderManager;          
+            this.positions = positions;
+            this.indexes = indexes;
             this.timeStationaryAtEndPoints = timeStationaryAtEndPoints;
             this.speed = speed;
             this.delay = delay;
             this.player = player;
 
-            if (startPosition.X == endPosition.X)
+            if (delay == 0)
             {
-                verticalMovement = true;
-
-                if (startPosition.Y > endPosition.Y)
-                {
-                    movingUp = true;
-                }
-                else
-                {
-                    movingDown = true;
-                }
+                thereIsADelay = false;
             }
             else
             {
-                horizontalMovement = true;
-
-                if (startPosition.X < endPosition.X)
-                {
-                    movingRight = true;
-                }
-                else
-                {
-                    movingLeft = true;
-                }
-
+                thereIsADelay = true;
             }
 
+            if (timeStationaryAtEndPoints == 0)
+            {
+                thereIsStationaryTime = false;
+            }
+            else
+            {
+                thereIsStationaryTime = true;
+            }
+
+            // We configure our starting direction       
+            UpdateDirection(indexes[0], indexes[1]);
 
             deltaTime = 1f / 60;
-
+            
         }
 
-              
+
 
 
 
         public override void LoadContent()
         {
             base.LoadContent();
-
             animation_Moving = spriteSheet.CreateAnimatedSprite("Moving");
-            CollisionObject = true;
             idleHitbox.isActive = true;
-
-
         }
 
         public override void Update(GameTime gameTime)
         {
+            
 
-            if (beforeDelay)
+            if (thereIsADelay)
             {
                 if (delayCounter > delay)
                 {
-                    beforeDelay = false;
+                    thereIsADelay = false;
                 }
                 else
                 {
                     delayCounter += 1;
                 }
-            }
-            else
-            {
-                if (horizontalMovement)
-                {
-                    FindHorizontalVelocityAndDisplacement();
-                }
-                else
-                {
-                    FindVerticalVelocityAndDisplacement();
-                }
+
+                return;
             }
 
-
-
+            UpdateAtStationaryPoints();
+            UpdateVelocityAndDisplacement();
             position.X += displacement.X;
             position.X = FindNearestInteger(position.X);
             position.Y += displacement.Y;
             position.Y = FindNearestInteger(position.Y);
 
-            // This needs to be done BEFORE idleHitbox is updated
+            // The player check needs to be done BEFORE idleHitbox is updated
             if (colliderManager.CheckForEdgesMeeting(idleHitbox, player.idleHitbox))
-            {
-                movePlayerToo = true;
-            }
-            else
-            {
-                movePlayerToo = false;
-            }
-
-            idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
-            idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
-
-            if (movePlayerToo)
             {
                 player.position.X += displacement.X;
                 player.position.Y += displacement.Y;
                 player.velocityOffSetDueToMovingPlatform.X = velocity.X;
                 player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
             }
+
+            idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
+            idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
+
+            MoveAttachedGameObjects();
+            ManageAnimations();
+
+            base.Update(gameTime);
+
+        }
+
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            base.Draw(spriteBatch);
+        }
+
+        public virtual void UpdateAtStationaryPoints()
+        {
+            if (globalDirection == GlobalDirection.horizontal)
+            {
+                if (position.X == positions[indexes[currentIndex]].X || position.X == positions[indexes[(currentIndex + 1) % indexes.Count]].X)
+                {
+   
+                    if (thereIsStationaryTime && timeStationaryCounter < timeStationaryAtEndPoints)
+                    {
+                        timeStationaryCounter += 1;
+                        direction = Direction.stationary;
+                    }
+                    else if (!thereIsStationaryTime || (thereIsStationaryTime && timeStationaryCounter == timeStationaryAtEndPoints))
+                    {
+                        timeStationaryCounter = 0;
+                        if (firstLoop)
+                        {
+                            firstLoop = false;
+                        }
+                        else
+                        {
+                            currentIndex = (currentIndex + 1) % indexes.Count;
+                        }
+                        UpdateDirection(currentIndex, (currentIndex + 1) % indexes.Count);
+                    }
+
+                    //return;
+                }
+            }
+            else
+            {
+                if (position.Y == positions[indexes[currentIndex]].Y || position.Y == positions[indexes[(currentIndex + 1) % indexes.Count]].Y)
+                {
+
+                    if (thereIsStationaryTime && timeStationaryCounter < timeStationaryAtEndPoints)
+                    {
+                        timeStationaryCounter += 1;
+                        direction = Direction.stationary;
+                    }
+                    else if (!thereIsStationaryTime || (thereIsStationaryTime && timeStationaryCounter == timeStationaryAtEndPoints))
+                    {
+                        timeStationaryCounter = 0;
+                        if (firstLoop)
+                        {
+                            firstLoop = false;
+                        }
+                        else
+                        {
+                            currentIndex = (currentIndex + 1) % indexes.Count;
+                        }
+                        UpdateDirection(currentIndex, (currentIndex + 1) % indexes.Count);
+                    }
+
+                    //return;
+                }
+            }
+        }
+
+
+        public void UpdateVelocityAndDisplacement()
+        {
+            switch (direction)
+            {
+                case Direction.moveRight:
+                    {
+                        velocity.X = 60 * speed;
+                        velocity.Y = 0;
+                        break;
+                    }
+                case Direction.moveLeft:
+                    {
+                        velocity.X = -60 * speed;
+                        velocity.Y = 0;
+                        break;
+                    }
+                case Direction.moveUp:
+                    {
+                        velocity.X = 0;
+                        velocity.Y = -60 * speed;
+                        break;
+                    }
+                case Direction.moveDown:
+                    {
+                        velocity.X = 0;
+                        velocity.Y = 60 * speed;
+                        break;
+                    }
+                case Direction.stationary:
+                    {
+                        velocity.X = 0;
+                        velocity.Y = 0;
+                        break;
+                    }
+
+            }
+
+            displacement = velocity * deltaTime;
+        }
+
+
+
+
+        public override void ManageAnimations()
+        {
+            if (timeStationaryCounter == 0)
+            {
+                UpdatePlayingAnimation(animation_Moving);
+            }
+            else
+            {
+                UpdatePlayingAnimation(animation_Idle);
+            }
+
+        }
+
+
+        public void MoveAttachedGameObjects()
+        {
             if (attachedGameObjects != null)
             {
 
@@ -203,199 +299,38 @@ namespace Adventure
                     }
                 }
             }
-
-
-            base.Update(gameTime);
-            ManageAnimations();
-
-
-
-
-
-
         }
 
-
-        public override void Draw(SpriteBatch spriteBatch)
+        public void UpdateDirection(int currentIndex, int indexToMoveTo)
         {
-            base.Draw(spriteBatch);
-        }
-
-
-        public void FindHorizontalVelocityAndDisplacement()
-        {
-            if (position.X != endPosition.X && position.X != startPosition.X)
+            if (positions[currentIndex].X == positions[indexToMoveTo].X)
             {
-                if (movingRight)
+                globalDirection = GlobalDirection.vertical;
+
+                if (positions[currentIndex].Y > positions[indexToMoveTo].Y)
                 {
-                    velocity.X = 60 * speed;
-                    displacement.X = velocity.X * deltaTime;
-                }
-                else if (movingLeft)
-                {
-                    velocity.X = -60 * speed;
-                    displacement.X = velocity.X * deltaTime;
-                }
-
-                return;
-            }
-
-            if (timeStationaryAtEndPoints > 0)
-            {
-
-                if ((position.X == endPosition.X || position.X == startPosition.X) && timeStationaryCounter < timeStationaryAtEndPoints)
-                {
-
-                    velocity.X = 0;
-                    displacement.X = 0;
-                    timeStationaryCounter += 1;
-                    return;
-                }
-            }
-
-            if ((position.X == endPosition.X || position.X == startPosition.X) && timeStationaryCounter == timeStationaryAtEndPoints)
-            {
-                timeStationaryCounter = 0;
-
-                if (firstLoop)
-                {
-                    if (movingRight)
-                    {
-                        velocity.X = 60 * speed;
-                        displacement.X = velocity.X * deltaTime;
-                    }
-                    else if (movingLeft)
-                    {
-                        velocity.X = -60 * speed;
-                        displacement.X = velocity.X * deltaTime;
-                    }
-
-                    firstLoop = false;
-
+                    direction = Direction.moveUp;
                 }
                 else
                 {
-                    if (movingRight)
-                    {
-                        movingRight = false;
-                        movingLeft = true;
-                        velocity.X = -60 * speed;
-                        displacement.X = velocity.X * deltaTime;
-                    }
-                    else if (movingLeft)
-                    {
-                        movingLeft = false;
-                        movingRight = true;
-                        velocity.X = 60 * speed;
-                        displacement.X = velocity.X * deltaTime;
-                    }
+                    direction = Direction.moveDown;
                 }
-
-                return;
-            }
-        }
-
-        public void FindVerticalVelocityAndDisplacement()
-        {
-            if (position.Y != endPosition.Y && position.Y != startPosition.Y)
-            {
-                if (movingDown)
-                {
-                    positionOffset.Y = 1;
-                    velocity.Y = 60 * speed;
-                    displacement.Y = velocity.Y * deltaTime;
-                }
-                else if (movingUp)
-                {
-                    positionOffset.Y = -1;
-                    velocity.Y = -60 * speed;
-                    displacement.Y = velocity.Y * deltaTime;
-
-                }
-
-
-                return;
-            }
-
-            if (timeStationaryAtEndPoints > 0)
-            {
-                if ((position.Y == endPosition.Y || position.Y == startPosition.Y) && timeStationaryCounter < timeStationaryAtEndPoints)
-                {
-                    positionOffset.Y = 0;
-                    velocity.Y = 0;
-                    displacement.Y = 0;
-                    timeStationaryCounter += 1;
-                    return;
-                }
-            }
-
-
-            if ((position.Y == endPosition.Y || position.Y == startPosition.Y) && timeStationaryCounter == timeStationaryAtEndPoints)
-            {
-                timeStationaryCounter = 0;
-
-                if (firstLoop)
-                {
-                    if (movingDown)
-                    {
-                        positionOffset.Y = 1;
-                        velocity.Y = 60 * speed;
-                        displacement.Y = velocity.Y * deltaTime;
-                    }
-                    else if (movingUp)
-                    {
-                        positionOffset.Y = -1;
-                        velocity.Y = -60 * speed;
-                        displacement.Y = velocity.Y * deltaTime;
-                    }
-
-                    firstLoop = false;
-                }
-                else
-                {
-                    if (movingDown)
-                    {
-                        movingDown = false;
-                        movingUp = true;
-                        positionOffset.Y = -1;
-                        velocity.Y = -60 * speed;
-                        displacement.Y = velocity.Y * deltaTime;
-                    }
-                    else if (movingUp)
-                    {
-                        movingUp = false;
-                        movingDown = true;
-                        positionOffset.Y = 1;
-                        velocity.Y = 60 * speed;
-                        displacement.Y = velocity.Y * deltaTime;
-
-                    }
-
-                }
-
-                return;
-            }
-        }
-
-
-
-
-
-        public override void ManageAnimations()
-        {
-            if (timeStationaryCounter == 0)
-            {
-                UpdatePlayingAnimation(animation_Moving);
             }
             else
             {
-                UpdatePlayingAnimation(animation_Idle);
+                globalDirection = GlobalDirection.horizontal;
+
+                if (positions[currentIndex].X < positions[indexToMoveTo].X)
+                {
+                    direction = Direction.moveRight;
+                }
+                else
+                {
+                    direction = Direction.moveLeft;
+                }
+
             }
-
-
-
         }
-
 
     }
 }
