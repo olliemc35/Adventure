@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class Gate : MovingPlatformLooping
+    public class Gate : MovingPlatform
     {
         public bool open = false;
         public bool opened = false;
@@ -17,7 +17,7 @@ namespace Adventure
         public bool moveHorizontally = false;
         public bool moveVertically = false;
 
-        public Gate(Vector2 initialPosition, string filename, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(initialPosition, filename, endPosition, 0, 1, assetManager, colliderManager, player)
+        public Gate(Vector2 initialPosition, Vector2 endPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPosition }, new List<int>() { 0, 1 }, filename, 0, 1, 0, assetManager, colliderManager, player)
         {
 
         }
@@ -30,16 +30,16 @@ namespace Adventure
             {
                 base.Update(gameTime);
 
-                if (horizontalMovement)
+                if (globalDirection == GlobalDirection.horizontal)
                 {
-                    if (position.X == endPosition.X)
+                    if (position.X == positions[1].X)
                     {
                         opened = true;
                     }
                 }
-                else if (verticalMovement)
+                else if (globalDirection == GlobalDirection.vertical)
                 {
-                    if (position.Y == endPosition.Y)
+                    if (position.Y == positions[1].Y)
                     {
                         opened = true;
                     }
@@ -50,16 +50,16 @@ namespace Adventure
             {
                 base.Update(gameTime);
 
-                if (horizontalMovement)
+                if (globalDirection == GlobalDirection.horizontal)
                 {
-                    if (position.X == startPosition.X)
+                    if (position.X == positions[0].X)
                     {
                         opened = false;
                     }
                 }
-                else if (verticalMovement)
+                else if (globalDirection == GlobalDirection.vertical)
                 {
-                    if (position.Y == startPosition.Y)
+                    if (position.Y == positions[0].Y)
                     {
                         opened = false;
                     }

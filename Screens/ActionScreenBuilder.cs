@@ -230,21 +230,19 @@ namespace Adventure
                         {
                             int[] ints = ParseMovingPlatformString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatformLooping2(position, endPosition, "movingPlatform1", ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
-                            //gameObjects[i, j] = new MovingPlatformLooping(position, "movingPlatform1", endPosition, ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
+                            gameObjects[i, j] = new MovingPlatform_ABLoop(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], assetManager, colliderManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "movingPlatformHalfLoop")
                         {
                             int[] ints = ParseMovingPlatformString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatformHalfLoop(position, endPosition, "movingPlatform1", 1, assetManager, colliderManager, player, null);
-                            //gameObjects[i, j] = new MovingPlatformHalfLoop(position, "movingPlatform1", endPosition, ints[1], ints[2], assetManager, colliderManager, player, ints[3], null);
+                            gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", 1, assetManager, colliderManager, player);
                         }
                         else if (gameObjectDictionary[colors[i,j]] == "movingPlatformNoLoopSeries")
                         {
                             int[] ints = ParseSeriesOfMovingPlatformString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new SeriesOfMovingPlatformNoLoop(position, "movingPlatform1", endPosition, ints[1], ints[2], ints[4], ints[5], assetManager, colliderManager, player, ints[3], null);
+                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], ints[4], ints[5], assetManager, colliderManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "FKeyRound")
                         {
@@ -292,9 +290,10 @@ namespace Adventure
 
                             test.position.X += ints[index];
 
-                            if (test is MovingPlatformLooping platform)
+                            if (test is MovingPlatform platform)
                             {
-                                platform.startPosition.X += ints[index];
+                                platform.positions[0] = new Vector2(platform.positions[0].X + ints[index], platform.positions[0].Y);
+                                //platform.positions[0].X = platform.positions[0].X + ints[index];
                             }
 
                             index += 1;
@@ -302,13 +301,16 @@ namespace Adventure
 
                         }
 
-                        if (gameObjects[i,j] is SeriesOfMovingPlatformNoLoop series)
+                        if (gameObjects[i,j] is SeriesOfMovingPlatform_ABWrapAround series)
                         {
 
-                            foreach (MovingPlatformNoLoop platform in series.platforms)
+                            foreach (MovingPlatform_ABWrapAround platform in series.platforms)
                             {
-                                platform.startPosition.X += ints[index];
-                                platform.endPosition.X += ints[index + 1];
+                                platform.positions[0] = new Vector2(platform.positions[0].X + ints[index], platform.positions[0].Y);
+                                platform.positions[1] = new Vector2(platform.positions[1].X + ints[index + 1], platform.positions[1].Y);
+
+                                //platform.positions[0].X += ints[index];
+                                //platform.endPosition.X += ints[index + 1];
                                 platform.position.X += ints[index];
 
                             }
@@ -342,19 +344,24 @@ namespace Adventure
                         {
                             test.position.Y += ints[index];
 
-                            if (test is MovingPlatformLooping platform)
+                            if (test is MovingPlatform_ABLoop platform)
                             {
-                                platform.startPosition.Y += ints[index];
+                                // NOTE: if using an ARRAY instead of a LIST we can access the members directly
+                                platform.positions[0] = new Vector2(platform.positions[0].X, platform.positions[0].Y + ints[index]);
+
+                                //platform.startPosition.Y += ints[index];
                             }
 
                         }                       
                         
-                        if (gameObjects[i, j] is SeriesOfMovingPlatformNoLoop series)
+                        if (gameObjects[i, j] is SeriesOfMovingPlatform_ABWrapAround series)
                         {
-                            foreach (MovingPlatformNoLoop platform in series.platforms)
+                            foreach (MovingPlatform_ABWrapAround platform in series.platforms)
                             {
-                                platform.startPosition.Y += ints[index];
-                                platform.endPosition.Y += ints[index + 1];
+                                platform.positions[0] = new Vector2(platform.positions[0].X, platform.positions[0].Y + ints[index]);
+                                platform.positions[1] = new Vector2(platform.positions[1].X, platform.positions[1].Y + ints[index + 1]);
+                                //platform.startPosition.Y += ints[index];
+                                //platform.endPosition.Y += ints[index + 1];
                                 platform.position.Y += ints[index];
 
                             }

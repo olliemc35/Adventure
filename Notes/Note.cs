@@ -50,7 +50,7 @@ namespace Adventure
 
         int numberOfFramesBetweenPlayerInteractions = 60;
 
-        public Note(Vector2 keyPosition, string keyFilename, string noteValue, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, SoundManager soundManager, Player player, List<GameObject> gameObjects = null, string symbolFilename = null, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
+        public Note(Vector2 keyPosition, string keyFilename, string noteValue, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, SoundManager soundManager, Player player, string symbolFilename = null, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
         {
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
@@ -61,7 +61,6 @@ namespace Adventure
             this.noteValue = noteValue;
             this.symbolFilename = symbolFilename;
             this.displacementScalingForNoteShip = displacementScalingForNoteShip;
-            attachedGameObjects = gameObjects;
             orbSpeed = speedOfOrb;
             this.orbFilename = orbFilename;
 
@@ -212,14 +211,14 @@ namespace Adventure
                             gate.open = true;
                         }
                     }
-                    else if (gameObject is MovingPlatformOneLoop platform_oneLoop)
+                    else if (gameObject is MovingPlatform_ABA platform_oneLoop)
                     {
                         if (!platform_oneLoop.movePlatform)
                         {
                             platform_oneLoop.movePlatform = true;
                         }
                     }
-                    else if (gameObject is MovingPlatformHalfLoop platform_halfLoop)
+                    else if (gameObject is MovingPlatform_AB platform_halfLoop)
                     {
                         if (!platform_halfLoop.movePlatform)
                         {
@@ -230,44 +229,38 @@ namespace Adventure
                     {
                         launchPad.launchFlag = true;
                     }
-                    else if (gameObject is SeriesOfMovingPlatformNoLoop movingPlatformsNoLoop)
+                    else if (gameObject is SeriesOfMovingPlatform_ABWrapAround series)
                     {
 
                         if (changeDirection)
                         {
-                            int test2 = 0;
-                            for (int k = 0; k< movingPlatformsNoLoop.numberOfPlatforms; k++)
+                            if (series.directionMode == SeriesOfMovingPlatform_ABWrapAround.DirectionModes.leftToRight)
                             {
-                                if (movingPlatformsNoLoop.platforms[k].movePlatform)
+                                series.directionMode = SeriesOfMovingPlatform_ABWrapAround.DirectionModes.rightToLeft;
+                            }
+                            else
+                            {
+                                series.directionMode = SeriesOfMovingPlatform_ABWrapAround.DirectionModes.leftToRight;
+                            }
+
+                            int test2 = 0;
+
+                            //Debug.WriteLine(series.platforms[6].position.X);
+
+                            for (int i = 0; i< series.numberOfPlatforms; i++)
+                            {
+                                if (Vector2.Distance(series.platforms[i].position, series.platforms[i].positions[series.platforms[i].indexes[1]]) <= 8 * series.horizontalSpacing)
                                 {
-                                    test2 = k;
-                                }
-                                else
-                                {
+                                    test2 = i;
                                     break;
                                 }
                             }
 
-                            movingPlatformsNoLoop.indexOfPlatformClosestToStart = (test2 + 1) % movingPlatformsNoLoop.numberOfPlatforms;
-                            movingPlatformsNoLoop.platforms[movingPlatformsNoLoop.indexOfPlatformClosestToStart].movePlatform = true;
+                            series.indexOfPlatformClosestToStart = test2;
 
-                            foreach (MovingPlatformNoLoop platform in movingPlatformsNoLoop.platforms)
+                            foreach (MovingPlatform_ABWrapAround platform in series.platforms)
                             {
-                                if (platform.movingRight)
-                                {
-                                    platform.movingRight = false;
-                                    platform.movingLeft = true;
-                                }
-                                else
-                                {
-                                    platform.movingRight = true;
-                                    platform.movingLeft = false;
-                                }
-
-                                Vector2 test = platform.startPosition;
-                                platform.startPosition = platform.endPosition;
-                                platform.endPosition = test;
-
+                                platform.ReverseDirection();
                             }
                         }
                         else
@@ -275,11 +268,11 @@ namespace Adventure
 
                             int indexofFirstPlatformNotMoving = -1;
 
-                            for (int i = 0; i < movingPlatformsNoLoop.platforms.Count; i++)
+                            for (int i = 0; i < series.platforms.Count; i++)
                             {
-                                if (movingPlatformsNoLoop.platforms[i].horizontalMovement)
+                                if (series.platforms[i].globalDirection == MovingPlatform.GlobalDirection.horizontal)
                                 {
-                                    if (movingPlatformsNoLoop.platforms[i].position.X == movingPlatformsNoLoop.platforms[i].startPosition.X)
+                                    if (series.platforms[i].position.X == series.platforms[i].positions[0].X)
                                     {
                                         indexofFirstPlatformNotMoving = i;
                                         break;
@@ -287,7 +280,7 @@ namespace Adventure
                                 }
                                 else
                                 {
-                                    if (movingPlatformsNoLoop.platforms[i].position.Y == movingPlatformsNoLoop.platforms[i].startPosition.Y)
+                                    if (series.platforms[i].position.Y == series.platforms[i].positions[0].Y)
                                     {
                                         indexofFirstPlatformNotMoving = i;
                                         break;
@@ -302,7 +295,7 @@ namespace Adventure
                             }
                             else
                             {
-                                movingPlatformsNoLoop.platforms[indexofFirstPlatformNotMoving].movePlatform = true;
+                                series.platforms[indexofFirstPlatformNotMoving].movePlatform = true;
                             }
                         }
                     }

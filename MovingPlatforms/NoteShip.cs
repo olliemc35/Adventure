@@ -10,24 +10,17 @@ using System.Threading.Tasks;
 
 namespace Adventure
 {
-    public class NoteShip : MovingPlatformLooping
+    public class NoteShip : MovingPlatform
     {
         public int displacement;
         public int displacementScaling = 0;
         public bool moveVertically;
         public Vector2 originalPosition;
 
+        // THIS WILL NEED FIXING
 
-
-
-        public NoteShip(Vector2 initialPosition) : base(initialPosition)
+        public NoteShip(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationaryAtEndPoints, float speed, int displacement, int delay, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, new List<int>() { 0, 1 }, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player)
         {
-
-        }
-
-        public NoteShip(Vector2 initialPosition, string filename, Vector2 endPoint, int timeStationaryAtEndPoints, float speed, int displacement, AssetManager assetManager, ColliderManager colliderManager, Player player, float delay = 0, List<GameObject> attachedGameObjects = null) : base(initialPosition, filename, endPoint, timeStationaryAtEndPoints, speed, assetManager, colliderManager, player, delay, attachedGameObjects)
-        {
-            horizontalMovement = true;
             this.displacement = displacement;
             originalPosition = initialPosition;
 
@@ -79,12 +72,11 @@ namespace Adventure
                 }
 
 
-                if (position.X == endPosition.X)
+                if (position.X == positions[1].X)
                 {
                     velocity.X = 0;
                     base.displacement.X = 0;
                     movePlatform = false;
-                    horizontalMovement = false;
                 }
 
 

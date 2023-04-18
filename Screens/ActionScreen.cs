@@ -128,16 +128,16 @@ namespace Adventure
                         hitboxesToCheckCollisionsWith.Add(beam.endHitbox);
                     }
 
-                    if (gameObject is SeriesOfMovingPlatformNoLoop series)
+                    if (gameObject is SeriesOfMovingPlatform_ABWrapAround series)
                     {
-                        foreach (MovingPlatformNoLoop platformNoLoop in series.platforms)
+                        foreach (MovingPlatform_ABWrapAround platformNoLoop in series.platforms)
                         {
                             hitboxesToCheckCollisionsWith.Add(platformNoLoop.idleHitbox);
                         }
                     }
                   
 
-                    if (gameObject is MovingPlatformLooping platform)
+                    if (gameObject is MovingPlatform_ABLoop platform)
                     {
 
                         hitboxesForAimLine.Add(platform.idleHitbox);

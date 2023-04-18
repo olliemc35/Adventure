@@ -10,7 +10,7 @@ namespace Adventure
         // Every MovingPlatform will have a "moving" animation
         public AnimatedSprite animation_Moving;
 
-        // A MovingPlatform object can either move horizontally or vertically, in straight lines
+        // A MovingPlatform object can either move horizontally or vertically in straight lines
         public enum Direction
         {
             moveRight,
@@ -31,6 +31,7 @@ namespace Adventure
 
         // Every MovingPlatform will contain a list of positions it will travel to. There will always be at least two positions.
         public List<Vector2> positions = new List<Vector2>();
+
         // We will also give a list of ints corresponding to the indices we move to. At the end of the list we loop back to the start.
         // E.g. suppose there are 3 positions. Then indexes = {0,1,2,1,2} means we go 0 - 1 - 2 - 1 - 2 - 0 - ... etc.
         public List<int> indexes = new List<int>();
@@ -52,18 +53,14 @@ namespace Adventure
         // There is a slightly annoying technicality with the code where we must treat the first time we UpdateStationaryPoints separately to the rest, hence we use this bool
         public bool firstLoop = true;
 
-        // Certaing MovingPlatforms will have behaviour that is triggered by the player and we incorporate a trigger via this bool. (This is for derived classes to use.)
+        // Certain MovingPlatforms will have behaviour that is triggered by the player and we incorporate a trigger via this bool. (This is for derived classes to use.)
         public bool movePlatform = false;
 
 
 
-
-
-        public MovingPlatform(List<Vector2> positions, List<int> indexes, string filename, int timeStationaryAtEndPoints, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, int delay = 0, List<GameObject> spritesOnPlatform = null) : base(positions[0], filename, assetManager)
+        public MovingPlatform(List<Vector2> positions, List<int> indexes, string filename, int timeStationaryAtEndPoints, float speed, int delay, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(positions[0], filename, assetManager)
         {
             CollisionObject = true;
-
-            attachedGameObjects = spritesOnPlatform;
             attachedGameObjects = new List<GameObject>();
 
             this.colliderManager = colliderManager;          
@@ -113,7 +110,6 @@ namespace Adventure
         public override void Update(GameTime gameTime)
         {
             
-
             if (thereIsADelay)
             {
                 if (delayCounter > delay)
@@ -162,60 +158,29 @@ namespace Adventure
 
         public virtual void UpdateAtStationaryPoints()
         {
-            if (globalDirection == GlobalDirection.horizontal)
+            if (position == positions[indexes[currentIndex]] || position == positions[indexes[(currentIndex + 1) % indexes.Count]])
             {
-                if (position.X == positions[indexes[currentIndex]].X || position.X == positions[indexes[(currentIndex + 1) % indexes.Count]].X)
+                if (thereIsStationaryTime && timeStationaryCounter < timeStationaryAtEndPoints)
                 {
-   
-                    if (thereIsStationaryTime && timeStationaryCounter < timeStationaryAtEndPoints)
-                    {
-                        timeStationaryCounter += 1;
-                        direction = Direction.stationary;
-                    }
-                    else if (!thereIsStationaryTime || (thereIsStationaryTime && timeStationaryCounter == timeStationaryAtEndPoints))
-                    {
-                        timeStationaryCounter = 0;
-                        if (firstLoop)
-                        {
-                            firstLoop = false;
-                        }
-                        else
-                        {
-                            currentIndex = (currentIndex + 1) % indexes.Count;
-                        }
-                        UpdateDirection(currentIndex, (currentIndex + 1) % indexes.Count);
-                    }
-
-                    //return;
+                    timeStationaryCounter += 1;
+                    direction = Direction.stationary;
                 }
-            }
-            else
-            {
-                if (position.Y == positions[indexes[currentIndex]].Y || position.Y == positions[indexes[(currentIndex + 1) % indexes.Count]].Y)
+                else if (!thereIsStationaryTime || (thereIsStationaryTime && timeStationaryCounter == timeStationaryAtEndPoints))
                 {
-
-                    if (thereIsStationaryTime && timeStationaryCounter < timeStationaryAtEndPoints)
+                    timeStationaryCounter = 0;
+                    if (firstLoop)
                     {
-                        timeStationaryCounter += 1;
-                        direction = Direction.stationary;
+                        firstLoop = false;
                     }
-                    else if (!thereIsStationaryTime || (thereIsStationaryTime && timeStationaryCounter == timeStationaryAtEndPoints))
+                    else
                     {
-                        timeStationaryCounter = 0;
-                        if (firstLoop)
-                        {
-                            firstLoop = false;
-                        }
-                        else
-                        {
-                            currentIndex = (currentIndex + 1) % indexes.Count;
-                        }
-                        UpdateDirection(currentIndex, (currentIndex + 1) % indexes.Count);
+                        currentIndex = (currentIndex + 1) % indexes.Count;
                     }
-
-                    //return;
+                    UpdateDirection(currentIndex, (currentIndex + 1) % indexes.Count);
                 }
+
             }
+
         }
 
 
@@ -330,6 +295,37 @@ namespace Adventure
                 }
 
             }
+        }
+
+        public virtual void ReverseDirection()
+        {
+            currentIndex = indexes[(currentIndex + 1) % indexes.Count];
+
+            if (globalDirection == GlobalDirection.horizontal)
+            {
+                if (direction == Direction.moveRight)
+                {
+                    direction = Direction.moveLeft;
+                }
+                else
+                {
+                    direction = Direction.moveRight;
+                }
+            }
+            else
+            {
+                if (direction == Direction.moveUp)
+                {
+                    direction = Direction.moveDown;
+                }
+                else
+                {
+                    direction = Direction.moveUp;
+                }
+            }
+
+            indexes.Reverse();
+
         }
 
     }
