@@ -51,27 +51,35 @@ namespace Adventure
                 position = positions[indexes[1]];
             }
 
-            if (globalDirection == GlobalDirection.horizontal)
+            switch (direction)
             {
-                if (direction == Direction.moveRight)
-                {
-                    direction = Direction.moveLeft;
-                }
-                else
-                {
-                    direction = Direction.moveRight;
-                }
-            }
-            else
-            {
-                if (direction == Direction.moveUp)
-                {
-                    direction = Direction.moveDown;
-                }
-                else
-                {
-                    direction = Direction.moveUp;
-                }
+                case Direction.moveRight:
+                    {
+                        direction = Direction.moveLeft;
+                        break;
+                    }
+                case Direction.moveLeft:
+                    {
+                        direction = Direction.moveRight;
+
+                        break;
+                    }
+                case Direction.moveUp:
+                    {
+                        direction = Direction.moveDown;
+
+                        break;
+                    }
+                case Direction.moveDown:
+                    {
+                        direction = Direction.moveUp;
+                        break;
+                    }
+                case Direction.stationary:
+                    {
+                        break;
+                    }
+
             }
 
             indexes.Reverse();

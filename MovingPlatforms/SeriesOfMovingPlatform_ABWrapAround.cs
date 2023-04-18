@@ -5,9 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using static Adventure.MovingPlatform;
 
 namespace Adventure
 {
@@ -15,49 +16,27 @@ namespace Adventure
     {
         public List<MovingPlatform_ABWrapAround> platforms = new List<MovingPlatform_ABWrapAround>();
         public int indexOfPlatformClosestToStart = -1;
-        public int horizontalSpacing;
+        public int spacing;
         public int numberOfPlatforms;
+        public int indexOfStartPosition = 0;
+        public int shift = 1; // when we change direction we need to change this to -1 to make the modular arithmetic order work
 
-        public enum DirectionModes
+
+        // This GameObject consists of a series of moving platforms which will move across the screen and wrap around when they reach the end
+        // The player is able to control the DIRECTION of the moving platforms by playing a corresponding Note
+
+        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationaryAtEndPoints, float speed, int delay, int numberOfPlatforms, int spacing, AssetManager assetManager, ColliderManager colliderManager, Player player)
         {
-            leftToRight,
-            rightToLeft
-        };
-        public DirectionModes directionMode;
+            this.spacing = spacing;
+            this.numberOfPlatforms = numberOfPlatforms;
 
 
-        // This GameObject consists of a series of moving platforms which will move across the screen and loop back every time
-        // We control this behaviour using the movePlatform bool of each MovingPlatformNoLoop
-
-        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationaryAtEndPoints, float speed, int delay, int number, int horizontalSpacing, AssetManager assetManager, ColliderManager colliderManager, Player player)
-        {
-            this.horizontalSpacing = horizontalSpacing;
-            numberOfPlatforms = number;
-
-            directionMode = DirectionModes.leftToRight;
-
-            for (int i = 0; i < number; i++)
+            for (int i = 0; i < numberOfPlatforms; i++)
             {
-                platforms.Add(new MovingPlatform_ABWrapAround(initialPosition,  endPoint, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player));
+                platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, endPoint, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player));
             }
 
-            for (int i = 0; i < number; i++)
-            {
-                // we're assuming here initialPosition.X < endPoint.X
-                if (initialPosition.X + 8 * horizontalSpacing * i < endPoint.X)
-                {
-                    platforms[i].movePlatform = true;
-                    indexOfPlatformClosestToStart += 1;
-
-                }
-            }
-
-            for (int i = 0; i <= indexOfPlatformClosestToStart; i++)
-            {
-                platforms[i].position.X = initialPosition.X + 8 * horizontalSpacing * (indexOfPlatformClosestToStart - i);
-            }
-
-
+            SetStartingPositions(initialPosition, endPoint);          
 
         }
 
@@ -72,26 +51,15 @@ namespace Adventure
         public override void Update(GameTime gametime)
         {
 
-
-            if (Vector2.Distance(platforms[indexOfPlatformClosestToStart].position, platforms[indexOfPlatformClosestToStart].positions[platforms[indexOfPlatformClosestToStart].indexes[0]]) >= 8 * horizontalSpacing)
+            if (Vector2.Distance(platforms[indexOfPlatformClosestToStart].position, platforms[0].positions[platforms[0].indexes[0]]) >= 8 * spacing)
             {
-                if (directionMode == DirectionModes.leftToRight)
+                if (!platforms[(platforms.Count+indexOfPlatformClosestToStart + shift) % platforms.Count].movePlatform)
                 {
-                    if (!platforms[(indexOfPlatformClosestToStart + 1) % platforms.Count].movePlatform)
-                    {
-                        platforms[(indexOfPlatformClosestToStart + 1) % platforms.Count].movePlatform = true;
+                    platforms[(platforms.Count + indexOfPlatformClosestToStart + shift) % platforms.Count].movePlatform = true;
 
-                        indexOfPlatformClosestToStart = (indexOfPlatformClosestToStart + 1) % platforms.Count;
-                    }
+                    indexOfPlatformClosestToStart = (platforms.Count + indexOfPlatformClosestToStart + shift) % platforms.Count;
                 }
-                else
-                {
-                    if (!platforms[(platforms.Count + indexOfPlatformClosestToStart - 1) % platforms.Count].movePlatform)
-                    {
-                        platforms[(platforms.Count + indexOfPlatformClosestToStart - 1) % platforms.Count].movePlatform = true;
-                        indexOfPlatformClosestToStart = (platforms.Count + indexOfPlatformClosestToStart - 1) % platforms.Count;
-                    }
-                }
+     
             }
 
 
@@ -113,5 +81,81 @@ namespace Adventure
             }
         }
 
+        public void ReverseDirection()
+        {
+        
+            int newIndexOfPlatformClosestToStart = 0;
+
+            for (int i = 0; i < numberOfPlatforms; i++)
+            {
+                // As platforms are handled so that they are always precisely a distance 8 * spacing apart and they wrap-around at the end-point
+                // there will always be a platform satisfying the inequality below
+
+                if (Vector2.Distance(platforms[i].position, platforms[0].positions[platforms[0].indexes[1]]) <= 8 * spacing)
+                {
+                    newIndexOfPlatformClosestToStart = i;
+                    break;
+                }
+            }
+
+            indexOfPlatformClosestToStart = newIndexOfPlatformClosestToStart;
+
+            foreach (MovingPlatform_ABWrapAround platform in platforms)
+            {
+                platform.ReverseDirection();
+            }
+
+            // When we reverse the platforms we want to move through the list platforms in the opposite direction
+            // E.g. if we are going UP through the list we want to go DOWN through the list. (Drawing a picture makes this make sense.)
+            if (shift == 1)
+            {
+                shift = -1;
+            }
+            else
+            {
+                shift = 1;
+            }
+            
+
+        }
+
+
+        // We call this function so that the screen is already populated with platforms when we first enter it
+        public void SetStartingPositions(Vector2 initialPosition, Vector2 endPoint)
+        {
+
+            Vector2 direction = endPoint - initialPosition;
+            direction.Normalize();
+
+            if (initialPosition.Length() < endPoint.Length())
+            {
+                for (int i = 0; i < numberOfPlatforms; i++)
+                {
+                    if ((initialPosition + direction * 8 * spacing * i).Length() < endPoint.Length())
+                    {
+                        platforms[i].movePlatform = true;
+                        indexOfPlatformClosestToStart += 1;
+
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < numberOfPlatforms; i++)
+                {
+                    if ((initialPosition + direction * 8 * spacing * i).Length() > endPoint.Length())
+                    {
+                        platforms[i].movePlatform = true;
+                        indexOfPlatformClosestToStart += 1;
+
+                    }
+                }
+            }
+
+            for (int i = 0; i <= indexOfPlatformClosestToStart; i++)
+            {
+                platforms[i].position = initialPosition + 8 * spacing * (indexOfPlatformClosestToStart - i) * direction;
+            }
+        }
     }
 }

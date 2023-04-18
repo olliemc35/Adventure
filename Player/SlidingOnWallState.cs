@@ -49,6 +49,14 @@ namespace Adventure
                 return;
             }
 
+            //if (!player.CollidedOnRight || !player.CollidedOnLeft)
+            //{
+            //    player.velocity.Y = 0;
+            //    player.displacement.Y = 0;
+            //    exits = Exits.exitToNormalState;
+            //    return;
+            //}
+
             if (facingRight)
             {
                 if (player.spriteDirectionX == -1)

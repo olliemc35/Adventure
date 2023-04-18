@@ -42,8 +42,6 @@ namespace Adventure
         public bool movePlatform = false;
         public bool symbolTurnedOn = false;
 
-        public bool changeDirection = true;
-
         int counter = 0;
 
         public List<int> indicesToRemove = new List<int>();
@@ -220,10 +218,17 @@ namespace Adventure
                     }
                     else if (gameObject is MovingPlatform_AB platform_halfLoop)
                     {
-                        if (!platform_halfLoop.movePlatform)
+                        if (platform_halfLoop.movePlatform)
                         {
-                            platform_halfLoop.movePlatform = true;
+                            platform_halfLoop.ReverseDirection();
                         }
+
+                        platform_halfLoop.movePlatform = true;                     
+
+                        //if (!platform_halfLoop.movePlatform)
+                        //{
+                        //    platform_halfLoop.movePlatform = true;
+                        //}
                     }
                     else if (gameObject is LaunchPad launchPad)
                     {
@@ -231,73 +236,11 @@ namespace Adventure
                     }
                     else if (gameObject is SeriesOfMovingPlatform_ABWrapAround series)
                     {
-
-                        if (changeDirection)
-                        {
-                            if (series.directionMode == SeriesOfMovingPlatform_ABWrapAround.DirectionModes.leftToRight)
-                            {
-                                series.directionMode = SeriesOfMovingPlatform_ABWrapAround.DirectionModes.rightToLeft;
-                            }
-                            else
-                            {
-                                series.directionMode = SeriesOfMovingPlatform_ABWrapAround.DirectionModes.leftToRight;
-                            }
-
-                            int test2 = 0;
-
-                            //Debug.WriteLine(series.platforms[6].position.X);
-
-                            for (int i = 0; i< series.numberOfPlatforms; i++)
-                            {
-                                if (Vector2.Distance(series.platforms[i].position, series.platforms[i].positions[series.platforms[i].indexes[1]]) <= 8 * series.horizontalSpacing)
-                                {
-                                    test2 = i;
-                                    break;
-                                }
-                            }
-
-                            series.indexOfPlatformClosestToStart = test2;
-
-                            foreach (MovingPlatform_ABWrapAround platform in series.platforms)
-                            {
-                                platform.ReverseDirection();
-                            }
-                        }
-                        else
-                        {
-
-                            int indexofFirstPlatformNotMoving = -1;
-
-                            for (int i = 0; i < series.platforms.Count; i++)
-                            {
-                                if (series.platforms[i].globalDirection == MovingPlatform.GlobalDirection.horizontal)
-                                {
-                                    if (series.platforms[i].position.X == series.platforms[i].positions[0].X)
-                                    {
-                                        indexofFirstPlatformNotMoving = i;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    if (series.platforms[i].position.Y == series.platforms[i].positions[0].Y)
-                                    {
-                                        indexofFirstPlatformNotMoving = i;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (indexofFirstPlatformNotMoving == -1)
-                            {
-                                // do nothing - I need to supply more platforms so this doesn't happen
-                                Debug.WriteLine("SUPPLY MORE PLATFORMS");
-                            }
-                            else
-                            {
-                                series.platforms[indexofFirstPlatformNotMoving].movePlatform = true;
-                            }
-                        }
+                        series.ReverseDirection();                                  
+                    }
+                    else if (gameObject is SeriesOfMovingPlatform_ABWrapAround2 series2)
+                    {
+                        series2.StartAPlatformMoving();                       
                     }
                     else if (gameObject is NoteShip noteShip)
                     {

@@ -21,14 +21,6 @@ namespace Adventure
         };
         public Direction direction;
 
-        // It proves useful to keep track of our "global" direction.
-        public enum GlobalDirection
-        {
-            horizontal,
-            vertical
-        };
-        public GlobalDirection globalDirection;
-
         // Every MovingPlatform will contain a list of positions it will travel to. There will always be at least two positions.
         public List<Vector2> positions = new List<Vector2>();
 
@@ -89,7 +81,7 @@ namespace Adventure
                 thereIsStationaryTime = true;
             }
 
-            // We configure our starting direction       
+            // We configure our starting direction
             UpdateDirection(indexes[0], indexes[1]);
 
             deltaTime = 1f / 60;
@@ -270,8 +262,6 @@ namespace Adventure
         {
             if (positions[currentIndex].X == positions[indexToMoveTo].X)
             {
-                globalDirection = GlobalDirection.vertical;
-
                 if (positions[currentIndex].Y > positions[indexToMoveTo].Y)
                 {
                     direction = Direction.moveUp;
@@ -283,7 +273,6 @@ namespace Adventure
             }
             else
             {
-                globalDirection = GlobalDirection.horizontal;
 
                 if (positions[currentIndex].X < positions[indexToMoveTo].X)
                 {
@@ -301,28 +290,37 @@ namespace Adventure
         {
             currentIndex = indexes[(currentIndex + 1) % indexes.Count];
 
-            if (globalDirection == GlobalDirection.horizontal)
+            switch (direction)
             {
-                if (direction == Direction.moveRight)
-                {
-                    direction = Direction.moveLeft;
-                }
-                else
-                {
-                    direction = Direction.moveRight;
-                }
+                case Direction.moveRight:
+                    {
+                        direction = Direction.moveLeft;
+                        break;
+                    }
+                case Direction.moveLeft:
+                    {
+                        direction = Direction.moveRight;
+
+                        break;
+                    }
+                case Direction.moveUp:
+                    {
+                        direction = Direction.moveDown;
+
+                        break;
+                    }
+                case Direction.moveDown:
+                    {
+                        direction = Direction.moveUp;
+                        break;
+                    }
+                case Direction.stationary:
+                    {
+                        break;
+                    }
+
             }
-            else
-            {
-                if (direction == Direction.moveUp)
-                {
-                    direction = Direction.moveDown;
-                }
-                else
-                {
-                    direction = Direction.moveUp;
-                }
-            }
+
 
             indexes.Reverse();
 

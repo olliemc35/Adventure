@@ -30,40 +30,23 @@ namespace Adventure
             {
                 base.Update(gameTime);
 
-                if (globalDirection == GlobalDirection.horizontal)
+
+                if (position == positions[1])
                 {
-                    if (position.X == positions[1].X)
-                    {
-                        opened = true;
-                    }
+                    opened = true;
                 }
-                else if (globalDirection == GlobalDirection.vertical)
-                {
-                    if (position.Y == positions[1].Y)
-                    {
-                        opened = true;
-                    }
-                }
+
             }
 
             if (!open && opened)
             {
                 base.Update(gameTime);
 
-                if (globalDirection == GlobalDirection.horizontal)
+                if (position == positions[0])
                 {
-                    if (position.X == positions[0].X)
-                    {
-                        opened = false;
-                    }
+                    opened = false;
                 }
-                else if (globalDirection == GlobalDirection.vertical)
-                {
-                    if (position.Y == positions[0].Y)
-                    {
-                        opened = false;
-                    }
-                }
+
             }
 
 
