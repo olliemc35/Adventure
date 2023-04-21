@@ -48,7 +48,7 @@ namespace Adventure
 
         int numberOfFramesBetweenPlayerInteractions = 60;
 
-        public Note(Vector2 keyPosition, string keyFilename, string noteValue, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, SoundManager soundManager, Player player, string symbolFilename = null, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
+        public Note(Vector2 keyPosition, string keyFilename, string noteValue, string symbolFilename, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, SoundManager soundManager, Player player, string orbFilename = null, float speedOfOrb = 0, int displacementScalingForNoteShip = 0)
         {
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
@@ -229,6 +229,10 @@ namespace Adventure
                         //{
                         //    platform_halfLoop.movePlatform = true;
                         //}
+                    }
+                    else if (gameObject is OrganStop organStop)
+                    {             
+                        organStop.platform.movePlatform = true;
                     }
                     else if (gameObject is LaunchPad launchPad)
                     {

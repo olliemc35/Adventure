@@ -142,7 +142,7 @@ namespace Adventure
 
 
         public PlayerStateManager playerStateManager;
-
+        public HitboxRectangle hurtHitbox = new HitboxRectangle();
 
 
 
@@ -208,10 +208,9 @@ namespace Adventure
 
             playerStateManager = new PlayerStateManager(this, screenManager, assetManager);
 
-
-
-
         }
+
+        
 
        
 
@@ -230,6 +229,8 @@ namespace Adventure
             position.Y = screenManager.activeScreen.respawnPoint.Y;
             idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
             idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
+            hurtHitbox.rectangle.X = (int)position.X + hurtHitbox.offsetX;
+            hurtHitbox.rectangle.Y = (int)position.Y + hurtHitbox.offsetY;
             //player.animatedSprite_Idle.Position = player.spritePosition;
             velocity.X = 0;
             velocity.Y = 0;
@@ -278,6 +279,16 @@ namespace Adventure
             idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
             idleHitbox.isActive = true;
 
+            hurtHitbox.texture = assetManager.hitboxTexture;
+            hurtHitbox.rectangle.Width = 6;
+            hurtHitbox.offsetX = 5;
+            hurtHitbox.rectangle.Height = 11;
+            hurtHitbox.offsetY = 4;
+            hurtHitbox.rectangle.X = (int)position.X + hurtHitbox.offsetX;
+            hurtHitbox.rectangle.Y = (int)position.Y + hurtHitbox.offsetY;
+            hurtHitbox.isActive = true;
+
+
 
         }
 
@@ -325,11 +336,11 @@ namespace Adventure
             ropeAnchor.Y = position.Y + idleHitbox.offsetY + idleHitbox.rectangle.Height / 2 - 2;
 
 
-            base.Update(gameTime);
 
             inputManager.PlayerMovementInput(this);
             MovePlayer(gameTime);
 
+            base.Update(gameTime);
 
 
         }
@@ -352,7 +363,11 @@ namespace Adventure
             //    }
 
             //}
-            //spriteBatch.Draw(spriteHitboxTexture, idleHitbox.rectangle, Color.Red);
+            
+            //spriteBatch.Draw(idleHitbox.texture, idleHitbox.rectangle, Color.Red);
+            //spriteBatch.Draw(hurtHitbox.texture, hurtHitbox.rectangle, Color.Blue);
+
+
 
             playerStateManager.Draw(spriteBatch);
 

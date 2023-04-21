@@ -61,6 +61,7 @@ namespace Adventure
                 "OrbWindowLeft",
                 "OrbWindowRight",
                 "OrbWindowMiddle",
+                "OrganStopMiddle",
                 "Post",
                 "PostDown",
                 "RedDot",

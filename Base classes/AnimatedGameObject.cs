@@ -126,6 +126,8 @@ namespace Adventure
             animation_playing.Update(gameTime);
             animationPosition = FindNearestIntegerVector(position);
 
+
+
             if (Climable)
             {
                 UpdateClimable();
@@ -178,12 +180,6 @@ namespace Adventure
         {
             if (animation_playing != animation)
             {
-                //if (animation_playing == References.player.animation_Dead)
-                //{
-                //    Debug.WriteLine("here");
-
-                //}
-
                 animation_playing.Stop();
                 animation_playing.Reset();
                 animation_playing = animation;
@@ -250,7 +246,7 @@ namespace Adventure
         {
             if (!player.playerStateManager.deadState.Active)
             {
-                if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
+                if (colliderManager.CheckForCollision(player.hurtHitbox, idleHitbox))
                 {
                     player.Dead = true;
                     player.playerStateManager.DeactivatePlayerStates();

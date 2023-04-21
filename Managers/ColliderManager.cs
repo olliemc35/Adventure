@@ -252,6 +252,379 @@ namespace Adventure
             }
         }
 
+        public void AdjustForCollisionsPlayer(Player player, List<HitboxRectangle> terrainHitboxes, List<HitboxRectangle> hazardHitboxes, int seeFurtherAhead, int acc)
+        {
+            // We first reset everything
+            ResetColliderBoolsForSprite(player);
+            ResetColliderBoolsForHitbox(player.idleHitbox);
+            ResetColliderBoolsForHitbox(player.hurtHitbox);
+
+
+            // Based on input find where the sprite would be on the next frame if there was no collision
+            Vector2 positionOnNextFrameIfNoCollision = new Vector2
+            {
+                X = player.position.X + player.displacement.X,
+                Y = player.position.Y + player.displacement.Y
+            };
+
+
+            // Move idle and hurt hitbox to the current position
+            player.idleHitbox.rectangle.X = DistanceToNearestInteger(player.position.X) + player.idleHitbox.offsetX;
+            player.idleHitbox.rectangle.Y = DistanceToNearestInteger(player.position.Y) + player.idleHitbox.offsetY;
+            player.hurtHitbox.rectangle.X = DistanceToNearestInteger(player.position.X) + player.hurtHitbox.offsetX;
+            player.hurtHitbox.rectangle.Y = DistanceToNearestInteger(player.position.Y) + player.hurtHitbox.offsetY;
+
+
+            // We create a list of "ghostPositions" and "ghostHitboxes"
+            // These are places we could be between now and the next frame.
+
+            List<Vector2> ghostPositions = new List<Vector2>();
+            List<HitboxRectangle> ghostIdleHitboxes = new List<HitboxRectangle>();
+            List<HitboxRectangle> ghostHurtHitboxes = new List<HitboxRectangle>();
+
+
+            for (int j = 0; j <= seeFurtherAhead * acc; j++)
+            {
+                Vector2 ghostPosition = new Vector2(player.position.X + player.displacement.X * ((float)j / acc), player.position.Y + player.displacement.Y * ((float)j / acc));
+                ghostPositions.Add(ghostPosition);
+            }
+
+            for (int j = 0; j < ghostPositions.Count(); j++)
+            {
+                HitboxRectangle ghostHitbox = new HitboxRectangle(DistanceToNearestInteger(ghostPositions[j].X) + player.idleHitbox.offsetX, DistanceToNearestInteger(ghostPositions[j].Y) + player.idleHitbox.offsetY, player.idleHitbox.rectangle.Width, player.idleHitbox.rectangle.Height)
+                {
+                    offsetX = player.idleHitbox.offsetX,
+                    offsetY = player.idleHitbox.offsetY,
+                    isActive = true
+                };
+
+                HitboxRectangle ghostHurtHitbox = new HitboxRectangle(DistanceToNearestInteger(ghostPositions[j].X) + player.hurtHitbox.offsetX, DistanceToNearestInteger(ghostPositions[j].Y) + player.hurtHitbox.offsetY, player.hurtHitbox.rectangle.Width, player.hurtHitbox.rectangle.Height)
+                {
+                    offsetX = player.hurtHitbox.offsetX,
+                    offsetY = player.hurtHitbox.offsetY,
+                    isActive = true
+                };
+
+                ghostIdleHitboxes.Add(ghostHitbox);
+                ghostHurtHitboxes.Add(ghostHurtHitbox);
+            }
+
+            // Our method takes each terrain hitbox in turn and checks whether we collide with each one - here by collision we mean OVERLAP (not edges meeting).
+            // If we do we create a new hitbox at the at the first ghostHitbox positions for which there was a collision, 
+            // after adjusting this position along the displacement vector so that the edges are just meeting.
+            // We then add a copy of this hitbox to the following list:
+            List<HitboxRectangle> possibleIdleHitboxesIfCollisionDetected = new List<HitboxRectangle>();
+            List<HitboxRectangle> possibleHurtHitboxesIfCollisionDetected = new List<HitboxRectangle>();
+
+            FindPotentialCollision(player, possibleIdleHitboxesIfCollisionDetected, ghostIdleHitboxes, terrainHitboxes, acc);
+            FindPotentialCollision(player, possibleHurtHitboxesIfCollisionDetected, ghostHurtHitboxes, hazardHitboxes, acc);
+
+
+
+            // First let us treat the case that there has been no collisions
+            // The hitbox we are now interested in is the last hitbox of ghostHitboxes
+
+
+            if (possibleIdleHitboxesIfCollisionDetected.Count() == 0 && possibleHurtHitboxesIfCollisionDetected.Count() == 0)
+            {
+                foreach (HitboxRectangle hitbox2 in terrainHitboxes)
+                {
+                    if (hitbox2.isActive)
+                    {
+                        if (CheckForCollision(ghostIdleHitboxes.Last(), hitbox2))
+                        {
+                            ResetColliderBoolsForHitbox(ghostIdleHitboxes.Last());
+                            UpdateHitboxRectangleColliderBools2(ghostIdleHitboxes.Last(), hitbox2);
+
+                            if (ghostIdleHitboxes.Last().CollidedOnBottom)
+                            {
+                                player.CollidedOnBottom = true;
+                                player.velocity.Y = 0;
+                                player.displacement.Y = 0;
+                            }
+                            if (ghostIdleHitboxes.Last().CollidedOnTop)
+                            {
+                                player.CollidedOnTop = true;
+                                player.velocity.Y = 0;
+                                player.displacement.Y = 0;
+                            }
+                            if (ghostIdleHitboxes.Last().CollidedOnRight)
+                            {
+                                player.CollidedOnRight = true;
+                                player.velocity.X = 0;
+                                player.displacement.X = 0;
+                            }
+                            if (ghostIdleHitboxes.Last().CollidedOnLeft)
+                            {
+                                player.CollidedOnLeft = true;
+                                player.velocity.X = 0;
+                                player.displacement.X = 0;
+                            }
+                        }
+
+                    }
+
+
+                }
+
+                player.position.X = positionOnNextFrameIfNoCollision.X;
+                player.position.Y = positionOnNextFrameIfNoCollision.Y;
+
+
+            }
+            else
+            {
+                // In this case there has been collisions.
+                // We are interested in the hitbox which is closest to the movingSprite so we first find that
+                // and store the index as keyIndex.
+                //Debug.WriteLine("here");
+
+                if (possibleHurtHitboxesIfCollisionDetected.Count == 0)
+                {
+
+                    Vector2 idlePositionOnNextFrame = new Vector2
+                    {
+                        X = possibleIdleHitboxesIfCollisionDetected[0].rectangle.X - possibleIdleHitboxesIfCollisionDetected[0].offsetX,
+                        Y = possibleIdleHitboxesIfCollisionDetected[0].rectangle.Y - possibleIdleHitboxesIfCollisionDetected[0].offsetY
+                    };
+
+                    int keyIndexIdle = FindKeyIndex(player, possibleIdleHitboxesIfCollisionDetected, idlePositionOnNextFrame);
+                    UpdatePlayerBools(player, terrainHitboxes, possibleIdleHitboxesIfCollisionDetected, keyIndexIdle);
+                    player.position.X = possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].rectangle.X - possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].offsetX;
+                    player.position.Y = possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].rectangle.Y - possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].offsetY;
+
+                }
+                else if (possibleIdleHitboxesIfCollisionDetected.Count == 0)
+                {
+                    Vector2 hurtPositionOnNextFrame = new Vector2
+                    {
+                        X = possibleHurtHitboxesIfCollisionDetected[0].rectangle.X - possibleHurtHitboxesIfCollisionDetected[0].offsetX,
+                        Y = possibleHurtHitboxesIfCollisionDetected[0].rectangle.Y - possibleHurtHitboxesIfCollisionDetected[0].offsetY
+                    };
+
+                    int keyIndexHurt = FindKeyIndex(player, possibleHurtHitboxesIfCollisionDetected, hurtPositionOnNextFrame);
+                    UpdatePlayerBools(player, hazardHitboxes, possibleHurtHitboxesIfCollisionDetected, keyIndexHurt);
+                    player.position.X = possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].rectangle.X - possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].offsetX;
+                    player.position.Y = possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].rectangle.Y - possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].offsetY;
+
+                }
+                else
+                {
+                    Vector2 idlePositionOnNextFrame = new Vector2
+                    {
+                        X = possibleIdleHitboxesIfCollisionDetected[0].rectangle.X - possibleIdleHitboxesIfCollisionDetected[0].offsetX,
+                        Y = possibleIdleHitboxesIfCollisionDetected[0].rectangle.Y - possibleIdleHitboxesIfCollisionDetected[0].offsetY
+                    };
+                    Vector2 hurtPositionOnNextFrame = new Vector2
+                    {
+                        X = possibleHurtHitboxesIfCollisionDetected[0].rectangle.X - possibleHurtHitboxesIfCollisionDetected[0].offsetX,
+                        Y = possibleHurtHitboxesIfCollisionDetected[0].rectangle.Y - possibleHurtHitboxesIfCollisionDetected[0].offsetY
+                    };
+
+                    int keyIndexIdle = FindKeyIndex(player, possibleIdleHitboxesIfCollisionDetected, idlePositionOnNextFrame);
+                    int keyIndexHurt = FindKeyIndex(player, possibleHurtHitboxesIfCollisionDetected, hurtPositionOnNextFrame);
+                    UpdatePlayerBools(player, terrainHitboxes, possibleIdleHitboxesIfCollisionDetected, keyIndexIdle);
+                    UpdatePlayerBools(player, hazardHitboxes, possibleHurtHitboxesIfCollisionDetected, keyIndexHurt);
+
+
+                    Vector2 position1 = new Vector2();
+                    position1.X = possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].rectangle.X - possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].offsetX;
+                    position1.Y = possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].rectangle.Y - possibleIdleHitboxesIfCollisionDetected[keyIndexIdle].offsetY;
+                    Vector2 position2 = new Vector2();
+                    position2.X = possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].rectangle.X - possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].offsetX;
+                    position2.Y = possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].rectangle.Y - possibleHurtHitboxesIfCollisionDetected[keyIndexHurt].offsetY;
+
+                    if (Vector2.Distance(player.position, position1) <= Vector2.Distance(player.position, position2))
+                    {
+                        player.position = position1;
+                    }
+                    else
+                    {
+                        player.position = position2;
+                    }
+
+                }
+           
+
+            }
+
+
+            player.idleHitbox.rectangle.X = DistanceToNearestInteger(player.position.X) + player.idleHitbox.offsetX;
+            player.idleHitbox.rectangle.Y = DistanceToNearestInteger(player.position.Y) + player.idleHitbox.offsetY;
+            player.hurtHitbox.rectangle.X = DistanceToNearestInteger(player.position.X) + player.hurtHitbox.offsetX;
+            player.hurtHitbox.rectangle.Y = DistanceToNearestInteger(player.position.Y) + player.hurtHitbox.offsetY;
+        }
+
+
+        public void FindPotentialCollision(Player player, List<HitboxRectangle> possibleHitboxesIfCollisionDetected,  List<HitboxRectangle> ghostHitboxes, List<HitboxRectangle> hitboxesToCheckAgainst, int acc)
+        {
+            foreach (HitboxRectangle hitbox2 in hitboxesToCheckAgainst)
+            {
+                for (int j = 0; j < ghostHitboxes.Count(); j++)
+                {
+
+                    if (hitbox2.isActive)
+                    {
+                        if (CheckForOverlap(ghostHitboxes[j], hitbox2))
+                        {
+                            Vector2 startingVec = new Vector2
+                            {
+                                X = ghostHitboxes[j].rectangle.X,
+                                Y = ghostHitboxes[j].rectangle.Y
+                            };
+
+                            Vector2 displacementVec = new Vector2();
+
+                            if (j == 0)
+                            {
+                                displacementVec.X = DistanceToNearestInteger(player.position.X) + player.idleHitbox.offsetX - ghostHitboxes[j].rectangle.X;
+                                displacementVec.Y = DistanceToNearestInteger(player.position.Y) + player.idleHitbox.offsetY - ghostHitboxes[j].rectangle.Y;
+                            }
+                            else
+                            {
+                                displacementVec.X = ghostHitboxes[j - 1].rectangle.X - ghostHitboxes[j].rectangle.X;
+                                displacementVec.Y = ghostHitboxes[j - 1].rectangle.Y - ghostHitboxes[j].rectangle.Y;
+
+                            }
+
+                            for (int k = 1; k <= acc; k++)
+                            {
+                                ghostHitboxes[j].rectangle.X = DistanceToNearestInteger(startingVec.X + ((float)k / acc) * displacementVec.X);
+                                ghostHitboxes[j].rectangle.Y = DistanceToNearestInteger(startingVec.Y + ((float)k / acc) * displacementVec.Y);
+
+                                if (!CheckForOverlap(ghostHitboxes[j], hitbox2))
+                                {
+                                    // I have moved a sufficient distance away so that there is no collision 
+                                    // Now the aim is to move it closer so that we are just touching (this will count as a collision)
+                                    // The idea is that the first collision we detect will be when we are just touching
+
+                                    if (CheckForEdgesMeeting(ghostHitboxes[j], hitbox2))
+                                    {
+                                        HitboxRectangle newHitbox = new HitboxRectangle(ghostHitboxes[j].rectangle.X, ghostHitboxes[j].rectangle.Y, ghostHitboxes[j].rectangle.Width, ghostHitboxes[j].rectangle.Height);
+                                        newHitbox.offsetX = ghostHitboxes[j].offsetX;
+                                        newHitbox.offsetY = ghostHitboxes[j].offsetY;
+                                        possibleHitboxesIfCollisionDetected.Add(newHitbox);
+
+                                        ghostHitboxes[j].rectangle.X = (int)startingVec.X;
+                                        ghostHitboxes[j].rectangle.Y = (int)startingVec.Y;
+                                    }
+                                    else
+                                    {
+                                        // we never reach here by looks of things?
+                                        //Debug.WriteLine("here");
+                                        // Maybe here we should set ghostHitboxes[j] to ghostHitboxes[j-1] and treat this as a bad case we should never be in
+                                        for (int l = 1; l <= acc; l++)
+                                        {
+
+                                            ghostHitboxes[j].rectangle.X -= Math.Sign(displacementVec.X);
+                                            ghostHitboxes[j].rectangle.Y -= Math.Sign(displacementVec.Y);
+
+                                            if (CheckForCollision(ghostHitboxes[j], hitbox2))
+                                            {
+
+
+                                                HitboxRectangle newHitbox = new HitboxRectangle(ghostHitboxes[j].rectangle.X, ghostHitboxes[j].rectangle.Y, ghostHitboxes[j].rectangle.Width, ghostHitboxes[j].rectangle.Height);
+                                                newHitbox.offsetX = ghostHitboxes[j].offsetX;
+                                                newHitbox.offsetY = ghostHitboxes[j].offsetY;
+                                                possibleHitboxesIfCollisionDetected.Add(newHitbox);
+
+                                                ghostHitboxes[j].rectangle.X = (int)startingVec.X;
+                                                ghostHitboxes[j].rectangle.Y = (int)startingVec.Y;
+
+                                                break;
+                                            }
+                                        }
+                                    }
+
+
+                                    break;
+
+                                }
+
+
+
+
+                            }
+
+
+                            break;
+
+
+
+                        }
+                    }
+
+                }
+
+            }
+        }
+
+
+        public int FindKeyIndex(Player player, List<HitboxRectangle> possibleHitboxesIfCollisionDetected, Vector2 positionOnNextFrame)
+        {
+            if (possibleHitboxesIfCollisionDetected.Count() == 1)
+            {
+                return 0;
+            }
+            else if (possibleHitboxesIfCollisionDetected.Count() > 1)
+            {
+                for (int i = 1; i < possibleHitboxesIfCollisionDetected.Count(); i++)
+                {
+                    Vector2 possiblePositionOnNextFrame = new Vector2(possibleHitboxesIfCollisionDetected[i].rectangle.X - possibleHitboxesIfCollisionDetected[i].offsetX, possibleHitboxesIfCollisionDetected[i].rectangle.Y - possibleHitboxesIfCollisionDetected[i].offsetY);
+
+                    if (Vector2.Distance(player.position, possiblePositionOnNextFrame) <= Vector2.Distance(player.position, positionOnNextFrame))
+                    {
+                        positionOnNextFrame = possiblePositionOnNextFrame;
+                        return i;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+
+        public void UpdatePlayerBools(Player player, List<HitboxRectangle> hitboxesToCheckAgainst, List<HitboxRectangle> possibleHitboxesIfCollisionDetected, int keyIndex)
+        {
+            foreach (HitboxRectangle hitbox2 in hitboxesToCheckAgainst)
+            {
+
+                if (hitbox2.isActive)
+                {
+                    if (CheckForCollision(possibleHitboxesIfCollisionDetected[keyIndex], hitbox2))
+                    {
+                        ResetColliderBoolsForHitbox(possibleHitboxesIfCollisionDetected[keyIndex]);
+                        UpdateHitboxRectangleColliderBools2(possibleHitboxesIfCollisionDetected[keyIndex], hitbox2);
+
+                        if (possibleHitboxesIfCollisionDetected[keyIndex].CollidedOnBottom)
+                        {
+                            player.CollidedOnBottom = true;
+                            player.velocity.Y = 0;
+                            player.displacement.Y = 0;
+                        }
+                        if (possibleHitboxesIfCollisionDetected[keyIndex].CollidedOnTop)
+                        {
+                            player.CollidedOnTop = true;
+                            player.velocity.Y = 0;
+                            player.displacement.Y = 0;
+                        }
+                        if (possibleHitboxesIfCollisionDetected[keyIndex].CollidedOnRight)
+                        {
+                            player.CollidedOnRight = true;
+                            player.velocity.X = 0;
+                            player.displacement.X = 0;
+                        }
+                        if (possibleHitboxesIfCollisionDetected[keyIndex].CollidedOnLeft)
+                        {
+                            player.CollidedOnLeft = true;
+                            player.velocity.X = 0;
+                            player.displacement.X = 0;
+                        }
+                    }
+                }
+
+            }
+        }
 
 
         public void AdjustForCollisionsMovingSpriteAgainstListOfSprites(MovingGameObject movingSprite, List<HitboxRectangle> hitboxes, int seeFurtherAhead, int acc)
@@ -552,6 +925,12 @@ namespace Adventure
 
             movingSprite.idleHitbox.rectangle.X = DistanceToNearestInteger(movingSprite.position.X) + movingSprite.idleHitbox.offsetX;
             movingSprite.idleHitbox.rectangle.Y = DistanceToNearestInteger(movingSprite.position.Y) + movingSprite.idleHitbox.offsetY;
+
+            if (movingSprite is Player player)
+            {
+                player.hurtHitbox.rectangle.X = DistanceToNearestInteger(player.position.X) + player.hurtHitbox.offsetX;
+                player.hurtHitbox.rectangle.Y = DistanceToNearestInteger(player.position.Y) + player.hurtHitbox.offsetY;
+            }
 
         }
 

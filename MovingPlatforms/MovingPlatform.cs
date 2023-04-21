@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Aseprite.Sprites;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Adventure
 {
@@ -101,7 +102,7 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            
+           
             if (thereIsADelay)
             {
                 if (delayCounter > delay)
@@ -119,7 +120,7 @@ namespace Adventure
             UpdateAtStationaryPoints();
             UpdateVelocityAndDisplacement();
             position.X += displacement.X;
-            position.X = FindNearestInteger(position.X);
+            position.X = FindNearestInteger(position.X); // If I don't do this it doesn't register the end-points properly. ON the other hand I cannot use speeds < 1. So need to think about this.
             position.Y += displacement.Y;
             position.Y = FindNearestInteger(position.Y);
 

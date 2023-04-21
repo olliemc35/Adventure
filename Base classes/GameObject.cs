@@ -46,6 +46,9 @@ namespace Adventure
         // Some GameObjects e.g. moving platforms can either be controlled by the player (via a Note) or act according to themselves. This bool determines which case is true.
         public bool playerControlled = false;
 
+        // Some GameObjects need to be loaded into the game before others - e.g. NoteAndGatePuzzle needs to be loaded AFTER notes have
+        public bool LoadLast = false;
+
         public GameObject()
         {
         }

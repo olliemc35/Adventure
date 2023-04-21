@@ -36,7 +36,8 @@ namespace Adventure
         public List<HitboxRectangle> hitboxesToCheckCollisionsWith = new List<HitboxRectangle>();
         public List<HitboxRectangle> hitboxesForAimLine = new List<HitboxRectangle>();
 
-        
+        public List<HitboxRectangle> terrainHitboxes = new List<HitboxRectangle>();
+        public List<HitboxRectangle> hazardHitboxes = new List<HitboxRectangle>();
 
 
         public Texture2D Background { get; set; }

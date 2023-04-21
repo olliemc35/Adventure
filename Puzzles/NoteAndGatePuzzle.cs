@@ -6,17 +6,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Adventure
 {
     public class NoteAndGatePuzzle : GameObject
     {
         // This order is very important for the puzzle
-        public List<Note> notes;
+        public List<int> noteOrder = new List<int>();
+        public List<Note> notes = new List<Note>();
         public Gate gate;
         public int indexWhichMustBePlayedNext = 0;
         public AnimatedGameObject symbolPlate;
         public List<Symbol> symbols = new List<Symbol>();
+
+        public NoteAndGatePuzzle(Vector2 symbolPlatePosition, string symbolPlateFilename, List<int> noteOrder, AssetManager assetManager)
+        {
+            this.noteOrder = noteOrder;
+            this.assetManager = assetManager;
+            symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename, assetManager);
+            attachedGameObjects = new List<GameObject>();
+        }
 
         public NoteAndGatePuzzle(Vector2 symbolPlatePosition, string symbolPlateFilename, List<Note> notes, Gate gate, AssetManager assetManager)
         {
@@ -25,13 +35,38 @@ namespace Adventure
             this.assetManager = assetManager;
             symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename, assetManager);
 
-
-
         }
 
         public override void LoadContent()
         {
+
+            List<Note> tempNotes = new List<Note>();
+
+            if (attachedGameObjects != null)
+            {
+                foreach (GameObject gameObject in attachedGameObjects)
+                {
+                    // We will be fed the notes in the order given by the ActionScreenBuilder
+                    // This is simply going from top-to-bottom, then left-to-right, in the order drawn on the Aseprite file
+                    if (gameObject is Note note)
+                    {
+                        tempNotes.Add(note);
+                    }
+                    else if (gameObject is Gate gate)
+                    {
+                        this.gate = gate;
+                    }
+                }
+            }
+
+            for (int i = 0; i < noteOrder.Count; i++)
+            {
+                notes.Add(tempNotes[noteOrder[i]]);
+            }
+
             symbolPlate.LoadContent();
+
+
 
             for (int i = 0; i < notes.Count; i++)
             {

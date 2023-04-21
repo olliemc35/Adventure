@@ -159,6 +159,21 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Level6.aseprite;Level6.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/Level7.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level7.aseprite;Level7.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level8.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level8.aseprite;Level8.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level9.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level9.aseprite;Level9.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/levelTest.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -238,6 +253,11 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/OrbWindowRight.aseprite;OrbWindowRight.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganStopMiddle.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganStopMiddle.aseprite;OrganStopMiddle.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/Post.aseprite
 /importer:AsepriteFileContentImporter

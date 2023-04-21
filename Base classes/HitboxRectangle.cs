@@ -40,7 +40,10 @@ namespace Adventure
         public int offsetX = 0;
         public int offsetY = 0;
 
-
+        public HitboxRectangle()
+        {
+            
+        }
 
         // Create a hitbox which consists of a single rectangle. 
         public HitboxRectangle(int x, int y, int width, int height)

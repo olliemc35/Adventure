@@ -113,6 +113,7 @@ namespace Adventure
 
 
                 UpdateVelocityAndDisplacement();
+                //player.colliderManager.AdjustForCollisionsPlayer(player, screenManager.activeScreen.terrainHitboxes, screenManager.activeScreen.hazardHitboxes, 1, 10);
                 player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
                 return;
 
@@ -124,6 +125,8 @@ namespace Adventure
             UpdateStatesX();
             UpdateStatesY();
             UpdateVelocityAndDisplacement();
+            //player.colliderManager.AdjustForCollisionsPlayer(player, screenManager.activeScreen.terrainHitboxes, screenManager.activeScreen.hazardHitboxes, 1, 10);
+
             player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
         }
 
@@ -467,6 +470,7 @@ namespace Adventure
 
         public override void UpdateAnimations()
         {
+
             if (statesY == StatesY.falling)
             {
                 if (player.velocity.Y < 0)

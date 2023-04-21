@@ -184,7 +184,7 @@ namespace Adventure
                 }
             }
 
-            activeScreen = screens[5];
+            activeScreen = screens[8];
             activeScreen.Show();
 
             player.LoadContent();
@@ -272,7 +272,7 @@ namespace Adventure
 
 
 
-            for (int i = 1; i <= 6; i++)
+            for (int i = 1; i <= 9; i++)
             {
                 //ActionScreenBuilder level = new ActionScreenBuilder("Level1_TEST", assetManager, colliderManager, inputManager, this, soundManager, player);
 

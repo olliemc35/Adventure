@@ -14,9 +14,6 @@ namespace Adventure
         public bool open = false;
         public bool opened = false;
 
-        public bool moveHorizontally = false;
-        public bool moveVertically = false;
-
         public Gate(Vector2 initialPosition, Vector2 endPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPosition }, new List<int>() { 0, 1 }, filename, 0, 1, 0, assetManager, colliderManager, player)
         {
 

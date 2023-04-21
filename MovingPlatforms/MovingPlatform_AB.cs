@@ -23,11 +23,18 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-
+            //Debug.WriteLine(position.X);
             if (movePlatform)
             {
                 base.Update(gameTime);
                 StopAtStationaryPoints();
+            }
+            else
+            {
+                if (Climable)
+                {
+                    UpdateClimable();
+                }
             }
 
         }

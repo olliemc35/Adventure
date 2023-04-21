@@ -11,7 +11,6 @@ namespace Adventure
 {
     public class NoteAndGateAndOrbPuzzle : GameObject
     {
-        public AssetManager assetManager;
 
         public List<Note> notes;
         public Gate gate;
@@ -42,6 +41,7 @@ namespace Adventure
             this.orbVessel = orbVessel;
             symbolPlate = new AnimatedGameObject(symbolPlatePosition, symbolPlateFilename, assetManager);
             this.assetManager = assetManager;
+            LoadLast = true;
         }
 
         public override void LoadContent()

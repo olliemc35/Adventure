@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Collections;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Xml.Linq;
 
 namespace Adventure
 {
@@ -31,6 +32,8 @@ namespace Adventure
         //public Color[,] gameObjectColorArray;
         public IDictionary<Color, string> backgroundDictionary = new Dictionary<Color, string>();
         public IDictionary<Color, string> gameObjectDictionary = new Dictionary<Color, string>();
+        public IDictionary<string, List<List<GameObject>>> attachmentsDictionary = new Dictionary<string, List<List<GameObject>>>();
+        public IDictionary<Type, List<List<GameObject>>> attachmentsDictionary2 = new Dictionary<Type, List<List<GameObject>>>();
 
 
         public ColliderManager colliderManager;
@@ -50,25 +53,16 @@ namespace Adventure
         public GameObject[,] gameObjects;
 
 
-        List<List<GameObject>> noteTriggerData = new List<List<GameObject>>();
-        List<List<GameObject>> movingPlatformAttachmentsData = new List<List<GameObject>>();
-
-
         public List<GameObject> gameObjectsAsList = new List<GameObject>();
 
         public Color color_MovingPlatformPreMultiplyAlpha;
         public Color color_BeamPreMultiplyAlpha;
 
-        public Color color_AdjustPosition = new Color(255, 255, 156, 255);
+        public Color color_AdjustPosition = new Color(255, 255, 156, 255); // Pale yellow
+        public Color color_Climable = new Color(85, 255, 0, 255); // Bright green
 
 
-        public Color color_NoteTrigger1 = new Color(255, 0, 255, 255);
-        public Color color_NoteTrigger2 = new Color(225, 0, 225, 255);
-        public Color color_NoteTrigger3 = new Color(200, 0, 225, 255);
-
-        public Color color_MovingPlatformAttached1 = new Color(50, 0, 255, 255);
-        public Color color_MovingPlatformAttached2 = new Color(50, 0, 225, 255);
-        public Color color_MovingPlatformAttached3 = new Color(50, 0, 200, 255);
+        public List<Color> attachmentColors = new List<Color>();
 
 
 
@@ -84,6 +78,9 @@ namespace Adventure
             this.player = player;
             this.soundManager = soundManager;
 
+            attachmentColors.Add(new Color(255, 0, 255, 255));
+            attachmentColors.Add(new Color(225, 0, 225, 255));
+            attachmentColors.Add(new Color(200, 0, 225, 255));
 
 
             backgroundObjects = new AnimatedGameObject[screenWidth, screenHeight];
@@ -102,19 +99,30 @@ namespace Adventure
             gameObjectDictionary.Add(new Color(192, 0, 0, 255), "CKeyRound"); // Reds ...
             gameObjectDictionary.Add(new Color(240, 0, 0, 255), "FKeyRound");
             gameObjectDictionary.Add(new Color(155, 173, 183, 255), "Beam"); // Light grey
+            gameObjectDictionary.Add(new Color(65, 25, 18, 255), "Gate"); // Dark brown
+            gameObjectDictionary.Add(new Color(255, 120, 0, 255), "NoteAndGatePuzzle"); // Bright orange
+            gameObjectDictionary.Add(new Color(56,37,37, 255), "OrganStop"); // Dark brown
 
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(color_MovingPlatformAlpha.ToVector4());
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(gameObjectDictionary[])
             color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(41, 20, 52, 150);
-            color_BeamPreMultiplyAlpha = Color.FromNonPremultiplied(155,173,183,150);
+            color_BeamPreMultiplyAlpha = Color.FromNonPremultiplied(155, 173, 183, 150);
 
 
-            noteTriggerData.Add(new List<GameObject>());
-            noteTriggerData.Add(new List<GameObject>());
-            noteTriggerData.Add(new List<GameObject>());
-            movingPlatformAttachmentsData.Add(new List<GameObject>());
-            movingPlatformAttachmentsData.Add(new List<GameObject>());
-            movingPlatformAttachmentsData.Add(new List<GameObject>());
+
+            // Initialise attachmentsDictionary
+            attachmentsDictionary.Add("Note", new List<List<GameObject>>());
+            attachmentsDictionary.Add("MovingPlatform", new List<List<GameObject>>());
+            attachmentsDictionary.Add("NoteAndGatePuzzle", new List<List<GameObject>>());
+
+            foreach (string typeName in attachmentsDictionary.Keys)
+            {
+                for (int i = 0; i < attachmentColors.Count; i++)
+                {
+                    attachmentsDictionary[typeName].Add(new List<GameObject>());
+                }
+            }
+
 
 
         }
@@ -152,18 +160,34 @@ namespace Adventure
                 {
                     HandleAdjustVerticalLayer(layer, data[layer]);
                 }
-                else if (layer.Name.Contains("NoteTriggers"))
+                else if (layer.Name == "Climables")
                 {
-                    HandleNoteTriggerLayer(layer, data[layer]);
+                    HandleClimableLayer(layer, data[layer]);
                 }
-                else if (layer.Name.Contains("PlatformAttachments"))
+                else if (layer.Name.Contains("Attachments"))
                 {
-                    HandleMovingPlatformAttachmentsLayer(layer, data[layer]);
+                    string info = layer.UserData.Text;
+                    string typeName = ParseUntilNextComma(ref info);
+                    HandleAttachmentsLayer(attachmentsDictionary[typeName], data[layer]);
                 }
+
             }
 
-            FormAttachments<Note>(noteTriggerData);
-            FormAttachments<MovingPlatform>(movingPlatformAttachmentsData);
+
+
+            // FormAttachments2();
+
+            //foreach (string typeName in attachmentsDictionary.Keys)
+            //{
+            //    //Debug.WriteLine(Type.GetType("Adventure." + typeName));
+            //    FormAttachments3(Type.GetType("Adventure." + typeName), attachmentsDictionary[typeName]);
+            //}
+
+            // AGH. Must be a better way to do this ... 
+            FormAttachments<Note>(attachmentsDictionary["Note"]);
+            FormAttachments<MovingPlatform>(attachmentsDictionary["MovingPlatform"]);
+            FormAttachments<NoteAndGatePuzzle>(attachmentsDictionary["NoteAndGatePuzzle"]);
+
 
 
             foreach (GameObject gameObject in gameObjects)
@@ -172,7 +196,17 @@ namespace Adventure
                 {
                     gameObjectsAsList.Add(gameObject);
                 }
+
             }
+
+            //foreach (GameObject gameObject in gameObjectsAsList)
+            //{
+            //    if (gameObject.LoadLast)
+            //    {
+            //        gameObjectsAsList.Remove(gameObject);
+            //        gameObjectsAsList.Add(gameObject);
+            //    }
+            //}
 
 
         }
@@ -219,7 +253,7 @@ namespace Adventure
 
                         if (gameObjectDictionary[colors[i, j]] == "Door")
                         {
-                            int[] ints = ParseDoorString(ref info);
+                            List<int> ints = ParseString(ref info, 2);
                             gameObjects[i, j] = new Door(position, "Door", ints[0], ints[1], assetManager, colliderManager, inputManager, screenManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Spike")
@@ -228,39 +262,56 @@ namespace Adventure
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "movingPlatform1")
                         {
-                            int[] ints = ParseMovingPlatformString(ref info);
+                            List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
                             gameObjects[i, j] = new MovingPlatform_ABLoop(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], assetManager, colliderManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "movingPlatformHalfLoop")
                         {
-                            int[] ints = ParseMovingPlatformString(ref info);
+                            List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
                             gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", 1, assetManager, colliderManager, player);
                         }
-                        else if (gameObjectDictionary[colors[i,j]] == "movingPlatformNoLoopSeries")
+                        else if (gameObjectDictionary[colors[i, j]] == "movingPlatformNoLoopSeries")
                         {
-                            int[] ints = ParseSeriesOfMovingPlatformString(ref info);
+                            List<int> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
                             gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], ints[4], ints[5], assetManager, colliderManager, player);
                         }
+                        else if (gameObjectDictionary[colors[i, j]] == "OrganStop")
+                        {
+                            List<int> ints = ParseString(ref info, 6);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
+                            gameObjects[i, j] = new OrganStop(position, endPosition, "movingPlatform1", 1, assetManager, colliderManager, player);
+                        }
                         else if (gameObjectDictionary[colors[i, j]] == "FKeyRound")
                         {
-                            gameObjects[i, j] = new Note(position, "FKeyRound", "F", assetManager, colliderManager, inputManager, soundManager, player);
+                            gameObjects[i, j] = new Note(position, "FKeyRound", "F", "rune_F", assetManager, colliderManager, inputManager, soundManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "CKeyRound")
                         {
-                            gameObjects[i, j] = new Note(position, "CKeyRound", "C", assetManager, colliderManager, inputManager, soundManager, player);
+                            gameObjects[i, j] = new Note(position, "CKeyRound", "C", "rune_C", assetManager, colliderManager, inputManager, soundManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "LaunchPad")
                         {
                             gameObjects[i, j] = new LaunchPad(position, "LaunchPad", assetManager, colliderManager, player);
                         }
-                        else if (gameObjectDictionary[colors[i,j]] == "Beam")
+                        else if (gameObjectDictionary[colors[i, j]] == "Beam")
                         {
-                            int[] ints = ParseBeamString(ref info);
+                            List<int> ints = ParseString(ref info, 1);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_BeamPreMultiplyAlpha, i, j, ints[0]);
                             gameObjects[i, j] = new Beam(position, endPosition, assetManager, colliderManager, screenManager, player);
+                        }
+                        else if (gameObjectDictionary[colors[i, j]] == "Gate")
+                        {
+                            List<int> ints = ParseString(ref info);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
+                            gameObjects[i, j] = new Gate(position, endPosition, "AncientDoor", assetManager, colliderManager, player);
+                        }
+                        else if (gameObjectDictionary[colors[i, j]] == "NoteAndGatePuzzle")
+                        {
+                            List<int> ints = ParseString(ref info);
+                            gameObjects[i, j] = new NoteAndGatePuzzle(position, "symbolPlate", ints, assetManager);
                         }
                     }
 
@@ -274,7 +325,7 @@ namespace Adventure
         public void HandleAdjustHorizontalLayer(AsepriteLayer layer, Color[,] colors)
         {
             string info = layer.UserData.Text;
-            List<int> ints = ParseAdjustString(ref info);
+            List<int> ints = ParseString(ref info);
             int index = 0;
             //Debug.WriteLine(ints[1]);
 
@@ -301,7 +352,7 @@ namespace Adventure
 
                         }
 
-                        if (gameObjects[i,j] is SeriesOfMovingPlatform_ABWrapAround series)
+                        if (gameObjects[i, j] is SeriesOfMovingPlatform_ABWrapAround series)
                         {
 
                             foreach (MovingPlatform_ABWrapAround platform in series.platforms)
@@ -331,7 +382,7 @@ namespace Adventure
         public void HandleAdjustVerticalLayer(AsepriteLayer layer, Color[,] colors)
         {
             string info = layer.UserData.Text;
-            List<int> ints = ParseAdjustString(ref info);
+            List<int> ints = ParseString(ref info);
             int index = 0;
 
             for (int i = 0; i < colors.GetLength(0); i++)
@@ -352,8 +403,8 @@ namespace Adventure
                                 //platform.startPosition.Y += ints[index];
                             }
 
-                        }                       
-                        
+                        }
+
                         if (gameObjects[i, j] is SeriesOfMovingPlatform_ABWrapAround series)
                         {
                             foreach (MovingPlatform_ABWrapAround platform in series.platforms)
@@ -376,7 +427,30 @@ namespace Adventure
         }
 
 
+
+        public void HandleClimableLayer(AsepriteLayer layer, Color[,] colors)
+        {
+
+            for (int i = 0; i < colors.GetLength(0); i++)
+            {
+                for (int j = 0; j < colors.GetLength(1); j++)
+                {
+                    if (colors[i, j] == color_Climable)
+                    {
+                        if (gameObjects[i, j] is AnimatedGameObject test)
+                        {
+                            test.Climable = true;
+                        }
+                    }
+
+                }
+            }
+        }
+
+
         // This is a generic method - we feed in a parameter Type T and behaviour can alter depending on the value of T
+        // We give as input a list of lists of GameObjects, and consider each list in turn
+        // For each list, we find an object of type T, and then let this objects attachedGameObjects consist of every other object in the list not of type T 
         public void FormAttachments<T>(List<List<GameObject>> list)
         {
             for (int i = 0; i < list.Count; i++)
@@ -410,65 +484,100 @@ namespace Adventure
             }
 
         }
-        
 
-        public void HandleNoteTriggerLayer(AsepriteLayer layer, Color[,] colors)
+        //public void FormAttachments3(Type T, List<List<GameObject>> list)
+        //{
+
+        //    for (int i = 0; i < list.Count; i++)
+        //    {
+        //        foreach (GameObject gameObject in list[i])
+        //        {
+        //            //Debug.WriteLine(gameObject.GetType());
+        //            if (gameObject.GetType() is T)
+        //            {
+        //                foreach (GameObject gameObject1 in list[i])
+        //                {
+        //                    if (gameObject1.GetType() != T)
+        //                    {
+
+        //                        //if (gameObject.GetType() == typeof(Note))
+        //                        //{
+        //                        //    gameObject1.playerControlled = true;
+        //                        //}
+        //                        //if (typeof(T) is Note)
+        //                        //{
+        //                        //    if (typeof(gameObject1) is MovingPlatform)
+        //                        //    {
+        //                        //        // gameObject1.PlayerControlled = true;
+        //                        //    }
+        //                        //}
+
+        //                        gameObject.attachedGameObjects.Add(gameObject1);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //}
+        // Working with strings doesn't really work here - it forces us to make every derived class contain the name of the base class which we obviously don't want
+        //public void FormAttachments2()
+        //{
+        //    foreach (string typeName in attachmentsDictionary.Keys)
+        //    {
+        //        for (int i = 0; i < attachmentsDictionary[typeName].Count; i++)
+        //        {
+        //            if (attachmentsDictionary[typeName][i] != null)
+        //            {
+        //                foreach (GameObject gameObject in attachmentsDictionary[typeName][i])
+        //                {
+        //                    if (gameObject.GetType().Name.Contains(typeName)) // This is so derived classes are detected e.g. MovingPlatform_NoLoop is a MovingPlatform
+        //                    {
+        //                        foreach (GameObject gameObject1 in attachmentsDictionary[typeName][i])
+        //                        {
+        //                            if (!gameObject1.GetType().Name.Contains(typeName))
+        //                            {
+        //                                gameObject.attachedGameObjects.Add(gameObject1);
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //}
+
+        // Some GameObjects e.g. Notes and MovingPlatforms may have a list of attached GameObjects. How we deal with this is as follows:
+        // These GameObjects require their own "attachment" layer in the Aseprite file
+        // Say a Note is attached to a Gate. We will colour both in one of the "attachmentColors" which are shades of PINK
+        // This code scans that layer and will put the Note and Gate in a new list of GameObjects
+        // We allow for a single layer to detail multiple attachments - e.g. say there is another Note attached to another Gate. Then on the Aseprite file
+        // we colour these another "attachmentColor" (i.e. different shade of PINK) and these will then be put in another list.
+        // With these lists we then form the attachments, described by the code above.
+        public void HandleAttachmentsLayer(List<List<GameObject>> gameObjectsAttachmentsData, Color[,] colors)
         {
-
-
             for (int i = 0; i < colors.GetLength(0); i++)
             {
                 for (int j = 0; j < colors.GetLength(1); j++)
                 {
-                    if (colors[i, j] == color_NoteTrigger1)
+                    if (attachmentColors.Contains(colors[i, j]))
                     {
-                        noteTriggerData[0].Add(gameObjects[i, j]);
-                    }
-                    else if (colors[i, j] == color_NoteTrigger2)
-                    {
-                        noteTriggerData[1].Add(gameObjects[i, j]);
-                    }
-                    else if (colors[i, j] == color_NoteTrigger3)
-                    {
-                        noteTriggerData[2].Add(gameObjects[i, j]);
+                        gameObjectsAttachmentsData[attachmentColors.IndexOf(colors[i, j])].Add(gameObjects[i, j]);
                     }
                 }
             }
-
-           
-        }
-
-        public void HandleMovingPlatformAttachmentsLayer(AsepriteLayer layer, Color[,] colors)
-        {
-
-            for (int i = 0; i < colors.GetLength(0); i++)
-            {
-                for (int j = 0; j < colors.GetLength(1); j++)
-                {
-                    if (colors[i, j] == color_MovingPlatformAttached1)
-                    {
-                        movingPlatformAttachmentsData[0].Add(gameObjects[i, j]);
-                    }
-                    else if (colors[i, j] == color_MovingPlatformAttached2)
-                    {
-                        movingPlatformAttachmentsData[1].Add(gameObjects[i, j]);
-                    }
-                    else if (colors[i, j] == color_MovingPlatformAttached3)
-                    {
-                        movingPlatformAttachmentsData[2].Add(gameObjects[i, j]);
-                    }
-                }
-            }
-
-
         }
 
 
-        public void ParseUntilNextComma(ref string stringToAdd, ref string str)
-        {
-            stringToAdd += str[0];
 
-            for (int i = 1; i <= Math.Min(str.Count() - 1, 10); i++)
+        // This code takes a string and creates a new string (stringToAdd) until the next comma
+        public string ParseUntilNextComma(ref string str, int stop = 100)
+        {
+            string stringToAdd = "";
+            //stringToAdd += str[0];
+
+            for (int i = 0; i <= stop; i++)
             {
                 if (str[i] != ',')
                 {
@@ -480,20 +589,30 @@ namespace Adventure
                     break;
                 }
             }
+
+            return stringToAdd;
         }
 
-        public List<int> ParseAdjustString(ref string adjust)
+        // We parse strings according to the following rules. The order is top-to-bottom then left-to-right.
+        // For direction we always take 0 = vertical and 1 = horizontal. 
+        // Doors will go: screenNumber - doorNumber. We will parse 2 at a time. 
+        // Puzzle: just parse the NoteOrder
+        // MovingPlatform: direction, timeStationaryAtEndPoints, speed, delay
+        // SeriesOfMovingPlatform: direction, timeStationaryAtEndPoints, speed, delay, numberOfPlatforms, spacing
+        // Beam: direction
+        // Attachment layer: contains the name of the object Type we are attaching to - e.g. Note or MovingPlatform
+
+
+
+        public List<int> ParseString(ref string str, int stop = 100)
         {
             List<int> result = new List<int>();
 
-            for (int k = 0; k < 10; k++)
+            for (int k = 0; k < stop; k++)
             {
-                if (adjust.Count() > 0)
+                if (str.Count() > 0)
                 {
-                    string test = "";
-                    ParseUntilNextComma(ref test, ref adjust);
-                    result.Add(int.Parse(test));
-
+                    result.Add(int.Parse(ParseUntilNextComma(ref str)));
                 }
                 else
                 {
@@ -506,94 +625,6 @@ namespace Adventure
         }
 
 
-        // We pass in a string by reference as we want the original input to be modified 
-        // This is important as when we loop over on to other doors on the screen we want the string to change
-        public int[] ParseDoorString(ref string door)
-        {
-
-            string screenNumber = "";
-            string doorNumber = "";
-
-            ParseUntilNextComma(ref screenNumber, ref door);
-            ParseUntilNextComma(ref doorNumber, ref door);
-           
-            int[] result = new int[2];
-            result[0] = int.Parse(screenNumber);
-            result[1] = int.Parse(doorNumber);
-
-            return result;
-
-        }
-
-        // Issue: want to return floats for speed NOT ints
-        public int[] ParseMovingPlatformString(ref string platform)
-        {
-            string direction = "";
-            string timeStationaryAtEndPoints = "";
-            string speed = "";
-            string delay = "";
-
-            direction += platform[0];
-            platform = platform.Remove(0, 2);
-
-            ParseUntilNextComma(ref timeStationaryAtEndPoints, ref platform);
-            ParseUntilNextComma(ref speed, ref platform);
-            ParseUntilNextComma(ref delay, ref platform);
-
-
-            int[] result = new int[4];
-            result[0] = int.Parse(direction);
-            result[1] = int.Parse(timeStationaryAtEndPoints);
-            result[2] = int.Parse(speed);
-            result[3] = int.Parse(delay);
-
-            return result;
-
-
-        }
-
-        public int[] ParseSeriesOfMovingPlatformString(ref string platform)
-        {
-            string direction = "";
-            string timeStationaryAtEndPoints = "";
-            string speed = "";
-            string delay = "";
-            string number = "";
-            string horizontalSpacing = "";
-
-            direction += platform[0];
-            platform = platform.Remove(0, 2);
-
-            ParseUntilNextComma(ref timeStationaryAtEndPoints, ref platform);
-            ParseUntilNextComma(ref speed, ref platform);
-            ParseUntilNextComma(ref delay, ref platform);
-            ParseUntilNextComma(ref number, ref platform);
-            ParseUntilNextComma(ref horizontalSpacing, ref platform);
-
-
-            int[] result = new int[6];
-            result[0] = int.Parse(direction);
-            result[1] = int.Parse(timeStationaryAtEndPoints);
-            result[2] = int.Parse(speed);
-            result[3] = int.Parse(delay);
-            result[4] = int.Parse(number);
-            result[5] = int.Parse(horizontalSpacing);
-
-            return result;
-
-
-        }
-
-
-        public int[] ParseBeamString(ref string beam)
-        {
-            int[] result = new int[1];
-            result[0] = int.Parse(beam[0].ToString());
-            return result;
-        }
-
-
-        
 
 
         public Vector2 FindEndPointForGameObject(Color[,] colors, Color color, int i, int j, int direction)

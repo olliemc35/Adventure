@@ -95,15 +95,27 @@ namespace Adventure
 
                     if (gameObject is AnimatedGameObject sprite)
                     {
-                        
 
+                                             
+
+                        
                         if (sprite.CollisionObject)
                         {
                             hitboxesToCheckCollisionsWith.Add(sprite.idleHitbox);
                         }
+
+                        if (sprite.Hazard)
+                        {
+                            hazardHitboxes.Add(sprite.idleHitbox);
+                        }
                     }
 
-                    
+                    if (gameObject is MovingPlatform movingPlatform)
+                    {
+
+                         terrainHitboxes.Add(movingPlatform.idleHitbox);
+                        
+                    }
 
                     if (gameObject is Door door)
                     {
@@ -112,7 +124,10 @@ namespace Adventure
 
 
 
-
+                    if (gameObject is OrganStop organStop)
+                    {
+                        hitboxesToCheckCollisionsWith.Add(organStop.platform.idleHitbox);
+                    }
                     //if (gameObject is FlashingBeam beam)
                     //{
                     //    screenBeams.Add(beam);
@@ -126,12 +141,16 @@ namespace Adventure
                         
                         hitboxesToCheckCollisionsWith.Add(beam.startHitbox);
                         hitboxesToCheckCollisionsWith.Add(beam.endHitbox);
+
+                        terrainHitboxes.Add(beam.startHitbox);
+                        terrainHitboxes.Add(beam.endHitbox);
                     }
 
                     if (gameObject is SeriesOfMovingPlatform_ABWrapAround series)
                     {
                         foreach (MovingPlatform_ABWrapAround platformNoLoop in series.platforms)
                         {
+                            terrainHitboxes.Add(platformNoLoop.idleHitbox);
                             hitboxesToCheckCollisionsWith.Add(platformNoLoop.idleHitbox);
                         }
                     }
@@ -464,6 +483,7 @@ namespace Adventure
 
                         newHitbox.isActive = true;
                         hitboxesToCheckCollisionsWith.Add(newHitbox);
+                        terrainHitboxes.Add(newHitbox);
                         hitboxesForAimLine.Add(newHitbox);
 
                     }
