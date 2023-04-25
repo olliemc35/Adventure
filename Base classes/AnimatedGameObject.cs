@@ -151,6 +151,13 @@ namespace Adventure
             }
         }
 
+        public override void MoveOnPlatform(Vector2 moveVector)
+        {
+            position.X += moveVector.X;
+            idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
+            position.Y += moveVector.Y;
+            idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
+        }
 
         public int FindNearestInteger(float x)
         {
@@ -193,50 +200,9 @@ namespace Adventure
         {
             if (!player.playerStateManager.climbingState.Active)
             {
-
-
                 if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
                 {
-                    if (player.CollidedOnTop && player.velocity.Y < 0)
-                    {
-                        player.playerStateManager.DeactivatePlayerStates();
-                        player.playerStateManager.climbingState.Activate();
-                        player.playerStateManager.climbingState.platform = this;
-                        return;
-                    }
-                    if (player.CollidedOnRight || player.CollidedOnLeft)
-                    {
-                        player.playerStateManager.DeactivatePlayerStates();
-                        player.playerStateManager.climbingState.Activate();
-                        player.playerStateManager.climbingState.platform = this;
-                        return;
-                    }
-                    else if (player.CollidedOnBottom)
-                    {
-                        if ((player.spriteDirectionX == 1 || player.spriteDirectionY == 1) && player.idleHitbox.rectangle.X >= idleHitbox.rectangle.X + idleHitbox.rectangle.Width - player.distanceCanStartClimbing)
-                        {
-                            player.idleHitbox.rectangle.X = idleHitbox.rectangle.X + idleHitbox.rectangle.Width;
-                            player.idleHitbox.rectangle.Y = idleHitbox.rectangle.Y;
-                            player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
-                            player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
-                            player.playerStateManager.DeactivatePlayerStates();
-                            player.playerStateManager.climbingState.Activate();
-                            player.playerStateManager.climbingState.platform = this;
-                            return;
-                        }
-                        else if ((player.spriteDirectionX == -1 || player.spriteDirectionY == 1) && player.idleHitbox.rectangle.X <= idleHitbox.rectangle.X - player.distanceCanStartClimbing)
-                        {
-                            player.idleHitbox.rectangle.X = idleHitbox.rectangle.X - player.idleHitbox.rectangle.Width;
-                            player.idleHitbox.rectangle.Y = idleHitbox.rectangle.Y;
-                            player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
-                            player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
-                            player.playerStateManager.DeactivatePlayerStates();
-                            player.playerStateManager.climbingState.Activate();
-                            player.playerStateManager.climbingState.platform = this;
-                            return;
-                        }
-
-                    }
+                    player.Climb(this);
                 }
             }
 
@@ -248,11 +214,25 @@ namespace Adventure
             {
                 if (colliderManager.CheckForCollision(player.hurtHitbox, idleHitbox))
                 {
-                    player.Dead = true;
-                    player.playerStateManager.DeactivatePlayerStates();
-                    player.playerStateManager.deadState.Activate();
+                    player.KillPlayer();
                 }
             }
         }
+
+
+        public override void AdjustHorizontally(ref List<int> ints)
+        {
+            position.X += ints[0];
+            ints.RemoveAt(0);
+        }
+        public override void AdjustVertically(ref List<int> ints)
+        {
+            position.Y += ints[0];
+            ints.RemoveAt(0);
+        }
+
+
+
+
     }
 }

@@ -84,6 +84,11 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/hoodedoldmanv2.aseprite;hoodedoldmanv2.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/Ivy.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Ivy.aseprite;Ivy.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/Ladder.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -254,10 +259,20 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/OrbWindowRight.aseprite;OrbWindowRight.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganStopBottom.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganStopBottom.aseprite;OrganStopBottom.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/OrganStopMiddle.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/OrganStopMiddle.aseprite;OrganStopMiddle.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganStopTop.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganStopTop.aseprite;OrganStopTop.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/Post.aseprite
 /importer:AsepriteFileContentImporter

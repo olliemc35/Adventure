@@ -49,5 +49,16 @@ namespace Adventure
 
         }
 
+
+        public override void HandleNoteTrigger()
+        {
+            if (movePlatform)
+            {
+                ReverseDirection();
+            }
+
+            movePlatform = true;
+        }
+
     }
 }

@@ -53,7 +53,9 @@ namespace Adventure
         public GameObject[,] gameObjects;
 
 
+
         public List<GameObject> gameObjectsAsList = new List<GameObject>();
+
 
         public Color color_MovingPlatformPreMultiplyAlpha;
         public Color color_BeamPreMultiplyAlpha;
@@ -86,6 +88,7 @@ namespace Adventure
             backgroundObjects = new AnimatedGameObject[screenWidth, screenHeight];
             gameObjects = new GameObject[screenWidth, screenHeight];
 
+
             backgroundDictionary.Add(new Color(199, 245, 255, 255), "Tile_air");
             backgroundDictionary.Add(new Color(75, 105, 47, 255), "Tile_grass");
             backgroundDictionary.Add(new Color(102, 57, 49, 255), "Tile_ground");
@@ -102,6 +105,8 @@ namespace Adventure
             gameObjectDictionary.Add(new Color(65, 25, 18, 255), "Gate"); // Dark brown
             gameObjectDictionary.Add(new Color(255, 120, 0, 255), "NoteAndGatePuzzle"); // Bright orange
             gameObjectDictionary.Add(new Color(56,37,37, 255), "OrganStop"); // Dark brown
+            gameObjectDictionary.Add(new Color(50,60,57, 255), "Ivy"); // Dark green
+
 
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(color_MovingPlatformAlpha.ToVector4());
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(gameObjectDictionary[])
@@ -114,6 +119,8 @@ namespace Adventure
             attachmentsDictionary.Add("Note", new List<List<GameObject>>());
             attachmentsDictionary.Add("MovingPlatform", new List<List<GameObject>>());
             attachmentsDictionary.Add("NoteAndGatePuzzle", new List<List<GameObject>>());
+            attachmentsDictionary.Add("OrganStop", new List<List<GameObject>>());
+
 
             foreach (string typeName in attachmentsDictionary.Keys)
             {
@@ -173,40 +180,33 @@ namespace Adventure
 
             }
 
-
-
-            // FormAttachments2();
-
-            //foreach (string typeName in attachmentsDictionary.Keys)
-            //{
-            //    //Debug.WriteLine(Type.GetType("Adventure." + typeName));
-            //    FormAttachments3(Type.GetType("Adventure." + typeName), attachmentsDictionary[typeName]);
-            //}
-
             // AGH. Must be a better way to do this ... 
             FormAttachments<Note>(attachmentsDictionary["Note"]);
             FormAttachments<MovingPlatform>(attachmentsDictionary["MovingPlatform"]);
             FormAttachments<NoteAndGatePuzzle>(attachmentsDictionary["NoteAndGatePuzzle"]);
+            FormAttachments<OrganStop>(attachmentsDictionary["OrganStop"]);
 
-
+            List<GameObject> temp = new List<GameObject>();
 
             foreach (GameObject gameObject in gameObjects)
             {
                 if (gameObject != null)
                 {
-                    gameObjectsAsList.Add(gameObject);
+                    if (gameObject.LoadLast)
+                    {
+                        temp.Add(gameObject);
+                    }
+                    else
+                    {
+                        gameObjectsAsList.Add(gameObject);
+                    }
                 }
 
             }
 
-            //foreach (GameObject gameObject in gameObjectsAsList)
-            //{
-            //    if (gameObject.LoadLast)
-            //    {
-            //        gameObjectsAsList.Remove(gameObject);
-            //        gameObjectsAsList.Add(gameObject);
-            //    }
-            //}
+            gameObjectsAsList.AddRange(temp);
+
+
 
 
         }
@@ -280,9 +280,9 @@ namespace Adventure
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "OrganStop")
                         {
-                            List<int> ints = ParseString(ref info, 6);
+                            List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new OrganStop(position, endPosition, "movingPlatform1", 1, assetManager, colliderManager, player);
+                            gameObjects[i, j] = new OrganStop(position, endPosition, "OrganStopTop", 1, assetManager, colliderManager, player, 8 * ints[4]);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "FKeyRound")
                         {
@@ -313,6 +313,11 @@ namespace Adventure
                             List<int> ints = ParseString(ref info);
                             gameObjects[i, j] = new NoteAndGatePuzzle(position, "symbolPlate", ints, assetManager);
                         }
+                        else if (gameObjectDictionary[colors[i, j]] == "Ivy")
+                        {
+                            List<int> ints = ParseString(ref info);
+                            gameObjects[i, j] = new Ivy(position, "Ivy", assetManager, colliderManager, player, ints[0]);
+                        }
                     }
 
                 }
@@ -326,8 +331,6 @@ namespace Adventure
         {
             string info = layer.UserData.Text;
             List<int> ints = ParseString(ref info);
-            int index = 0;
-            //Debug.WriteLine(ints[1]);
 
             for (int i = 0; i < colors.GetLength(0); i++)
             {
@@ -335,44 +338,7 @@ namespace Adventure
                 {
                     if (colors[i, j] == color_AdjustPosition)
                     {
-
-                        if (gameObjects[i, j] is AnimatedGameObject test)
-                        {
-
-                            test.position.X += ints[index];
-
-                            if (test is MovingPlatform platform)
-                            {
-                                platform.positions[0] = new Vector2(platform.positions[0].X + ints[index], platform.positions[0].Y);
-                                //platform.positions[0].X = platform.positions[0].X + ints[index];
-                            }
-
-                            index += 1;
-
-
-                        }
-
-                        if (gameObjects[i, j] is SeriesOfMovingPlatform_ABWrapAround series)
-                        {
-
-                            foreach (MovingPlatform_ABWrapAround platform in series.platforms)
-                            {
-                                platform.positions[0] = new Vector2(platform.positions[0].X + ints[index], platform.positions[0].Y);
-                                platform.positions[1] = new Vector2(platform.positions[1].X + ints[index + 1], platform.positions[1].Y);
-
-                                //platform.positions[0].X += ints[index];
-                                //platform.endPosition.X += ints[index + 1];
-                                platform.position.X += ints[index];
-
-                            }
-
-                            index += 2;
-
-                        }
-
-
-
-
+                        gameObjects[i, j].AdjustHorizontally(ref ints); 
                     }
 
                 }
@@ -383,7 +349,6 @@ namespace Adventure
         {
             string info = layer.UserData.Text;
             List<int> ints = ParseString(ref info);
-            int index = 0;
 
             for (int i = 0; i < colors.GetLength(0); i++)
             {
@@ -391,35 +356,7 @@ namespace Adventure
                 {
                     if (colors[i, j] == color_AdjustPosition)
                     {
-                        if (gameObjects[i, j] is AnimatedGameObject test)
-                        {
-                            test.position.Y += ints[index];
-
-                            if (test is MovingPlatform_ABLoop platform)
-                            {
-                                // NOTE: if using an ARRAY instead of a LIST we can access the members directly
-                                platform.positions[0] = new Vector2(platform.positions[0].X, platform.positions[0].Y + ints[index]);
-
-                                //platform.startPosition.Y += ints[index];
-                            }
-
-                        }
-
-                        if (gameObjects[i, j] is SeriesOfMovingPlatform_ABWrapAround series)
-                        {
-                            foreach (MovingPlatform_ABWrapAround platform in series.platforms)
-                            {
-                                platform.positions[0] = new Vector2(platform.positions[0].X, platform.positions[0].Y + ints[index]);
-                                platform.positions[1] = new Vector2(platform.positions[1].X, platform.positions[1].Y + ints[index + 1]);
-                                //platform.startPosition.Y += ints[index];
-                                //platform.endPosition.Y += ints[index + 1];
-                                platform.position.Y += ints[index];
-
-                            }
-                        }
-
-                        index += 1;
-
+                        gameObjects[i, j].AdjustVertically(ref ints);                      
                     }
 
                 }
@@ -463,20 +400,7 @@ namespace Adventure
                         {
                             if (gameObject1 is not T)
                             {
-
-                                //if (gameObject.GetType() == typeof(Note))
-                                //{
-                                //    gameObject1.playerControlled = true;
-                                //}
-                                //if (typeof(T) is Note)
-                                //{
-                                //    if (typeof(gameObject1) is MovingPlatform)
-                                //    {
-                                //        // gameObject1.PlayerControlled = true;
-                                //    }
-                                //}
-
-                                gameObject.attachedGameObjects.Add(gameObject1);
+                                gameObject.AddAttachedGameObject(gameObject1);
                             }
                         }
                     }
@@ -484,69 +408,6 @@ namespace Adventure
             }
 
         }
-
-        //public void FormAttachments3(Type T, List<List<GameObject>> list)
-        //{
-
-        //    for (int i = 0; i < list.Count; i++)
-        //    {
-        //        foreach (GameObject gameObject in list[i])
-        //        {
-        //            //Debug.WriteLine(gameObject.GetType());
-        //            if (gameObject.GetType() is T)
-        //            {
-        //                foreach (GameObject gameObject1 in list[i])
-        //                {
-        //                    if (gameObject1.GetType() != T)
-        //                    {
-
-        //                        //if (gameObject.GetType() == typeof(Note))
-        //                        //{
-        //                        //    gameObject1.playerControlled = true;
-        //                        //}
-        //                        //if (typeof(T) is Note)
-        //                        //{
-        //                        //    if (typeof(gameObject1) is MovingPlatform)
-        //                        //    {
-        //                        //        // gameObject1.PlayerControlled = true;
-        //                        //    }
-        //                        //}
-
-        //                        gameObject.attachedGameObjects.Add(gameObject1);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //}
-        // Working with strings doesn't really work here - it forces us to make every derived class contain the name of the base class which we obviously don't want
-        //public void FormAttachments2()
-        //{
-        //    foreach (string typeName in attachmentsDictionary.Keys)
-        //    {
-        //        for (int i = 0; i < attachmentsDictionary[typeName].Count; i++)
-        //        {
-        //            if (attachmentsDictionary[typeName][i] != null)
-        //            {
-        //                foreach (GameObject gameObject in attachmentsDictionary[typeName][i])
-        //                {
-        //                    if (gameObject.GetType().Name.Contains(typeName)) // This is so derived classes are detected e.g. MovingPlatform_NoLoop is a MovingPlatform
-        //                    {
-        //                        foreach (GameObject gameObject1 in attachmentsDictionary[typeName][i])
-        //                        {
-        //                            if (!gameObject1.GetType().Name.Contains(typeName))
-        //                            {
-        //                                gameObject.attachedGameObjects.Add(gameObject1);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //}
 
         // Some GameObjects e.g. Notes and MovingPlatforms may have a list of attached GameObjects. How we deal with this is as follows:
         // These GameObjects require their own "attachment" layer in the Aseprite file
@@ -564,6 +425,8 @@ namespace Adventure
                     if (attachmentColors.Contains(colors[i, j]))
                     {
                         gameObjectsAttachmentsData[attachmentColors.IndexOf(colors[i, j])].Add(gameObjects[i, j]);
+
+
                     }
                 }
             }
@@ -572,12 +435,12 @@ namespace Adventure
 
 
         // This code takes a string and creates a new string (stringToAdd) until the next comma
-        public string ParseUntilNextComma(ref string str, int stop = 100)
+        public string ParseUntilNextComma(ref string str)
         {
             string stringToAdd = "";
             //stringToAdd += str[0];
 
-            for (int i = 0; i <= stop; i++)
+            for (int i = 0; i < 100; i++)
             {
                 if (str[i] != ',')
                 {
@@ -600,6 +463,8 @@ namespace Adventure
         // MovingPlatform: direction, timeStationaryAtEndPoints, speed, delay
         // SeriesOfMovingPlatform: direction, timeStationaryAtEndPoints, speed, delay, numberOfPlatforms, spacing
         // Beam: direction
+        // OrganStop: direction, timeStationaryAtEndPoints, speed, delay, distanceFromBase
+        // Ivy: number of ivy tiles
         // Attachment layer: contains the name of the object Type we are attaching to - e.g. Note or MovingPlatform
 
 
@@ -608,11 +473,16 @@ namespace Adventure
         {
             List<int> result = new List<int>();
 
-            for (int k = 0; k < stop; k++)
+            for (int k = 0; k < 100; k++)
             {
                 if (str.Count() > 0)
                 {
                     result.Add(int.Parse(ParseUntilNextComma(ref str)));
+
+                    if (result.Count == stop)
+                    {
+                        break;
+                    }
                 }
                 else
                 {

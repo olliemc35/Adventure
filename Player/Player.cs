@@ -37,12 +37,6 @@ namespace Adventure
         public AnimatedSprite animation_FallingLeft;
 
 
-        public KeyboardState keyboardState;
-        public KeyboardState oldKeyboardState;
-        public MouseState mouseState;
-        public MouseState oldMouseState;
-
-
         public Vector2 ropeAnchor = new Vector2(0, 0);
 
         public bool DirectionChangedX;
@@ -50,10 +44,10 @@ namespace Adventure
 
 
         // These will be +/-1 or 0
-        public int spriteDirectionX;
-        public int spriteDirectionY;
-        public int previousSpriteDirectionX;
-        public int previousSpriteDirectionY;
+        public int directionX;
+        public int directionY;
+        public int previousDirectionX;
+        public int previousDirectionY;
 
         public float jumpDuration;
         public float jumpHeight;
@@ -210,14 +204,18 @@ namespace Adventure
 
         }
 
-        
 
-       
+
+
 
 
         public void ReturnToIdleAnimation(AnimatedSprite animation)
         {
             UpdatePlayingAnimation(animation_Idle);
+        }
+        public void ReturnToIdleLeftAnimation(AnimatedSprite animation)
+        {
+            UpdatePlayingAnimation(animation_IdleLeft);
         }
 
         public void ReturnToRespawnAnimation(AnimatedSprite animation)
@@ -246,7 +244,7 @@ namespace Adventure
 
             base.LoadContent();
 
-            
+
 
             animation_IdleLeft = spriteSheet.CreateAnimatedSprite("IdleLeft");
             animation_MoveRight = spriteSheet.CreateAnimatedSprite("MoveRight");
@@ -267,7 +265,7 @@ namespace Adventure
 
 
             animation_Landed.OnAnimationEnd = ReturnToIdleAnimation;
-            animation_LandedLeft.OnAnimationEnd = ReturnToIdleAnimation;
+            animation_LandedLeft.OnAnimationEnd = ReturnToIdleLeftAnimation;
             animation_Respawn.OnAnimationEnd = ReturnToIdleAnimation;
             animation_Dead.OnAnimationEnd = ReturnToRespawnAnimation;
 
@@ -322,7 +320,10 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            
+            //Debug.WriteLine("A: " + animation_playing.Name);
+            //Debug.WriteLine("B: " + spriteDirectionX);
+            //Debug.WriteLine("C: " + playerStateManager.normalState.Active);
+            //Debug.WriteLine(velocity.X);
             bomb.Update(gameTime);
             foreach (Ribbon ribbon in ribbons)
             {
@@ -332,12 +333,12 @@ namespace Adventure
                 }
             }
 
+
             ropeAnchor.X = position.X + idleHitbox.offsetX + 1;
             ropeAnchor.Y = position.Y + idleHitbox.offsetY + idleHitbox.rectangle.Height / 2 - 2;
 
 
 
-            inputManager.PlayerMovementInput(this);
             MovePlayer(gameTime);
 
             base.Update(gameTime);
@@ -350,7 +351,7 @@ namespace Adventure
         public override void Draw(SpriteBatch spriteBatch)
         {
 
-
+            //Debug.WriteLine(animation_playing.Name);
 
             //if (!drawHitboxes)
             //{
@@ -363,8 +364,8 @@ namespace Adventure
             //    }
 
             //}
-            
-            //spriteBatch.Draw(idleHitbox.texture, idleHitbox.rectangle, Color.Red);
+
+            spriteBatch.Draw(idleHitbox.texture, idleHitbox.rectangle, Color.Red);
             //spriteBatch.Draw(hurtHitbox.texture, hurtHitbox.rectangle, Color.Blue);
 
 
@@ -379,7 +380,7 @@ namespace Adventure
 
             bomb.Draw(spriteBatch);
 
-            foreach(Ribbon ribbon in ribbons)
+            foreach (Ribbon ribbon in ribbons)
             {
                 if (ribbon.Enabled)
                 {
@@ -390,5 +391,117 @@ namespace Adventure
             //gun.Draw(spriteBatch);
 
         }
+
+
+
+        public void KillPlayer()
+        {
+            Dead = true;
+            playerStateManager.DeactivatePlayerStates();
+            playerStateManager.deadState.Activate();
+        }
+
+        public void Climb(AnimatedGameObject platform)
+        {
+
+
+            // We deal with the collider bools on the PLATFORM hitbox
+            // This is much better/easier - as the player hitbox will be collided with other objects such as the terrain 
+            // E.g. player.idleHitbox.CollidedOnBottom will be true if we are standing on any ground, whereas we would like to test when we are standing on top of the CLIMABLE object
+            // We can do this by looking at platform.idleHitbox.CollidedOnTop
+
+            // Another issue: platform can detect CollidedOnTop in situations where the player is not on top (e.g. try jumping at the ivy, if we hit mid-fall often fall through. This must be because platofrm is detecting collided on TOP)
+            colliderManager.UpdateHitboxRectangleColliderBools2(platform.idleHitbox, idleHitbox);
+
+
+            if (idleHitbox.rectangle.Y > platform.idleHitbox.rectangle.Y - idleHitbox.rectangle.Height)
+            {
+
+                if (platform.idleHitbox.CollidedOnLeft && directionX == 1)
+                {
+                    playerStateManager.DeactivatePlayerStates();
+                    playerStateManager.climbingState.Activate();
+                    playerStateManager.climbingState.platform = platform;
+                    playerStateManager.climbingState.orientation = ClimbingState.Orientation.right;
+                }
+                else if (platform.idleHitbox.CollidedOnRight && directionX == -1)
+                {
+                    playerStateManager.DeactivatePlayerStates();
+                    playerStateManager.climbingState.Activate();
+                    playerStateManager.climbingState.platform = platform;
+                    playerStateManager.climbingState.orientation = ClimbingState.Orientation.left;
+                }
+                else if (platform.idleHitbox.CollidedOnBottom && directionY == 1 && platform.idleHitbox.rectangle.Width > 8)
+                {
+                    playerStateManager.DeactivatePlayerStates();
+                    playerStateManager.climbingState.Activate();
+                    playerStateManager.climbingState.platform = platform;
+                    playerStateManager.climbingState.orientation = ClimbingState.Orientation.top;
+                }
+            }
+            else
+            {
+                // In this case the player is standing on top of a platform which is climable
+                // If they press the down key, and are standing in the right position, we want them to move to a CLIMB state
+                // If the platform is wide enough the "right position" simply depends on which corner we are closest to
+                // Otherwise, we need to check collisions with other terrain elements in the level, in order to determine which side of the platform is free and the side we should be climbing (think of ivy for this case)
+
+                if (directionY == 1)
+                {
+                    if (platform.idleHitbox.rectangle.Width > 8)
+                    {
+
+                        if (position.X < platform.idleHitbox.rectangle.X + distanceCanStartClimbing)
+                        {
+                            playerStateManager.DeactivatePlayerStates();
+                            playerStateManager.climbingState.Activate();
+                            playerStateManager.climbingState.platform = platform;
+                            playerStateManager.climbingState.orientation = ClimbingState.Orientation.right;
+
+                        }
+                        else if (position.X > platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width - distanceCanStartClimbing)
+                        {
+                            playerStateManager.DeactivatePlayerStates();
+                            playerStateManager.climbingState.Activate();
+                            playerStateManager.climbingState.platform = platform;
+                            playerStateManager.climbingState.orientation = ClimbingState.Orientation.left;
+                        }
+
+                    }
+                    else
+                    {
+
+
+                        colliderManager.ResetColliderBoolsForHitbox(platform.idleHitbox);
+
+                        foreach (HitboxRectangle hitbox in screenManager.activeScreen.hitboxesToCheckCollisionsWith)
+                        {
+                            colliderManager.UpdateHitboxRectangleColliderBools2(platform.idleHitbox, hitbox);
+                        }
+
+                        if (platform.idleHitbox.CollidedOnRight)
+                        {
+                            playerStateManager.DeactivatePlayerStates();
+                            playerStateManager.climbingState.Activate();
+                            playerStateManager.climbingState.platform = platform;
+                            playerStateManager.climbingState.orientation = ClimbingState.Orientation.right;
+                        }
+                        else if (platform.idleHitbox.CollidedOnLeft)
+                        {
+                            playerStateManager.DeactivatePlayerStates();
+                            playerStateManager.climbingState.Activate();
+                            playerStateManager.climbingState.platform = platform;
+                            playerStateManager.climbingState.orientation = ClimbingState.Orientation.left;
+                        }
+
+                    }
+                }
+
+            }
+
+            colliderManager.ResetColliderBoolsForHitbox(platform.idleHitbox);
+
+        }
+
     }
 }

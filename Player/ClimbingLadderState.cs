@@ -46,7 +46,7 @@ namespace Adventure
             }
 
             // I've climbed the ladder
-            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= ladder.positionOfTopLeftCorner.Y && player.spriteDirectionY != 1)
+            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= ladder.positionOfTopLeftCorner.Y && player.directionY != 1)
             {
                 player.velocity.Y = 0;
                 exits = Exits.exitToNormalState;
@@ -54,7 +54,7 @@ namespace Adventure
             }
 
             // I've hit the bottom and I'm not going up
-            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height > ladder.positionOfTopLeftCorner.Y && player.CollidedOnBottom && player.spriteDirectionY != -1)
+            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height > ladder.positionOfTopLeftCorner.Y && player.CollidedOnBottom && player.directionY != -1)
             {
                 player.velocity.Y = 0;
                 exits = Exits.exitToNormalState;
@@ -67,7 +67,7 @@ namespace Adventure
         {
             player.velocity.X = 0;
             player.displacement.X = 0;
-            player.velocity.Y = climbingSpeed * player.spriteDirectionY;
+            player.velocity.Y = climbingSpeed * player.directionY;
             player.displacement.Y = player.velocity.Y * player.deltaTime;
 
         }

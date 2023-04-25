@@ -52,12 +52,12 @@ namespace Adventure
             return keyboardState.IsKeyUp(key) && previousKeyboardState.IsKeyDown(key);
         }
 
-        public void PlayerMovementInput(Player player)
+        public void UpdatePlayerInput(Player player)
         {
             //Debug.WriteLine(velocityOffSetDueToMovingPlatform.Y);
             // We will use these to check whether we have changed direction
-            int testDirectionX = player.spriteDirectionX;
-            int testDirectionY = player.spriteDirectionY;
+            int testDirectionX = player.directionX;
+            int testDirectionY = player.directionY;
 
 
 
@@ -69,15 +69,15 @@ namespace Adventure
             {
                 if (testDirectionX != -1)
                 {
-                    player.spriteDirectionX = -1;
+                    player.directionX = -1;
                 }
                 else if (testDirectionX != 1)
                 {
-                    player.spriteDirectionX = 1;
+                    player.directionX = 1;
                 }
                 else
                 {
-                    player.spriteDirectionX = 0;
+                    player.directionX = 0;
                 }
 
                 player.twoKeysPressedFirstTimeX = false;
@@ -88,17 +88,17 @@ namespace Adventure
             }
             else if (keyboardState.IsKeyDown(Keys.Left))
             {
-                player.spriteDirectionX = -1;
+                player.directionX = -1;
                 player.twoKeysPressedFirstTimeX = true;
             }
             else if (keyboardState.IsKeyDown(Keys.Right))
             {
-                player.spriteDirectionX = 1;
+                player.directionX = 1;
                 player.twoKeysPressedFirstTimeX = true;
             }
             else
             {
-                player.spriteDirectionX = 0;
+                player.directionX = 0;
                 player.twoKeysPressedFirstTimeX = true;
             }
 
@@ -108,9 +108,9 @@ namespace Adventure
             //else { spriteDirectionX = 0; }
 
             // Vertical direction
-            if (keyboardState.IsKeyDown(Keys.Up)) { player.spriteDirectionY = -1; }
-            else if (keyboardState.IsKeyDown(Keys.Down)) { player.spriteDirectionY = 1; }
-            else { player.spriteDirectionY = 0; }
+            if (keyboardState.IsKeyDown(Keys.Up)) { player.directionY = -1; }
+            else if (keyboardState.IsKeyDown(Keys.Down)) { player.directionY = 1; }
+            else { player.directionY = 0; }
 
             player.jumpButtonPressed = keyboardState.IsKeyDown(Keys.Space);
             //runButtonPressed = keyboardState.IsKeyDown(Keys.LeftShift);
@@ -127,18 +127,18 @@ namespace Adventure
             player.flagLeftMouseClick = mouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released;
 
             // Keep track of previous direction
-            if (player.spriteDirectionX != testDirectionX)
+            if (player.directionX != testDirectionX)
             {
-                player.previousSpriteDirectionX = testDirectionX;
+                player.previousDirectionX = testDirectionX;
                 player.DirectionChangedX = true;
             }
             else
             {
                 player.DirectionChangedX = false;
             }
-            if (player.spriteDirectionY != testDirectionY)
+            if (player.directionY != testDirectionY)
             {
-                player.previousSpriteDirectionY = testDirectionY;
+                player.previousDirectionY = testDirectionY;
                 player.DirectionChangedY = true;
             }
             else

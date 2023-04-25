@@ -138,15 +138,15 @@ namespace Adventure
             if (isTeleportGlobal)
             {
 
-                teleportDirection.X = player.spriteDirectionX;
+                teleportDirection.X = player.directionX;
 
-                if (player.spriteDirectionX != 0)
+                if (player.directionX != 0)
                 {
                     teleportDirection.Y = -1;
                 }
                 else
                 {
-                    if (player.spriteDirectionY == -1)
+                    if (player.directionY == -1)
                     {
                         teleportDirection.Y = -1;
 

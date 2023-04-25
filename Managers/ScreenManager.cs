@@ -140,9 +140,6 @@ namespace Adventure
         public AssetManager assetManager;
         public SoundManager soundManager;
 
-        public KeyboardState keyboardState = new KeyboardState();
-        public KeyboardState oldKeyboardState = new KeyboardState();
-
         public Player player;
 
 
@@ -204,7 +201,6 @@ namespace Adventure
 
         public void Update(GameTime gameTime)
         {
-            keyboardState = Keyboard.GetState();
 
             activeScreen.Update(gameTime);
 
@@ -219,7 +215,6 @@ namespace Adventure
 
             //soundManager.Update(gameTime);
 
-            oldKeyboardState = keyboardState;
 
         }
 
@@ -257,10 +252,6 @@ namespace Adventure
             activeScreen.Show();
         }
 
-        private bool CheckKey(Keys theKey)
-        {
-            return keyboardState.IsKeyUp(theKey) && oldKeyboardState.IsKeyDown(theKey);
-        }
 
         public void CreateScreens(ContentManager content, GraphicsDevice graphicsDevice)
         {
@@ -280,7 +271,7 @@ namespace Adventure
                 level.LoadContent(content, graphicsDevice);
 
                 screens.Add(
-                    new ActionScreen(spriteBatch, menuFont, player, level.gameObjectsAsList, level.backgroundObjects)
+                    new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects)
                     {
                         respawnPoint = new Vector2(8 * 1, 8 * 1),
                         screenNumber = i,

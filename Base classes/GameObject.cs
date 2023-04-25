@@ -49,6 +49,8 @@ namespace Adventure
         // Some GameObjects need to be loaded into the game before others - e.g. NoteAndGatePuzzle needs to be loaded AFTER notes have
         public bool LoadLast = false;
 
+        
+
         public GameObject()
         {
         }
@@ -65,8 +67,34 @@ namespace Adventure
         {
         }
 
+        public virtual void MoveOnPlatform(Vector2 moveVector)
+        {
 
-       
+        }
+
+        public virtual void AddAttachedGameObject(GameObject gameObject)
+        {
+            attachedGameObjects.Add(gameObject);
+        }
+
+
+        // These two functions are used in the ActionScreenBuilder to determine behaviour on AdjustHorizontally / AdjustVertically layers
+        public virtual void AdjustHorizontally(ref List<int> ints)
+        {
+
+        }
+        public virtual void AdjustVertically(ref List<int> ints)
+        {
+
+        }
+
+        // Certain GameObjects will be attached to a Note and will execute some code whenever the player interacts with the note
+        public virtual void HandleNoteTrigger()
+        {
+
+        }
+
+
 
     }
 }

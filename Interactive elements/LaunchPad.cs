@@ -159,11 +159,16 @@ namespace Adventure
                 UpdatePlayingAnimation(animation_Idle);
             }
 
-            
-
+           
            
 
         }
+
+        public override void HandleNoteTrigger()
+        {
+            launchFlag = true;
+        }
+
 
     }
 }

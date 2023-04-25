@@ -91,6 +91,11 @@ namespace Adventure
             }
         }
 
-       
+
+        public override void HandleNoteTrigger()
+        {
+            StartAPlatformMoving();
+        }
+
     }
 }

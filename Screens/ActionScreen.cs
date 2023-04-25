@@ -14,47 +14,21 @@ namespace Adventure
     public class ActionScreen : GameScreen
     {
         public Player player;
-
+        public InputManager inputManager;
         // It is important, for the draw order, that we add the tiles FIRST - so that these are drawn in the background
         public Tileset tileset;
         public AnimatedGameObject[,] arrayofTiles;
 
         public AnimatedGameObject[,] backgroundObjects;
 
-        ActionScreenBuilder screenBuilder;
 
 
-        public KeyboardState keyboardState;
-        public KeyboardState oldKeyboardState;
-
-
-
-        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, List<GameObject> gameObjects, Tileset tileset, KeyboardState keyboard, KeyboardState oldKeyboard) : base(spriteBatch)
-        {
-            this.player = player;
-            this.screenGameObjectsToLoadIn = gameObjects;
-            this.tileset = tileset;
-            this.keyboardState = keyboard;
-            this.oldKeyboardState = oldKeyboard;
-            arrayofTiles = new AnimatedGameObject[tileset.rows, tileset.columns];
-            ScreenWidth = 8 * tileset.columns;
-            ScreenHeight = 8 * tileset.rows;
-        }
-        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, List<GameObject> gameObjects, KeyboardState keyboard, KeyboardState oldKeyboard) : base(spriteBatch)
-        {
-            this.player = player;
-            this.screenGameObjectsToLoadIn = gameObjects;
-            this.keyboardState = keyboard;
-            this.oldKeyboardState = oldKeyboard;
-            ScreenWidth = 8 * 40;
-            ScreenHeight = 8 * 23;
-        }
-
-        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, List<GameObject> gameObjects, AnimatedGameObject[,] backgroundObjects) : base(spriteBatch)
+        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, InputManager inputManager, List<GameObject> gameObjects, AnimatedGameObject[,] backgroundObjects) : base(spriteBatch)
         {
             this.player = player;
             this.screenGameObjectsToLoadIn = gameObjects;
             this.backgroundObjects = backgroundObjects;
+            this.inputManager = inputManager;
             ScreenWidth = 8 * 40;
             ScreenHeight = 8 * 23;
         }
@@ -127,6 +101,7 @@ namespace Adventure
                     if (gameObject is OrganStop organStop)
                     {
                         hitboxesToCheckCollisionsWith.Add(organStop.platform.idleHitbox);
+                        hitboxesToCheckCollisionsWith.Add(organStop.tubeHitbox);
                     }
                     //if (gameObject is FlashingBeam beam)
                     //{
@@ -228,6 +203,7 @@ namespace Adventure
             base.Update(gameTime);
             camera.UpdateTransform(this, player);
 
+          
         }
 
         public override void Draw(GameTime gameTime)
@@ -240,133 +216,10 @@ namespace Adventure
             //}
         }
 
-
-
-
-        //public void BuildTileSet()
-        //{
-        //    for (int i = 0; i < tileset.arrayofTileSetSpriteFilenames.GetLength(0); i++)
-        //    {
-
-        //        for (int j = 0; j < tileset.arrayofTileSetSpriteFilenames.GetLength(1); j++)
-        //        {
-
-        //            AnimatedGameObject tile = new AnimatedGameObject(new Vector2(8 * j, 8 * i), tileset.arrayofTileSetSpriteFilenames[i, j]);
-
-        //            tile.LoadContent(References.content, References.graphicsDevice);
-
-        //            if (tile.filename == "Tile_air")
-        //            {
-        //                tile.idleHitbox.isActive = false;
-        //            }
-        //            else
-        //            {
-        //                tile.idleHitbox.isActive = true;
-        //            }
-        //            arrayofTiles[i, j] = tile;
-        //            gameObjectsDrawOnly.Add(tile);
-        //        }
-        //    }
-        //}
-
-
-
-        //public void BuildHitboxSet()
-        //{
-
-        //    for (int i = 0; i < arrayofTiles.GetLength(1); i++)
-        //    {
-        //        for (int j = 0; j < arrayofTiles.GetLength(0); j++)
-        //        {
-
-        //            bool GotHeight = false;
-
-        //            if (arrayofTiles[j, i].idleHitbox.isActive)
-        //            {
-        //                HitboxRectangle newHitbox = new HitboxRectangle(0, 0, 0, 0);
-        //                newHitbox.rectangle.X = arrayofTiles[j, i].idleHitbox.rectangle.X;
-        //                newHitbox.rectangle.Y = arrayofTiles[j, i].idleHitbox.rectangle.Y;
-
-
-        //                // Get correct width
-        //                if (i < arrayofTiles.GetLength(1) - 1)
-        //                {
-        //                    for (int k = i + 1; k < arrayofTiles.GetLength(1); k++)
-        //                    {
-        //                        if (!arrayofTiles[j, k].idleHitbox.isActive)
-        //                        {
-        //                            newHitbox.rectangle.Width = (k - i) * 8;
-        //                            break;
-        //                        }
-
-        //                        if (k == arrayofTiles.GetLength(1) - 1 && arrayofTiles[j, k].idleHitbox.isActive)
-        //                        {
-        //                            newHitbox.rectangle.Width = (k - i + 1) * 8;
-        //                            break;
-        //                        }
-
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    newHitbox.rectangle.Width = 1;
-        //                }
-
-
-        //                // Get correct height
-        //                if (j < arrayofTiles.GetLength(0) - 1)
-        //                {
-        //                    for (int h = j + 1; h < arrayofTiles.GetLength(0); h++)
-        //                    {
-        //                        for (int l = i; l < i + (newHitbox.rectangle.Width) / 8; l++)
-        //                        {
-        //                            if (!arrayofTiles[h, l].idleHitbox.isActive)
-        //                            {
-        //                                newHitbox.rectangle.Height = (h - j) * 8;
-        //                                GotHeight = true;
-        //                                break;
-        //                            }
-        //                        }
-
-        //                        if (GotHeight)
-        //                        {
-        //                            break;
-        //                        }
-
-        //                        // I only reach this point if everything is fine
-        //                        if (h == arrayofTiles.GetLength(0) - 1)
-        //                        {
-        //                            newHitbox.rectangle.Height = (h - j + 1) * 8;
-        //                        }
-
-        //                    }
-
-        //                }
-        //                else
-        //                {
-        //                    newHitbox.rectangle.Height = 1;
-        //                }
-
-
-        //                for (int j2 = j; j2 < j + newHitbox.rectangle.Height / 8; j2++)
-        //                {
-        //                    for (int i2 = i; i2 < i + newHitbox.rectangle.Width / 8; i2++)
-        //                    {
-        //                        arrayofTiles[j2, i2].idleHitbox.isActive = false;
-        //                    }
-        //                }
-
-
-        //                newHitbox.isActive = true;
-        //                hitboxesToCheckCollisionsWith.Add(newHitbox);
-        //                hitboxesForAimLine.Add(newHitbox);
-
-        //            }
-        //        }
-
-
-        //    }
-        //}
+        public override void HandleInput()
+        {
+            inputManager.UpdatePlayerInput(player);
+        }
 
         public void BuildBackground()
         {

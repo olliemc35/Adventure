@@ -115,6 +115,9 @@ namespace Adventure
 
         public virtual void Update(GameTime gameTime)
         {
+
+            HandleInput();
+
             foreach (GameObject gameObject in screenGameObjects)
             {
                 if (gameObject.Enabled)
@@ -122,6 +125,8 @@ namespace Adventure
                     gameObject.Update(gameTime);
                 }
             }
+
+
 
             if (screenGameObjectsToRemove != null)
             {
@@ -137,8 +142,7 @@ namespace Adventure
           
 
 
-
-          
+        
 
 
 
@@ -185,6 +189,10 @@ namespace Adventure
             }
         }
 
+
+        public virtual void HandleInput()
+        {
+        }
 
         public virtual void Show()
         {

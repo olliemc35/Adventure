@@ -196,61 +196,13 @@ namespace Adventure
             if (attachedGameObjects != null)
             {
                 foreach (GameObject gameObject in attachedGameObjects)
-                {
-
-                    if (gameObject is Gate gate)
-                    {
-                        if (gate.open)
-                        {
-                            gate.open = false;
-                        }
-                        else
-                        {
-                            gate.open = true;
-                        }
-                    }
-                    else if (gameObject is MovingPlatform_ABA platform_oneLoop)
-                    {
-                        if (!platform_oneLoop.movePlatform)
-                        {
-                            platform_oneLoop.movePlatform = true;
-                        }
-                    }
-                    else if (gameObject is MovingPlatform_AB platform_halfLoop)
-                    {
-                        if (platform_halfLoop.movePlatform)
-                        {
-                            platform_halfLoop.ReverseDirection();
-                        }
-
-                        platform_halfLoop.movePlatform = true;                     
-
-                        //if (!platform_halfLoop.movePlatform)
-                        //{
-                        //    platform_halfLoop.movePlatform = true;
-                        //}
-                    }
-                    else if (gameObject is OrganStop organStop)
-                    {             
-                        organStop.platform.movePlatform = true;
-                    }
-                    else if (gameObject is LaunchPad launchPad)
-                    {
-                        launchPad.launchFlag = true;
-                    }
-                    else if (gameObject is SeriesOfMovingPlatform_ABWrapAround series)
-                    {
-                        series.ReverseDirection();                                  
-                    }
-                    else if (gameObject is SeriesOfMovingPlatform_ABWrapAround2 series2)
-                    {
-                        series2.StartAPlatformMoving();                       
-                    }
-                    else if (gameObject is NoteShip noteShip)
+                {                    
+                    if (gameObject is NoteShip noteShip)
                     {
                         noteShip.displacementScaling = displacementScalingForNoteShip;
-                        noteShip.moveVertically = true;
                     }
+
+                    gameObject.HandleNoteTrigger();
 
 
                 }
@@ -263,6 +215,12 @@ namespace Adventure
         public override void Draw(SpriteBatch spriteBatch)
         {
             key.Draw(spriteBatch);
+        }
+
+
+        public override void MoveOnPlatform(Vector2 moveVector)
+        {
+            key.MoveOnPlatform(moveVector);
         }
 
 

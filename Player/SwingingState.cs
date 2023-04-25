@@ -203,9 +203,9 @@ namespace Adventure
                 {
                     if (Math.Abs(impulseAngle) < 0.03)
                     {
-                        if (player.spriteDirectionX != 0)
+                        if (player.directionX != 0)
                         {
-                            swingDirection = player.spriteDirectionX;
+                            swingDirection = player.directionX;
                             swingDrivingForce = swingForceMaximum * swingForceDuration * swingDirection;
                             timeAngle = player.deltaTime;
                         }
@@ -219,9 +219,9 @@ namespace Adventure
                     }
                     else
                     {
-                        if (player.spriteDirectionX != 0 && player.spriteDirectionX == Math.Sign(player.velocity.X))
+                        if (player.directionX != 0 && player.directionX == Math.Sign(player.velocity.X))
                         {
-                            swingDirection = player.spriteDirectionX;
+                            swingDirection = player.directionX;
                             swingDrivingForce = swingForceMaximum * swingForceDuration * swingDirection;
                             timeAngle = player.deltaTime;
                         }

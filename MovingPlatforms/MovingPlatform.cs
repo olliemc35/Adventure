@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Aseprite.Sprites;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Adventure
 {
@@ -132,6 +134,24 @@ namespace Adventure
                 player.velocityOffSetDueToMovingPlatform.X = velocity.X;
                 player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
             }
+            else
+            {
+                foreach (GameObject gameObject in attachedGameObjects)
+                {
+                    if (gameObject is AnimatedGameObject sprite)
+                    {
+                        if (sprite.Climable && colliderManager.CheckForEdgesMeeting(sprite.idleHitbox, player.idleHitbox))
+                        {
+                            player.position.X += displacement.X;
+                            player.position.Y += displacement.Y;
+                            player.velocityOffSetDueToMovingPlatform.X = velocity.X;
+                            player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
+                            break;
+                        }
+
+                    }
+                }
+            }
 
             idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
             idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
@@ -234,27 +254,14 @@ namespace Adventure
         }
 
 
+        // Give each GameObject a MoveOnPlatform method which it can override? So don't need to adjust method according to gameObject Type
         public void MoveAttachedGameObjects()
         {
             if (attachedGameObjects != null)
             {
-
                 foreach (GameObject gameObject in attachedGameObjects)
                 {
-                    if (gameObject is Note note)
-                    {
-                        note.key.position.X += displacement.X;
-                        note.key.idleHitbox.rectangle.X = (int)note.key.position.X + note.key.idleHitbox.offsetX;
-                        note.key.position.Y += displacement.Y;
-                        note.key.idleHitbox.rectangle.Y = (int)note.key.position.Y + note.key.idleHitbox.offsetY;
-                    }
-                    else if (gameObject is AnimatedGameObject sprite)
-                    {
-                        sprite.position.X += displacement.X;
-                        sprite.idleHitbox.rectangle.X = (int)sprite.position.X + sprite.idleHitbox.offsetX;
-                        sprite.position.Y += displacement.Y;
-                        sprite.idleHitbox.rectangle.Y = (int)sprite.position.Y + sprite.idleHitbox.offsetY;
-                    }
+                    gameObject.MoveOnPlatform(displacement);
                 }
             }
         }
@@ -325,6 +332,21 @@ namespace Adventure
 
             indexes.Reverse();
 
+        }
+
+
+        public override void AdjustHorizontally(ref List<int> ints)
+        {
+            position.X += ints[0];
+            positions[0] = new Vector2(positions[0].X + ints[0], positions[0].Y);
+            ints.RemoveAt(0);
+        }
+
+        public override void AdjustVertically(ref List<int> ints)
+        {
+            position.Y += ints[0];
+            positions[0] = new Vector2(positions[0].X, positions[0].Y + ints[0]);
+            ints.RemoveAt(0);
         }
 
     }

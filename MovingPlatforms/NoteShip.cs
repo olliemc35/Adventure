@@ -87,5 +87,12 @@ namespace Adventure
         }
 
 
+        public override void HandleNoteTrigger()
+        {
+            //displacementScaling = displacementScalingForNoteShip;
+            moveVertically = true;
+        }
+
+
     }
 }

@@ -87,12 +87,12 @@ namespace Adventure
                 }
                 else
                 {
-                    if (player.spriteDirectionX == 1)
+                    if (player.directionX == 1)
                     {
                         statesX = StatesX.accelerateRight;
 
                     }
-                    else if (player.spriteDirectionX == -1)
+                    else if (player.directionX == -1)
                     {
                         statesX = StatesX.accelerateLeft;
                     }
@@ -140,12 +140,12 @@ namespace Adventure
         {
             if (!player.CollidedOnBottom)
             {
-                if (player.CollidedOnRight && player.spriteDirectionX == 1)
+                if (player.CollidedOnRight && player.directionX == 1)
                 {
                     exits = Exits.exitToSlidingWallStateFacingRight;
                     return;
                 }
-                if (player.CollidedOnLeft && player.spriteDirectionX == -1)
+                if (player.CollidedOnLeft && player.directionX == -1)
                 {
                     exits = Exits.exitToSlidingWallStateFacingLeft;
                     return;
@@ -161,7 +161,7 @@ namespace Adventure
 
             if (statesX == StatesX.constantVelocityRightUntilHitGround)
             {
-                if (player.spriteDirectionX == -1)
+                if (player.directionX == -1)
                 {
                     if (playerControlCounter >= NumberOfFramesBeforePlayerRegainsControl)
                     {
@@ -185,11 +185,11 @@ namespace Adventure
 
                 if (player.CollidedOnBottom)
                 {
-                    if (player.spriteDirectionX == 1)
+                    if (player.directionX == 1)
                     {
                         statesX = StatesX.constantVelocityRight;
                     }
-                    else if (player.spriteDirectionX == -1)
+                    else if (player.directionX == -1)
                     {
                         statesX = StatesX.accelerateLeft;
                     }
@@ -205,7 +205,7 @@ namespace Adventure
             if (statesX == StatesX.constantVelocityLeftUntilHitGround)
             {
 
-                if (player.spriteDirectionX == 1)
+                if (player.directionX == 1)
                 {
                     if (playerControlCounter >= NumberOfFramesBeforePlayerRegainsControl)
                     {
@@ -230,11 +230,11 @@ namespace Adventure
                 if (player.CollidedOnBottom)
                 {
 
-                    if (player.spriteDirectionX == -1)
+                    if (player.directionX == -1)
                     {
                         statesX = StatesX.constantVelocityLeft;
                     }
-                    else if (player.spriteDirectionX == 1)
+                    else if (player.directionX == 1)
                     {
                         statesX = StatesX.accelerateRight;
                     }
@@ -248,49 +248,49 @@ namespace Adventure
             }
 
 
-            if (player.CollidedOnRight && player.spriteDirectionX == 1)
+            if (player.CollidedOnRight && player.directionX == 1)
             {
                 statesX = StatesX.constantVelocityRight;
                 return;
             }
 
-            if (player.CollidedOnLeft && player.spriteDirectionX == -1)
+            if (player.CollidedOnLeft && player.directionX == -1)
             {
                 statesX = StatesX.constantVelocityLeft;
                 return;
             }
 
-            if (statesX == StatesX.atRestX && player.DirectionChangedX && player.spriteDirectionX == 1)
+            if (statesX == StatesX.atRestX && player.DirectionChangedX && player.directionX == 1)
             {
                 statesX = StatesX.accelerateRight;
                 return;
             }
 
-            if (statesX == StatesX.atRestX && player.DirectionChangedX && player.spriteDirectionX == -1)
+            if (statesX == StatesX.atRestX && player.DirectionChangedX && player.directionX == -1)
             {
                 statesX = StatesX.accelerateLeft;
                 return;
             }
 
-            if ((statesX == StatesX.accelerateRight || statesX == StatesX.constantVelocityRight) && player.DirectionChangedX && player.spriteDirectionX == 0)
+            if ((statesX == StatesX.accelerateRight || statesX == StatesX.constantVelocityRight) && player.DirectionChangedX && player.directionX == 0)
             {
                 statesX = StatesX.decelerateRight;
                 return;
             }
 
-            if ((statesX == StatesX.accelerateLeft || statesX == StatesX.constantVelocityLeft) && player.DirectionChangedX && player.spriteDirectionX == 0)
+            if ((statesX == StatesX.accelerateLeft || statesX == StatesX.constantVelocityLeft) && player.DirectionChangedX && player.directionX == 0)
             {
                 statesX = StatesX.decelerateLeft;
                 return;
             }
 
-            if ((statesX == StatesX.decelerateRight || statesX == StatesX.decelerateLeft || statesX == StatesX.accelerateLeft || statesX == StatesX.constantVelocityLeft) && player.DirectionChangedX && player.spriteDirectionX == 1)
+            if ((statesX == StatesX.decelerateRight || statesX == StatesX.decelerateLeft || statesX == StatesX.accelerateLeft || statesX == StatesX.constantVelocityLeft) && player.DirectionChangedX && player.directionX == 1)
             {
                 statesX = StatesX.accelerateRight;
                 return;
             }
 
-            if ((statesX == StatesX.decelerateRight || statesX == StatesX.decelerateLeft || statesX == StatesX.accelerateRight || statesX == StatesX.constantVelocityRight) && player.DirectionChangedX && player.spriteDirectionX == -1)
+            if ((statesX == StatesX.decelerateRight || statesX == StatesX.decelerateLeft || statesX == StatesX.accelerateRight || statesX == StatesX.constantVelocityRight) && player.DirectionChangedX && player.directionX == -1)
             {
                 statesX = StatesX.accelerateLeft;
                 return;
@@ -475,21 +475,21 @@ namespace Adventure
             {
                 if (player.velocity.Y < 0)
                 {
-                    if (player.spriteDirectionX == -1)
+                    if (player.directionX == -1)
                     {
                         player.UpdatePlayingAnimation(player.animation_JumpLeft);
                     }
-                    else if (player.spriteDirectionX == 1) 
+                    else if (player.directionX == 1) 
                     {
                         player.UpdatePlayingAnimation(player.animation_JumpRight);
                     }
-                    else if (player.spriteDirectionX == 0)
+                    else if (player.directionX == 0)
                     {
-                        if (player.previousSpriteDirectionX == -1)
+                        if (player.previousDirectionX == -1)
                         {
                             player.UpdatePlayingAnimation(player.animation_JumpLeft);
                         }
-                        else if (player.previousSpriteDirectionX == 1)
+                        else if (player.previousDirectionX == 1)
                         {
                             player.UpdatePlayingAnimation(player.animation_JumpRight);
                         }
@@ -497,21 +497,21 @@ namespace Adventure
                 }
                 else
                 {
-                    if (player.spriteDirectionX == -1)
+                    if (player.directionX == -1)
                     {
                         player.UpdatePlayingAnimation(player.animation_FallingLeft);
                     }
-                    else if (player.spriteDirectionX == 1)
+                    else if (player.directionX == 1)
                     {
                         player.UpdatePlayingAnimation(player.animation_FallingRight);
                     }
-                    else if (player.spriteDirectionX == 0)
+                    else if (player.directionX == 0)
                     {
-                        if (player.previousSpriteDirectionX == -1)
+                        if (player.previousDirectionX == -1)
                         {
                             player.UpdatePlayingAnimation(player.animation_FallingLeft);
                         }
-                        else if (player.previousSpriteDirectionX == 1)
+                        else if (player.previousDirectionX == 1)
                         {
                             player.UpdatePlayingAnimation(player.animation_FallingRight);
                         }
@@ -524,21 +524,21 @@ namespace Adventure
                 {
                     landedFlag = false;
 
-                    if (player.spriteDirectionX == -1)
+                    if (player.directionX == -1)
                     {
                         player.UpdatePlayingAnimation(player.animation_LandedLeft, 1);
                     }
-                    else if (player.spriteDirectionX == 1)
+                    else if (player.directionX == 1)
                     {
                         player.UpdatePlayingAnimation(player.animation_Landed, 1);
                     }
-                    else if (player.spriteDirectionX == 0)
+                    else if (player.directionX == 0)
                     {
-                        if (player.previousSpriteDirectionX == -1)
+                        if (player.previousDirectionX == -1)
                         {
                             player.UpdatePlayingAnimation(player.animation_LandedLeft, 1);
                         }
-                        else if (player.previousSpriteDirectionX == 1)
+                        else if (player.previousDirectionX == 1)
                         {
                             player.UpdatePlayingAnimation(player.animation_Landed, 1);
                         }
@@ -548,22 +548,21 @@ namespace Adventure
 
                 if (!(player.animation_Landed.IsAnimating || player.animation_LandedLeft.IsAnimating))
                 {
-                    if (player.spriteDirectionX == 1)
+                    if (player.directionX == 1)
                     {
                         player.UpdatePlayingAnimation(player.animation_MoveRight);
                     }
-                    else if (player.spriteDirectionX == -1)
+                    else if (player.directionX == -1)
                     {
                         player.UpdatePlayingAnimation(player.animation_MoveLeft);
                     }
-                    else if (player.spriteDirectionX == 0)
+                    else if (player.directionX == 0)
                     {
-                        if (player.previousSpriteDirectionX == 1)
+                        if (player.previousDirectionX == 1)
                         {
                             player.UpdatePlayingAnimation(player.animation_Idle);
-
                         }
-                        else if (player.previousSpriteDirectionX == -1)
+                        else if (player.previousDirectionX == -1)
                         {
                             player.UpdatePlayingAnimation(player.animation_IdleLeft);
 

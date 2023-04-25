@@ -92,7 +92,7 @@ namespace Adventure
             }
 
             // This is allowing the player to stand on the top of a ladder, but move from underneath the ladder 
-            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && player.spriteDirectionY != 1)
+            if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && player.directionY != 1)
             {
                 idleHitbox.isActive = true;
             }
@@ -107,7 +107,7 @@ namespace Adventure
                 if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
                 {
                     // I'm climbing starting from the top
-                    if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && player.spriteDirectionY == 1)
+                    if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height <= positionOfTopLeftCorner.Y && player.directionY == 1)
                     {
                         player.playerStateManager.climbingLadderState.ladder = this;
                         idleHitbox.isActive = false;
@@ -117,7 +117,7 @@ namespace Adventure
                     }
 
                     // I'm climbing starting from somewhere below the top
-                    if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height > positionOfTopLeftCorner.Y && player.spriteDirectionY != 0)
+                    if (player.idleHitbox.rectangle.Y + player.idleHitbox.rectangle.Height > positionOfTopLeftCorner.Y && player.directionY != 0)
                     {
                         player.playerStateManager.climbingLadderState.ladder = this;
                         player.playerStateManager.DeactivatePlayerStates();

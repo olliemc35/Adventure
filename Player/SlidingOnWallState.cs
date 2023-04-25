@@ -68,7 +68,7 @@ namespace Adventure
 
             if (facingRight)
             {
-                if (player.spriteDirectionX == -1)
+                if (player.directionX == -1)
                 {
                     if (leavingWallCounter >= numberOfFramesToLeaveWall)
                     {
@@ -88,7 +88,7 @@ namespace Adventure
 
             if (!facingRight)
             {
-                if (player.spriteDirectionX == 1)
+                if (player.directionX == 1)
                 {
                     if (leavingWallCounter >= numberOfFramesToLeaveWall)
                     {
