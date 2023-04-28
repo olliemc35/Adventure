@@ -17,16 +17,14 @@ namespace Adventure
         public int durationOff;
         public int delay;
         public bool beforeDelay;
-        public bool on;
 
 
-        public FlashingBeam(Vector2 startPosition, int durationOn, int durationOff, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, int delay = 0) : base(startPosition, endPosition, assetManager, colliderManager, screenManager, player)
+        public FlashingBeam(Vector2 startPosition, int durationOn, int durationOff, Vector2 endPosition, int on, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, int delay = 0) : base(startPosition, endPosition, on, assetManager, colliderManager, screenManager, player)
         {
             this.durationOn = durationOn;
             this.durationOff = durationOff;
             this.delay = delay;
             beforeDelay = false;
-            on = true;
         }
 
 

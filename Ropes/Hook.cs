@@ -136,7 +136,7 @@ namespace Adventure
         {
             for (int i = 0; i < rope.Count(); i++)
             {
-                rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
+                rope[i].animation_Idle.Draw(spriteBatch, rope[i].drawPosition);
 
             }
 

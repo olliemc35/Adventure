@@ -124,7 +124,7 @@ namespace Adventure
 
                 for (int i = 0; i <= IndexOfRopeBitInPlayersHand; i++)
                 {
-                    rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
+                    rope[i].animation_Idle.Draw(spriteBatch, rope[i].drawPosition);
 
 
                     foreach (Pivot pivot in rope[i].pivotsBetweenThisRopeBitandOnePlus)

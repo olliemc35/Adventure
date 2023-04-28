@@ -86,7 +86,7 @@ namespace Adventure
 
             if (!playerInteractedWith)
             {
-                if (colliderManager.CheckForCollision(player.idleHitbox, key.idleHitbox) && (inputManager.OnKeyUp(Keys.E) || inputManager.OnKeyUp(Keys.Up)))
+                if (colliderManager.CheckForCollision(player.idleHitbox, key.idleHitbox) && (inputManager.OnKeyDown(Keys.E) || inputManager.OnKeyDown(Keys.Up)))
                 {
                     if (ribbonAttached)
                     {
@@ -218,9 +218,9 @@ namespace Adventure
         }
 
 
-        public override void MoveOnPlatform(Vector2 moveVector)
+        public override void MoveManually(Vector2 moveVector)
         {
-            key.MoveOnPlatform(moveVector);
+            key.MoveManually(moveVector);
         }
 
 

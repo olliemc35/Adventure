@@ -95,18 +95,17 @@ namespace Adventure
 
             gameObjectDictionary.Add(new Color(255, 157, 4, 255), "Door"); // Gold
             gameObjectDictionary.Add(new Color(255, 255, 255, 255), "Spike"); // White
-            gameObjectDictionary.Add(new Color(41, 20, 52, 255), "movingPlatform1"); // Very dark purple
-            gameObjectDictionary.Add(new Color(72, 37, 91, 255), "movingPlatformHalfLoop"); // Dark purple
-            gameObjectDictionary.Add(new Color(97, 52, 121, 255), "movingPlatformNoLoopSeries"); // Purple
+            gameObjectDictionary.Add(new Color(41, 20, 52, 255), "movingPlatform_ABLoop"); // Very dark purple
+            gameObjectDictionary.Add(new Color(72, 37, 91, 255), "movingPlatform_AB"); // Dark purple
+            gameObjectDictionary.Add(new Color(97, 52, 121, 255), "SeriesOfMovingPlatform_ABWrapAround"); // Purple
             gameObjectDictionary.Add(new Color(104, 104, 104, 255), "LaunchPad"); // Grey
-            gameObjectDictionary.Add(new Color(192, 0, 0, 255), "CKeyRound"); // Reds ...
-            gameObjectDictionary.Add(new Color(240, 0, 0, 255), "FKeyRound");
+            gameObjectDictionary.Add(new Color(240, 0, 0, 255), "Note_KeyRound"); // Bright red
             gameObjectDictionary.Add(new Color(155, 173, 183, 255), "Beam"); // Light grey
             gameObjectDictionary.Add(new Color(65, 25, 18, 255), "Gate"); // Dark brown
             gameObjectDictionary.Add(new Color(255, 120, 0, 255), "NoteAndGatePuzzle"); // Bright orange
-            gameObjectDictionary.Add(new Color(56,37,37, 255), "OrganStop"); // Dark brown
-            gameObjectDictionary.Add(new Color(50,60,57, 255), "Ivy"); // Dark green
-
+            gameObjectDictionary.Add(new Color(56, 37, 37, 255), "OrganStop"); // Dark brown
+            gameObjectDictionary.Add(new Color(50, 60, 57, 255), "Ivy"); // Dark green
+            gameObjectDictionary.Add(new Color(151, 151, 151, 255), "BreakingPlatform"); // Light grey
 
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(color_MovingPlatformAlpha.ToVector4());
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(gameObjectDictionary[])
@@ -186,7 +185,8 @@ namespace Adventure
             FormAttachments<NoteAndGatePuzzle>(attachmentsDictionary["NoteAndGatePuzzle"]);
             FormAttachments<OrganStop>(attachmentsDictionary["OrganStop"]);
 
-            List<GameObject> temp = new List<GameObject>();
+            List<GameObject> gameObjects_LoadLast = new List<GameObject>();
+            List<GameObject> gameObjects_LoadFirst = new List<GameObject>();
 
             foreach (GameObject gameObject in gameObjects)
             {
@@ -194,7 +194,11 @@ namespace Adventure
                 {
                     if (gameObject.LoadLast)
                     {
-                        temp.Add(gameObject);
+                        gameObjects_LoadLast.Add(gameObject);
+                    }
+                    else if (gameObject.LoadFirst)
+                    {
+                        gameObjects_LoadFirst.Add(gameObject);
                     }
                     else
                     {
@@ -204,8 +208,10 @@ namespace Adventure
 
             }
 
-            gameObjectsAsList.AddRange(temp);
 
+
+            gameObjectsAsList.InsertRange(0, gameObjects_LoadFirst);
+            gameObjectsAsList.AddRange(gameObjects_LoadLast);
 
 
 
@@ -241,6 +247,7 @@ namespace Adventure
 
         public void HandleGameObjectLayer(AsepriteLayer layer, Color[,] colors)
         {
+
             string info = layer.UserData.Text;
 
             for (int i = 0; i < colors.GetLength(0); i++)
@@ -253,70 +260,92 @@ namespace Adventure
 
                         if (gameObjectDictionary[colors[i, j]] == "Door")
                         {
-                            List<int> ints = ParseString(ref info, 2);
-                            gameObjects[i, j] = new Door(position, "Door", ints[0], ints[1], assetManager, colliderManager, inputManager, screenManager, player);
+                            List<int> ints = ParseString(ref info, 3);
+                            gameObjects[i, j] = new Door(position, "Door", ints[0], ints[1], ints[2], assetManager, colliderManager, inputManager, screenManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 2, 2);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Spike")
                         {
                             gameObjects[i, j] = new Spike(position, "Spike", assetManager, colliderManager, player);
                         }
-                        else if (gameObjectDictionary[colors[i, j]] == "movingPlatform1")
+                        else if (gameObjectDictionary[colors[i, j]] == "movingPlatform_ABLoop")
                         {
                             List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
                             gameObjects[i, j] = new MovingPlatform_ABLoop(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
                         }
-                        else if (gameObjectDictionary[colors[i, j]] == "movingPlatformHalfLoop")
+                        else if (gameObjectDictionary[colors[i, j]] == "movingPlatform_AB")
                         {
                             List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", 1, assetManager, colliderManager, player);
+                            gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", ints[1], ints[2], assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
+
                         }
-                        else if (gameObjectDictionary[colors[i, j]] == "movingPlatformNoLoopSeries")
+                        else if (gameObjectDictionary[colors[i, j]] == "SeriesOfMovingPlatform_ABWrapAround")
                         {
                             List<int> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
                             gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], ints[4], ints[5], assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
+
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "OrganStop")
                         {
-                            List<int> ints = ParseString(ref info);
+                            List<int> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new OrganStop(position, endPosition, "OrganStopTop", 1, assetManager, colliderManager, player, 8 * ints[4]);
+                            gameObjects[i, j] = new OrganStop(position, endPosition, ints[1], ints[2], assetManager, colliderManager, player, 8 * ints[4], ints[5]);
+                            if (position.X == endPosition.X)
+                            {
+                                SetRectangularColorRegionToZero(ref colors, i, j, 5, 2);
+                            }
+                            else
+                            {
+                                SetRectangularColorRegionToZero(ref colors, i, j, 2, 5);
+                            }
                         }
-                        else if (gameObjectDictionary[colors[i, j]] == "FKeyRound")
+                        else if (gameObjectDictionary[colors[i, j]] == "Note_KeyRound")
                         {
-                            gameObjects[i, j] = new Note(position, "FKeyRound", "F", "rune_F", assetManager, colliderManager, inputManager, soundManager, player);
-                        }
-                        else if (gameObjectDictionary[colors[i, j]] == "CKeyRound")
-                        {
-                            gameObjects[i, j] = new Note(position, "CKeyRound", "C", "rune_C", assetManager, colliderManager, inputManager, soundManager, player);
-                        }
+                            string noteValue = ParseUntilNextComma(ref info);
+                            gameObjects[i, j] = new Note(position, noteValue + "KeyRound", noteValue, "rune_" + noteValue, assetManager, colliderManager, inputManager, soundManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 2, 2);
+                        }                      
                         else if (gameObjectDictionary[colors[i, j]] == "LaunchPad")
                         {
                             gameObjects[i, j] = new LaunchPad(position, "LaunchPad", assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 2, 2);
+
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Beam")
                         {
-                            List<int> ints = ParseString(ref info, 1);
+                            List<int> ints = ParseString(ref info, 2);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_BeamPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new Beam(position, endPosition, assetManager, colliderManager, screenManager, player);
+                            gameObjects[i, j] = new Beam(position, endPosition, ints[1], assetManager, colliderManager, screenManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Gate")
                         {
                             List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
                             gameObjects[i, j] = new Gate(position, endPosition, "AncientDoor", assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 1, 6);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "NoteAndGatePuzzle")
                         {
                             List<int> ints = ParseString(ref info);
                             gameObjects[i, j] = new NoteAndGatePuzzle(position, "symbolPlate", ints, assetManager);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 6, 1);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Ivy")
                         {
                             List<int> ints = ParseString(ref info);
                             gameObjects[i, j] = new Ivy(position, "Ivy", assetManager, colliderManager, player, ints[0]);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 1, ints[0]);
+                        }
+                        else if (gameObjectDictionary[colors[i, j]] == "BreakingPlatform")
+                        {
+                            gameObjects[i, j] = new BreakingPlatform(position, "platform_breaking", assetManager, colliderManager, screenManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 2, 1);
                         }
                     }
 
@@ -338,7 +367,7 @@ namespace Adventure
                 {
                     if (colors[i, j] == color_AdjustPosition)
                     {
-                        gameObjects[i, j].AdjustHorizontally(ref ints); 
+                        gameObjects[i, j].AdjustHorizontally(ref ints);
                     }
 
                 }
@@ -356,7 +385,7 @@ namespace Adventure
                 {
                     if (colors[i, j] == color_AdjustPosition)
                     {
-                        gameObjects[i, j].AdjustVertically(ref ints);                      
+                        gameObjects[i, j].AdjustVertically(ref ints);
                     }
 
                 }
@@ -456,14 +485,16 @@ namespace Adventure
             return stringToAdd;
         }
 
-        // We parse strings according to the following rules. The order is top-to-bottom then left-to-right.
+        // We parse strings according to the following rules. The order we scan the screen for GameObjects is top-to-bottom then left-to-right.
+        // We end every bit of important information with a comma
         // For direction we always take 0 = vertical and 1 = horizontal. 
-        // Doors will go: screenNumber - doorNumber. We will parse 2 at a time. 
+        // Doors will go: doorNumber, screenNumberToMoveTo, doorNumberToMoveTo
+        // Note_KeyRound: note value (e.g. C or F etc)
         // Puzzle: just parse the NoteOrder
         // MovingPlatform: direction, timeStationaryAtEndPoints, speed, delay
         // SeriesOfMovingPlatform: direction, timeStationaryAtEndPoints, speed, delay, numberOfPlatforms, spacing
         // Beam: direction
-        // OrganStop: direction, timeStationaryAtEndPoints, speed, delay, distanceFromBase
+        // OrganStop: direction, timeStationaryAtEndPoints, speed, delay, distanceFromBase, behaviour (0 = AB, 1 = ABA)
         // Ivy: number of ivy tiles
         // Attachment layer: contains the name of the object Type we are attaching to - e.g. Note or MovingPlatform
 
@@ -570,5 +601,26 @@ namespace Adventure
             return result;
 
         }
+
+        public void SetColorToZero(ref Color color)
+        {
+            color.R = 0;
+            color.G = 0;
+            color.B = 0;
+            color.A = 0;
+        }
+
+        public void SetRectangularColorRegionToZero(ref Color[,] colors, int i, int j, int width, int height)
+        {
+            for (int x = 0; x< width; x++)
+            {
+                for (int y = 0; y< height; y++)
+                {
+                    SetColorToZero(ref colors[i + x, j + y]);
+                }
+            }
+        }
+
+
     }
 }

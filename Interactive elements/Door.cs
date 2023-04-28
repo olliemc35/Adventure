@@ -13,19 +13,29 @@ namespace Adventure
 {
     public class Door : AnimatedGameObject
     {
-        public int ScreenNumberToMoveTo;
-        public int DoorNumberToMoveTo;
+        public int doorNumber;
+        public int screenNumberToMoveTo;
+        public int doorNumberToMoveTo;
 
 
-        public Door(Vector2 initialPosition, string filename, int x, int y, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player) : base(initialPosition, filename, assetManager)
+        public Door(Vector2 initialPosition, string filename, int doorNumber, int screenNumberToMoveTo, int doorNumberToMoveTo, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, Player player) : base(initialPosition, filename, assetManager)
         {
-            ScreenNumberToMoveTo = x;
-            DoorNumberToMoveTo = y;
+            this.doorNumber = doorNumber;
+            this.screenNumberToMoveTo = screenNumberToMoveTo;
+            this.doorNumberToMoveTo = doorNumberToMoveTo;
             CollisionObject = true;
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
             this.screenManager = screenManager;
             this.player = player;
+
+            // This is a cheap way of ensuring that the doors are added to the list of screen GameObjects in the right order
+            // But only works properly if there are two doors per screen. 
+            // So with more complex levels would have to think of a different way to do this
+            if (doorNumber == 2)
+            {
+                LoadLast = true;
+            }
         }
 
 
@@ -38,8 +48,8 @@ namespace Adventure
             {
                 screenManager.activeScreen.ChangeScreenFlag = true;
                 screenManager.PreviousScreenNumber = screenManager.activeScreen.screenNumber;
-                screenManager.ScreenNumber = ScreenNumberToMoveTo;
-                screenManager.DoorNumberToMoveTo = DoorNumberToMoveTo;
+                screenManager.ScreenNumber = screenNumberToMoveTo;
+                screenManager.DoorNumberToMoveTo = doorNumberToMoveTo;
             }
 
 

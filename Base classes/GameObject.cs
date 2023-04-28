@@ -48,8 +48,10 @@ namespace Adventure
 
         // Some GameObjects need to be loaded into the game before others - e.g. NoteAndGatePuzzle needs to be loaded AFTER notes have
         public bool LoadLast = false;
+        // Some GameObjects need to be loaded into the game first - e.g. MovingPlatforms need to be updated FIRST so that any attached gameObjects move before they themselves update
+        // (e.g. if attached gameObject is CLIMABLE we need it to move first otherwise the CLIMB update will use the co-ordinates before the move)
+        public bool LoadFirst = false;
 
-        
 
         public GameObject()
         {
@@ -67,7 +69,7 @@ namespace Adventure
         {
         }
 
-        public virtual void MoveOnPlatform(Vector2 moveVector)
+        public virtual void MoveManually(Vector2 moveVector)
         {
 
         }

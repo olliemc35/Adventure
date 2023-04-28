@@ -144,11 +144,16 @@ namespace Adventure
                         {
                             if (player.directionX == 1 || player.directionY == -1)
                             {
+                                Debug.WriteLine("here");
                                 player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X;
                                 player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height;
 
                                 player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;
                                 player.position.Y = player.idleHitbox.rectangle.Y - player.idleHitbox.offsetY;
+
+                                //player.position.X = platform.idleHitbox.rectangle.X;
+                                //player.position.Y = platform.idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height - player.idleHitbox.offsetY;
+
 
                                 player.velocity.Y = 0;
 
@@ -192,7 +197,9 @@ namespace Adventure
                         {
                             if (player.directionX == -1 || player.directionY == -1)
                             {
-                                player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width - player.idleHitbox.rectangle.Width;
+                                //player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + platform.idleHitbox.rectangle.Width - player.idleHitbox.rectangle.Width;
+                                //player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height;
+                                player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X + (int) 0.5f * platform.idleHitbox.rectangle.Width;
                                 player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height;
 
                                 player.position.X = player.idleHitbox.rectangle.X - player.idleHitbox.offsetX;

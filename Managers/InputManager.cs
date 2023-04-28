@@ -114,10 +114,7 @@ namespace Adventure
 
             player.jumpButtonPressed = keyboardState.IsKeyDown(Keys.Space);
             //runButtonPressed = keyboardState.IsKeyDown(Keys.LeftShift);
-            player.gunButtomPressed = keyboardState.IsKeyDown(Keys.G);
             player.flagJumpButtonPressed = previousKeyboardState.IsKeyUp(Keys.Space) && keyboardState.IsKeyDown(Keys.Space);
-            player.flagLeftDashButtonPressed = previousKeyboardState.IsKeyUp(Keys.Z) && keyboardState.IsKeyDown(Keys.Z);
-            player.flagGunButtonPressed = previousKeyboardState.IsKeyUp(Keys.G) && keyboardState.IsKeyDown(Keys.G);
             player.flagTeleportButtonPressed = previousKeyboardState.IsKeyUp(Keys.T) && keyboardState.IsKeyDown(Keys.T);
             player.flagBombButtonPressed = previousKeyboardState.IsKeyUp(Keys.B) && keyboardState.IsKeyDown(Keys.B);
             player.flagHookButtonPressed = previousKeyboardState.IsKeyUp(Keys.H) && keyboardState.IsKeyDown(Keys.H);

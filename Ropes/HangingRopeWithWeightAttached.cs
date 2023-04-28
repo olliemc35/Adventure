@@ -164,10 +164,10 @@ namespace Adventure
         {
             for (int i = 0; i < NumberOfRopeBits; i++)
             {
-                rope[i].animation_Idle.Draw(spriteBatch, rope[i].animationPosition);
+                rope[i].animation_Idle.Draw(spriteBatch, rope[i].drawPosition);
             }
 
-            weight.animation_Idle.Draw(spriteBatch, weight.animationPosition);
+            weight.animation_Idle.Draw(spriteBatch, weight.drawPosition);
 
             //foreach (HitboxRectangle hitbox in weight.hitboxesForGunlineForEachFrame[1])
             //{

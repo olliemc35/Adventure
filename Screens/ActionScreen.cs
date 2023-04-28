@@ -75,6 +75,7 @@ namespace Adventure
                         
                         if (sprite.CollisionObject)
                         {
+                          
                             hitboxesToCheckCollisionsWith.Add(sprite.idleHitbox);
                         }
 

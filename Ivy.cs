@@ -58,19 +58,19 @@ namespace Adventure
                 ivyTile.Draw(spriteBatch);
             }
 
-            spriteBatch.Draw(idleHitbox.texture, idleHitbox.rectangle, Color.Red);
+            //spriteBatch.Draw(idleHitbox.texture, idleHitbox.rectangle, Color.Red);
             //spriteBatch.Draw(ivyTiles[0].idleHitbox.texture, ivyTiles[0].idleHitbox.rectangle, Color.Red);
 
         }
 
 
-        public override void MoveOnPlatform(Vector2 moveVector)
+        public override void MoveManually(Vector2 moveVector)
         {
-            base.MoveOnPlatform(moveVector);
+            base.MoveManually(moveVector);
 
             foreach (AnimatedGameObject ivyTile in ivyTiles)
             {
-                ivyTile.MoveOnPlatform(moveVector);
+                ivyTile.MoveManually(moveVector);
             }
 
         }

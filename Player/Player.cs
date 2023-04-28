@@ -52,90 +52,43 @@ namespace Adventure
         public float jumpDuration;
         public float jumpHeight;
         public float jumpSpeed;
-        public float wallJumpWithRopeSpeedX;
 
         public bool jumpButtonPressed = false;
         public bool runButtonPressed = false;
-        public bool gunButtomPressed = false;
         public bool flagJumpButtonPressed = false;
-        public bool flagLeftDashButtonPressed = false;
-        public bool flagGunButtonPressed = false;
         public bool flagLeftMouseClick = false;
         public bool flagTeleportButtonPressed = false;
-        public bool jumpingWithRopeAttachedToTheLeft = false;
         public bool flagBombButtonPressed = false;
         public bool flagHookButtonPressed = false;
         public bool climbButtonPressed = false;
 
         public bool launchFlag = false;
 
-        public int distanceCanStartClimbing = 6;
+        public int distanceCanStartClimbing = 6; // This is the distance away from the edge of a climbable platform at which the player can start climbing
 
 
-        public bool Respawn = false;
-        public bool Dead = false;
 
         public bool twoKeysPressedFirstTimeX = true;
 
 
-        public bool gunEquipped = false;
 
         public float distanceFromRopeHookWhenAttached = 0;
-        //public float knockBackInterpolator = 0f;
 
-
-        public bool startedJumpingAgainstWall = false;
-
-        public float jump;
-        public float leftDash;
-        public float climbingSpeed = 60;
-
-
-
-
-
-        public int health = 3;
-
-
-        //public Vector2 mousePosition = new Vector2();
 
 
         public RopeForPlayer rope;
-        public Gun gun;
-        public bool fire = false;
 
-        // This will be a reference / pointer to the ladder we are climbing
-        public Ladder ladder;
-
-        public bool ropeActive = false;
-        public bool pullBackRope = false;
-
-
-
-
-        public float lambdaDecelFromSwing;
-
-        public float speedToStartOfFrom = 0;
-        public float initialVelocity = 0;
-        public Vector2 velocityAtTheBeginningOfTheInterval = new Vector2(0, 0);
-        public float timerXAtTheBeginningOfTheInterval = 0;
-
-
-
-
-
-        public bool onMovingPlatform = false;
-        public Vector2 velocityOffSetDueToMovingPlatform = new Vector2(0, 0);
-
-        public bool ribbonInHand = false;
         public List<Ribbon> ribbons;
         public int ribbonIndex = 0;
+        public bool ribbonInHand = false;
+
 
         public Bomb bomb;
         public bool bombPlanted = false;
 
 
         public PlayerStateManager playerStateManager;
+
         public HitboxRectangle hurtHitbox = new HitboxRectangle();
 
 
@@ -152,15 +105,12 @@ namespace Adventure
 
             jumpDuration = 0.5f;
             jumpHeight = 24;
-            leftDash = 500;
 
             gravityConstant = 750;
             mass = 8 * jumpHeight / (jumpDuration * jumpDuration * gravityConstant);
             jumpSpeed = 0.5f * mass * gravityConstant * jumpDuration;
-            wallJumpWithRopeSpeedX = jumpSpeed;
 
 
-            jump = 0;
 
 
             maxVerticalSpeed = 300;
@@ -287,6 +237,14 @@ namespace Adventure
             hurtHitbox.isActive = true;
 
 
+            bomb.LoadContent();
+
+            foreach (Ribbon ribbon in ribbons)
+            {
+                ribbon.LoadContent();
+            }
+
+
 
         }
 
@@ -333,6 +291,11 @@ namespace Adventure
                 }
             }
 
+            //if (playerStateManager.climbingState.Active)
+            //{
+            //    Debug.WriteLine(playerStateManager.climbingState.Active);
+
+            //}
 
             ropeAnchor.X = position.X + idleHitbox.offsetX + 1;
             ropeAnchor.Y = position.Y + idleHitbox.offsetY + idleHitbox.rectangle.Height / 2 - 2;
@@ -365,7 +328,7 @@ namespace Adventure
 
             //}
 
-            spriteBatch.Draw(idleHitbox.texture, idleHitbox.rectangle, Color.Red);
+            //spriteBatch.Draw(idleHitbox.texture, idleHitbox.rectangle, Color.Red);
             //spriteBatch.Draw(hurtHitbox.texture, hurtHitbox.rectangle, Color.Blue);
 
 
@@ -396,7 +359,6 @@ namespace Adventure
 
         public void KillPlayer()
         {
-            Dead = true;
             playerStateManager.DeactivatePlayerStates();
             playerStateManager.deadState.Activate();
         }
@@ -441,16 +403,16 @@ namespace Adventure
             }
             else
             {
-                // In this case the player is standing on top of a platform which is climable
-                // If they press the down key, and are standing in the right position, we want them to move to a CLIMB state
-                // If the platform is wide enough the "right position" simply depends on which corner we are closest to
-                // Otherwise, we need to check collisions with other terrain elements in the level, in order to determine which side of the platform is free and the side we should be climbing (think of ivy for this case)
+
+                //In this case the player is standing on top of a platform which is climable
+                //If they press the down key, and are standing in the right position, we want them to move to a CLIMB state
+                //If the platform is wide enough the "right position" simply depends on which corner we are closest to
+                //Otherwise, we need to check collisions with other terrain elements in the level, in order to determine which side of the platform is free and the side we should be climbing (think of ivy for this case)
 
                 if (directionY == 1)
                 {
                     if (platform.idleHitbox.rectangle.Width > 8)
                     {
-
                         if (position.X < platform.idleHitbox.rectangle.X + distanceCanStartClimbing)
                         {
                             playerStateManager.DeactivatePlayerStates();

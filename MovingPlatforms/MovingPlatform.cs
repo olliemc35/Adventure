@@ -51,11 +51,17 @@ namespace Adventure
         // Certain MovingPlatforms will have behaviour that is triggered by the player and we incorporate a trigger via this bool. (This is for derived classes to use.)
         public bool movePlatform = false;
 
+        bool test = true;
 
+        public MovingPlatform(Direction direction)
+        {
+            this.direction = direction;
+        }
 
         public MovingPlatform(List<Vector2> positions, List<int> indexes, string filename, int timeStationaryAtEndPoints, float speed, int delay, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(positions[0], filename, assetManager)
         {
             CollisionObject = true;
+            LoadFirst = true;
             attachedGameObjects = new List<GameObject>();
 
             this.colliderManager = colliderManager;          
@@ -121,18 +127,45 @@ namespace Adventure
 
             UpdateAtStationaryPoints();
             UpdateVelocityAndDisplacement();
-            position.X += displacement.X;
-            position.X = FindNearestInteger(position.X); // If I don't do this it doesn't register the end-points properly. ON the other hand I cannot use speeds < 1. So need to think about this.
-            position.Y += displacement.Y;
-            position.Y = FindNearestInteger(position.Y);
 
-            // The player check needs to be done BEFORE idleHitbox is updated
+            //if (test)
+            //{
+            //    position.X += 2 * displacement.X;
+            //    position.Y += 2 * displacement.Y;
+            //    MoveAttachedGameObjects();
+            //    if (colliderManager.CheckForEdgesMeeting(idleHitbox, player.idleHitbox))
+            //    {
+            //        player.MoveManually(displacement);
+            //    }
+            //    else
+            //    {
+            //        foreach (GameObject gameObject in attachedGameObjects)
+            //        {
+            //            if (gameObject is AnimatedGameObject sprite)
+            //            {
+            //                if (sprite.Climable && player.playerStateManager.climbingState.Active && player.playerStateManager.climbingState.platform == sprite)
+            //                {
+            //                    player.MoveManually(displacement);
+            //                    break;
+            //                }
+
+            //            }
+            //        }
+            //    }
+            //    test = false;
+            //}
+            //else
+            //{
+            //    test = true;
+            //}
+
+            position.X += displacement.X;
+            position.Y += displacement.Y;
+
+            // This check needs to be done BEFORE idleHitbox is updated
             if (colliderManager.CheckForEdgesMeeting(idleHitbox, player.idleHitbox))
             {
-                player.position.X += displacement.X;
-                player.position.Y += displacement.Y;
-                player.velocityOffSetDueToMovingPlatform.X = velocity.X;
-                player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
+                player.MoveManually(displacement);
             }
             else
             {
@@ -140,12 +173,9 @@ namespace Adventure
                 {
                     if (gameObject is AnimatedGameObject sprite)
                     {
-                        if (sprite.Climable && colliderManager.CheckForEdgesMeeting(sprite.idleHitbox, player.idleHitbox))
+                        if (sprite.Climable && player.playerStateManager.climbingState.Active && player.playerStateManager.climbingState.platform == sprite)
                         {
-                            player.position.X += displacement.X;
-                            player.position.Y += displacement.Y;
-                            player.velocityOffSetDueToMovingPlatform.X = velocity.X;
-                            player.velocityOffSetDueToMovingPlatform.Y = velocity.Y;
+                            player.MoveManually(displacement);
                             break;
                         }
 
@@ -153,10 +183,12 @@ namespace Adventure
                 }
             }
 
+            MoveAttachedGameObjects();
+
+
             idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
             idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
 
-            MoveAttachedGameObjects();
             ManageAnimations();
 
             base.Update(gameTime);
@@ -234,7 +266,7 @@ namespace Adventure
 
             }
 
-            displacement = velocity * deltaTime;
+            displacement = velocity / 60; // If we multiply by deltaTime we incur floating point errors and must round the position to nearest integer (or half-integer etc) depending on speed
         }
 
 
@@ -261,7 +293,7 @@ namespace Adventure
             {
                 foreach (GameObject gameObject in attachedGameObjects)
                 {
-                    gameObject.MoveOnPlatform(displacement);
+                    gameObject.MoveManually(displacement);
                 }
             }
         }

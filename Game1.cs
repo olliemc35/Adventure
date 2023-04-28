@@ -67,8 +67,10 @@ namespace Adventure
             TargetElapsedTime = TimeSpan.FromTicks((long)(TimeSpan.TicksPerMillisecond * (1000 / (double)60))); // Lock at 60 FPS
 
 
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 480;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720; 
+            //graphics.SynchronizeWithVerticalRetrace = true; // This is vsync
+            graphics.PreferMultiSampling = true; // This is anti-aliasing
             graphics.ApplyChanges();
 
             renderTarget = new RenderTarget2D(GraphicsDevice, 320, 180, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
@@ -125,10 +127,11 @@ namespace Adventure
             screenManager.Draw(gameTime);
             // We then set it to null so that we can draw back on to the screen
             graphics.GraphicsDevice.SetRenderTarget(null);
-
+            
             // Draw back to the screen as a Texture2D
+            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone);
             spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            spriteBatch.Draw(renderTarget, new Rectangle(0, 0, 800, 480), Color.White);
+            spriteBatch.Draw(renderTarget, new Rectangle(0, 0, 1280, 720), Color.White);
             spriteBatch.End();
 
 

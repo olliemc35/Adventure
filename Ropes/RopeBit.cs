@@ -151,7 +151,7 @@ namespace Adventure
                 }
             }
 
-            animation_Idle.Draw(spriteBatch, animationPosition);
+            animation_Idle.Draw(spriteBatch, drawPosition);
         }
 
 

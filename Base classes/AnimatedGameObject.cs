@@ -22,7 +22,7 @@ namespace Adventure
         public string filename;
         // This is the position in which we draw to the screen.
         // This will be the position vector clamped to the nearest integer - this is necessary to avoid drawing at sub-pixels and hence avoid blurring effects
-        public Vector2 animationPosition;
+        public Vector2 drawPosition;
 
         // If the object can be climbed upon this will be set to true
         public bool Climable = false;
@@ -68,7 +68,7 @@ namespace Adventure
         {
             this.position = position;
             previousPosition = position;
-            animationPosition = FindNearestIntegerVector(position);
+            drawPosition = FindNearestIntegerVector(position);
 
         }
 
@@ -83,7 +83,7 @@ namespace Adventure
             this.screenManager = screenManager;
             this.player = player;
             previousPosition = position;
-            animationPosition = FindNearestIntegerVector(position);
+            drawPosition = FindNearestIntegerVector(position);
 
         }
 
@@ -124,7 +124,8 @@ namespace Adventure
         {
             base.Update(gameTime);
             animation_playing.Update(gameTime);
-            animationPosition = FindNearestIntegerVector(position);
+            //animationPosition = position;
+            drawPosition = FindNearestIntegerVector(position);
 
 
 
@@ -147,11 +148,11 @@ namespace Adventure
             }
             if (Enabled)
             {
-                animation_playing.Draw(spriteBatch, animationPosition);
+                animation_playing.Draw(spriteBatch, drawPosition);
             }
         }
 
-        public override void MoveOnPlatform(Vector2 moveVector)
+        public override void MoveManually(Vector2 moveVector)
         {
             position.X += moveVector.X;
             idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;

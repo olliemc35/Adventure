@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,17 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
+
             if (movePlatform)
             {
                 base.Update(gameTime);
-                StopAtStartPoint();              
+
+                if (direction != Direction.stationary)
+                {
+                    StopAtStartPoint();
+
+                }
+
             }
 
         }
@@ -39,6 +47,13 @@ namespace Adventure
 
         public override void HandleNoteTrigger()
         {
+            //if (movePlatform)
+            //{
+            //    ReverseDirection();
+            //}
+
+            //movePlatform = true;
+
             if (!movePlatform)
             {
                 movePlatform = true;

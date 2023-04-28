@@ -16,18 +16,21 @@ namespace Adventure
         // When the player presses the Note again AND the platform is at position B, it will move back to position A etc.
         // As always the player trigger is the movePlatform bool
 
-        public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, new List<int>() { 0, 1 }, filename, 0, speed, 0, assetManager, colliderManager, player)
+        public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationary, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, new List<int>() { 0, 1 }, filename, timeStationary, speed, 0, assetManager, colliderManager, player)
         {
 
         }
 
         public override void Update(GameTime gameTime)
         {
-            //Debug.WriteLine(position.X);
             if (movePlatform)
             {
                 base.Update(gameTime);
-                StopAtStationaryPoints();
+
+                if (direction != Direction.stationary)
+                {
+                    StopAtStationaryPoints();
+                }
             }
             else
             {

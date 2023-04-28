@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Adventure
 {
@@ -22,8 +23,9 @@ namespace Adventure
         public HitboxRectangle startHitbox;
         public HitboxRectangle endHitbox;
 
+        public bool on = true;
 
-        public Beam(Vector2 startPosition, Vector2 endPosition, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base()
+        public Beam(Vector2 startPosition, Vector2 endPosition, int on, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base()
         {
             this.startPosition = startPosition;
             this.endPosition = endPosition;
@@ -31,6 +33,12 @@ namespace Adventure
             this.assetManager = assetManager;
             this.screenManager = screenManager;
             this.player = player;
+
+            if (on == 0)
+            {
+                this.on = false;
+            }
+
         }
 
         public override void LoadContent()
@@ -152,53 +160,61 @@ namespace Adventure
             listOfBeamSquares[0].Update(gameTime);
             listOfBeamSquares[listOfBeamSquares.Count - 1].Update(gameTime);
 
-            IndexOfBeamToUpdateTo = listOfBeamSquares.Count - 2;
-
-            for (int i = 1; i < listOfBeamSquares.Count - 1; i++)
+            if (on)
             {
-                bool breakEarly = false;
 
-                foreach (HitboxRectangle hitbox in screenManager.activeScreen.hitboxesToCheckCollisionsWith)
+
+                IndexOfBeamToUpdateTo = listOfBeamSquares.Count - 2;
+
+                for (int i = 1; i < listOfBeamSquares.Count - 1; i++)
                 {
-                    if (colliderManager.CheckForOverlap(hitbox, listOfBeamSquares[i].idleHitbox))
+                    bool breakEarly = false;
+
+                    foreach (HitboxRectangle hitbox in screenManager.activeScreen.hitboxesToCheckCollisionsWith)
                     {
-                        breakEarly = true;
+                        if (colliderManager.CheckForOverlap(hitbox, listOfBeamSquares[i].idleHitbox))
+                        {
+                            breakEarly = true;
+                            break;
+                        }
+                    }
+
+                    if (breakEarly)
+                    {
+                        IndexOfBeamToUpdateTo = i - 1;
                         break;
                     }
+                    else
+                    {
+                        listOfBeamSquares[i].Update(gameTime);
+                    }
+
                 }
 
-                if (breakEarly)
+                if (verticalBeam)
                 {
-                    IndexOfBeamToUpdateTo = i - 1;
-                    break;
+                    if (startPosition.Y > endPosition.Y)
+                    {
+                        idleHitbox.rectangle.Y = listOfBeamSquares[IndexOfBeamToUpdateTo].idleHitbox.rectangle.Y;
+                    }
+
+                    idleHitbox.rectangle.Height = listOfBeamSquares[0].idleHitbox.rectangle.Height * IndexOfBeamToUpdateTo;
                 }
-                else
+                else if (horizontalBeam)
                 {
-                    listOfBeamSquares[i].Update(gameTime);
+                    if (startPosition.X > endPosition.X)
+                    {
+                        idleHitbox.rectangle.X = listOfBeamSquares[IndexOfBeamToUpdateTo].idleHitbox.rectangle.X;
+                    }
+
+                    idleHitbox.rectangle.Width = listOfBeamSquares[0].idleHitbox.rectangle.Width * IndexOfBeamToUpdateTo;
                 }
 
             }
-
-            if (verticalBeam)
+            else
             {
-                if (startPosition.Y > endPosition.Y)
-                {
-                    idleHitbox.rectangle.Y = listOfBeamSquares[IndexOfBeamToUpdateTo].idleHitbox.rectangle.Y;
-                }
-
-                idleHitbox.rectangle.Height = listOfBeamSquares[0].idleHitbox.rectangle.Height * IndexOfBeamToUpdateTo;
+                IndexOfBeamToUpdateTo = 0;
             }
-            else if (horizontalBeam)
-            {
-                if (startPosition.X > endPosition.X)
-                {
-                    idleHitbox.rectangle.X = listOfBeamSquares[IndexOfBeamToUpdateTo].idleHitbox.rectangle.X;
-                }
-
-                idleHitbox.rectangle.Width = listOfBeamSquares[0].idleHitbox.rectangle.Width * IndexOfBeamToUpdateTo;
-            }
-
-
 
 
 
@@ -211,17 +227,30 @@ namespace Adventure
             listOfBeamSquares[0].Draw(spriteBatch);
             listOfBeamSquares[listOfBeamSquares.Count - 1].Draw(spriteBatch);
 
-            for (int i = 1; i <= IndexOfBeamToUpdateTo; i++)
+            if (IndexOfBeamToUpdateTo >= 1)
             {
-                listOfBeamSquares[i].Draw(spriteBatch);
-                //spriteBatch.Draw(References.player.spriteHitboxTexture, listOfBeamSquares[i].idleHitbox.rectangle, Color.Red);
+                for (int i = 1; i <= IndexOfBeamToUpdateTo; i++)
+                {
+                    listOfBeamSquares[i].Draw(spriteBatch);
+                }
             }
 
-            // spriteBatch.Draw(References.player.spriteHitboxTexture, idleHitbox.rectangle, Color.Red);
 
 
         }
 
+
+        public override void HandleNoteTrigger()
+        {
+            if (on)
+            {
+                on = false;
+            }
+            else
+            {
+                on = true;
+            }
+        }
 
 
     }

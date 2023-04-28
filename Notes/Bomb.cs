@@ -74,7 +74,7 @@ namespace Adventure
                     foreach (Note note in screenManager.activeScreen.screenNotes)
                     {
                         // What to do if I press B next to a note (i.e. bomb)
-                        if (colliderManager.CheckForCollision(player.idleHitbox, note.key.idleHitbox) && inputManager.OnKeyUp(Keys.B))
+                        if (colliderManager.CheckForCollision(player.idleHitbox, note.key.idleHitbox) && inputManager.OnKeyDown(Keys.B))
                         {
                             player.bombPlanted = true;
                             position = player.position;
@@ -86,7 +86,7 @@ namespace Adventure
             }
             else
             {
-                if (inputManager.OnKeyUp(Keys.B))
+                if (inputManager.OnKeyDown(Keys.B))
                 {
                     detonate = true;
                     player.bombPlanted = false;
