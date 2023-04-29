@@ -31,58 +31,25 @@ namespace Adventure
 
         public void ReturnToBeginningAtStationaryPoints()
         {
-            if (position == positions[indexes[1]])
+            if (position == positions[indexToMoveTo])
             {
                 movePlatform = false;
-                currentIndex = indexes[0];
-                firstLoop = true;
-                position = positions[indexes[0]];
+                //int temp = indexToMoveTo;
+                //currentIndex = 0;
+                //firstLoop = true;
+                position = positions[currentIndex];
             }
             
         }
 
         public override void ReverseDirection()
         {
-            currentIndex = indexes[1];
-
-            // If I am stationary off-screen then put me at the opposite off-screen location
-            if (position == positions[indexes[0]])
+            if (position == positions[currentIndex])
             {
-                position = positions[indexes[1]];
+                position = positions[indexToMoveTo];
             }
 
-            switch (direction)
-            {
-                case Direction.moveRight:
-                    {
-                        direction = Direction.moveLeft;
-                        break;
-                    }
-                case Direction.moveLeft:
-                    {
-                        direction = Direction.moveRight;
-
-                        break;
-                    }
-                case Direction.moveUp:
-                    {
-                        direction = Direction.moveDown;
-
-                        break;
-                    }
-                case Direction.moveDown:
-                    {
-                        direction = Direction.moveUp;
-                        break;
-                    }
-                case Direction.stationary:
-                    {
-                        break;
-                    }
-
-            }
-
-            indexes.Reverse();
+            base.ReverseDirection();
 
         }
 

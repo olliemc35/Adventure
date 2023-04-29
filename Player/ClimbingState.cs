@@ -144,7 +144,6 @@ namespace Adventure
                         {
                             if (player.directionX == 1 || player.directionY == -1)
                             {
-                                Debug.WriteLine("here");
                                 player.idleHitbox.rectangle.X = platform.idleHitbox.rectangle.X;
                                 player.idleHitbox.rectangle.Y = platform.idleHitbox.rectangle.Y - player.idleHitbox.rectangle.Height;
 

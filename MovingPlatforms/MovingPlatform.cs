@@ -4,6 +4,7 @@ using MonoGame.Aseprite.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 
 namespace Adventure
@@ -30,7 +31,14 @@ namespace Adventure
         // We will also give a list of ints corresponding to the indices we move to. At the end of the list we loop back to the start.
         // E.g. suppose there are 3 positions. Then indexes = {0,1,2,1,2} means we go 0 - 1 - 2 - 1 - 2 - 0 - ... etc.
         public List<int> indexes = new List<int>();
-        public int currentIndex = 0;
+
+        // The position WE HAVE JUST LEFT will be kept track of via currentIndex - i.e. we will always have just left positions[currentIndex].
+        public int currentIndex;
+        // The position WE ARE TRAVELLING TOWARDS will be kept track of via indexToMoveTo - i.e. we will always be travelling to positions[indexToMoveTo]
+        public int indexToMoveTo;
+        // We keep track of these by moving through the list indexes - we may reverse the direction, which means going through the list in the opposite direction. We keep track of this via the following sign.
+        public int sign = 1;
+
 
         // Every MovingPlatform will have a speed
         public float speed;
@@ -40,7 +48,7 @@ namespace Adventure
         public int timeStationaryCounter = 0;
         public bool thereIsStationaryTime;
 
-        // We may want to delay the movement of the MovingPlatform for a few frames before any movement begins
+        // We may want to delay the movement of the MovingPlatform for a few frames before any movement begins. (This is just stationary time for the first movement.)
         public int delay = 0; // counted in frames
         public int delayCounter = 0;
         public bool thereIsADelay;
@@ -51,7 +59,7 @@ namespace Adventure
         // Certain MovingPlatforms will have behaviour that is triggered by the player and we incorporate a trigger via this bool. (This is for derived classes to use.)
         public bool movePlatform = false;
 
-        bool test = true;
+
 
         public MovingPlatform(Direction direction)
         {
@@ -91,7 +99,9 @@ namespace Adventure
             }
 
             // We configure our starting direction
-            UpdateDirection(indexes[0], indexes[1]);
+            currentIndex = indexes[0];
+            indexToMoveTo = indexes[1];
+            UpdateDirection();
 
             deltaTime = 1f / 60;
             
@@ -110,7 +120,7 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-           
+           // Debug.WriteLine(position.X);
             if (thereIsADelay)
             {
                 if (delayCounter > delay)
@@ -126,38 +136,7 @@ namespace Adventure
             }
 
             UpdateAtStationaryPoints();
-            UpdateVelocityAndDisplacement();
-
-            //if (test)
-            //{
-            //    position.X += 2 * displacement.X;
-            //    position.Y += 2 * displacement.Y;
-            //    MoveAttachedGameObjects();
-            //    if (colliderManager.CheckForEdgesMeeting(idleHitbox, player.idleHitbox))
-            //    {
-            //        player.MoveManually(displacement);
-            //    }
-            //    else
-            //    {
-            //        foreach (GameObject gameObject in attachedGameObjects)
-            //        {
-            //            if (gameObject is AnimatedGameObject sprite)
-            //            {
-            //                if (sprite.Climable && player.playerStateManager.climbingState.Active && player.playerStateManager.climbingState.platform == sprite)
-            //                {
-            //                    player.MoveManually(displacement);
-            //                    break;
-            //                }
-
-            //            }
-            //        }
-            //    }
-            //    test = false;
-            //}
-            //else
-            //{
-            //    test = true;
-            //}
+            UpdateVelocityAndDisplacement();           
 
             position.X += displacement.X;
             position.Y += displacement.Y;
@@ -203,7 +182,7 @@ namespace Adventure
 
         public virtual void UpdateAtStationaryPoints()
         {
-            if (position == positions[indexes[currentIndex]] || position == positions[indexes[(currentIndex + 1) % indexes.Count]])
+            if (position == positions[indexToMoveTo])
             {
                 if (thereIsStationaryTime && timeStationaryCounter < timeStationaryAtEndPoints)
                 {
@@ -213,19 +192,12 @@ namespace Adventure
                 else if (!thereIsStationaryTime || (thereIsStationaryTime && timeStationaryCounter == timeStationaryAtEndPoints))
                 {
                     timeStationaryCounter = 0;
-                    if (firstLoop)
-                    {
-                        firstLoop = false;
-                    }
-                    else
-                    {
-                        currentIndex = (currentIndex + 1) % indexes.Count;
-                    }
-                    UpdateDirection(currentIndex, (currentIndex + 1) % indexes.Count);
+                    currentIndex = indexToMoveTo;
+                    indexToMoveTo = indexes[(indexToMoveTo + indexes.Count + sign) % indexes.Count];
+                    UpdateDirection();
                 }
 
             }
-
         }
 
 
@@ -274,19 +246,18 @@ namespace Adventure
 
         public override void ManageAnimations()
         {
-            if (timeStationaryCounter == 0)
+            if (!movePlatform || direction == Direction.stationary)
             {
-                UpdatePlayingAnimation(animation_Moving);
+                UpdatePlayingAnimation(animation_Idle);
             }
             else
             {
-                UpdatePlayingAnimation(animation_Idle);
+                UpdatePlayingAnimation(animation_Moving);
             }
 
         }
 
 
-        // Give each GameObject a MoveOnPlatform method which it can override? So don't need to adjust method according to gameObject Type
         public void MoveAttachedGameObjects()
         {
             if (attachedGameObjects != null)
@@ -298,7 +269,7 @@ namespace Adventure
             }
         }
 
-        public void UpdateDirection(int currentIndex, int indexToMoveTo)
+        public void UpdateDirection()
         {
             if (positions[currentIndex].X == positions[indexToMoveTo].X)
             {
@@ -328,8 +299,6 @@ namespace Adventure
 
         public virtual void ReverseDirection()
         {
-            currentIndex = indexes[(currentIndex + 1) % indexes.Count];
-
             switch (direction)
             {
                 case Direction.moveRight:
@@ -340,13 +309,11 @@ namespace Adventure
                 case Direction.moveLeft:
                     {
                         direction = Direction.moveRight;
-
                         break;
                     }
                 case Direction.moveUp:
                     {
                         direction = Direction.moveDown;
-
                         break;
                     }
                 case Direction.moveDown:
@@ -362,7 +329,18 @@ namespace Adventure
             }
 
 
-            indexes.Reverse();
+            if (sign == 1)
+            {
+                sign = -1;
+            }
+            else
+            {
+                sign = 1;
+            }
+
+            int temp = currentIndex;
+            currentIndex = indexToMoveTo;
+            indexToMoveTo = temp;
 
         }
 

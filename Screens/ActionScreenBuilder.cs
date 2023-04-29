@@ -178,7 +178,6 @@ namespace Adventure
                 }
 
             }
-
             // AGH. Must be a better way to do this ... 
             FormAttachments<Note>(attachmentsDictionary["Note"]);
             FormAttachments<MovingPlatform>(attachmentsDictionary["MovingPlatform"]);
@@ -419,12 +418,16 @@ namespace Adventure
         // For each list, we find an object of type T, and then let this objects attachedGameObjects consist of every other object in the list not of type T 
         public void FormAttachments<T>(List<List<GameObject>> list)
         {
+
             for (int i = 0; i < list.Count; i++)
             {
                 foreach (GameObject gameObject in list[i])
                 {
+
                     if (gameObject is T)
                     {
+                        
+
                         foreach (GameObject gameObject1 in list[i])
                         {
                             if (gameObject1 is not T)
@@ -454,8 +457,6 @@ namespace Adventure
                     if (attachmentColors.Contains(colors[i, j]))
                     {
                         gameObjectsAttachmentsData[attachmentColors.IndexOf(colors[i, j])].Add(gameObjects[i, j]);
-
-
                     }
                 }
             }

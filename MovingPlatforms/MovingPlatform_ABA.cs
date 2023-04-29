@@ -25,7 +25,7 @@ namespace Adventure
             {
                 base.Update(gameTime);
 
-                if (direction != Direction.stationary)
+                if (direction != Direction.stationary) // Necessary in order to actually move - otherwise will always be stopped at position[0].
                 {
                     StopAtStartPoint();
 

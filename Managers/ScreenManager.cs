@@ -147,7 +147,7 @@ namespace Adventure
                 screens.Add(
                     new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects)
                     {
-                        respawnPoint = new Vector2(8 * 4, 8 * 10),
+                        respawnPoint = new Vector2(8 * 10, 8 * 10),
                         screenNumber = i,
                         cameraBehaviourType1 = true
                     });

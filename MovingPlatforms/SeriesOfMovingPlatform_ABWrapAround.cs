@@ -31,7 +31,6 @@ namespace Adventure
             this.spacing = spacing;
             this.numberOfPlatforms = numberOfPlatforms;
 
-
             for (int i = 0; i < numberOfPlatforms; i++)
             {
                 platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, endPoint, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player));
@@ -52,7 +51,7 @@ namespace Adventure
         public override void Update(GameTime gametime)
         {
 
-            if (Vector2.Distance(platforms[indexOfPlatformClosestToStart].position, platforms[0].positions[platforms[0].indexes[0]]) >= 8 * spacing)
+            if (Vector2.Distance(platforms[indexOfPlatformClosestToStart].position, platforms[0].positions[platforms[0].currentIndex]) >= 8 * spacing)
             {
                 if (!platforms[(platforms.Count+indexOfPlatformClosestToStart + shift) % platforms.Count].movePlatform)
                 {
@@ -84,7 +83,6 @@ namespace Adventure
 
         public void ReverseDirection()
         {
-        
             int newIndexOfPlatformClosestToStart = 0;
 
             for (int i = 0; i < numberOfPlatforms; i++)
@@ -92,13 +90,13 @@ namespace Adventure
                 // As platforms are handled so that they are always precisely a distance 8 * spacing apart and they wrap-around at the end-point
                 // there will always be a platform satisfying the inequality below
 
-                if (Vector2.Distance(platforms[i].position, platforms[0].positions[platforms[0].indexes[1]]) <= 8 * spacing)
+                if (Vector2.Distance(platforms[i].position, platforms[0].positions[platforms[0].indexToMoveTo]) <= 8 * spacing)
                 {
                     newIndexOfPlatformClosestToStart = i;
                     break;
                 }
-            }
 
+            }
             indexOfPlatformClosestToStart = newIndexOfPlatformClosestToStart;
 
             foreach (MovingPlatform_ABWrapAround platform in platforms)
