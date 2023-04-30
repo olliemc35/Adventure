@@ -106,6 +106,8 @@ namespace Adventure
             gameObjectDictionary.Add(new Color(56, 37, 37, 255), "OrganStop"); // Dark brown
             gameObjectDictionary.Add(new Color(50, 60, 57, 255), "Ivy"); // Dark green
             gameObjectDictionary.Add(new Color(151, 151, 151, 255), "BreakingPlatform"); // Light grey
+            gameObjectDictionary.Add(new Color(17, 0, 86, 255), "OrganPipe"); // Dark blue
+
 
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(color_MovingPlatformAlpha.ToVector4());
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(gameObjectDictionary[])
@@ -345,6 +347,14 @@ namespace Adventure
                         {
                             gameObjects[i, j] = new BreakingPlatform(position, "platform_breaking", assetManager, colliderManager, screenManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 1);
+                        }
+                        else if (gameObjectDictionary[colors[i, j]] == "OrganPipe")
+                        {
+                            List<int> ints = ParseString(ref info, 6);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
+                            gameObjects[i, j] = new OrganPipe(position, endPosition, ints[1], ints[2], assetManager, colliderManager, player, 8 * ints[4], ints[5]);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 2, 1);
+
                         }
                     }
 

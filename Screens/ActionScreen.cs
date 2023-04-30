@@ -104,6 +104,16 @@ namespace Adventure
                         hitboxesToCheckCollisionsWith.Add(organStop.platform.idleHitbox);
                         hitboxesToCheckCollisionsWith.Add(organStop.tubeHitbox);
                     }
+
+                    if (gameObject is OrganPipe pipe)
+                    {
+                        hitboxesToCheckCollisionsWith.Add(pipe.platform.idleHitbox);
+                        hitboxesToCheckCollisionsWith.Add(pipe.pipeHitbox1);
+                        hitboxesToCheckCollisionsWith.Add(pipe.pipeHitbox2);
+                        hitboxesToCheckCollisionsWith.Add(pipe.pipeHitbox3);
+
+                    }
+
                     //if (gameObject is FlashingBeam beam)
                     //{
                     //    screenBeams.Add(beam);

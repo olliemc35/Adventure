@@ -139,6 +139,16 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Level13.aseprite;Level13.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/Level14.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level14.aseprite;Level14.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/Level15.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/Level15.aseprite;Level15.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/Level2.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -278,6 +288,31 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/OrbWindowRight.aseprite;OrbWindowRight.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganPipe_Base.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganPipe_Base.aseprite;OrganPipe_Base.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganPipe_Platform.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganPipe_Platform.aseprite;OrganPipe_Platform.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganPipe_Tile.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganPipe_Tile.aseprite;OrganPipe_Tile.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganPipe_TileRow.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganPipe_TileRow.aseprite;OrganPipe_TileRow.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrganPipe_TileRowLeft.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrganPipe_TileRowLeft.aseprite;OrganPipe_TileRowLeft.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/OrganStopBottom_Vertical.aseprite
 /importer:AsepriteFileContentImporter
