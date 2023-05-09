@@ -16,7 +16,6 @@ namespace Adventure
         public Player player;
         public InputManager inputManager;
         // It is important, for the draw order, that we add the tiles FIRST - so that these are drawn in the background
-        public Tileset tileset;
         public AnimatedGameObject[,] arrayofTiles;
 
         public AnimatedGameObject[,] backgroundObjects;

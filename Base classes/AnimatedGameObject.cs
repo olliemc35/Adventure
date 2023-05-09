@@ -30,16 +30,16 @@ namespace Adventure
         // If the object is a hazard - i.e. kills player on contact - this will be set to true
         public bool Hazard = false;
 
-        // Every sprite will have a list of hitboxes (nearly all sprites will only have a single one)
+        // Every sprite will have a list of hitboxes - most AnimatedGameObjects will only have a single one which we call idleHitbox but more complicated
+        // AnimatedGameObjects might have more - e.g. the OrganTop has a idleHitbox along with a baseHitbox (corresponding to the base part of the sprite).
         public List<HitboxRectangle> hitboxes = new List<HitboxRectangle>();
 
         // Every sprite will have a "base" hitbox which we call idleHitbox
         public HitboxRectangle idleHitbox;
 
-
         // We set CollisionSprite to true if we want the player / other objects to collide with this sprite
+        // In this case the player will detect collisions with EVERY hitbox in the list hitboxes with has isActive set to TRUE.
         public bool CollisionObject = false;
-
 
         // The drawHitboxes bool is for DEBUGGING purposes
         // At some point we may want to draw the hitboxes to the screen to see exactly what is going on 
@@ -50,8 +50,8 @@ namespace Adventure
         public bool Highlight = false;
 
 
-        // Each object of this type will have a list of animations as created in the Aseprite file
-        // An AnimatedSprite object is essentially just an animation - it contains information to play / pause / stop etc.
+        // Each object of this type will have at least one animation as created in the Aseprite file
+        // Note that an AnimatedSprite object is essentially just an animation - it contains information to play / pause / stop etc.
         // Every object will have at least one animation, which we call animation_Idle
         public SpriteSheet spriteSheet;
         public AnimatedSprite animation_Idle;
@@ -97,6 +97,7 @@ namespace Adventure
             // Obtain the correct spritesheet from the assetManager
             spriteSheet = assetManager.spriteSheets[filename];
             // We then form AnimatedSprites from each animation in the spritesheet - these are called by the tag names we give the animation in Aseprite
+            // If there are multiple animations for a given class we create these manually by overriding the LoadContent method
             animation_Idle = spriteSheet.CreateAnimatedSprite("Idle");
             animation_Idle.Play();
             animation_playing = animation_Idle;
@@ -123,17 +124,16 @@ namespace Adventure
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            animation_playing.Update(gameTime);
-            //animationPosition = position;
-            drawPosition = FindNearestIntegerVector(position);
 
+            animation_playing.Update(gameTime);
+            // It is important that we draw at an integer position to avoid blurring effects which occur when the GraphicsDevice attempts to draw at sub-pixels.
+            drawPosition = FindNearestIntegerVector(position);
 
 
             if (Climable)
             {
                 UpdateClimable();
             }
-
             if (Hazard)
             {
                 UpdateHazard();
@@ -178,12 +178,6 @@ namespace Adventure
             return new Vector2(FindNearestInteger(vec.X), FindNearestInteger(vec.Y));
         }
 
-        public void UpdateVectorToNearestInteger(Vector2 vec)
-        {
-            vec.X = FindNearestInteger(vec.X);
-            vec.Y = FindNearestInteger(vec.Y);
-        }
-
         public void UpdatePlayingAnimation(AnimatedSprite animation, int i = 0)
         {
             if (animation_playing != animation)
@@ -196,7 +190,7 @@ namespace Adventure
         }
 
 
-        // SEPARATE THIS OUT INTO ITS OWN CLASS
+        // If an AnimatedGameObject is climable we want to detect when we are in contact with the player and then tell the player to check whether we want to climb or not.
         public void UpdateClimable()
         {
             if (!player.playerStateManager.climbingState.Active)
@@ -209,6 +203,7 @@ namespace Adventure
 
         }
 
+        // If an AnimatedGameObject is a hazard then we want to detect when we are in contact with the player and then tell the player to kill themselves!
         public void UpdateHazard()
         {
             if (!player.playerStateManager.deadState.Active)
@@ -221,6 +216,7 @@ namespace Adventure
         }
 
 
+        // This is code which is used by the ActionScreenBuilder only.
         public override void AdjustHorizontally(ref List<int> ints)
         {
             position.X += ints[0];

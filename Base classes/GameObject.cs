@@ -41,6 +41,7 @@ namespace Adventure
         public Player player;
 
         // Some GameObjects will need a reference to a list of other GameObjects - e.g. notes may need reference to gates, moving platforms need reference to any GameObjects on the platform (so they move at the same time) etc.
+        // We will also use this to build up more complicated structures - e.g. an OrganStop is a movingPlatform with an attached AnimatedGameObject which represents the base
         public List<GameObject> attachedGameObjects;
 
         // Some GameObjects e.g. moving platforms can either be controlled by the player (via a Note) or act according to themselves. This bool determines which case is true.

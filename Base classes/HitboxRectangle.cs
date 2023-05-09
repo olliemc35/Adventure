@@ -14,6 +14,8 @@ namespace Adventure
 
         public Texture2D texture;
 
+        // If this hitbox corresponds to a terrain element then we will detect collisions against it only if isActive is set to TRUE
+        // In certain situations we may want to change the value of isActive - e.g. to implement one-way platforms we want isActive to be FALSE whenever the player is underneath the platform and TRUE otherwise.
         public bool isActive;
 
         // Use these bools to check whether I have collided with a particular sprite during the collision detectiong step
@@ -51,7 +53,6 @@ namespace Adventure
             rectangle = new Rectangle(x, y, width, height);
         }
 
-        // Create a hitbox which consists of a list of rectangles
 
     }
 }

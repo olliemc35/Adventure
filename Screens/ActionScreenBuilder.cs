@@ -273,14 +273,14 @@ namespace Adventure
                         {
                             List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatform_ABLoop(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], assetManager, colliderManager, player);
+                            gameObjects[i, j] = new MovingPlatform_ABLoop(position, endPosition, "movingPlatform1", ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "movingPlatform_AB")
                         {
                             List<int> ints = ParseString(ref info);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", ints[1], ints[2], assetManager, colliderManager, player);
+                            gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
 
                         }
@@ -288,7 +288,7 @@ namespace Adventure
                         {
                             List<int> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround(position, endPosition, "movingPlatform1", ints[1], ints[2], ints[3], ints[4], ints[5], assetManager, colliderManager, player);
+                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround(position, endPosition, "movingPlatform1", ints[1], new List<int>() { ints[2], ints[3] }, ints[4], ints[5], assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
 
                         }
@@ -296,7 +296,7 @@ namespace Adventure
                         {
                             List<int> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new OrganStop(position, endPosition, ints[1], ints[2], assetManager, colliderManager, player, 8 * ints[4], ints[5]);
+                            gameObjects[i, j] = new OrganStop(position, endPosition, ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player, 8 * ints[4], ints[5]);
                             if (position.X == endPosition.X)
                             {
                                 SetRectangularColorRegionToZero(ref colors, i, j, 5, 2);
@@ -352,7 +352,7 @@ namespace Adventure
                         {
                             List<int> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new OrganPipe(position, endPosition, ints[1], ints[2], assetManager, colliderManager, player, 8 * ints[4], ints[5]);
+                            gameObjects[i, j] = new OrganPipe(position, endPosition, ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player, 8 * ints[4], ints[5]);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 1);
 
                         }
@@ -502,10 +502,10 @@ namespace Adventure
         // Doors will go: doorNumber, screenNumberToMoveTo, doorNumberToMoveTo
         // Note_KeyRound: note value (e.g. C or F etc)
         // Puzzle: just parse the NoteOrder
-        // MovingPlatform: direction, timeStationaryAtEndPoints, speed, delay
-        // SeriesOfMovingPlatform: direction, timeStationaryAtEndPoints, speed, delay, numberOfPlatforms, spacing
+        // MovingPlatform: direction, speed, stationaryTimes (in order of positions)
+        // SeriesOfMovingPlatform: direction, speed, stationaryTimes (in order of positions), numberOfPlatforms, spacing
         // Beam: direction
-        // OrganStop: direction, timeStationaryAtEndPoints, speed, delay, distanceFromBase, behaviour (0 = AB, 1 = ABA)
+        // OrganStop / OrganPipe: direction, speed, stationaryTimes (in order of positions), distanceFromBase, behaviour (0 = AB, 1 = ABA)
         // Ivy: number of ivy tiles
         // Attachment layer: contains the name of the object Type we are attaching to - e.g. Note or MovingPlatform
 

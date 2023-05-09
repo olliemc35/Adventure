@@ -14,7 +14,7 @@ namespace Adventure
         // Every MovingPlatform will have a "moving" animation
         public AnimatedSprite animation_Moving;
 
-        // A MovingPlatform object can either move horizontally or vertically in straight lines
+        // A MovingPlatform object can either move horizontally or vertically in straight lines (or be stationary)
         public enum Direction
         {
             moveRight,
@@ -25,39 +25,34 @@ namespace Adventure
         };
         public Direction direction;
 
-        // Every MovingPlatform will contain a list of positions it will travel to. There will always be at least two positions.
+        // Every MovingPlatform will contain a list of positions it will travel to.
+        // There will always be at least two positions and when we reach the end of the list the next position the platform will move to will be the first element i.e. we loop back to the start.
         public List<Vector2> positions = new List<Vector2>();
-
-        // We will also give a list of ints corresponding to the indices we move to. At the end of the list we loop back to the start.
-        // E.g. suppose there are 3 positions. Then indexes = {0,1,2,1,2} means we go 0 - 1 - 2 - 1 - 2 - 0 - ... etc.
-        public List<int> indexes = new List<int>();
 
         // The position WE HAVE JUST LEFT will be kept track of via currentIndex - i.e. we will always have just left positions[currentIndex].
         public int currentIndex;
         // The position WE ARE TRAVELLING TOWARDS will be kept track of via indexToMoveTo - i.e. we will always be travelling to positions[indexToMoveTo]
         public int indexToMoveTo;
-        // We keep track of these by moving through the list indexes - we may reverse the direction, which means going through the list in the opposite direction. We keep track of this via the following sign.
+        // We keep track of these by moving through the list indexes - in derived classes we may want the player to be able to reverse the direction.
+        // This means going through the list in the opposite direction. We keep track of this via the following sign (+1 means go forward through the list, -1 means go backwards).
         public int sign = 1;
 
 
         // Every MovingPlatform will have a speed
         public float speed;
 
-        // We may want the MovingPlatform to remain stationary for a few frames when it reaches the next position in the sequence
-        public int timeStationaryAtEndPoints; // counted in frames
+        // At each position we may want the platform to remain stationary for a set number of frames
+        public List<int> stationaryTimes = new List<int>();
         public int timeStationaryCounter = 0;
-        public bool thereIsStationaryTime;
-
-        // We may want to delay the movement of the MovingPlatform for a few frames before any movement begins. (This is just stationary time for the first movement.)
-        public int delay = 0; // counted in frames
-        public int delayCounter = 0;
-        public bool thereIsADelay;
-
-        // There is a slightly annoying technicality with the code where we must treat the first time we UpdateStationaryPoints separately to the rest, hence we use this bool
-        public bool firstLoop = true;
+        
 
         // Certain MovingPlatforms will have behaviour that is triggered by the player and we incorporate a trigger via this bool. (This is for derived classes to use.)
         public bool movePlatform = false;
+
+        // If the player reverses the direction of the platform we may want the motion to halt for a set number of frames
+        public bool halt = false;
+        public int numberOfFramesHalted = 60;
+        public int haltCounter = 0;
 
 
 
@@ -66,7 +61,7 @@ namespace Adventure
             this.direction = direction;
         }
 
-        public MovingPlatform(List<Vector2> positions, List<int> indexes, string filename, int timeStationaryAtEndPoints, float speed, int delay, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(positions[0], filename, assetManager)
+        public MovingPlatform(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(positions[0], filename, assetManager)
         {
             CollisionObject = true;
             LoadFirst = true;
@@ -74,34 +69,24 @@ namespace Adventure
 
             this.colliderManager = colliderManager;          
             this.positions = positions;
-            this.indexes = indexes;
-            this.timeStationaryAtEndPoints = timeStationaryAtEndPoints;
             this.speed = speed;
-            this.delay = delay;
+            this.stationaryTimes = stationaryTimes;
             this.player = player;
 
-            if (delay == 0)
-            {
-                thereIsADelay = false;
-            }
-            else
-            {
-                thereIsADelay = true;
-            }
-
-            if (timeStationaryAtEndPoints == 0)
-            {
-                thereIsStationaryTime = false;
-            }
-            else
-            {
-                thereIsStationaryTime = true;
-            }
-
             // We configure our starting direction
-            currentIndex = indexes[0];
-            indexToMoveTo = indexes[1];
-            UpdateDirection();
+            if (stationaryTimes[0] == 0)
+            {
+                currentIndex = 0;
+                indexToMoveTo = 1;
+                UpdateDirection();
+            }
+            else
+            {
+                currentIndex = 0;
+                indexToMoveTo = 1;
+                direction = Direction.stationary;
+            }
+            
 
             deltaTime = 1f / 60;
             
@@ -120,20 +105,6 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-           // Debug.WriteLine(position.X);
-            if (thereIsADelay)
-            {
-                if (delayCounter > delay)
-                {
-                    thereIsADelay = false;
-                }
-                else
-                {
-                    delayCounter += 1;
-                }
-
-                return;
-            }
 
             UpdateAtStationaryPoints();
             UpdateVelocityAndDisplacement();           
@@ -174,6 +145,11 @@ namespace Adventure
 
         }
 
+        public void BaseUpdate(GameTime gameTime) 
+        { 
+            base.Update(gameTime); 
+        }
+
 
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -182,22 +158,54 @@ namespace Adventure
 
         public virtual void UpdateAtStationaryPoints()
         {
-            if (position == positions[indexToMoveTo])
+            if (direction == Direction.stationary)
             {
-                if (thereIsStationaryTime && timeStationaryCounter < timeStationaryAtEndPoints)
+                if (timeStationaryCounter < stationaryTimes[currentIndex])
                 {
                     timeStationaryCounter += 1;
-                    direction = Direction.stationary;
                 }
-                else if (!thereIsStationaryTime || (thereIsStationaryTime && timeStationaryCounter == timeStationaryAtEndPoints))
+                else
+                {
+                    timeStationaryCounter = 0;
+                    //currentIndex = indexToMoveTo;
+                    //indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
+                    UpdateDirection();
+                }
+            }
+            else
+            {
+                if (position == positions[indexToMoveTo] && stationaryTimes[indexToMoveTo] != 0)
+                {
+                    direction = Direction.stationary;
+                    currentIndex = indexToMoveTo;
+                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
+                }
+                else
                 {
                     timeStationaryCounter = 0;
                     currentIndex = indexToMoveTo;
-                    indexToMoveTo = indexes[(indexToMoveTo + indexes.Count + sign) % indexes.Count];
+                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
                     UpdateDirection();
                 }
-
             }
+
+
+            //if (position == positions[indexToMoveTo])
+            //{
+            //    if (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter < stationaryTimes[indexToMoveTo])
+            //    {
+            //        timeStationaryCounter += 1;
+            //        direction = Direction.stationary;
+            //    }
+            //    else if (stationaryTimes[indexToMoveTo] == 0 || (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter == stationaryTimes[indexToMoveTo]))
+            //    {
+            //        timeStationaryCounter = 0;
+            //        currentIndex = indexToMoveTo;
+            //        indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
+            //        UpdateDirection();
+            //    }
+
+            //}
         }
 
 
@@ -328,23 +336,12 @@ namespace Adventure
 
             }
 
-
-            if (sign == 1)
-            {
-                sign = -1;
-            }
-            else
-            {
-                sign = 1;
-            }
-
-            int temp = currentIndex;
-            currentIndex = indexToMoveTo;
-            indexToMoveTo = temp;
-
+            sign *= -1;
+            (indexToMoveTo, currentIndex) = (currentIndex, indexToMoveTo);
         }
 
 
+        // Methods for the ActionScreenBuilder to use
         public override void AdjustHorizontally(ref List<int> ints)
         {
             position.X += ints[0];

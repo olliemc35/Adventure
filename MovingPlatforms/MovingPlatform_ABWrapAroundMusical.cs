@@ -22,7 +22,7 @@ namespace Adventure
         // This type of MovingPlatform is very similar to MovingPlatformNoLoop except there is extra code to play a sound when the platform reaches the endpoint (and loops back)
         // E.g. used if we have an orb hitting a tuning fork 
 
-        public MovingPlatform_ABWrapAroundMusical(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationaryAtEndPoints, float speed, int delay, string noteValue, SoundManager soundManager, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>(){ initialPosition, endPoint }, new List<int>(){ 0, 1 }, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player)
+        public MovingPlatform_ABWrapAroundMusical(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, string noteValue, SoundManager soundManager, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>(){ initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
         {
             this.soundManager = soundManager;
             this.noteValue = noteValue;
@@ -68,7 +68,6 @@ namespace Adventure
                     movePlatform = false;
                 }
                 currentIndex = 0;
-                firstLoop = true;
                 position = positions[0];
                 hitFlag = true;
                 noteInstances.Add(noteSound.CreateInstance());

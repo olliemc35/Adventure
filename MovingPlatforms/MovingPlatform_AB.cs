@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,17 +18,20 @@ namespace Adventure
         // When the player presses the Note again AND the platform is at position B, it will move back to position A etc.
         // As always the player trigger is the movePlatform bool
 
-        public bool halt = false;
-        public int numberOfFramesHalted = 60;
-        public int haltCounter = 0;
+        
 
-        public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationary, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, new List<int>() { 0, 1 }, filename, timeStationary, speed, 0, assetManager, colliderManager, player)
+        public bool delayed = false;
+
+        public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
         {
-
         }
+
 
         public override void Update(GameTime gameTime)
         {
+            //Debug.WriteLine("currentIndex " + currentIndex);
+            //Debug.WriteLine("indexToMoveTo " + indexToMoveTo);
+
             if (halt)
             {
                 if (haltCounter == numberOfFramesHalted)
@@ -44,29 +48,131 @@ namespace Adventure
 
             if (movePlatform)
             {
-                base.Update(gameTime);
-                StopAtStationaryPoints();
+                UpdateAtStationaryPoints();
+                UpdateVelocityAndDisplacement();
+                position.X += displacement.X;
+                position.Y += displacement.Y;
+
+                if (colliderManager.CheckForEdgesMeeting(idleHitbox, player.idleHitbox))
+                {
+                    player.MoveManually(displacement);
+                }
+                else
+                {
+                    foreach (GameObject gameObject in attachedGameObjects)
+                    {
+                        if (gameObject is AnimatedGameObject sprite)
+                        {
+                            if (sprite.Climable && player.playerStateManager.climbingState.Active && player.playerStateManager.climbingState.platform == sprite)
+                            {
+                                player.MoveManually(displacement);
+                                break;
+                            }
+
+                        }
+                    }
+                }
+
+                MoveAttachedGameObjects();
+
+
+                idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
+                idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
+
+
+                //StopAtStationaryPoints();
 
             }
-            else
-            {
-                if (Climable)
-                {
-                    UpdateClimable();
-                }
-            }
+
+
+            ManageAnimations();
+            BaseUpdate(gameTime);
+
 
         }
 
 
         public void StopAtStationaryPoints()
         {
+
+
             if (position == positions[indexToMoveTo])
             {
-                movePlatform = false;
+                if (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter < stationaryTimes[indexToMoveTo])
+                {
+                    timeStationaryCounter += 1;
+                    direction = Direction.stationary;
+                }
+                else if (stationaryTimes[indexToMoveTo] == 0 || (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter == stationaryTimes[indexToMoveTo]))
+                {
+                    timeStationaryCounter = 0;
+                    currentIndex = indexToMoveTo;
+                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
+                    UpdateDirection();
+                }
+
             }
 
+
+
         }
+        public override void UpdateAtStationaryPoints()
+        {
+            if (direction == Direction.stationary)
+            {
+                if (timeStationaryCounter < stationaryTimes[currentIndex])
+                {
+                    timeStationaryCounter += 1;
+                }
+                else
+                {
+                    timeStationaryCounter = 0;
+                    //currentIndex = indexToMoveTo;
+                    //indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
+                    UpdateDirection();
+                }
+            }
+            else
+            {
+                if (position == positions[indexToMoveTo])
+                {
+                    direction = Direction.stationary;
+                    movePlatform = false;
+                    currentIndex = indexToMoveTo;
+                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
+                }
+
+            }
+
+
+            //if (position == positions[indexToMoveTo])
+            //{
+            //    if (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter < stationaryTimes[indexToMoveTo])
+            //    {
+            //        timeStationaryCounter += 1;
+            //        direction = Direction.stationary;
+            //    }
+            //    else if (stationaryTimes[indexToMoveTo] == 0 || (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter == stationaryTimes[indexToMoveTo]))
+            //    {
+            //        timeStationaryCounter = 0;
+            //        currentIndex = indexToMoveTo;
+            //        indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
+            //        UpdateDirection();
+            //    }
+
+            //}
+        }
+        //public override void UpdateAtStationaryPoints()
+        //{
+        //    if (position == positions[indexToMoveTo])
+        //    {
+        //        movePlatform = false;
+        //        timeStationaryCounter = 0;
+        //        currentIndex = indexToMoveTo;
+
+        //        direction = Direction.stationary;
+        //    }
+        //}
 
 
         public override void HandleNoteTrigger()

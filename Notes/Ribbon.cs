@@ -196,7 +196,7 @@ namespace Adventure
 
             if (playNotes)
             {
-                PlayAtNote();
+                PlayAtNote2();
             }
 
 
@@ -442,7 +442,36 @@ namespace Adventure
             }
 
         }
+        public void PlayAtNote2()
+        {
+            if (indexOfNoteToPlay == listOfNotes.Count - 1 && listOfNotes[listOfNotes.Count - 1].keyPlayInteractedAnimation)
+            {
+                playNotes = false; 
+                inPlayersHand = false;
+                Enabled = false;
+                player.ribbonInHand = false;
+                ClearNoteBools();
+            }
+            else if (noteCounter == 0)
+            {
+                listOfNotes[indexOfNoteToPlay].flagPlayerInteractedWith = true;
 
+                if (indexOfNoteToPlay < listOfNotes.Count - 1)
+                {
+                    indexOfNoteToPlay = (indexOfNoteToPlay + 1) % listOfNotes.Count;
+                }
+                noteCounter += 1;
+            }
+            else if (noteCounter < numberOfFramesEachNotePlaysFor)
+            {
+                noteCounter += 1;
+            }
+            else
+            {
+                noteCounter = 0;
+            }
+
+        }
 
 
 

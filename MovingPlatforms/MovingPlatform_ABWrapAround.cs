@@ -13,7 +13,7 @@ namespace Adventure
 
         // This type of MovingPlatform will go from one side of the screen to the other and loop back again
         // It may or may not be controlled by the player 
-        public MovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationaryAtEndPoints, float speed, int delay, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>(){ initialPosition, endPoint }, new List<int>(){ 0, 1 }, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player)
+        public MovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>(){ initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
         {
 
         }
@@ -36,7 +36,6 @@ namespace Adventure
                 movePlatform = false;
                 //int temp = indexToMoveTo;
                 //currentIndex = 0;
-                //firstLoop = true;
                 position = positions[currentIndex];
             }
             

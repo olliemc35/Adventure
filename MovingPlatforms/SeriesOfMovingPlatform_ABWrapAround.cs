@@ -26,14 +26,14 @@ namespace Adventure
         // This GameObject consists of a series of moving platforms which will move across the screen and wrap around when they reach the end
         // The player is able to control the DIRECTION of the moving platforms by playing a corresponding Note
 
-        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationaryAtEndPoints, float speed, int delay, int numberOfPlatforms, int spacing, AssetManager assetManager, ColliderManager colliderManager, Player player)
+        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int numberOfPlatforms, int spacing, AssetManager assetManager, ColliderManager colliderManager, Player player)
         {
             this.spacing = spacing;
             this.numberOfPlatforms = numberOfPlatforms;
 
             for (int i = 0; i < numberOfPlatforms; i++)
             {
-                platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, endPoint, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player));
+                platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, endPoint, filename, speed, stationaryTimes, assetManager, colliderManager, player));
             }
 
             SetStartingPositions(initialPosition, endPoint);          
@@ -106,14 +106,8 @@ namespace Adventure
 
             // When we reverse the platforms we want to move through the list platforms in the opposite direction
             // E.g. if we are going UP through the list we want to go DOWN through the list. (Drawing a picture makes this make sense.)
-            if (shift == 1)
-            {
-                shift = -1;
-            }
-            else
-            {
-                shift = 1;
-            }
+            shift *= -1;
+
             
 
         }

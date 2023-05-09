@@ -49,7 +49,7 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y;
                     endPosition.Y = endStream.Y;
-                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", 0, speed, 0, "HighCBell", soundManager, assetManager, colliderManager, player);
+                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, "HighCBell", soundManager, assetManager, colliderManager, player);
                     orbs.Add(orb);
 
                 }
@@ -57,14 +57,14 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y - 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 8 * verticalSpacing;
-                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", 0, speed, 0, "HighEflatBell", soundManager, assetManager, colliderManager, player);
+                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, "HighEflatBell", soundManager, assetManager, colliderManager, player);
                     orbs.Add(orb);
                 }
                 else if (i % 4 == 2)
                 {
                     startPosition.Y = startStream.Y - 2 * 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 2 * 8 * verticalSpacing;
-                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", 0, speed, 0, "HighGBell", soundManager, assetManager, colliderManager, player);
+                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, "HighGBell", soundManager, assetManager, colliderManager, player);
                     orbs.Add(orb);
                 }
 

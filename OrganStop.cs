@@ -35,7 +35,7 @@ namespace Adventure
         public ExtendingDirection direction;
 
 
-        public OrganStop(Vector2 startPoint, Vector2 endPoint, int timeStationary, float speed, AssetManager assetManager, ColliderManager colliderManager, Player player, int distanceFromBase, int behaviour) 
+        public OrganStop(Vector2 startPoint, Vector2 endPoint, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player, int distanceFromBase, int behaviour) 
         {
 
             this.assetManager = assetManager;
@@ -46,17 +46,17 @@ namespace Adventure
 
             if (behaviour == 0)
             {
-                platform = new MovingPlatform_AB(startPoint, endPoint, "OrganStop", timeStationary, 0.5f, assetManager, colliderManager, player);
+                platform = new MovingPlatform_AB(startPoint, endPoint, "OrganStop", speed, stationaryTimes, assetManager, colliderManager, player);
 
             }
             else if (behaviour == 1)
             {
-                platform = new MovingPlatform_ABA(startPoint, endPoint, "OrganStop", 60, speed, 0, assetManager, colliderManager, player);
+                platform = new MovingPlatform_ABA(startPoint, endPoint, "OrganStop", speed, stationaryTimes, assetManager, colliderManager, player);
 
             }
 
 
-            if (platform.direction == MovingPlatform.Direction.moveUp || platform.direction == MovingPlatform.Direction.moveDown)
+            if (startPoint.X == endPoint.X)
             {
 
                 if (distanceFromBase > 0)

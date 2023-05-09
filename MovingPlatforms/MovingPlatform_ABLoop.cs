@@ -14,7 +14,7 @@ namespace Adventure
     {
 
         // This type of MovingPlatform will alternate between exactly two positions in an infinite loop
-        public MovingPlatform_ABLoop(Vector2 position1, Vector2 position2, string filename, int timeStationaryAtEndPoints, float speed, int delay, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { position1, position2 }, new List<int>() { 0,1}, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player)
+        public MovingPlatform_ABLoop(Vector2 position1, Vector2 position2, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { position1, position2 }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
         {
         }
 

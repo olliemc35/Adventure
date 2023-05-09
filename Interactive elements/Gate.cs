@@ -14,7 +14,7 @@ namespace Adventure
         public bool open = false;
         public bool opened = false;
 
-        public Gate(Vector2 initialPosition, Vector2 endPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPosition }, new List<int>() { 0, 1 }, filename, 0, 1, 0, assetManager, colliderManager, player)
+        public Gate(Vector2 initialPosition, Vector2 endPosition, string filename, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPosition }, filename, 1, new List<int>() { 0, 1 }, assetManager, colliderManager, player)
         {
 
         }

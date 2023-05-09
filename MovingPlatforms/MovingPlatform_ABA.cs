@@ -14,7 +14,7 @@ namespace Adventure
         // It will have two positions to move between and the starting position must be given first in the list (i.e. at index 0)
         // It is controlled by the player - when the player plays a corresponding Note it will move from position 1 to position 2 back to position 1 again
 
-        public MovingPlatform_ABA(Vector2 initialPosition, Vector2 endPoint, string filename, int timeStationaryAtEndPoints, float speed, int delay, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, new List<int>() { 0, 1 }, filename, timeStationaryAtEndPoints, speed, delay, assetManager, colliderManager, player)
+        public MovingPlatform_ABA(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
         {
         }
 
