@@ -92,30 +92,7 @@ namespace Adventure
         }
 
 
-        public void StopAtStationaryPoints()
-        {
 
-
-            if (position == positions[indexToMoveTo])
-            {
-                if (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter < stationaryTimes[indexToMoveTo])
-                {
-                    timeStationaryCounter += 1;
-                    direction = Direction.stationary;
-                }
-                else if (stationaryTimes[indexToMoveTo] == 0 || (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter == stationaryTimes[indexToMoveTo]))
-                {
-                    timeStationaryCounter = 0;
-                    currentIndex = indexToMoveTo;
-                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
-                    UpdateDirection();
-                }
-
-            }
-
-
-
-        }
         public override void UpdateAtStationaryPoints()
         {
             if (direction == Direction.stationary)
@@ -127,8 +104,6 @@ namespace Adventure
                 else
                 {
                     timeStationaryCounter = 0;
-                    //currentIndex = indexToMoveTo;
-                    //indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
                     UpdateDirection();
                 }
             }
@@ -138,41 +113,14 @@ namespace Adventure
                 {
                     direction = Direction.stationary;
                     movePlatform = false;
-                    currentIndex = indexToMoveTo;
-                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
+                    UpdateIndices();
                 }
 
             }
 
 
-            //if (position == positions[indexToMoveTo])
-            //{
-            //    if (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter < stationaryTimes[indexToMoveTo])
-            //    {
-            //        timeStationaryCounter += 1;
-            //        direction = Direction.stationary;
-            //    }
-            //    else if (stationaryTimes[indexToMoveTo] == 0 || (stationaryTimes[indexToMoveTo] != 0 && timeStationaryCounter == stationaryTimes[indexToMoveTo]))
-            //    {
-            //        timeStationaryCounter = 0;
-            //        currentIndex = indexToMoveTo;
-            //        indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
-            //        UpdateDirection();
-            //    }
-
-            //}
         }
-        //public override void UpdateAtStationaryPoints()
-        //{
-        //    if (position == positions[indexToMoveTo])
-        //    {
-        //        movePlatform = false;
-        //        timeStationaryCounter = 0;
-        //        currentIndex = indexToMoveTo;
 
-        //        direction = Direction.stationary;
-        //    }
-        //}
 
 
         public override void HandleNoteTrigger()

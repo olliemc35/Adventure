@@ -167,8 +167,6 @@ namespace Adventure
                 else
                 {
                     timeStationaryCounter = 0;
-                    //currentIndex = indexToMoveTo;
-                    //indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; // We add positions.Count here is the way C# handles modular arithmetic is a bit odd if the integer is negative (which is can be if sign = -1 here).
                     UpdateDirection();
                 }
             }
@@ -177,14 +175,12 @@ namespace Adventure
                 if (position == positions[indexToMoveTo] && stationaryTimes[indexToMoveTo] != 0)
                 {
                     direction = Direction.stationary;
-                    currentIndex = indexToMoveTo;
-                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
+                    UpdateIndices();
                 }
                 else
                 {
                     timeStationaryCounter = 0;
-                    currentIndex = indexToMoveTo;
-                    indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
+                    UpdateIndices();
                     UpdateDirection();
                 }
             }
@@ -208,6 +204,11 @@ namespace Adventure
             //}
         }
 
+        public void UpdateIndices()
+        {
+            currentIndex = indexToMoveTo;
+            indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
+        }
 
         public void UpdateVelocityAndDisplacement()
         {
