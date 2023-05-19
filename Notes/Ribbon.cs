@@ -144,6 +144,7 @@ namespace Adventure
 
         public override void Update(GameTime gametime)
         {
+            //Debug.WriteLine(indexOfNoteToPlay);
            
             if (inPlayersHand)
             {
@@ -219,8 +220,7 @@ namespace Adventure
 
         public void SimulateRibbon()
         {
-
-
+            //Debug.WriteLine(playNotes);
 
             for (int i = 0; i <= IndexOfRopeBitInPlayersHand; i++)
             {
@@ -444,23 +444,24 @@ namespace Adventure
         }
         public void PlayAtNote2()
         {
-            if (indexOfNoteToPlay == listOfNotes.Count - 1 && listOfNotes[listOfNotes.Count - 1].keyPlayInteractedAnimation)
-            {
-                playNotes = false; 
-                inPlayersHand = false;
-                Enabled = false;
-                player.ribbonInHand = false;
-                ClearNoteBools();
-            }
-            else if (noteCounter == 0)
+            if (noteCounter == 0)
             {
                 listOfNotes[indexOfNoteToPlay].flagPlayerInteractedWith = true;
+                indexOfNoteToPlay = indexOfNoteToPlay + 1;
 
-                if (indexOfNoteToPlay < listOfNotes.Count - 1)
+                if (indexOfNoteToPlay == listOfNotes.Count)
                 {
-                    indexOfNoteToPlay = (indexOfNoteToPlay + 1) % listOfNotes.Count;
+                    playNotes = false;
+                    inPlayersHand = false;
+                    Enabled = false;
+                    player.ribbonInHand = false;
+                    indexOfNoteToPlay = 0;
+                    ClearNoteBools();
                 }
-                noteCounter += 1;
+                else
+                {
+                    noteCounter += 1;
+                }
             }
             else if (noteCounter < numberOfFramesEachNotePlaysFor)
             {
@@ -470,6 +471,35 @@ namespace Adventure
             {
                 noteCounter = 0;
             }
+
+            //if (indexOfNoteToPlay == listOfNotes.Count - 1 && listOfNotes[listOfNotes.Count - 1].keyPlayInteractedAnimation)
+            //{
+            //    playNotes = false; 
+            //    inPlayersHand = false;
+            //    Enabled = false;
+            //    player.ribbonInHand = false;
+            //    indexOfNoteToPlay = 0;
+            //    ClearNoteBools();
+            //}
+            //else if (noteCounter == 0)
+            //{
+            //    listOfNotes[indexOfNoteToPlay].flagPlayerInteractedWith = true;
+            //    indexOfNoteToPlay = (indexOfNoteToPlay + 1) % listOfNotes.Count;
+
+            //    //if (indexOfNoteToPlay < listOfNotes.Count - 1)
+            //    //{
+            //    //    indexOfNoteToPlay = (indexOfNoteToPlay + 1) % listOfNotes.Count;
+            //    //}
+            //    noteCounter += 1;
+            //}
+            //else if (noteCounter < numberOfFramesEachNotePlaysFor)
+            //{
+            //    noteCounter += 1;
+            //}
+            //else
+            //{
+            //    noteCounter = 0;
+            //}
 
         }
 

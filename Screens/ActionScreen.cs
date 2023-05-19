@@ -96,6 +96,12 @@ namespace Adventure
                         screenDoors.Add(door);
                     }
 
+                    if (gameObject is OrbEmitter emitter)
+                    {
+                        hitboxesToCheckCollisionsWith.Add(emitter.orb.idleHitbox);
+                        hitboxesToCheckCollisionsWith.Add(emitter.orbReceptors[0].idleHitbox);
+                        hitboxesToCheckCollisionsWith.Add(emitter.orbReceptors[1].idleHitbox);
+                    }
 
 
                     if (gameObject is OrganStop organStop)
@@ -139,7 +145,14 @@ namespace Adventure
                             hitboxesToCheckCollisionsWith.Add(platformNoLoop.idleHitbox);
                         }
                     }
-                  
+                    if (gameObject is SeriesOfMovingPlatform_ABWrapAround2 series2)
+                    {
+                        foreach (MovingPlatform_ABWrapAround platformNoLoop in series2.platforms)
+                        {
+                            terrainHitboxes.Add(platformNoLoop.idleHitbox);
+                            hitboxesToCheckCollisionsWith.Add(platformNoLoop.idleHitbox);
+                        }
+                    }
 
                     if (gameObject is MovingPlatform_ABLoop platform)
                     {

@@ -221,6 +221,7 @@ namespace Adventure
             }
 
 
+
             tubeHitbox.texture = assetManager.hitboxTexture;
             tubeHitbox.isActive = true;
 

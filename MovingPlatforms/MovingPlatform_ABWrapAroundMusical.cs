@@ -37,12 +37,7 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
-            if (movePlatform)
-            {
-                base.Update(gameTime);
-                ReturnToBeginningAtStationaryPointsAndPlaySound();
-
-            }
+            base.Update(gameTime);
 
             if (noteInstances.Count() > 0)
             {
@@ -58,22 +53,50 @@ namespace Adventure
 
         }
 
-
-        public void ReturnToBeginningAtStationaryPointsAndPlaySound()
+        public override void UpdateAtStationaryPoints()
         {
-            if (position == positions[1])
+            if (direction == Direction.stationary)
             {
-                if (playerControlled)
+                if (timeStationaryCounter < stationaryTimes[currentIndex])
                 {
+                    timeStationaryCounter += 1;
+                }
+                else
+                {
+                    timeStationaryCounter = 0;
+                    UpdateDirection();
+                }
+            }
+            else
+            {
+                if (position == positions[indexToMoveTo])
+                {
+                    position = positions[currentIndex];
+                    hitFlag = true;
+                    noteInstances.Add(noteSound.CreateInstance());
+                    noteInstances.Last().Play();
                     movePlatform = false;
                 }
-                currentIndex = 0;
-                position = positions[0];
-                hitFlag = true;
-                noteInstances.Add(noteSound.CreateInstance());
-                noteInstances.Last().Play();
+
+
             }
         }
+
+        //public void ReturnToBeginningAtStationaryPointsAndPlaySound()
+        //{
+        //    if (position == positions[1])
+        //    {
+        //        if (playerControlled)
+        //        {
+        //            movePlatform = false;
+        //        }
+        //        currentIndex = 0;
+        //        position = positions[0];
+        //        hitFlag = true;
+        //        noteInstances.Add(noteSound.CreateInstance());
+        //        noteInstances.Last().Play();
+        //    }
+        //}
 
 
     }

@@ -17,81 +17,14 @@ namespace Adventure
         // The player will press a corresponding Note and the platform will move from position A to position B
         // When the player presses the Note again AND the platform is at position B, it will move back to position A etc.
         // As always the player trigger is the movePlatform bool
-
-        
+       
 
         public bool delayed = false;
 
         public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
         {
+            movePlatform = false;
         }
-
-
-        public override void Update(GameTime gameTime)
-        {
-            //Debug.WriteLine("currentIndex " + currentIndex);
-            //Debug.WriteLine("indexToMoveTo " + indexToMoveTo);
-
-            if (halt)
-            {
-                if (haltCounter == numberOfFramesHalted)
-                {
-                    haltCounter = 0;
-                    halt = false;
-                }
-                else
-                {
-                    haltCounter += 1;
-                    return;
-                }
-            }
-
-            if (movePlatform)
-            {
-                UpdateAtStationaryPoints();
-                UpdateVelocityAndDisplacement();
-                position.X += displacement.X;
-                position.Y += displacement.Y;
-
-                if (colliderManager.CheckForEdgesMeeting(idleHitbox, player.idleHitbox))
-                {
-                    player.MoveManually(displacement);
-                }
-                else
-                {
-                    foreach (GameObject gameObject in attachedGameObjects)
-                    {
-                        if (gameObject is AnimatedGameObject sprite)
-                        {
-                            if (sprite.Climable && player.playerStateManager.climbingState.Active && player.playerStateManager.climbingState.platform == sprite)
-                            {
-                                player.MoveManually(displacement);
-                                break;
-                            }
-
-                        }
-                    }
-                }
-
-                MoveAttachedGameObjects();
-
-
-                idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
-                idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
-
-
-                //StopAtStationaryPoints();
-
-            }
-
-
-            ManageAnimations();
-            BaseUpdate(gameTime);
-
-
-        }
-
-
 
         public override void UpdateAtStationaryPoints()
         {
@@ -110,10 +43,10 @@ namespace Adventure
             else
             {
                 if (position == positions[indexToMoveTo])
-                {
+                {                   
+                    UpdateIndices();
                     direction = Direction.stationary;
                     movePlatform = false;
-                    UpdateIndices();
                 }
 
             }

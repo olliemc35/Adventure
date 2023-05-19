@@ -16,32 +16,50 @@ namespace Adventure
 
         public MovingPlatform_ABA(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
         {
+            movePlatform = false;
         }
 
-        public override void Update(GameTime gameTime)
+
+        public override void UpdateAtStationaryPoints()
         {
-
-            if (movePlatform)
+            if (direction == Direction.stationary)
             {
-                base.Update(gameTime);
-
-                if (direction != Direction.stationary) // Necessary in order to actually move - otherwise will always be stopped at position[0].
+                if (timeStationaryCounter < stationaryTimes[currentIndex])
                 {
-                    StopAtStartPoint();
-
+                    timeStationaryCounter += 1;
                 }
-
+                else
+                {
+                    timeStationaryCounter = 0;
+                    UpdateDirection();
+                }
             }
-
-        }
-
-        public void StopAtStartPoint()
-        {
-            if (position == positions[0])
+            else
             {
-                movePlatform = false;
-            } 
-
+                if (position == positions[indexToMoveTo])
+                {
+                    if (indexToMoveTo == 0)
+                    {
+                        UpdateIndices();
+                        direction = Direction.stationary;
+                        movePlatform = false;
+                    }
+                    else
+                    {
+                        if (stationaryTimes[indexToMoveTo] == 0)
+                        {
+                            timeStationaryCounter = 0;
+                            UpdateIndices();
+                            UpdateDirection();
+                        }
+                        else
+                        {
+                            UpdateIndices();
+                            direction = Direction.stationary;
+                        }
+                    }
+                }
+            }
         }
 
 

@@ -24,6 +24,9 @@ namespace Adventure
 
 
         public AnimatedGameObject pipeBottom = new AnimatedGameObject();
+        public AnimatedSprite animation_RumbleTop;
+        public AnimatedSprite animation_RumbleBottom;
+
         public MovingPlatform platform;
 
         // The idleHitbox corresponds to the platform (the top). We also need a hitbox for the tube.
@@ -241,15 +244,37 @@ namespace Adventure
             pipeHitbox3.texture = assetManager.hitboxTexture;
             pipeHitbox3.isActive = true;
 
+            animation_RumbleTop = pipeBottom.spriteSheet.CreateAnimatedSprite("Rumble_Top");
+            animation_RumbleBottom = pipeBottom.spriteSheet.CreateAnimatedSprite("Rumble_Bottom");
+
         }
         public override void Update(GameTime gameTime)
         {
             platform.Update(gameTime);
+            pipeBottom.Update(gameTime);
 
             //if (platform.direction == MovingPlatform.Direction.moveRight)
             //{
             //    Debug.WriteLine(platform.drawPosition.X);
             //}
+
+            if (platform.direction == MovingPlatform.Direction.stationary && platform.movePlatform)
+            {
+                if (direction == ExtendingDirection.topToBottom)
+                {
+                    pipeBottom.UpdatePlayingAnimation(animation_RumbleTop);
+                }
+                else if (direction == ExtendingDirection.bottomToTop)
+                {
+                    pipeBottom.UpdatePlayingAnimation(animation_RumbleBottom);
+
+                }
+            }
+            else
+            {
+                pipeBottom.UpdatePlayingAnimation(pipeBottom.animation_Idle);
+            }
+
 
             foreach (AnimatedGameObject animatedGameObject in pipeTiles_BetweenBaseAndPlatform)
             {
@@ -476,13 +501,13 @@ namespace Adventure
 
             for (int i = 1; i <= HeightFromBase; i++)
             {
-               
-                
-                    AnimatedGameObject animatedGameObject = new AnimatedGameObject(new Vector2(platform.positions[0].X - 8, platform.positions[0].Y + sign * (8 * i)), "OrganPipe_TileRowLeft", assetManager);
-                    animatedGameObject.LoadContent();
-                    pipeTiles_BetweenBaseAndPlatform.Add(animatedGameObject);
-                    platform.attachedGameObjects.Add(animatedGameObject);
-                
+
+
+                AnimatedGameObject animatedGameObject = new AnimatedGameObject(new Vector2(platform.positions[0].X - 8, platform.positions[0].Y + sign * (8 * i)), "OrganPipe_TileRowLeft", assetManager);
+                animatedGameObject.LoadContent();
+                pipeTiles_BetweenBaseAndPlatform.Add(animatedGameObject);
+                platform.attachedGameObjects.Add(animatedGameObject);
+
 
             }
 

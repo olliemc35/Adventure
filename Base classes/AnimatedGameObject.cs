@@ -30,6 +30,9 @@ namespace Adventure
         // If the object is a hazard - i.e. kills player on contact - this will be set to true
         public bool Hazard = false;
 
+        // If the object is a booster - i.e. increases the players jump when the player is in contact with it - this will be set to true
+        public bool Booster = false;
+
         // Every sprite will have a list of hitboxes - most AnimatedGameObjects will only have a single one which we call idleHitbox but more complicated
         // AnimatedGameObjects might have more - e.g. the OrganTop has a idleHitbox along with a baseHitbox (corresponding to the base part of the sprite).
         public List<HitboxRectangle> hitboxes = new List<HitboxRectangle>();
@@ -138,6 +141,10 @@ namespace Adventure
             {
                 UpdateHazard();
             }
+            if (Booster)
+            {
+                UpdateBooster();
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -215,6 +222,17 @@ namespace Adventure
             }
         }
 
+        // If an AnimatedGameObject is a booster then we want to detect when we are in contact with the player and then tell the player it is boosted.
+        // The player resets the boosted bool at the end of every update. As the player is updated LAST this works. (We don't want to set player.boosted to FALSE if we are NOT in contact as there might be another AnimatedGameObject which is boosted and we are in contact with.)
+        public void UpdateBooster()
+        {
+           
+                if (colliderManager.CheckForCollision(player.idleHitbox, idleHitbox))
+                {
+                    player.boosted = true;
+                }
+            
+        }
 
         // This is code which is used by the ActionScreenBuilder only.
         public override void AdjustHorizontally(ref List<int> ints)
@@ -228,8 +246,14 @@ namespace Adventure
             ints.RemoveAt(0);
         }
 
+        public override void SetClimable()
+        {
+            Climable = true;
+        }
 
-
-
+        public override void SetBoosters()
+        {
+            Booster = true;
+        }
     }
 }

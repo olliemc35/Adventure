@@ -69,5 +69,28 @@ namespace Adventure
             }
         }
 
+        public override void AdjustHorizontally(ref List<int> ints)
+        {
+
+            positions[0] = new Vector2(positions[0].X + ints[0], positions[0].Y);
+            positions[1] = new Vector2(positions[1].X + ints[1], positions[1].Y);
+            position.X += ints[0];
+
+
+            ints.RemoveRange(0, 2);
+
+        }
+        public override void AdjustVertically(ref List<int> ints)
+        {
+
+            positions[0] = new Vector2(positions[0].X, positions[0].Y + ints[0]);
+            positions[1] = new Vector2(positions[1].X, positions[1].Y + ints[1]);
+            position.Y += ints[0];
+
+
+            ints.RemoveRange(0, 2);
+
+        }
+
     }
 }

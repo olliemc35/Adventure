@@ -87,7 +87,15 @@ namespace Adventure
             }
             else
             {
-                platforms[indexofFirstPlatformNotMoving].movePlatform = true;
+                if (indexofFirstPlatformNotMoving == 0)
+                {
+                    platforms[indexofFirstPlatformNotMoving].movePlatform = true;
+                }
+                else if (Vector2.Distance(platforms[indexofFirstPlatformNotMoving - 1].position, platforms[0].positions[0]) >= 8 * spacing)
+                {
+                    platforms[indexofFirstPlatformNotMoving].movePlatform = true;
+
+                }
             }
         }
 
@@ -97,5 +105,38 @@ namespace Adventure
             StartAPlatformMoving();
         }
 
+        public override void AdjustHorizontally(ref List<int> ints)
+        {
+            foreach (MovingPlatform_ABWrapAround platform in platforms)
+            {
+                platform.positions[0] = new Vector2(platform.positions[0].X + ints[0], platform.positions[0].Y);
+                platform.positions[1] = new Vector2(platform.positions[1].X + ints[1], platform.positions[1].Y);
+                platform.position.X += ints[0];
+            }
+
+            ints.RemoveRange(0, 2);
+
+        }
+        public override void AdjustVertically(ref List<int> ints)
+        {
+            foreach (MovingPlatform_ABWrapAround platform in platforms)
+            {
+                platform.positions[0] = new Vector2(platform.positions[0].X, platform.positions[0].Y + ints[0]);
+                platform.positions[1] = new Vector2(platform.positions[1].X, platform.positions[1].Y + ints[1]);
+                platform.position.Y += ints[0];
+            }
+
+            ints.RemoveRange(0, 2);
+
+        }
+
+
+        public override void SetBoosters()
+        {
+            foreach (MovingPlatform_ABWrapAround platform in platforms)
+            {
+                platform.SetBoosters();
+            }
+        }
     }
 }

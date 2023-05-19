@@ -91,6 +91,16 @@ namespace Adventure
 
         }
 
+        public virtual void SetClimable()
+        {
+
+        }
+        public virtual void SetBoosters()
+        {
+
+        }
+
+
         // Certain GameObjects will be attached to a Note and will execute some code whenever the player interacts with the note
         public virtual void HandleNoteTrigger()
         {

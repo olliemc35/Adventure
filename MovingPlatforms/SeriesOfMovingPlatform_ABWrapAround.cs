@@ -50,6 +50,7 @@ namespace Adventure
 
         public override void Update(GameTime gametime)
         {
+            //Debug.WriteLine(indexOfPlatformClosestToStart);
 
             if (Vector2.Distance(platforms[indexOfPlatformClosestToStart].position, platforms[0].positions[platforms[0].currentIndex]) >= 8 * spacing)
             {
@@ -85,6 +86,14 @@ namespace Adventure
         {
             int newIndexOfPlatformClosestToStart = 0;
 
+            foreach (MovingPlatform_ABWrapAround platform in platforms)
+            {
+                if (platform.position == platform.positions[platform.currentIndex])
+                {
+                    platform.position = platform.positions[platform.indexToMoveTo];
+                }
+            }
+
             for (int i = 0; i < numberOfPlatforms; i++)
             {
                 // As platforms are handled so that they are always precisely a distance 8 * spacing apart and they wrap-around at the end-point
@@ -97,6 +106,7 @@ namespace Adventure
                 }
 
             }
+
             indexOfPlatformClosestToStart = newIndexOfPlatformClosestToStart;
 
             foreach (MovingPlatform_ABWrapAround platform in platforms)

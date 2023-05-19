@@ -62,7 +62,7 @@ namespace Adventure
                     screen.Hide();              
             }
 
-            activeScreen = screens[14];
+            activeScreen = screens[0];
             activeScreen.Show();
 
             player.LoadContent();
@@ -136,25 +136,37 @@ namespace Adventure
 
         public void CreateScreens(ContentManager content, GraphicsDevice graphicsDevice)
         {
-           
-            for (int i = 1; i <= 15; i++)
-            {
-                //ActionScreenBuilder level = new ActionScreenBuilder("Level1_TEST", assetManager, colliderManager, inputManager, this, soundManager, player);
 
-                ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), assetManager, colliderManager, inputManager, this, soundManager, player);
+            //for (int i = 1; i <= 17; i++)
+            //{
+            //    //ActionScreenBuilder level = new ActionScreenBuilder("Level1_TEST", assetManager, colliderManager, inputManager, this, soundManager, player);
+
+            //    ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), assetManager, colliderManager, inputManager, this, soundManager, player);
+            //    level.LoadContent(content, graphicsDevice);
+
+            //    screens.Add(
+            //        new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects)
+            //        {
+            //            respawnPoint = new Vector2(8 * 1, 8 * 1),
+            //            screenNumber = i,
+            //            cameraBehaviourType1 = true
+            //        });
+
+            //}
+
+            
+                ActionScreenBuilder level = new ActionScreenBuilder("Level_TEST", assetManager, colliderManager, inputManager, this, soundManager, player, 20, 12);
                 level.LoadContent(content, graphicsDevice);
 
                 screens.Add(
                     new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects)
                     {
-                        respawnPoint = new Vector2(8 * 3, 8 * 3),
-                        screenNumber = i,
-                        cameraBehaviourType1 = true
+                        respawnPoint = new Vector2(8 * 1, 8 * 1),
+                        screenNumber = 0,
+                        cameraBehaviourType3 = true
                     });
 
-            }
-
-
+            
         }
 
 

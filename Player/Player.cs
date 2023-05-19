@@ -52,6 +52,7 @@ namespace Adventure
         public float jumpDuration;
         public float jumpHeight;
         public float jumpSpeed;
+        public float boostMultiplier = 1.5f;
 
         public bool jumpButtonPressed = false;
         public bool runButtonPressed = false;
@@ -63,6 +64,7 @@ namespace Adventure
         public bool climbButtonPressed = false;
 
         public bool launchFlag = false;
+        public bool boosted = false;
 
         public int distanceCanStartClimbing = 6; // This is the distance away from the edge of a climbable platform at which the player can start climbing
 
@@ -306,7 +308,7 @@ namespace Adventure
 
             base.Update(gameTime);
 
-
+            boosted = false;
         }
 
 

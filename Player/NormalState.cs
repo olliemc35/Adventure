@@ -416,7 +416,15 @@ namespace Adventure
             if (statesY == StatesY.atRestY && player.flagJumpButtonPressed)
             {
                 statesY = StatesY.falling;
-                player.velocity.Y = -player.jumpSpeed;
+
+                if (player.boosted)
+                {
+                    player.velocity.Y = - player.boostMultiplier * player.jumpSpeed;
+                }
+                else
+                {
+                    player.velocity.Y = -player.jumpSpeed;
+                }
                 return;
             }
 

@@ -62,6 +62,7 @@ namespace Adventure
 
         public Color color_AdjustPosition = new Color(255, 255, 156, 255); // Pale yellow
         public Color color_Climable = new Color(85, 255, 0, 255); // Bright green
+        public Color color_Boosters = new Color(203, 203, 203, 255); // Silver
 
 
         public List<Color> attachmentColors = new List<Color>();
@@ -83,7 +84,7 @@ namespace Adventure
             attachmentColors.Add(new Color(255, 0, 255, 255));
             attachmentColors.Add(new Color(225, 0, 225, 255));
             attachmentColors.Add(new Color(200, 0, 225, 255));
-
+            attachmentColors.Add(new Color(175, 0, 225, 255));
 
             backgroundObjects = new AnimatedGameObject[screenWidth, screenHeight];
             gameObjects = new GameObject[screenWidth, screenHeight];
@@ -95,6 +96,7 @@ namespace Adventure
 
             gameObjectDictionary.Add(new Color(255, 157, 4, 255), "Door"); // Gold
             gameObjectDictionary.Add(new Color(255, 255, 255, 255), "Spike"); // White
+            gameObjectDictionary.Add(new Color(121, 49, 160, 255), "SeriesOfMovingPlatform_ABWrapAround2"); // Light purple
             gameObjectDictionary.Add(new Color(41, 20, 52, 255), "movingPlatform_ABLoop"); // Very dark purple
             gameObjectDictionary.Add(new Color(72, 37, 91, 255), "movingPlatform_AB"); // Dark purple
             gameObjectDictionary.Add(new Color(97, 52, 121, 255), "SeriesOfMovingPlatform_ABWrapAround"); // Purple
@@ -107,7 +109,7 @@ namespace Adventure
             gameObjectDictionary.Add(new Color(50, 60, 57, 255), "Ivy"); // Dark green
             gameObjectDictionary.Add(new Color(151, 151, 151, 255), "BreakingPlatform"); // Light grey
             gameObjectDictionary.Add(new Color(17, 0, 86, 255), "OrganPipe"); // Dark blue
-
+            gameObjectDictionary.Add(new Color(117, 216, 67, 255), "OrbEmitter"); // Light green
 
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(color_MovingPlatformAlpha.ToVector4());
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(gameObjectDictionary[])
@@ -177,6 +179,10 @@ namespace Adventure
                     string info = layer.UserData.Text;
                     string typeName = ParseUntilNextComma(ref info);
                     HandleAttachmentsLayer(attachmentsDictionary[typeName], data[layer]);
+                }
+                else if (layer.Name.Contains("Boosters"))
+                {
+                    HandleBoostersLayer(layer, data[layer]);
                 }
 
             }
@@ -261,8 +267,8 @@ namespace Adventure
 
                         if (gameObjectDictionary[colors[i, j]] == "Door")
                         {
-                            List<int> ints = ParseString(ref info, 3);
-                            gameObjects[i, j] = new Door(position, "Door", ints[0], ints[1], ints[2], assetManager, colliderManager, inputManager, screenManager, player);
+                            List<float> ints = ParseString(ref info, 3);
+                            gameObjects[i, j] = new Door(position, "Door", (int)ints[0], (int)ints[1], (int)ints[2], assetManager, colliderManager, inputManager, screenManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 2);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Spike")
@@ -271,32 +277,39 @@ namespace Adventure
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "movingPlatform_ABLoop")
                         {
-                            List<int> ints = ParseString(ref info);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatform_ABLoop(position, endPosition, "movingPlatform1", ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player);
+                            List<float> ints = ParseString(ref info);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new MovingPlatform_ABLoop(position, endPosition, "movingPlatform1", ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "movingPlatform_AB")
                         {
-                            List<int> ints = ParseString(ref info);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player);
+                            List<float> ints = ParseString(ref info);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, "movingPlatform1", ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
 
                         }
+                        else if (gameObjectDictionary[colors[i, j]] == "SeriesOfMovingPlatform_ABWrapAround2")
+                        {
+                            List<float> ints = ParseString(ref info, 6);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround2(position, endPosition, "movingPlatform1", ints[1], new List<int>() { (int)ints[2], (int)ints[3] },(int)ints[4], (int)ints[5],  assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
+                        }
                         else if (gameObjectDictionary[colors[i, j]] == "SeriesOfMovingPlatform_ABWrapAround")
                         {
-                            List<int> ints = ParseString(ref info, 6);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround(position, endPosition, "movingPlatform1", ints[1], new List<int>() { ints[2], ints[3] }, ints[4], ints[5], assetManager, colliderManager, player);
+                            List<float> ints = ParseString(ref info, 6);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround(position, endPosition, "movingPlatform1", ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, (int)ints[4], (int)ints[5], assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
 
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "OrganStop")
                         {
-                            List<int> ints = ParseString(ref info, 6);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new OrganStop(position, endPosition, ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player, 8 * ints[4], ints[5]);
+                            List<float> ints = ParseString(ref info, 6);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new OrganStop(position, endPosition, ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player, 8 * (int)ints[4], (int)ints[5]);
                             if (position.X == endPosition.X)
                             {
                                 SetRectangularColorRegionToZero(ref colors, i, j, 5, 2);
@@ -320,28 +333,28 @@ namespace Adventure
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Beam")
                         {
-                            List<int> ints = ParseString(ref info, 2);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_BeamPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new Beam(position, endPosition, ints[1], assetManager, colliderManager, screenManager, player);
+                            List<float> ints = ParseString(ref info, 2);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_BeamPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new Beam(position, endPosition, (int)ints[1], assetManager, colliderManager, screenManager, player);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Gate")
                         {
-                            List<int> ints = ParseString(ref info);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
+                            List<float> ints = ParseString(ref info, 5);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
                             gameObjects[i, j] = new Gate(position, endPosition, "AncientDoor", assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 1, 6);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "NoteAndGatePuzzle")
                         {
-                            List<int> ints = ParseString(ref info);
+                            List<int> ints = ParseStringToInts(ref info);
                             gameObjects[i, j] = new NoteAndGatePuzzle(position, "symbolPlate", ints, assetManager);
                             SetRectangularColorRegionToZero(ref colors, i, j, 6, 1);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Ivy")
                         {
-                            List<int> ints = ParseString(ref info);
-                            gameObjects[i, j] = new Ivy(position, "Ivy", assetManager, colliderManager, player, ints[0]);
-                            SetRectangularColorRegionToZero(ref colors, i, j, 1, ints[0]);
+                            List<float> ints = ParseString(ref info);
+                            gameObjects[i, j] = new Ivy(position, "Ivy", assetManager, colliderManager, player, (int)ints[0]);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 1, (int)ints[0]);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "BreakingPlatform")
                         {
@@ -350,11 +363,18 @@ namespace Adventure
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "OrganPipe")
                         {
-                            List<int> ints = ParseString(ref info, 6);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, ints[0]);
-                            gameObjects[i, j] = new OrganPipe(position, endPosition, ints[1], new List<int>() { ints[2], ints[3] }, assetManager, colliderManager, player, 8 * ints[4], ints[5]);
+                            List<float> ints = ParseString(ref info, 6);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new OrganPipe(position, endPosition, ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player, 8 * (int)ints[4], (int)ints[5]);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 1);
 
+                        }
+                        else if (gameObjectDictionary[colors[i, j]] == "OrbEmitter")
+                        {
+                            List<float> ints = ParseString(ref info, 4);
+                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
+                            gameObjects[i, j] = new OrbEmitter(position, endPosition, "BouncingOrb", ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
                         }
                     }
 
@@ -365,10 +385,13 @@ namespace Adventure
         }
 
 
+        // In these methods it is necessary to pass the gameObject the list by reference.
+        // This is because different gameObjects will require different numbers of (consecutive) elements from the list - we cannot just feed in ints[0] each time, for example.
+        // And so we let the gameObjects handle these by themselves.
         public void HandleAdjustHorizontalLayer(AsepriteLayer layer, Color[,] colors)
         {
             string info = layer.UserData.Text;
-            List<int> ints = ParseString(ref info);
+            List<int> ints = ParseStringToInts(ref info);
 
             for (int i = 0; i < colors.GetLength(0); i++)
             {
@@ -386,7 +409,7 @@ namespace Adventure
         public void HandleAdjustVerticalLayer(AsepriteLayer layer, Color[,] colors)
         {
             string info = layer.UserData.Text;
-            List<int> ints = ParseString(ref info);
+            List<int> ints = ParseStringToInts(ref info);
 
             for (int i = 0; i < colors.GetLength(0); i++)
             {
@@ -412,17 +435,28 @@ namespace Adventure
                 {
                     if (colors[i, j] == color_Climable)
                     {
-                        if (gameObjects[i, j] is AnimatedGameObject test)
-                        {
-                            test.Climable = true;
-                        }
+                        gameObjects[i, j].SetClimable();                     
                     }
 
                 }
             }
         }
 
+        public void HandleBoostersLayer(AsepriteLayer layer, Color[,] colors)
+        {
 
+            for (int i = 0; i < colors.GetLength(0); i++)
+            {
+                for (int j = 0; j < colors.GetLength(1); j++)
+                {
+                    if (colors[i, j] == color_Boosters)
+                    {
+                        gameObjects[i, j].SetBoosters();
+                    }
+
+                }
+            }
+        }
         // This is a generic method - we feed in a parameter Type T and behaviour can alter depending on the value of T
         // We give as input a list of lists of GameObjects, and consider each list in turn
         // For each list, we find an object of type T, and then let this objects attachedGameObjects consist of every other object in the list not of type T 
@@ -437,7 +471,6 @@ namespace Adventure
                     if (gameObject is T)
                     {
                         
-
                         foreach (GameObject gameObject1 in list[i])
                         {
                             if (gameObject1 is not T)
@@ -509,9 +542,33 @@ namespace Adventure
         // Ivy: number of ivy tiles
         // Attachment layer: contains the name of the object Type we are attaching to - e.g. Note or MovingPlatform
 
+        public List<float> ParseString(ref string str, int stop = 100)
+        {
+            List<float> result = new List<float>();
 
+            for (int k = 0; k < 100; k++)
+            {
+                if (str.Count() > 0)
+                {
+                    // This last argument ensures that we look for decimal points as the default looks for commas (e.g. 2.5 vs 2,5)
+                    result.Add(float.Parse(ParseUntilNextComma(ref str), CultureInfo.InvariantCulture));
 
-        public List<int> ParseString(ref string str, int stop = 100)
+                    if (result.Count == stop)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return result;
+
+        }
+
+        public List<int> ParseStringToInts(ref string str, int stop = 100)
         {
             List<int> result = new List<int>();
 

@@ -52,8 +52,9 @@ namespace Adventure
 
                 //var offset = Matrix.CreateTranslation(Game1.ScreenWidth / 2, Game1.ScreenHeight / 2, 0);
                 var scale = Matrix.CreateScale(2);
-                var offset = Matrix.CreateTranslation(0, -References.game.ScreenHeight, 0);
-                Transform = scale * offset;
+                Transform = scale;
+                //var offset = Matrix.CreateTranslation(0, -References.game.ScreenHeight, 0);
+                //Transform = scale * offset;
 
             }
             else if (screen.cameraBehaviourType4)
