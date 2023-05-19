@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 
@@ -20,7 +21,7 @@ namespace Adventure
         public int ScreenWidth;
 
         public RenderTarget2D renderTarget; // We create a renderTarget - essentially a rectangle on to which we draw all of our sprites
-
+        public List<RenderTarget2D> renderTargets;
 
 
         public Game1()
@@ -31,14 +32,6 @@ namespace Adventure
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
-            // We wish to render pixels at 320 x 180 like in Celeste. This mirrors old retro games
-            // With this, each tile will be 8 x 8
-            //graphics.PreferredBackBufferWidth = 320;
-            //graphics.PreferredBackBufferHeight = 180;
-            ////graphics.SynchronizeWithVerticalRetrace = true; // This is vsync
-            ////graphics.PreferMultiSampling = true;
-            //graphics.ApplyChanges();
-
             assetManager = new AssetManager();
             soundManager = new SoundManager();
             colliderManager = new ColliderManager();
@@ -47,35 +40,36 @@ namespace Adventure
 
             References.game = this;
 
-            //IsFixedTimeStep = false;
-
         }
 
         protected override void Initialize()
         {
+            // Work in a native/virtual resolution of 640 x 360
+            // Tile sizes will be 16 x 16 and so we fit 40 tiles horizontally and 23 (really 22.5) tiles vertically on the screen
+            ScreenWidth = 640;
+            ScreenHeight = 360;
 
-            //graphics.HardwareModeSwitch = false;
-            ////
-            //graphics.PreferredBackBufferWidth = 320;
-            //graphics.PreferredBackBufferHeight = 180;
-            ////graphics.HardwareModeSwitch = true;
-            //graphics.ApplyChanges();
-
-            ScreenHeight = 180;
-            ScreenWidth = 320;
+            // Lock the game to run at 60 FPS
             IsFixedTimeStep = true;
-            TargetElapsedTime = TimeSpan.FromTicks((long)(TimeSpan.TicksPerMillisecond * (1000 / (double)60))); // Lock at 60 FPS
+            TargetElapsedTime = TimeSpan.FromTicks((long)(TimeSpan.TicksPerMillisecond * (1000 / (double)60)));
 
-
+            // Output to 720p
+            graphics.PreferredBackBufferHeight = 720;
             graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720; 
             //graphics.SynchronizeWithVerticalRetrace = true; // This is vsync
             graphics.PreferMultiSampling = true; // This is anti-aliasing
             graphics.ApplyChanges();
 
-            renderTarget = new RenderTarget2D(GraphicsDevice, 320, 180, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24);
+
+            renderTargets = new List<RenderTarget2D>()
+            {
+                new RenderTarget2D(GraphicsDevice, 160, 90, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24),
+                new RenderTarget2D(GraphicsDevice, 320, 180, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24),
+                new RenderTarget2D(GraphicsDevice, 640, 360, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24),
+                new RenderTarget2D(GraphicsDevice, 1280, 720, false, GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24)
+            };
+
             base.Initialize();
-            //renderTarget = new RenderTarget2D(graphics.GraphicsDevice, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight, false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
         }
 
@@ -121,19 +115,7 @@ namespace Adventure
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Beige);
-
-            // We draw all of our sprites on to the renderTarget,
-            graphics.GraphicsDevice.SetRenderTarget(renderTarget);
-            screenManager.Draw(gameTime);
-            // We then set it to null so that we can draw back on to the screen
-            graphics.GraphicsDevice.SetRenderTarget(null);
-            
-            // Draw back to the screen as a Texture2D
-            //spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            spriteBatch.Draw(renderTarget, new Rectangle(0, 0, 1280, 720), Color.White);
-            spriteBatch.End();
-
+            screenManager.Draw(gameTime, graphics, renderTargets);
 
             base.Draw(gameTime);
         }

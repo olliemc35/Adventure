@@ -12,7 +12,7 @@ namespace Adventure
     {
 
         public int playerControlCounter = 0;
-        public int NumberOfFramesBeforePlayerRegainsControl = 5;
+        public int NumberOfFramesBeforePlayerRegainsControl = 9;
 
         public float TimeTakenToAccelerateToMaxSpeedX = (float)6 / 60;
         public float TimeTakenToDecelerateFromMaxSpeedX = (float)6 / 60;
@@ -70,6 +70,10 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
+            //Debug.WriteLine(playerControlCounter);
+            //Debug.WriteLine(statesX);
+            //Debug.WriteLine(player.displacement.X);
+            //Debug.WriteLine(statesY);
 
             if (enterStateFlag)
             {
@@ -142,11 +146,13 @@ namespace Adventure
             {
                 if (player.CollidedOnRight && player.directionX == 1)
                 {
+                    playerControlCounter = 0;
                     exits = Exits.exitToSlidingWallStateFacingRight;
                     return;
                 }
                 if (player.CollidedOnLeft && player.directionX == -1)
                 {
+                    playerControlCounter = 0;
                     exits = Exits.exitToSlidingWallStateFacingLeft;
                     return;
                 }
@@ -161,90 +167,83 @@ namespace Adventure
 
             if (statesX == StatesX.constantVelocityRightUntilHitGround)
             {
-                if (player.directionX == -1)
+
+                if (playerControlCounter < NumberOfFramesBeforePlayerRegainsControl)
                 {
-                    if (playerControlCounter >= NumberOfFramesBeforePlayerRegainsControl)
+                    playerControlCounter += 1;
+                    return;
+                }
+                else
+                {
+
+
+                    if (player.directionX == -1)
                     {
-                        playerControlCounter = 0;
                         statesX = StatesX.accelerateLeft;
+                        playerControlCounter = 0;
                         return;
                     }
-                }
-
-                //if (player.spriteDirectionX == 0)
-                //{
-                //    if (playerControlCounter >= NumberOfFramesBeforePlayerRegainsControl)
-                //    {
-                //        playerControlCounter = 0;
-                //        statesX = StatesX.decelerateRight;
-                //        return;
-                //    }
-                //}
-
-                playerControlCounter += 1;
-
-                if (player.CollidedOnBottom)
-                {
-                    if (player.directionX == 1)
+                    else if (player.directionX == 1)
                     {
                         statesX = StatesX.constantVelocityRight;
-                    }
-                    else if (player.directionX == -1)
-                    {
-                        statesX = StatesX.accelerateLeft;
+                        playerControlCounter = 0;
+                        return;
                     }
                     else
                     {
-                        statesX = StatesX.decelerateRight;
+                        if (player.CollidedOnBottom)
+                        {
+                            statesX = StatesX.atRestX;
+                            playerControlCounter = 0;
+                            return;
+                        }
                     }
+
+                    return;
+
                 }
 
-                return;
+
             }
 
             if (statesX == StatesX.constantVelocityLeftUntilHitGround)
             {
 
-                if (player.directionX == 1)
+                if (playerControlCounter < NumberOfFramesBeforePlayerRegainsControl)
                 {
-                    if (playerControlCounter >= NumberOfFramesBeforePlayerRegainsControl)
+                    playerControlCounter += 1;
+                    return;
+                }
+                else
+                {
+                    
+
+                    if (player.directionX == 1)
                     {
-                        playerControlCounter = 0;
                         statesX = StatesX.accelerateRight;
+                        playerControlCounter = 0;
                         return;
                     }
-                }
-
-                //if (player.spriteDirectionX == 0)
-                //{
-                //    if (playerControlCounter >= NumberOfFramesBeforePlayerRegainsControl)
-                //    {
-                //        playerControlCounter = 0;
-                //        statesX = StatesX.decelerateLeft;
-                //        return;
-                //    }
-                //}
-
-                playerControlCounter += 1;
-
-                if (player.CollidedOnBottom)
-                {
-
-                    if (player.directionX == -1)
+                    else if (player.directionX == -1)
                     {
                         statesX = StatesX.constantVelocityLeft;
-                    }
-                    else if (player.directionX == 1)
-                    {
-                        statesX = StatesX.accelerateRight;
+                        playerControlCounter = 0;
+                        return;
                     }
                     else
                     {
-                        statesX = StatesX.decelerateLeft;
+                        if (player.CollidedOnBottom)
+                        {       
+                            statesX = StatesX.atRestX;
+                            playerControlCounter = 0;
+                            return;
+                        }
                     }
-                }
 
-                return;
+                    return;
+
+                }
+                
             }
 
 

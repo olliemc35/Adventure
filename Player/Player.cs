@@ -103,19 +103,23 @@ namespace Adventure
             this.screenManager = screenManager;
 
 
-            maxHorizontalSpeed = 60;
+            maxHorizontalSpeed = 60; // This is overridden in inputManager
 
             jumpDuration = 0.5f;
-            jumpHeight = 24;
+            jumpHeight = 32;
 
-            gravityConstant = 750;
+            gravityConstant = 8 * jumpHeight / (jumpDuration * jumpDuration);
+            jumpSpeed = 4 * jumpHeight / jumpDuration;
+
+            //gravityConstant = 750;
+            // mass only comes in for swinging
             mass = 8 * jumpHeight / (jumpDuration * jumpDuration * gravityConstant);
-            jumpSpeed = 0.5f * mass * gravityConstant * jumpDuration;
+            //jumpSpeed = 0.5f * mass * gravityConstant * jumpDuration;
 
 
 
 
-            maxVerticalSpeed = 300;
+            maxVerticalSpeed = 600;
 
 
             //mass = 1;
@@ -150,10 +154,9 @@ namespace Adventure
             // at the end of the frame. A fix would be to just update deltaTime at the beginning of the frame.
             deltaTime = (float)1 / 60;
 
-
+            CollidedOnBottom = true; // We set this to be true as otherwise on the very first frame CollidedOnBottom will be false and the NormalStateManager will set statesY to falling
 
             playerStateManager = new PlayerStateManager(this, screenManager, assetManager);
-
         }
 
 
@@ -221,19 +224,19 @@ namespace Adventure
             animation_Respawn.OnAnimationEnd = ReturnToIdleAnimation;
             animation_Dead.OnAnimationEnd = ReturnToRespawnAnimation;
 
-            idleHitbox.rectangle.Width = 10;
-            idleHitbox.offsetX = 3;
-            idleHitbox.rectangle.Height = 14;
-            idleHitbox.offsetY = 2;
+            idleHitbox.rectangle.Width = 20;
+            idleHitbox.offsetX = 6;
+            idleHitbox.rectangle.Height = 28;
+            idleHitbox.offsetY = 4;
             idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
             idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
             idleHitbox.isActive = true;
 
             hurtHitbox.texture = assetManager.hitboxTexture;
-            hurtHitbox.rectangle.Width = 6;
-            hurtHitbox.offsetX = 5;
-            hurtHitbox.rectangle.Height = 11;
-            hurtHitbox.offsetY = 4;
+            hurtHitbox.rectangle.Width = 12;
+            hurtHitbox.offsetX = 10;
+            hurtHitbox.rectangle.Height = 22;
+            hurtHitbox.offsetY = 8;
             hurtHitbox.rectangle.X = (int)position.X + hurtHitbox.offsetX;
             hurtHitbox.rectangle.Y = (int)position.Y + hurtHitbox.offsetY;
             hurtHitbox.isActive = true;
@@ -284,6 +287,10 @@ namespace Adventure
             //Debug.WriteLine("B: " + spriteDirectionX);
             //Debug.WriteLine("C: " + playerStateManager.normalState.Active);
             //Debug.WriteLine(velocity.X);
+            //Debug.WriteLine(position.X);
+            //Debug.WriteLine(position.Y);
+
+
             bomb.Update(gameTime);
             foreach (Ribbon ribbon in ribbons)
             {
@@ -298,7 +305,7 @@ namespace Adventure
             //    Debug.WriteLine(playerStateManager.climbingState.Active);
 
             //}
-
+           // Debug.WriteLine(velocity.X);
             ropeAnchor.X = position.X + idleHitbox.offsetX + 1;
             ropeAnchor.Y = position.Y + idleHitbox.offsetY + idleHitbox.rectangle.Height / 2 - 2;
 

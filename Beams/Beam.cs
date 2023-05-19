@@ -47,13 +47,13 @@ namespace Adventure
             if (startPosition.X == endPosition.X)
             {
                 verticalBeam = true;
-                int numberOfBeams = (int)Math.Abs(endPosition.Y - startPosition.Y) / 8;
+                int numberOfBeams = (int)Math.Abs(endPosition.Y - startPosition.Y) / 16;
                 int sign = Math.Sign(endPosition.Y - startPosition.Y);
 
                 for (int i = 0; i <= numberOfBeams; i++)
                 {
                     Vector2 location = startPosition;
-                    location.Y += sign * 8 * i;
+                    location.Y += sign * 16 * i;
 
                     if (i == 0)
                     {
@@ -75,13 +75,13 @@ namespace Adventure
             else
             {
                 horizontalBeam = true;
-                int numberOfBeams = (int)Math.Abs(endPosition.X - startPosition.X) / 8;
+                int numberOfBeams = (int)Math.Abs(endPosition.X - startPosition.X) / 16;
                 int sign = Math.Sign(endPosition.X - startPosition.X);
 
                 for (int i = 0; i <= numberOfBeams; i++)
                 {
                     Vector2 location = startPosition;
-                    location.X += sign * 8 * i;
+                    location.X += sign * 16 * i;
 
                     if (i == 0)
                     {

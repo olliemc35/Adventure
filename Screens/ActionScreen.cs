@@ -15,36 +15,43 @@ namespace Adventure
     {
         public Player player;
         public InputManager inputManager;
-        // It is important, for the draw order, that we add the tiles FIRST - so that these are drawn in the background
-        public AnimatedGameObject[,] arrayofTiles;
 
         public AnimatedGameObject[,] backgroundObjects;
 
+        public int tileSize = 16;
+        public int cameraTypeIndex;
 
-
-        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, InputManager inputManager, List<GameObject> gameObjects, AnimatedGameObject[,] backgroundObjects) : base(spriteBatch)
+        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, InputManager inputManager, List<GameObject> gameObjects, AnimatedGameObject[,] backgroundObjects, Vector2 respawnPoint, int screenNumber, int cameraTypeIndex) : base(spriteBatch)
         {
             this.player = player;
             this.screenGameObjectsToLoadIn = gameObjects;
             this.backgroundObjects = backgroundObjects;
             this.inputManager = inputManager;
-            ScreenWidth = 8 * 40;
-            ScreenHeight = 8 * 23;
+            ScreenWidth = tileSize * backgroundObjects.GetLength(0);
+            ScreenHeight = tileSize * backgroundObjects.GetLength(1);
+            this.respawnPoint = respawnPoint;
+            this.screenNumber = screenNumber;
+            if (ScreenWidth == 160)
+            {
+                renderTargetIndex = 0;
+            }
+            else if (ScreenWidth == 320)
+            {
+                renderTargetIndex = 1;
+            }
+            else if (ScreenWidth == 640)
+            {
+                renderTargetIndex = 2;
+            }
+            else if (ScreenWidth == 1280)
+            {
+                renderTargetIndex = 3;
+            }
+
+            this.cameraTypeIndex = cameraTypeIndex;
+            cameraBehaviourType1 = true; // FIX THIS
+
         }
-
-        //public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, string screenBuilderFilename, KeyboardState keyboard, KeyboardState oldKeyboard) : base(spriteBatch)
-        //{
-        //    this.player = player;
-
-        //    screenBuilder = new ActionScreenBuilder(screenBuilderFilename, colliderManager, inputManager, this, player);
-        //    level1.LoadContent(References.content, References.graphicsDevice);
-
-        //    this.keyboardState = keyboard;
-        //    this.oldKeyboardState = oldKeyboard;
-        //    ScreenWidth = 8 * 40;
-        //    ScreenHeight = 8 * 23;
-        //}
-
 
 
         public override void LoadContent()
@@ -94,6 +101,11 @@ namespace Adventure
                     if (gameObject is Door door)
                     {
                         screenDoors.Add(door);
+                    }
+
+                    if (gameObject is ActionScreenTransitionWall wall)
+                    {
+                        actionScreenTransitionWalls.Add(wall);
                     }
 
                     if (gameObject is OrbEmitter emitter)
@@ -294,13 +306,13 @@ namespace Adventure
                             {
                                 if (!backgroundObjects[k, j].idleHitbox.isActive)
                                 {
-                                    newHitbox.rectangle.Width = (k - i) * 8;
+                                    newHitbox.rectangle.Width = (k - i) * tileSize;
                                     break;
                                 }
 
                                 if (k == backgroundObjects.GetLength(0) - 1 && backgroundObjects[k, j].idleHitbox.isActive)
                                 {
-                                    newHitbox.rectangle.Width = (k - i + 1) * 8;
+                                    newHitbox.rectangle.Width = (k - i + 1) * tileSize;
                                     break;
                                 }
 
@@ -308,7 +320,7 @@ namespace Adventure
                         }
                         else
                         {
-                            newHitbox.rectangle.Width = 8;
+                            newHitbox.rectangle.Width = tileSize;
                         }
 
 
@@ -317,11 +329,11 @@ namespace Adventure
                         {
                             for (int h = j + 1; h < backgroundObjects.GetLength(1); h++)
                             {
-                                for (int l = i; l < i + newHitbox.rectangle.Width / 8; l++)
+                                for (int l = i; l < i + newHitbox.rectangle.Width / tileSize; l++)
                                 {
                                     if (!backgroundObjects[l, h].idleHitbox.isActive)
                                     {
-                                        newHitbox.rectangle.Height = (h - j) * 8;
+                                        newHitbox.rectangle.Height = (h - j) * tileSize;
                                         GotHeight = true;
                                         break;
                                     }
@@ -335,7 +347,7 @@ namespace Adventure
                                 // I only reach this point if everything is fine
                                 if (h == backgroundObjects.GetLength(1) - 1)
                                 {
-                                    newHitbox.rectangle.Height = (h - j + 1) * 8;
+                                    newHitbox.rectangle.Height = (h - j + 1) * tileSize;
                                 }
 
                             }
@@ -343,12 +355,12 @@ namespace Adventure
                         }
                         else
                         {
-                            newHitbox.rectangle.Height = 8;
+                            newHitbox.rectangle.Height = tileSize;
                         }
 
-                        for (int i2 = i; i2 < i + newHitbox.rectangle.Width / 8; i2++)
+                        for (int i2 = i; i2 < i + newHitbox.rectangle.Width / tileSize; i2++)
                         {
-                            for (int j2 = j; j2 < j + newHitbox.rectangle.Height / 8; j2++)
+                            for (int j2 = j; j2 < j + newHitbox.rectangle.Height / tileSize; j2++)
                             {
                                 backgroundObjects[i2, j2].idleHitbox.isActive = false;
                             }

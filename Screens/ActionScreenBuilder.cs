@@ -16,6 +16,7 @@ using System.Collections;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
+using System.Reflection.Emit;
 
 namespace Adventure
 {
@@ -43,9 +44,13 @@ namespace Adventure
         public SoundManager soundManager;
         public Player player;
 
+        public Vector2 respawnPoint;
+        public int cameraTypeIndex = 0;
 
         public int screenWidth;
         public int screenHeight;
+
+        public int tileSize = 16;
 
         //public List<GameObject> gameObjects = new List<GameObject>();
 
@@ -64,16 +69,18 @@ namespace Adventure
         public Color color_Climable = new Color(85, 255, 0, 255); // Bright green
         public Color color_Boosters = new Color(203, 203, 203, 255); // Silver
 
+        public Color color_Spawn = new Color(0, 241, 255, 255); // Bright cyan
+
+
 
         public List<Color> attachmentColors = new List<Color>();
 
 
 
-        public ActionScreenBuilder(string filename, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, SoundManager soundManager, Player player, int screenWidth = 40, int screenHeight = 23)
+        public ActionScreenBuilder(string filename, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, ScreenManager screenManager, SoundManager soundManager, Player player)
         {
             this.filename = filename;
-            this.screenHeight = screenHeight;
-            this.screenWidth = screenWidth;
+
             this.assetManager = assetManager;
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
@@ -86,8 +93,7 @@ namespace Adventure
             attachmentColors.Add(new Color(200, 0, 225, 255));
             attachmentColors.Add(new Color(175, 0, 225, 255));
 
-            backgroundObjects = new AnimatedGameObject[screenWidth, screenHeight];
-            gameObjects = new GameObject[screenWidth, screenHeight];
+
 
 
             backgroundDictionary.Add(new Color(199, 245, 255, 255), "Tile_air");
@@ -110,6 +116,8 @@ namespace Adventure
             gameObjectDictionary.Add(new Color(151, 151, 151, 255), "BreakingPlatform"); // Light grey
             gameObjectDictionary.Add(new Color(17, 0, 86, 255), "OrganPipe"); // Dark blue
             gameObjectDictionary.Add(new Color(117, 216, 67, 255), "OrbEmitter"); // Light green
+            gameObjectDictionary.Add(new Color(188, 206, 216, 255), "ActionScreenTransitionWall"); // Very light grey
+
 
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(color_MovingPlatformAlpha.ToVector4());
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(gameObjectDictionary[])
@@ -145,12 +153,33 @@ namespace Adventure
             // From the frame we obtain Cel information
             ReadOnlySpan<AsepriteCel> asepriteCels = asepriteFile.GetFrame(0).Cels;
 
+            foreach (AsepriteCel cel in asepriteCels)
+            {
+                if (cel.Layer.Name == "Data")
+                {
+                    string info = cel.Layer.UserData.Text;
+                    List<int> ints = ParseStringToInts(ref info, 3);
+                    screenWidth = ints[0];
+                    screenHeight = ints[1];
+                    cameraTypeIndex = ints[2];
+                }
+            }
+
+            backgroundObjects = new AnimatedGameObject[screenWidth, screenHeight];
+            gameObjects = new GameObject[screenWidth, screenHeight];
+
+
+
+
+
             // From Cel data we obtain pixel data
             foreach (AsepriteCel cel in asepriteCels)
             {
                 AsepriteImageCel imageCel2 = cel as AsepriteImageCel;
                 data.Add(cel.Layer, CreatePixelArray(imageCel2));
             }
+
+
 
             foreach (AsepriteLayer layer in data.Keys)
             {
@@ -183,6 +212,10 @@ namespace Adventure
                 else if (layer.Name.Contains("Boosters"))
                 {
                     HandleBoostersLayer(layer, data[layer]);
+                }
+                else if (layer.Name.Contains("Data"))
+                {
+                    HandleDataLayer(layer, data[layer]);
                 }
 
             }
@@ -245,7 +278,7 @@ namespace Adventure
                 {
                     if (backgroundDictionary.ContainsKey(colors[i, j]))
                     {
-                        backgroundObjects[i, j] = new AnimatedGameObject(new Vector2(8 * i, 8 * j), backgroundDictionary[colors[i, j]], assetManager);
+                        backgroundObjects[i, j] = new AnimatedGameObject(new Vector2(tileSize * i, tileSize * j), backgroundDictionary[colors[i, j]], assetManager);
                     }
                 }
 
@@ -254,7 +287,6 @@ namespace Adventure
 
         public void HandleGameObjectLayer(AsepriteLayer layer, Color[,] colors)
         {
-
             string info = layer.UserData.Text;
 
             for (int i = 0; i < colors.GetLength(0); i++)
@@ -263,7 +295,7 @@ namespace Adventure
                 {
                     if (gameObjectDictionary.ContainsKey(colors[i, j]))
                     {
-                        Vector2 position = new Vector2(8 * i, 8 * j);
+                        Vector2 position = new Vector2(tileSize * i, tileSize * j);
 
                         if (gameObjectDictionary[colors[i, j]] == "Door")
                         {
@@ -294,7 +326,7 @@ namespace Adventure
                         {
                             List<float> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
-                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround2(position, endPosition, "movingPlatform1", ints[1], new List<int>() { (int)ints[2], (int)ints[3] },(int)ints[4], (int)ints[5],  assetManager, colliderManager, player);
+                            gameObjects[i, j] = new SeriesOfMovingPlatform_ABWrapAround2(position, endPosition, "movingPlatform1", ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, (int)ints[4], (int)ints[5], assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 4, 1);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "SeriesOfMovingPlatform_ABWrapAround")
@@ -309,7 +341,7 @@ namespace Adventure
                         {
                             List<float> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
-                            gameObjects[i, j] = new OrganStop(position, endPosition, ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player, 8 * (int)ints[4], (int)ints[5]);
+                            gameObjects[i, j] = new OrganStop(position, endPosition, ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player, tileSize * (int)ints[4], (int)ints[5]);
                             if (position.X == endPosition.X)
                             {
                                 SetRectangularColorRegionToZero(ref colors, i, j, 5, 2);
@@ -324,7 +356,7 @@ namespace Adventure
                             string noteValue = ParseUntilNextComma(ref info);
                             gameObjects[i, j] = new Note(position, noteValue + "KeyRound", noteValue, "rune_" + noteValue, assetManager, colliderManager, inputManager, soundManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 2);
-                        }                      
+                        }
                         else if (gameObjectDictionary[colors[i, j]] == "LaunchPad")
                         {
                             gameObjects[i, j] = new LaunchPad(position, "LaunchPad", assetManager, colliderManager, player);
@@ -339,10 +371,11 @@ namespace Adventure
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Gate")
                         {
-                            List<float> ints = ParseString(ref info, 5);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
-                            gameObjects[i, j] = new Gate(position, endPosition, "AncientDoor", assetManager, colliderManager, player);
-                            SetRectangularColorRegionToZero(ref colors, i, j, 1, 6);
+                            string filename = ParseUntilNextComma(ref info);
+                            List<int> ints = ParseStringToInts(ref info, 4);
+                            Vector2 endPoint = new Vector2(position.X + tileSize * ints[0], position.Y + tileSize * ints[1]);
+                            gameObjects[i, j] = new Gate(position, endPoint, filename, assetManager, colliderManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, ints[2], ints[3]);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "NoteAndGatePuzzle")
                         {
@@ -365,7 +398,7 @@ namespace Adventure
                         {
                             List<float> ints = ParseString(ref info, 6);
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
-                            gameObjects[i, j] = new OrganPipe(position, endPosition, ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player, 8 * (int)ints[4], (int)ints[5]);
+                            gameObjects[i, j] = new OrganPipe(position, endPosition, ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player, tileSize * (int)ints[4], (int)ints[5]);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 1);
 
                         }
@@ -375,6 +408,13 @@ namespace Adventure
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha, i, j, (int)ints[0]);
                             gameObjects[i, j] = new OrbEmitter(position, endPosition, "BouncingOrb", ints[1], new List<int>() { (int)ints[2], (int)ints[3] }, assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
+                        }
+                        else if (gameObjectDictionary[colors[i, j]] == "ActionScreenTransitionWall")
+                        {
+                            string direction = ParseUntilNextComma(ref info);
+                            List<int> ints = ParseStringToInts(ref info, 5);
+                            gameObjects[i, j] = new ActionScreenTransitionWall(position, direction, tileSize * ints[0], tileSize * ints[1], ints[2], ints[3], ints[4], colliderManager, inputManager, screenManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, ints[0], ints[1]);
                         }
                     }
 
@@ -417,7 +457,10 @@ namespace Adventure
                 {
                     if (colors[i, j] == color_AdjustPosition)
                     {
+
                         gameObjects[i, j].AdjustVertically(ref ints);
+
+
                     }
 
                 }
@@ -435,13 +478,30 @@ namespace Adventure
                 {
                     if (colors[i, j] == color_Climable)
                     {
-                        gameObjects[i, j].SetClimable();                     
+                        gameObjects[i, j].SetClimable();
                     }
 
                 }
             }
         }
+        public void HandleDataLayer(AsepriteLayer layer, Color[,] colors)
+        {
+            string info = layer.UserData.Text;
+            List<int> ints = ParseStringToInts(ref info);
 
+
+            for (int i = 0; i < colors.GetLength(0); i++)
+            {
+                for (int j = 0; j < colors.GetLength(1); j++)
+                {
+                    if (colors[i, j] == color_Spawn)
+                    {
+                        respawnPoint = new Vector2(tileSize * i, tileSize * j);
+                    }
+
+                }
+            }
+        }
         public void HandleBoostersLayer(AsepriteLayer layer, Color[,] colors)
         {
 
@@ -470,7 +530,7 @@ namespace Adventure
 
                     if (gameObject is T)
                     {
-                        
+
                         foreach (GameObject gameObject1 in list[i])
                         {
                             if (gameObject1 is not T)
@@ -611,8 +671,8 @@ namespace Adventure
                     {
                         if (colors[i, k] == color)
                         {
-                            result.X = 8 * i;
-                            result.Y = 8 * k;
+                            result.X = tileSize * i;
+                            result.Y = tileSize * k;
                             foundEndPoint = true;
                             break;
                         }
@@ -625,8 +685,8 @@ namespace Adventure
                     {
                         if (colors[i, k] == color)
                         {
-                            result.X = 8 * i;
-                            result.Y = 8 * k;
+                            result.X = tileSize * i;
+                            result.Y = tileSize * k;
                             foundEndPoint = true;
                             break;
                         }
@@ -641,8 +701,8 @@ namespace Adventure
                     {
                         if (colors[k, j] == color)
                         {
-                            result.X = 8 * k;
-                            result.Y = 8 * j;
+                            result.X = tileSize * k;
+                            result.Y = tileSize * j;
                             foundEndPoint = true;
                             break;
                         }
@@ -655,8 +715,8 @@ namespace Adventure
                     {
                         if (colors[k, j] == color)
                         {
-                            result.X = 8 * k;
-                            result.Y = 8 * j;
+                            result.X = tileSize * k;
+                            result.Y = tileSize * j;
                             break;
                         }
                     }
@@ -680,9 +740,9 @@ namespace Adventure
 
         public void SetRectangularColorRegionToZero(ref Color[,] colors, int i, int j, int width, int height)
         {
-            for (int x = 0; x< width; x++)
+            for (int x = 0; x < width; x++)
             {
-                for (int y = 0; y< height; y++)
+                for (int y = 0; y < height; y++)
                 {
                     SetColorToZero(ref colors[i + x, j + y]);
                 }

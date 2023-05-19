@@ -23,6 +23,7 @@ namespace Adventure
         public List<GameObject> screenGameObjectsToRemove = new List<GameObject>();
 
         public List<Door> screenDoors = new List<Door>();
+        public List<ActionScreenTransitionWall> actionScreenTransitionWalls = new List<ActionScreenTransitionWall>();
         public List<Note> screenNotes = new List<Note>();
         public NoteShip screenNoteShip;
 
@@ -55,11 +56,17 @@ namespace Adventure
         public int ScreenWidth = 0;
 
         public bool ChangeScreenFlag = false;
+        public bool ChangeScreenFlag_Wall = false;
+
 
         public Vector2 respawnPoint;
 
 
         public int screenNumber = 0;
+
+
+        public int renderTargetIndex = 0;
+
 
         public List<ScreenBehaviour> ScreenBehaviours
         {

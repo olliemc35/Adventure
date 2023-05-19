@@ -32,9 +32,9 @@ namespace Adventure
         public int ScreenNumber = 0;
         public int PreviousScreenNumber = 0;
         public int DoorNumberToMoveTo = 0;
+        public int WallNumberToMoveTo = 0;
 
 
-     
 
         public ScreenManager(SpriteBatch spriteBatch, AssetManager assetManager, ColliderManager colliderManager, InputManager inputManager, SoundManager soundManager)
         {
@@ -58,11 +58,11 @@ namespace Adventure
 
             foreach (GameScreen screen in screens)
             {
-                    screen.LoadContent();
-                    screen.Hide();              
+                screen.LoadContent();
+                screen.Hide();
             }
 
-            activeScreen = screens[0];
+            activeScreen = screens[9];
             activeScreen.Show();
 
             player.LoadContent();
@@ -80,9 +80,13 @@ namespace Adventure
             if (activeScreen.ChangeScreenFlag)
             {
                 activeScreen.ChangeScreenFlag = false;
-                ChangeScreen();               
+                ChangeScreen();
             }
- 
+            if (activeScreen.ChangeScreenFlag_Wall)
+            {
+                activeScreen.ChangeScreenFlag_Wall = false;
+                ChangeScreen_Wall();
+            }
             //soundManager.Update(gameTime);
 
 
@@ -100,11 +104,34 @@ namespace Adventure
             player.hurtHitbox.rectangle.Y = (int)player.position.Y + player.hurtHitbox.offsetY;
         }
 
-        public void Draw(GameTime gameTime)
+        public void ChangeScreen_Wall()
         {
-            //spriteBatch.Begin(samplerState: SamplerState.PointClamp, transformMatrix: activeScreen.camera.Transform);
+            activeScreen = screens[ScreenNumber - 1];
+            DisableShowScreenTransition(screens[PreviousScreenNumber - 1], screens[ScreenNumber - 1]);
+            player.position = activeScreen.actionScreenTransitionWalls[WallNumberToMoveTo - 1].spawnPoint;
+            player.idleHitbox.rectangle.X = (int)player.position.X + player.idleHitbox.offsetX;
+            player.idleHitbox.rectangle.Y = (int)player.position.Y + player.idleHitbox.offsetY;
+            player.hurtHitbox.rectangle.X = (int)player.position.X + player.hurtHitbox.offsetX;
+            player.hurtHitbox.rectangle.Y = (int)player.position.Y + player.hurtHitbox.offsetY;
+        }
+
+
+
+        public void Draw(GameTime gameTime, GraphicsDeviceManager graphics, List<RenderTarget2D> renderTargets)
+        {
+            // Set the right screen size
+            graphics.GraphicsDevice.SetRenderTarget(renderTargets[activeScreen.renderTargetIndex]);
+
             spriteBatch.Begin(transformMatrix: activeScreen.camera.Transform);
             activeScreen.Draw(gameTime);
+            spriteBatch.End();
+
+            // We then set it to null so that we can draw back on to the screen
+            graphics.GraphicsDevice.SetRenderTarget(null);
+
+            // Draw back to the screen as a Texture2D
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+            spriteBatch.Draw(renderTargets[activeScreen.renderTargetIndex], new Rectangle(0, 0, 1280, 720), Color.White);
             spriteBatch.End();
 
 
@@ -137,36 +164,31 @@ namespace Adventure
         public void CreateScreens(ContentManager content, GraphicsDevice graphicsDevice)
         {
 
-            //for (int i = 1; i <= 17; i++)
-            //{
-            //    //ActionScreenBuilder level = new ActionScreenBuilder("Level1_TEST", assetManager, colliderManager, inputManager, this, soundManager, player);
+            for (int i = 1; i <= 10; i++)
+            {
 
-            //    ActionScreenBuilder level = new ActionScreenBuilder("Level" + i.ToString(), assetManager, colliderManager, inputManager, this, soundManager, player);
-            //    level.LoadContent(content, graphicsDevice);
-
-            //    screens.Add(
-            //        new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects)
-            //        {
-            //            respawnPoint = new Vector2(8 * 1, 8 * 1),
-            //            screenNumber = i,
-            //            cameraBehaviourType1 = true
-            //        });
-
-            //}
-
-            
-                ActionScreenBuilder level = new ActionScreenBuilder("Level_TEST", assetManager, colliderManager, inputManager, this, soundManager, player, 20, 12);
+                ActionScreenBuilder level = new ActionScreenBuilder("NEWLevel_" + i.ToString(), assetManager, colliderManager, inputManager, this, soundManager, player);
                 level.LoadContent(content, graphicsDevice);
 
                 screens.Add(
-                    new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects)
-                    {
-                        respawnPoint = new Vector2(8 * 1, 8 * 1),
-                        screenNumber = 0,
-                        cameraBehaviourType3 = true
-                    });
+                    new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects, level.respawnPoint, i, level.cameraTypeIndex)
+                    );
 
-            
+            }
+
+
+            //ActionScreenBuilder level = new ActionScreenBuilder("Level_TEST", assetManager, colliderManager, inputManager, this, soundManager, player, 10, 6);
+            //level.LoadContent(content, graphicsDevice);
+
+            //screens.Add(
+            //    new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects)
+            //    {
+            //        respawnPoint = new Vector2(8 * 1, 8 * 1),
+            //        screenNumber = 0,
+            //        cameraBehaviourType1 = true
+            //    });
+
+
         }
 
 
