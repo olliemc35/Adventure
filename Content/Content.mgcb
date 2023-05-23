@@ -29,6 +29,11 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Beam.aseprite;Beam.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/BoostPad.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BoostPad.aseprite;BoostPad.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/BottomBeam.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -239,6 +244,11 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/MovingClimablePlatform.aseprite;MovingClimablePlatform.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/MovingOrbReceptor.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/MovingOrbReceptor.aseprite;MovingOrbReceptor.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/movingPlatform1.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -258,6 +268,46 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_10.aseprite;NEWLevel_10.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_11.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_11.aseprite;NEWLevel_11.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_12.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_12.aseprite;NEWLevel_12.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_13.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_13.aseprite;NEWLevel_13.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_14.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_14.aseprite;NEWLevel_14.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_15.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_15.aseprite;NEWLevel_15.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_16.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_16.aseprite;NEWLevel_16.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_17.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_17.aseprite;NEWLevel_17.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_18.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_18.aseprite;NEWLevel_18.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_2.aseprite
 /importer:AsepriteFileContentImporter
@@ -478,6 +528,11 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/rune_G.aseprite;rune_G.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/SmallWoodenGate.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/SmallWoodenGate.aseprite;SmallWoodenGate.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/Spike.aseprite
 /importer:AsepriteFileContentImporter

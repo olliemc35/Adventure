@@ -21,7 +21,10 @@ namespace Adventure
         public int tileSize = 16;
         public int cameraTypeIndex;
 
-        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, InputManager inputManager, List<GameObject> gameObjects, AnimatedGameObject[,] backgroundObjects, Vector2 respawnPoint, int screenNumber, int cameraTypeIndex) : base(spriteBatch)
+        
+
+
+        public ActionScreen(SpriteBatch spriteBatch, SpriteFont spriteFont, Player player, InputManager inputManager, List<GameObject> gameObjects, AnimatedGameObject[,] backgroundObjects, Vector2 respawnPoint, int screenNumber, int renderTargetIndex, int cameraTypeIndex) : base(spriteBatch)
         {
             this.player = player;
             this.screenGameObjectsToLoadIn = gameObjects;
@@ -29,26 +32,45 @@ namespace Adventure
             this.inputManager = inputManager;
             ScreenWidth = tileSize * backgroundObjects.GetLength(0);
             ScreenHeight = tileSize * backgroundObjects.GetLength(1);
-            this.respawnPoint = respawnPoint;
-            this.screenNumber = screenNumber;
-            if (ScreenWidth == 160)
+
+
+            actualScreenWidth = tileSize * backgroundObjects.GetLength(0);
+            actualScreenHeight = tileSize * backgroundObjects.GetLength(1);
+
+
+            this.renderTargetIndex = renderTargetIndex;
+
+            if (renderTargetIndex == 0)
             {
-                renderTargetIndex = 0;
+                renderScreenWidth = tileSize * 10;
+                renderScreenHeight = tileSize * 6;
             }
-            else if (ScreenWidth == 320)
+            else if (renderTargetIndex == 1)
             {
-                renderTargetIndex = 1;
+                renderScreenWidth = tileSize * 20;
+                renderScreenHeight = tileSize * 12;
             }
-            else if (ScreenWidth == 640)
+            else if (renderTargetIndex == 2)
             {
-                renderTargetIndex = 2;
+                renderScreenWidth = tileSize * 40;
+                renderScreenHeight = tileSize * 23;
             }
-            else if (ScreenWidth == 1280)
+            else if (renderTargetIndex == 3)
             {
-                renderTargetIndex = 3;
+                renderScreenWidth = tileSize * 80;
+                renderScreenHeight = tileSize * 45;
             }
 
+
+
+            this.respawnPoint = respawnPoint;
+            this.screenNumber = screenNumber;
+
+
             this.cameraTypeIndex = cameraTypeIndex;
+
+            camera = new Camera(cameraTypeIndex);
+
             cameraBehaviourType1 = true; // FIX THIS
 
         }
@@ -114,7 +136,14 @@ namespace Adventure
                         hitboxesToCheckCollisionsWith.Add(emitter.orbReceptors[0].idleHitbox);
                         hitboxesToCheckCollisionsWith.Add(emitter.orbReceptors[1].idleHitbox);
                     }
-
+                    if (gameObject is ConstantOrbEmitter emitter2)
+                    {
+                        hitboxesToCheckCollisionsWith.Add(emitter2.orbReceptor.idleHitbox);
+                    }
+                    if (gameObject is ConstantOrbEmitter2 emitter3)
+                    {
+                        hitboxesToCheckCollisionsWith.Add(emitter3.orbReceptor.idleHitbox);
+                    }
 
                     if (gameObject is OrganStop organStop)
                     {

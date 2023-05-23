@@ -23,7 +23,7 @@ namespace Adventure
 
         // This GameObject consists of a series of moving platforms which will move across the screen and wrap around when they reach the end
         // The player is able to control EMITTING one of the platforms
-        public SeriesOfMovingPlatform_ABWrapAround2(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int numberOfPlatforms, int spacing, AssetManager assetManager, ColliderManager colliderManager, Player player)
+        public SeriesOfMovingPlatform_ABWrapAround2(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int numberOfPlatforms, int spacing, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player)
         {
             this.spacing = spacing;
             this.numberOfPlatforms = numberOfPlatforms;
@@ -31,7 +31,7 @@ namespace Adventure
 
             for (int i = 0; i < numberOfPlatforms; i++)
             {
-                platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, endPoint, filename, speed, stationaryTimes, assetManager, colliderManager, player));
+                platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, endPoint, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player));
             }
 
 

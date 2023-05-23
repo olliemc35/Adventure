@@ -86,7 +86,6 @@ namespace Adventure
             this.screenManager = screenManager;
             this.player = player;
             previousPosition = position;
-            drawPosition = FindNearestIntegerVector(position);
 
         }
 
@@ -109,6 +108,8 @@ namespace Adventure
             idleHitbox = new HitboxRectangle((int)position.X, (int)position.Y, animation_Idle.Width, animation_Idle.Height);
             idleHitbox.texture = assetManager.hitboxTexture;
             hitboxes.Add(idleHitbox);
+
+            drawPosition = FindNearestIntegerVector(position);
 
             if (Climable)
             {
@@ -215,7 +216,7 @@ namespace Adventure
         {
             if (!player.playerStateManager.deadState.Active)
             {
-                if (colliderManager.CheckForCollision(player.hurtHitbox, idleHitbox))
+                if (colliderManager.CheckForCollision(player.hurtHitbox, idleHitbox) && idleHitbox.isActive)
                 {
                     player.KillPlayer();
                 }

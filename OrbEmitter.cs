@@ -15,9 +15,9 @@ namespace Adventure
         public MovingPlatform_ABWrapAround orb;
         public List<AnimatedGameObject> orbReceptors = new List<AnimatedGameObject>();
 
-        public OrbEmitter(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base()
+        public OrbEmitter(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base()
         {
-            orb = new MovingPlatform_ABWrapAround(initialPosition, endPoint , filename, speed, stationaryTimes, assetManager, colliderManager, player);
+            orb = new MovingPlatform_ABWrapAround(initialPosition, endPoint , filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player);
             orb.movePlayer = false;
             orbReceptors.Add(new AnimatedGameObject(initialPosition, "OrbReceptors", assetManager));
             orbReceptors.Add(new AnimatedGameObject(endPoint, "OrbReceptors", assetManager));

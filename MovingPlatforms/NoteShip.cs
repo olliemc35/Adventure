@@ -19,7 +19,7 @@ namespace Adventure
 
         // THIS WILL NEED FIXING
 
-        public NoteShip(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, int displacement, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
+        public NoteShip(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, int displacement, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
         {
             this.displacement = displacement;
             originalPosition = initialPosition;

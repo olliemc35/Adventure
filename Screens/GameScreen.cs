@@ -55,6 +55,19 @@ namespace Adventure
         public int ScreenHeight = 0;
         public int ScreenWidth = 0;
 
+        // We may create a level with 20 x 12 tiles (say). This is the actualScreenSize.
+        // We may choose to render it at 10 x 6 tiles (say). This is the renderScreenSize.
+        // We do this so that we do not lose image quality and can view big screens zoomed in (zooming in via the camera loses image quality).
+        // This distinction is important for the Camera.
+        // Note that we measure both in terms of tiles. So e.g. a 160 x 90 resolution corresponds to 10 x 6 tiles (of size 16x16). (Dividing gives something like 10 x 5.6... and we round up to the nearest tile.)
+
+        public int actualScreenWidth;
+        public int actualScreenHeight;
+
+        public int renderScreenWidth;
+        public int renderScreenHeight;
+
+
         public bool ChangeScreenFlag = false;
         public bool ChangeScreenFlag_Wall = false;
 
@@ -79,8 +92,8 @@ namespace Adventure
             Visible = false;
             Enabled = false;
             DisableScreenGameObjects();
-            camera = new Camera();
-            camera.Transform = Matrix.Identity;
+            //camera = new Camera();
+            //camera.Transform = Matrix.Identity;
 
 
         }

@@ -13,7 +13,7 @@ namespace Adventure
 
         // This type of MovingPlatform will go from one side of the screen to the other and loop back again
         // It may or may not be controlled by the player 
-        public MovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, player)
+        public MovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
         {
             movePlatform = false;
         }
@@ -76,6 +76,16 @@ namespace Adventure
 
             ints.RemoveRange(0, 2);
 
+        }
+
+        public override void HandleCollision()
+        {
+            position = positions[currentIndex];
+            idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
+            idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
+
+            movePlatform = false;
+            flagCollision = true;
         }
 
 

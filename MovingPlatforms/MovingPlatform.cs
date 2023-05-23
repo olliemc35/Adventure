@@ -57,6 +57,10 @@ namespace Adventure
         public int numberOfFramesHalted = 60;
         public int haltCounter = 0;
 
+        // We may want to detect collision with terrain and in that case do something (e.g. an orb may explode)
+        // For platforms this is unnecessary as we program the path to avoid any terrain
+        public bool detectCollisionsWithTerrain = false;
+        public bool flagCollision = false;
 
 
         public MovingPlatform(Direction direction)
@@ -64,13 +68,14 @@ namespace Adventure
             this.direction = direction;
         }
 
-        public MovingPlatform(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player) : base(positions[0], filename, assetManager)
+        public MovingPlatform(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(positions[0], filename, assetManager)
         {
             CollisionObject = true;
             LoadFirst = true;
             attachedGameObjects = new List<GameObject>();
 
             this.colliderManager = colliderManager;
+            this.screenManager = screenManager;
             this.positions = positions;
             this.speed = speed;
             this.stationaryTimes = stationaryTimes;
@@ -81,18 +86,6 @@ namespace Adventure
             indexToMoveTo = 1;
             direction = Direction.stationary; // We initialise direction to stationary so that we do not stop by mistake on the first loop 
 
-            //if (stationaryTimes[0] == 0)
-            //{
-            //    currentIndex = 0;
-            //    indexToMoveTo = 1;
-            //    UpdateDirection();
-            //}
-            //else
-            //{
-            //    currentIndex = 0;
-            //    indexToMoveTo = 1;
-            //    direction = Direction.stationary;
-            //}
 
 
             deltaTime = 1f / 60;
@@ -136,6 +129,29 @@ namespace Adventure
             ManageAnimations();
             base.Update(gameTime);
 
+            if (detectCollisionsWithTerrain)
+            {
+                foreach (GameObject gameObject in screenManager.activeScreen.screenGameObjects)
+                {
+                    if (gameObject is AnimatedGameObject sprite)
+                    {
+
+                        if (gameObject != this && gameObject != player && colliderManager.CheckForOverlap(idleHitbox, sprite.idleHitbox))
+                        {
+                            HandleCollision();
+
+                            if (sprite is MovingOrbReceptor receptor)
+                            {
+                                receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+
         }
 
         public void BaseUpdate(GameTime gameTime)
@@ -165,6 +181,9 @@ namespace Adventure
             UpdateVelocityAndDisplacement();
             position.X += displacement.X;
             position.Y += displacement.Y;
+
+          
+
             // This method needs to be done BEFORE idleHitbox is updated
             MoveAttachedGameObjects();
             idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
@@ -363,6 +382,12 @@ namespace Adventure
 
             sign *= -1;
             (indexToMoveTo, currentIndex) = (currentIndex, indexToMoveTo);
+        }
+
+
+        public virtual void HandleCollision()
+        {
+
         }
 
 

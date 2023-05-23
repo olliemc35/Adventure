@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,42 +12,76 @@ namespace Adventure
     {
         public Matrix Transform { get; set; }
 
+        // This integer will determine the kind of behaviour of the camera
+        public int behaviourType;
+
+        // 0: fixed to the screen
+        // 1: centered on the player 
+
+
+        public Camera(int i)
+        {
+            behaviourType = i;
+        }
+
         public void UpdateTransform(GameScreen screen, Player player)
         {
 
-            if (screen.cameraBehaviourType1)
+            if (behaviourType == 0)
             {
                 Transform = Matrix.Identity;
                 return;
             }
-            else if (screen.cameraBehaviourType2)
+            else if (behaviourType == 1)
             {
-                //var position = Matrix.CreateTranslation(-player.spritePosition.X, -player.spritePosition.Y, 0);
-                //Debug.WriteLine("here");
-                //var offset = Matrix.CreateTranslation(Game1.ScreenWidth / 2, Game1.ScreenHeight / 2, 0);
+                // Here we would like the camera to be centered on the player and move (smoothly) when the player passes the midpoint of the screen
+                // We are working with two different sizes - the actual size of the screen and the resolution we are rendering it at 
+                // E.g. we may have a screen of size 20 x 12 (tiles) but rendering it at a resolution 10 x 6 (tiles).
+                // We do this so that we do not lose out on image quality. If instead we made the camera scale (i.e. zoom in x2) then we would lose image quality.
 
-                int x = DistanceToNearestInteger(player.position.X);
+                // The way we calculate this is to focus the camera on the center of the player, and then calculate the desired X and Y offsets.
+                // These are easy to see and depend on where the player is on screen.
+                // We can do the X and Y translations completely separately from one another.
+                // Finally note that Matrix.CreateTranslation(x,y,0) means move -x in the X direction (i.e. to the left) and -y in the Y direction (which in the case means to the bottom if y>0).
+                // (This is unfortunately extremely confusing and must be to do with the way XNA/MonoGame draws to the screen.)
 
-                var position1 = Matrix.CreateTranslation(-x - player.idleHitbox.rectangle.Width / 2, 0, 0);
-                var position2 = Matrix.CreateTranslation(-screen.ScreenWidth + References.game.ScreenWidth / 2, 0, 0);
-                var offset = Matrix.CreateTranslation(References.game.ScreenWidth / 2, 0, 0);
+                // Set our camera centers
+                int cameraCenterX = DistanceToNearestInteger(player.position.X) + player.idleHitbox.rectangle.Width / 2;
+                int cameraCenterY = DistanceToNearestInteger(player.position.Y) + player.idleHitbox.rectangle.Height / 2;
+ 
+                Transform = Matrix.Identity;
 
+                // DO X AND Y SEPARATELY 
 
-                if (x + player.idleHitbox.rectangle.Width / 2 >= References.game.ScreenWidth / 2 && x + player.idleHitbox.rectangle.Width / 2 <= screen.ScreenWidth - References.game.ScreenWidth / 2)
+                if (cameraCenterX <= screen.renderScreenWidth / 2)
                 {
-                    Transform = position1 * offset;
+                    // do nothing
                 }
-                else if (x + player.idleHitbox.rectangle.Width / 2 >= screen.ScreenWidth - References.game.ScreenWidth / 2)
+                else if (cameraCenterX > screen.renderScreenWidth / 2 && cameraCenterX <= screen.actualScreenWidth - screen.renderScreenWidth / 2)
                 {
-                    Transform = position2 * offset;
+                    Transform *= Matrix.CreateTranslation(-cameraCenterX + screen.renderScreenWidth / 2, 0, 0);
                 }
-                else
+                else if (cameraCenterX > screen.actualScreenWidth - screen.renderScreenWidth / 2)
                 {
-                    Transform = Matrix.Identity;
+                    Transform *= Matrix.CreateTranslation(-screen.actualScreenWidth + screen.renderScreenWidth, 0, 0);
                 }
+
+                if (cameraCenterY >= screen.actualScreenHeight / 2 + screen.renderScreenHeight / 2)
+                {
+                    Transform *= Matrix.CreateTranslation(0, -screen.actualScreenHeight / 2, 0);
+                }
+                else if (cameraCenterY >= screen.renderScreenHeight / 2 && cameraCenterY <= screen.actualScreenHeight / 2 + screen.renderScreenHeight / 2)
+                {
+                    Transform *= Matrix.CreateTranslation(0, -cameraCenterY + screen.renderScreenHeight / 2, 0);
+                }
+                else if (cameraCenterY < screen.renderScreenHeight / 2)
+                {
+                    // do nothing
+                }
+
 
             }
-            else if (screen.cameraBehaviourType3)
+            else if (behaviourType == 2)
             {
                 //var position = Matrix.CreateTranslation(-player.spritePosition.X, -player.spritePosition.Y, 0);
 
@@ -57,7 +92,7 @@ namespace Adventure
                 //Transform = scale * offset;
 
             }
-            else if (screen.cameraBehaviourType4)
+            else if (behaviourType == 3)
             {
                 var position1 = Matrix.CreateTranslation(-player.position.X - player.idleHitbox.rectangle.Width / 2, -player.position.Y - player.idleHitbox.rectangle.Height / 2, 0);
                 var offset = Matrix.CreateTranslation(References.game.ScreenWidth / 2 - 120, References.game.ScreenHeight / 2 - 30, 0);
@@ -68,7 +103,7 @@ namespace Adventure
                 Transform = position1 * offset * scale;
 
             }
-            else if (screen.cameraBehaviourType5)
+            else if (behaviourType == 4)
             {
                 // Not right - want the camera to track the player until lands on noteShip
                 if (player.position.X < screen.screenNoteShip.position.X)

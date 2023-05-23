@@ -62,7 +62,7 @@ namespace Adventure
                 screen.Hide();
             }
 
-            activeScreen = screens[9];
+            activeScreen = screens[12];
             activeScreen.Show();
 
             player.LoadContent();
@@ -164,14 +164,14 @@ namespace Adventure
         public void CreateScreens(ContentManager content, GraphicsDevice graphicsDevice)
         {
 
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= 18; i++)
             {
 
                 ActionScreenBuilder level = new ActionScreenBuilder("NEWLevel_" + i.ToString(), assetManager, colliderManager, inputManager, this, soundManager, player);
                 level.LoadContent(content, graphicsDevice);
 
                 screens.Add(
-                    new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects, level.respawnPoint, i, level.cameraTypeIndex)
+                    new ActionScreen(spriteBatch, menuFont, player, inputManager, level.gameObjectsAsList, level.backgroundObjects, level.respawnPoint, i, level.renderTargetIndex, level.cameraTypeIndex)
                     );
 
             }

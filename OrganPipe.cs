@@ -46,7 +46,7 @@ namespace Adventure
         public ExtendingDirection direction;
 
 
-        public OrganPipe(Vector2 startPoint, Vector2 endPoint, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, Player player, int distanceFromBase, int behaviour)
+        public OrganPipe(Vector2 startPoint, Vector2 endPoint, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, int distanceFromBase, int behaviour)
         {
 
             this.assetManager = assetManager;
@@ -57,12 +57,12 @@ namespace Adventure
 
             if (behaviour == 0)
             {
-                platform = new MovingPlatform_AB(startPoint, endPoint, "OrganPipe_Platform", speed, stationaryTimes, assetManager, colliderManager, player);
+                platform = new MovingPlatform_AB(startPoint, endPoint, "OrganPipe_Platform", speed, stationaryTimes, assetManager, colliderManager, screenManager, player);
 
             }
             else if (behaviour == 1)
             {
-                platform = new MovingPlatform_ABA(startPoint, endPoint, "OrganPipe_Platform", speed, stationaryTimes, assetManager, colliderManager, player);
+                platform = new MovingPlatform_ABA(startPoint, endPoint, "OrganPipe_Platform", speed, stationaryTimes, assetManager, colliderManager, screenManager, player);
 
             }
 
