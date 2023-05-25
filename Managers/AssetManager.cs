@@ -58,6 +58,7 @@ namespace Adventure
                 "OrangeOrb",
                 "Orb",
                 "OrbMiddle",
+                "OrbReceptor2",
                 "OrbReceptors",
                 "OrbVesselEndLeft",
                 "OrbVesselEndRight",

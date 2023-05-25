@@ -19,7 +19,7 @@ namespace Adventure
         public bool beforeDelay;
 
 
-        public FlashingBeam(Vector2 startPosition, int durationOn, int durationOff, Vector2 endPosition, int on, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, int delay = 0) : base(startPosition, endPosition, on, assetManager, colliderManager, screenManager, player)
+        public FlashingBeam(Vector2 startPosition, int durationOn, int durationOff, Vector2 endPosition, string onOrOff, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, int delay = 0) : base(startPosition, endPosition, onOrOff, assetManager, colliderManager, screenManager, player)
         {
             this.durationOn = durationOn;
             this.durationOff = durationOff;

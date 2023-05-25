@@ -15,29 +15,68 @@ namespace Adventure
 {
     public class SeriesOfMovingPlatform_ABWrapAround : GameObject
     {
+        // The way in which we use the MovingPlatform_ABWrapAround class is in the following class and derived classes thereof
+        // The default behaviour is to have MovingPlatform_ABWrapAround emitted every time framesBetweenEmitting has elapsed, thus giving a constant stream of platforms moving across the screen.
+
         public List<MovingPlatform_ABWrapAround> platforms = new List<MovingPlatform_ABWrapAround>();
+
+        // These may be NULL if the platforms simply appear/disappear off-screen
+        public Emitter platformEmitter;
+        public Emitter platformReceiver;
+
+        // The int index denotes the index of the next platform to be released
+        public int index = 0;
+        public int counter = 0;
+        public int framesBetweenEmitting;
+
         public int indexOfPlatformClosestToStart = -1;
         public int spacing;
         public int numberOfPlatforms;
-        public int indexOfStartPosition = 0;
-        public int shift = 1; // when we change direction we need to change this to -1 to make the modular arithmetic order work
+        public int shift = 1; // when we change direction we need to change this to -1 
 
         public bool detectCollisionsWithTerrain = false;
 
-        // This GameObject consists of a series of moving platforms which will move across the screen and wrap around when they reach the end
-        // The player is able to control the DIRECTION of the moving platforms by playing a corresponding Note
 
-        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int numberOfPlatforms, int spacing, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player)
+       
+
+
+        
+
+
+        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, Emitter platformEmitter = null, Emitter platformReceiver = null, int numberOfPlatforms = 0)
         {
-            this.spacing = spacing;
-            this.numberOfPlatforms = numberOfPlatforms;
 
-            for (int i = 0; i < numberOfPlatforms; i++)
+            this.framesBetweenEmitting = framesBetweenEmitting;
+
+            this.platformEmitter = platformEmitter;
+            this.platformReceiver = platformReceiver;
+
+            // We may want to set the numberOfPlatforms manually (in this case we would nearly always want to set it to 1 manually). Otherwise we simply set it to be so that we have "enough" platforms
+            // As speed = distance / time and here time is measured in frames and speed is measured in pixels / frames 
+            // we see that, emitting a platform after timeBetweenPlatforms has passed means there is a spacing of timeBetweenPlatforms * speed between each platform.
+            // If N platforms are on screen then they cover a distance of N * (screenWidth) + N * spacing (if moving horizontally, say). We want this to be > Vector2.Distance(initialPosition,endPoint).
+            // We can guarantee this by taking N to be the ceiling of this distance over the spacing. This leads to the formulae below.
+            // (It is very likely that some platforms are redundant but this does not matter.)
+
+            if (numberOfPlatforms == 0)
+            {
+                this.numberOfPlatforms = (int)Math.Ceiling(Vector2.Distance(initialPosition, endPoint) / (framesBetweenEmitting * speed));
+            }
+            else
+            {
+                this.numberOfPlatforms = numberOfPlatforms;
+            }
+
+            spacing = (int)(framesBetweenEmitting * speed);
+
+            for (int i = 0; i < this.numberOfPlatforms; i++)
             {
                 platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, endPoint, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player));
             }
 
-            SetStartingPositions(initialPosition, endPoint);          
+            // We set this so that on the first frame we get a platforming emitting.
+            counter = framesBetweenEmitting;
+
 
         }
 
@@ -47,34 +86,34 @@ namespace Adventure
             {
                 platform.LoadContent();
             }
+
+            // X?.Method() does nothing if X == null and evaluates Method otherwise
+            platformEmitter?.LoadContent();          
+            platformReceiver?.LoadContent();
+
         }
 
-        public override void Update(GameTime gametime)
+        public override void Update(GameTime gameTime)
         {
-            //Debug.WriteLine(indexOfPlatformClosestToStart);
-
-            if (Vector2.Distance(platforms[indexOfPlatformClosestToStart].position, platforms[0].positions[platforms[0].currentIndex]) >= 16 * spacing)
+            if (counter < framesBetweenEmitting)
             {
-                if (!platforms[(platforms.Count+indexOfPlatformClosestToStart + shift) % platforms.Count].movePlatform)
-                {
-                    platforms[(platforms.Count + indexOfPlatformClosestToStart + shift) % platforms.Count].movePlatform = true;
-
-                    indexOfPlatformClosestToStart = (platforms.Count + indexOfPlatformClosestToStart + shift) % platforms.Count;
-                }
-     
+                counter++;
             }
-
+            else
+            {
+                counter = 0;
+                index = (index + shift + numberOfPlatforms) % numberOfPlatforms;
+                platforms[index].movePlatform = true;
+            }
 
             foreach (MovingPlatform_ABWrapAround platform in platforms)
             {
-                platform.Update(gametime);
+                platform.Update(gameTime);
 
-                if (platform.flagCollision)
-                {
-                    platform.flagCollision = false;
-                    indexOfPlatformClosestToStart = (platforms.Count + indexOfPlatformClosestToStart + shift) % platforms.Count;
-                }
             }
+
+            platformEmitter?.Update(gameTime);
+            platformReceiver?.Update(gameTime);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -87,47 +126,18 @@ namespace Adventure
 
                 }
             }
-        }
 
-        public void ReverseDirection()
-        {
-            int newIndexOfPlatformClosestToStart = 0;
+            platformEmitter?.Draw(spriteBatch);
+            platformReceiver?.Draw(spriteBatch);
 
-            foreach (MovingPlatform_ABWrapAround platform in platforms)
-            {
-                if (platform.position == platform.positions[platform.currentIndex])
-                {
-                    platform.position = platform.positions[platform.indexToMoveTo];
-                }
-            }
-
-            for (int i = 0; i < numberOfPlatforms; i++)
-            {
-                // As platforms are handled so that they are always precisely a distance 8 * spacing apart and they wrap-around at the end-point
-                // there will always be a platform satisfying the inequality below
-
-                if (Vector2.Distance(platforms[i].position, platforms[0].positions[platforms[0].indexToMoveTo]) <= 16 * spacing)
-                {
-                    newIndexOfPlatformClosestToStart = i;
-                    break;
-                }
-
-            }
-
-            indexOfPlatformClosestToStart = newIndexOfPlatformClosestToStart;
-
-            foreach (MovingPlatform_ABWrapAround platform in platforms)
-            {
-                platform.ReverseDirection();
-            }
-
-            // When we reverse the platforms we want to move through the list platforms in the opposite direction
-            // E.g. if we are going UP through the list we want to go DOWN through the list. (Drawing a picture makes this make sense.)
-            shift *= -1;
-
-            
 
         }
+
+
+
+
+
+
 
 
         // We call this function so that the screen is already populated with platforms when we first enter it
@@ -140,7 +150,7 @@ namespace Adventure
             {
                 for (int i = 0; i < numberOfPlatforms; i++)
                 {
-                    if ((initialPosition + direction * 16 * spacing * i).Length() < endPoint.Length())
+                    if ((initialPosition + direction * spacing * i).Length() < endPoint.Length())
                     {
                         platforms[i].movePlatform = true;
                         indexOfPlatformClosestToStart += 1;
@@ -152,7 +162,7 @@ namespace Adventure
             {
                 for (int i = 0; i < numberOfPlatforms; i++)
                 {
-                    if ((initialPosition + direction * 16 * spacing * i).Length() > endPoint.Length())
+                    if ((initialPosition + direction * spacing * i).Length() > endPoint.Length())
                     {
                         platforms[i].movePlatform = true;
                         indexOfPlatformClosestToStart += 1;
@@ -163,11 +173,12 @@ namespace Adventure
 
             for (int i = 0; i <= indexOfPlatformClosestToStart; i++)
             {
-                platforms[i].position = initialPosition + 16 * spacing * (indexOfPlatformClosestToStart - i) * direction;
+                platforms[i].position = initialPosition + spacing * (indexOfPlatformClosestToStart - i) * direction;
             }
         }
 
 
+        // Code for ActionScreenBuilder
         public override void AdjustHorizontally(ref List<int> ints)
         {
             foreach (MovingPlatform_ABWrapAround platform in platforms)
@@ -193,12 +204,16 @@ namespace Adventure
 
         }
 
-        public override void HandleNoteTrigger()
+
+        public override void SetBoosters()
         {
-            ReverseDirection();
+            foreach (MovingPlatform_ABWrapAround platform in platforms)
+            {
+                platform.SetBoosters();
+            }
         }
 
-        
+
 
     }
 }

@@ -15,17 +15,18 @@ namespace Adventure
     {
         // This type of MovingPlatform will be controlled by the player.
         // The player will press a corresponding Note and the platform will move from position A to position B
-        // When the player presses the Note again AND the platform is at position B, it will move back to position A etc.
-        // As always the player trigger is the movePlatform bool
+        // When the player presses the Note then ...
+            // If platform is stationary at B it will move to A and if platform is stationary at A it will move to B
+            // If platform is moving between A and B it will halt for 60 frames and then reverse direction, moving back to the point it came from.
+        // The player trigger is the movePlatform bool.
        
-
-        public bool delayed = false;
-
         public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
         {
             movePlatform = false;
         }
 
+
+        // We update the UpdateAtStationaryPoints method to incorporate stopping at each end-point.
         public override void UpdateAtStationaryPoints()
         {
             if (direction == Direction.stationary)

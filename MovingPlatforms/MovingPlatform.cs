@@ -14,7 +14,7 @@ namespace Adventure
         // Every MovingPlatform will have a "moving" animation
         public AnimatedSprite animation_Moving;
 
-        // A MovingPlatform object can either move horizontally or vertically in straight lines (or be stationary)
+        // A MovingPlatform object can either move horizontally or vertically (in straight lines) or be stationary
         public enum Direction
         {
             moveRight,
@@ -26,17 +26,16 @@ namespace Adventure
         public Direction direction;
 
         // Every MovingPlatform will contain a list of positions it will travel to.
-        // There will always be at least two positions and when we reach the end of the list the next position the platform will move to will be the first element i.e. we loop back to the start.
+        // There will always be at least two positions and when we reach the end of the list the next position the platform will move to the first element i.e. we loop back to the start.
         public List<Vector2> positions = new List<Vector2>();
 
-        // The position WE HAVE JUST LEFT will be kept track of via currentIndex - i.e. we will always have just left positions[currentIndex].
+        // The position WE HAVE JUST LEFT or ARE CURRENTLY STATIONARY AT will be kept track of via currentIndex - i.e. we will always have just left positions[currentIndex].
         public int currentIndex;
         // The position WE ARE TRAVELLING TOWARDS will be kept track of via indexToMoveTo - i.e. we will always be travelling to positions[indexToMoveTo]
         public int indexToMoveTo;
         // We keep track of these by moving through the list indexes - in derived classes we may want the player to be able to reverse the direction.
         // This means going through the list in the opposite direction. We keep track of this via the following sign (+1 means go forward through the list, -1 means go backwards).
         public int sign = 1;
-
 
         // Every MovingPlatform will have a speed
         public float speed;
@@ -45,28 +44,21 @@ namespace Adventure
         public List<int> stationaryTimes = new List<int>();
         public int timeStationaryCounter = 0;
 
-
         // Certain MovingPlatforms will have behaviour that is triggered by the player and we incorporate a trigger via this bool. (Any derived classes which is controlled by the player will set this to false.)
         public bool movePlatform = true;
 
-        // If the platform is a hazard (e.g. an Orb) we do not want the player to move as in this case we never detect collision with the player's hurtHitbox
+        // If the platform is a hazard (e.g. an Orb) we do not want the player to move if it is in contact with the platform (as in this case we never detect collision with the player's hurtHitbox).
         public bool movePlayer = true;
 
-        // If the player reverses the direction of the platform we may want the motion to halt for a set number of frames
+        // If the player reverses the direction of the platform we may want the motion to halt for a set number of frames (default is 60).
         public bool halt = false;
         public int numberOfFramesHalted = 60;
         public int haltCounter = 0;
 
-        // We may want to detect collision with terrain and in that case do something (e.g. an orb may explode)
-        // For platforms this is unnecessary as we program the path to avoid any terrain
+        // We may want to detect collision with terrain and in that case do something (e.g. an orb may explode on contact with a gate which can either be up or down).
+        // Note for most platforms this is unnecessary as we program the path to avoid any terrain and so do not need to call on the ColliderManager to ensure movement is OK.
         public bool detectCollisionsWithTerrain = false;
         public bool flagCollision = false;
-
-
-        public MovingPlatform(Direction direction)
-        {
-            this.direction = direction;
-        }
 
         public MovingPlatform(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(positions[0], filename, assetManager)
         {
@@ -86,15 +78,9 @@ namespace Adventure
             indexToMoveTo = 1;
             direction = Direction.stationary; // We initialise direction to stationary so that we do not stop by mistake on the first loop 
 
-
-
             deltaTime = 1f / 60;
 
         }
-
-
-
-
 
         public override void LoadContent()
         {
@@ -116,7 +102,7 @@ namespace Adventure
                 {
                     haltCounter += 1;
                     ManageAnimations();
-                    BaseUpdate(gameTime);
+                    base.Update(gameTime);
                     return;
                 }
             }
@@ -129,13 +115,15 @@ namespace Adventure
             ManageAnimations();
             base.Update(gameTime);
 
+
+
+            // THINK ABOUT MAKING THIS CLEANER
             if (detectCollisionsWithTerrain)
             {
                 foreach (GameObject gameObject in screenManager.activeScreen.screenGameObjects)
                 {
                     if (gameObject is AnimatedGameObject sprite)
                     {
-
                         if (gameObject != this && gameObject != player && colliderManager.CheckForOverlap(idleHitbox, sprite.idleHitbox))
                         {
                             HandleCollision();
@@ -145,7 +133,6 @@ namespace Adventure
                                 receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
                             }
                         }
-
                     }
 
                 }
@@ -171,8 +158,8 @@ namespace Adventure
         {
             UpdateAtStationaryPoints();
 
-            // In derived classes we may have set movePlatform to false in the above method call
-            // In this case we do not want to update any further and want to break from the loop
+            // In derived classes we may have set movePlatform to false in the above method call.
+            // In this case we do not want to update any further and want to break from the loop.
             if (!movePlatform)
             {
                 return;
@@ -182,10 +169,9 @@ namespace Adventure
             position.X += displacement.X;
             position.Y += displacement.Y;
 
-          
-
-            // This method needs to be done BEFORE idleHitbox is updated
+            // This method needs to be called BEFORE idleHitbox is updated
             MoveAttachedGameObjects();
+
             idleHitbox.rectangle.X = FindNearestInteger(position.X) + idleHitbox.offsetX;
             idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
         }
@@ -229,7 +215,10 @@ namespace Adventure
         public void UpdateIndices()
         {
             currentIndex = indexToMoveTo;
-            indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count;
+            // We add positions.Count as C# handles negative modular arithmetic in a slightly annoying way.
+            // x % m always gives a value in the range [-m+1, m-1] rather than [0,m-1]. E.g. -1 % 3 = -1 instead of what we would like i.e. 2.
+            // A simple way to get around this is to compute (x+m) % m instead (since in our case we know x > -m). (In general (x % m + m) % m works!)
+            indexToMoveTo = (indexToMoveTo + positions.Count + sign) % positions.Count; 
         }
 
         public void UpdateVelocityAndDisplacement()
@@ -298,16 +287,19 @@ namespace Adventure
             }
             else
             {
-                foreach (GameObject gameObject in attachedGameObjects)
+                if (attachedGameObjects != null)
                 {
-                    if (gameObject is AnimatedGameObject sprite)
+                    foreach (GameObject gameObject in attachedGameObjects)
                     {
-                        if (sprite.Climable && player.playerStateManager.climbingState.Active && player.playerStateManager.climbingState.platform == sprite)
+                        if (gameObject is AnimatedGameObject sprite)
                         {
-                            player.MoveManually(displacement);
-                            break;
-                        }
+                            if (sprite.Climable && player.playerStateManager.climbingState.Active && player.playerStateManager.climbingState.platform == sprite)
+                            {
+                                player.MoveManually(displacement);
+                                break;
+                            }
 
+                        }
                     }
                 }
             }

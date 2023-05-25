@@ -11,7 +11,7 @@ namespace Adventure
 {
     public class DiagonalOrbsPattern2 : GameObject
     {
-        public List<MovingPlatform_ABWrapAroundMusical> orbs = new List<MovingPlatform_ABWrapAroundMusical>();
+        public List<MovingPlatform_ABWrapAround> orbs = new List<MovingPlatform_ABWrapAround>();
         public List<OrbReceptor> orbReceptors = new List<OrbReceptor>();
         public float horizontalSpacing;
         public float verticalSpacing;
@@ -49,7 +49,7 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y;
                     endPosition.Y = endStream.Y;
-                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, "HighCBell", soundManager, assetManager, colliderManager, screenManager, player);
+                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, "HighCBell", soundManager);
                     orbs.Add(orb);
 
                 }
@@ -57,14 +57,14 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y - 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 8 * verticalSpacing;
-                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, "HighEflatBell", soundManager, assetManager, colliderManager, screenManager, player);
+                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, "HighEflatBell", soundManager);
                     orbs.Add(orb);
                 }
                 else if (i % 3 == 2)
                 {
                     startPosition.Y = startStream.Y - 2 * 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 2 * 8 * verticalSpacing;
-                    MovingPlatform_ABWrapAroundMusical orb = new MovingPlatform_ABWrapAroundMusical(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, "HighGBell", soundManager, assetManager, colliderManager, screenManager, player);
+                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, "HighGBell", soundManager);
                     orbs.Add(orb);
                 }
 
@@ -84,7 +84,7 @@ namespace Adventure
 
         public override void LoadContent()
         {
-            foreach (MovingPlatform_ABWrapAroundMusical orb in orbs)
+            foreach (MovingPlatform_ABWrapAround orb in orbs)
             {
                 orb.LoadContent();
                 orb.idleHitbox.rectangle.Width = 4;
@@ -117,7 +117,7 @@ namespace Adventure
             }
 
 
-            foreach (MovingPlatform_ABWrapAroundMusical orb in orbs)
+            foreach (MovingPlatform_ABWrapAround orb in orbs)
             {
                 orb.Update(gameTime);
 
@@ -187,7 +187,7 @@ namespace Adventure
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            foreach (MovingPlatform_ABWrapAroundMusical orb in orbs)
+            foreach (MovingPlatform_ABWrapAround orb in orbs)
             {
                 orb.Draw(spriteBatch);
             }

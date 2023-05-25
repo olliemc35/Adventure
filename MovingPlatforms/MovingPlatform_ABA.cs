@@ -10,16 +10,18 @@ namespace Adventure
 {
     public class MovingPlatform_ABA : MovingPlatform
     {
-        // This type of MovingPlatform is similar to MovingPlatformHalfLoop
-        // It will have two positions to move between and the starting position must be given first in the list (i.e. at index 0)
-        // It is controlled by the player - when the player plays a corresponding Note it will move from position 1 to position 2 back to position 1 again
+        // This type of MovingPlatform will be controlled by the player.
+        // It will move from A to B and back to A again.
+        // When the player presses a Note...
+            // The platform will move from position A to position B back to position A again.
+            // Pressing the Note again, mid-movement, does nothing.
 
         public MovingPlatform_ABA(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
         {
             movePlatform = false;
         }
 
-
+        // Adjust UpdateAtStationaryPoints to stop at (the return to) A but not at B
         public override void UpdateAtStationaryPoints()
         {
             if (direction == Direction.stationary)
@@ -65,12 +67,6 @@ namespace Adventure
 
         public override void HandleNoteTrigger()
         {
-            //if (movePlatform)
-            //{
-            //    ReverseDirection();
-            //}
-
-            //movePlatform = true;
 
             if (!movePlatform)
             {

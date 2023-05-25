@@ -130,21 +130,19 @@ namespace Adventure
                         actionScreenTransitionWalls.Add(wall);
                     }
 
-                    if (gameObject is OrbEmitter emitter)
+       
+                    if (gameObject is OrbEmitter emitter2)
                     {
-                        hitboxesToCheckCollisionsWith.Add(emitter.orb.idleHitbox);
-                        hitboxesToCheckCollisionsWith.Add(emitter.orbReceptors[0].idleHitbox);
-                        hitboxesToCheckCollisionsWith.Add(emitter.orbReceptors[1].idleHitbox);
+                        hitboxesToCheckCollisionsWith.Add(emitter2.platformEmitter.idleHitbox);
                     }
-                    if (gameObject is ConstantOrbEmitter emitter2)
+                    if (gameObject is OrbEmitter_PlayerEmitter emitter3)
                     {
-                        hitboxesToCheckCollisionsWith.Add(emitter2.orbReceptor.idleHitbox);
+                        hitboxesToCheckCollisionsWith.Add(emitter3.platformEmitter.idleHitbox);
                     }
-                    if (gameObject is ConstantOrbEmitter2 emitter3)
+                    if (gameObject is SingleOrbEmitter_PlayerEmitter emitter4)
                     {
-                        hitboxesToCheckCollisionsWith.Add(emitter3.orbReceptor.idleHitbox);
+                        hitboxesToCheckCollisionsWith.Add(emitter4.platformEmitter.idleHitbox);
                     }
-
                     if (gameObject is OrganStop organStop)
                     {
                         hitboxesToCheckCollisionsWith.Add(organStop.platform.idleHitbox);
@@ -178,7 +176,7 @@ namespace Adventure
                         terrainHitboxes.Add(beam.endHitbox);
                     }
 
-                    if (gameObject is SeriesOfMovingPlatform_ABWrapAround series)
+                    if (gameObject is SeriesOfMovingPlatform_ABWrapAround_Reversing series)
                     {
                         foreach (MovingPlatform_ABWrapAround platformNoLoop in series.platforms)
                         {
@@ -186,7 +184,7 @@ namespace Adventure
                             hitboxesToCheckCollisionsWith.Add(platformNoLoop.idleHitbox);
                         }
                     }
-                    if (gameObject is SeriesOfMovingPlatform_ABWrapAround2 series2)
+                    if (gameObject is SeriesOfMovingPlatform_ABWrapAround_PlayerEmitter series2)
                     {
                         foreach (MovingPlatform_ABWrapAround platformNoLoop in series2.platforms)
                         {

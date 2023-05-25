@@ -25,7 +25,7 @@ namespace Adventure
 
         public bool on = true;
 
-        public Beam(Vector2 startPosition, Vector2 endPosition, int on, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base()
+        public Beam(Vector2 startPosition, Vector2 endPosition, string onOrOff, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base()
         {
             this.startPosition = startPosition;
             this.endPosition = endPosition;
@@ -34,9 +34,9 @@ namespace Adventure
             this.screenManager = screenManager;
             this.player = player;
 
-            if (on == 0)
+            if (onOrOff == "off")
             {
-                this.on = false;
+                on = false;
             }
 
         }

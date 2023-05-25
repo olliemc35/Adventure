@@ -309,10 +309,20 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_18.aseprite;NEWLevel_18.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_19.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_19.aseprite;NEWLevel_19.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_2.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_2.aseprite;NEWLevel_2.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_20.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_20.aseprite;NEWLevel_20.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_3.aseprite
 /importer:AsepriteFileContentImporter
@@ -373,6 +383,11 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/OrbMiddle.aseprite;OrbMiddle.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/OrbReceptor2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/OrbReceptor2.aseprite;OrbReceptor2.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/OrbReceptors.aseprite
 /importer:AsepriteFileContentImporter
