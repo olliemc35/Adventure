@@ -93,7 +93,6 @@ namespace Adventure
                 {
                     if (emitter.platforms[0].movePlatform)
                     {
-                        Debug.WriteLine("here");
                         puzzleActive = true;
                         emitter.platformEmitter.UpdatePlayingAnimation(emitter.platformEmitter.animation_Active);
                         activeOrb = emitter.platforms[0];
@@ -110,7 +109,7 @@ namespace Adventure
                 foreach (SingleOrbEmitter_PlayerEmitter emitter in orbs)
                 {
 
-                    if (emitter.platforms[0].movePlatform && emitter.platforms[0] != activeOrb && colliderManager.CheckForCollision(activeOrb.idleHitbox, emitter.platforms[0].idleHitbox))
+                    if (emitter.platforms[0].movePlatform && emitter.platforms[0] != activeOrb && colliderManager.CheckForOverlap(activeOrb.idleHitbox, emitter.platforms[0].idleHitbox))
                     {
                         collided = true;
                         emitter.platformEmitter.UpdatePlayingAnimation(emitter.platformEmitter.animation_Active);

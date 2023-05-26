@@ -52,7 +52,7 @@ namespace Adventure
         public float jumpDuration;
         public float jumpHeight;
         public float jumpSpeed;
-        public float boostMultiplier = 1.5f;
+        public float boostMultiplier = 1.8f;
 
         public bool jumpButtonPressed = false;
         public bool runButtonPressed = false;

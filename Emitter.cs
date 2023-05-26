@@ -20,14 +20,19 @@ namespace Adventure
         public AnimatedSprite animation_Active;
         public AnimatedSprite animation_Success;
 
-        public Emitter(Vector2 position, string filename, AssetManager assetManager) : base(position, filename, assetManager)
+        public Emitter(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(positions, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
         {
+
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
 
+            if (spriteSheet.ContainsAnimationTag("Hit"))
+            {
+
+            }
             animation_Hit = spriteSheet.CreateAnimatedSprite("Hit");
             animation_Active = spriteSheet.CreateAnimatedSprite("Active");
             animation_Success = spriteSheet.CreateAnimatedSprite("Success");

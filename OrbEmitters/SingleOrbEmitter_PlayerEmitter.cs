@@ -14,9 +14,7 @@ namespace Adventure
     {
         // This is the same as ConstantOrbEmitter_PlayerEmitter except now we restrict to a single orb 
 
-        public MovingPlatform_ABWrapAround orb;
-
-        public SingleOrbEmitter_PlayerEmitter(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, Emitter orbEmitter) : base(initialPosition, endPoint, filename, speed, stationaryTimes, 0, assetManager, colliderManager, screenManager, player, orbEmitter, null, 1)
+        public SingleOrbEmitter_PlayerEmitter(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform orbEmitter) : base(initialPosition, endPoint, filename, speed, stationaryTimes, 0, assetManager, colliderManager, screenManager, player, orbEmitter, null, 1)
         {
 
         }
@@ -40,8 +38,10 @@ namespace Adventure
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            //Debug.WriteLine(platforms[0].positions[1].Y);
 
-
+            Debug.WriteLine(platforms[0].position.Y);
+            //Debug.WriteLine(platforms[0].positions[1].Y - platforms[0].positions[0].Y);
             foreach (MovingPlatform_ABWrapAround orb in platforms)
             {
 

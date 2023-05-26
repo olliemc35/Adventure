@@ -14,6 +14,10 @@ namespace Adventure
         // Every MovingPlatform will have a "moving" animation
         public AnimatedSprite animation_Moving;
 
+        
+
+
+
         // A MovingPlatform object can either move horizontally or vertically (in straight lines) or be stationary
         public enum Direction
         {
@@ -60,7 +64,10 @@ namespace Adventure
         public bool detectCollisionsWithTerrain = false;
         public bool flagCollision = false;
 
-        public MovingPlatform(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(positions[0], filename, assetManager)
+
+
+
+        public MovingPlatform(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, bool receptorBehaviour = false) : base(positions[0], filename, assetManager)
         {
             CollisionObject = true;
             LoadFirst = true;
@@ -73,24 +80,34 @@ namespace Adventure
             this.stationaryTimes = stationaryTimes;
             this.player = player;
 
+            this.receptorBehaviour = receptorBehaviour;
+
             // We configure our starting direction
             currentIndex = 0;
             indexToMoveTo = 1;
             direction = Direction.stationary; // We initialise direction to stationary so that we do not stop by mistake on the first loop 
 
             deltaTime = 1f / 60;
-
+            this.receptorBehaviour = receptorBehaviour;
         }
 
         public override void LoadContent()
         {
             base.LoadContent();
+
             animation_Moving = spriteSheet.CreateAnimatedSprite("Moving");
+
+            
+
+
             idleHitbox.isActive = true;
+
         }
 
         public override void Update(GameTime gameTime)
         {
+            //Debug.WriteLine(direction);
+
             if (halt)
             {
                 if (haltCounter == numberOfFramesHalted)
@@ -100,6 +117,8 @@ namespace Adventure
                 }
                 else
                 {
+                    velocity = new Vector2(0, 0);
+                    displacement = new Vector2(0,0);
                     haltCounter += 1;
                     ManageAnimations();
                     base.Update(gameTime);
@@ -128,10 +147,19 @@ namespace Adventure
                         {
                             HandleCollision();
 
-                            if (sprite is MovingOrbReceptor receptor)
+                            if (sprite.receptorBehaviour)
                             {
-                                receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
+                                sprite.UpdatePlayingAnimation(sprite.animation_Hit, 1);
+
+                                //receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
                             }
+
+                            //if (sprite is MovingOrbReceptor receptor)
+                            //{
+                            //    receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
+
+                            //    //receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
+                            //}
                         }
                     }
 
@@ -166,8 +194,10 @@ namespace Adventure
             }
 
             UpdateVelocityAndDisplacement();
-            position.X += displacement.X;
-            position.Y += displacement.Y;
+
+            // INCUR FLOATING POINT ERRORS OTHERWISE 
+            position.X += (int)displacement.X;
+            position.Y += (int)displacement.Y;
 
             // This method needs to be called BEFORE idleHitbox is updated
             MoveAttachedGameObjects();
@@ -266,7 +296,11 @@ namespace Adventure
 
         public override void ManageAnimations()
         {
-            if (!movePlatform || direction == Direction.stationary || halt)
+            if (animation_playing != animation_Idle || animation_playing != animation_Moving)
+            {
+                // do nothing - logic in other classes will change us back 
+            }
+            else if (!movePlatform || direction == Direction.stationary || halt)
             {
                 UpdatePlayingAnimation(animation_Idle);
             }
@@ -274,6 +308,15 @@ namespace Adventure
             {
                 UpdatePlayingAnimation(animation_Moving);
             }
+
+            //if (!movePlatform || direction == Direction.stationary || halt)
+            //{
+            //    UpdatePlayingAnimation(animation_Idle);
+            //}
+            //else
+            //{
+            //    UpdatePlayingAnimation(animation_Moving);
+            //}
 
         }
 

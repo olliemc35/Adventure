@@ -61,6 +61,12 @@ namespace Adventure
         // This will be a reference to the animation we want to be playing
         public AnimatedSprite animation_playing;
 
+        // Some AnimatedGameObjects namely Emitters and Receivers, will have more animations.
+        public AnimatedSprite animation_Hit;
+        public AnimatedSprite animation_Active;
+        public AnimatedSprite animation_Success;
+
+        public bool receptorBehaviour;
 
 
         public AnimatedGameObject()
@@ -103,6 +109,30 @@ namespace Adventure
             animation_Idle = spriteSheet.CreateAnimatedSprite("Idle");
             animation_Idle.Play();
             animation_playing = animation_Idle;
+
+
+            if (spriteSheet.ContainsAnimationTag("Hit"))
+            {
+                animation_Hit = spriteSheet.CreateAnimatedSprite("Hit");
+            }
+            if (spriteSheet.ContainsAnimationTag("Active"))
+            {
+                animation_Active = spriteSheet.CreateAnimatedSprite("Active");
+            }
+            if (spriteSheet.ContainsAnimationTag("Success"))
+            {
+                animation_Success = spriteSheet.CreateAnimatedSprite("Success");
+            }
+
+            if (animation_Hit != null)
+            {
+                animation_Hit.OnAnimationEnd = (hello) =>
+                {
+                    UpdatePlayingAnimation(animation_Idle);
+                };
+            }
+
+
 
             // Create the idleHitbox
             idleHitbox = new HitboxRectangle((int)position.X, (int)position.Y, animation_Idle.Width, animation_Idle.Height);
@@ -168,23 +198,7 @@ namespace Adventure
             idleHitbox.rectangle.Y = FindNearestInteger(position.Y) + idleHitbox.offsetY;
         }
 
-        public int FindNearestInteger(float x)
-        {
-            if (Math.Ceiling(x) - x <= 0.5)
-            {
-                return (int)Math.Ceiling(x);
-            }
-            else
-            {
-                return (int)Math.Floor(x);
-            }
-
-        }
-
-        public Vector2 FindNearestIntegerVector(Vector2 vec)
-        {
-            return new Vector2(FindNearestInteger(vec.X), FindNearestInteger(vec.Y));
-        }
+       
 
         public void UpdatePlayingAnimation(AnimatedSprite animation, int i = 0)
         {

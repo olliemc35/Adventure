@@ -14,7 +14,7 @@ namespace Adventure
     {
         // This is not controlled by the player
         // Platform will alternate between A and B in an infinite loop
-        public MovingPlatform_ABLoop(Vector2 position1, Vector2 position2, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(new List<Vector2>() { position1, position2 }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
+        public MovingPlatform_ABLoop(Vector2 position1, Vector2 position2, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, bool receptorBehaviour = false) : base(new List<Vector2>() { position1, position2 }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player, receptorBehaviour)
         {
         }
 

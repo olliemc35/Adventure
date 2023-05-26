@@ -324,6 +324,41 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_20.aseprite;NEWLevel_20.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_21.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_21.aseprite;NEWLevel_21.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_22.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_22.aseprite;NEWLevel_22.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_23.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_23.aseprite;NEWLevel_23.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_24.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_24.aseprite;NEWLevel_24.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_25.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_25.aseprite;NEWLevel_25.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_26.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_26.aseprite;NEWLevel_26.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_27.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_27.aseprite;NEWLevel_27.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_3.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor

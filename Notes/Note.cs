@@ -107,7 +107,7 @@ namespace Adventure
                     }
                 }
 
-                
+
             }
 
             //    // BOMB CODE
@@ -145,7 +145,7 @@ namespace Adventure
             }
 
 
-          
+
 
             if (playerInteractedWith && counter < numberOfFramesBetweenPlayerInteractions)
             {
@@ -196,13 +196,21 @@ namespace Adventure
             if (attachedGameObjects != null)
             {
                 foreach (GameObject gameObject in attachedGameObjects)
-                {                    
+                {
                     if (gameObject is NoteShip noteShip)
                     {
                         noteShip.displacementScaling = displacementScalingForNoteShip;
                     }
 
-                    gameObject.HandleNoteTrigger();
+                    if (gameObject.noteTriggerData == null)
+                    {
+                        gameObject.HandleNoteTrigger();
+                    }
+                    else
+                    {
+                        gameObject.HandleNoteTrigger(noteTriggerData);
+
+                    }
 
 
                 }

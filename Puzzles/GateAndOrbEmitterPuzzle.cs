@@ -12,7 +12,7 @@ namespace Adventure
 {
     public class GateAndOrbEmitterPuzzle : GameObject
     {
-        public MovingOrbReceptor orbReceptor;
+        public AnimatedGameObject orbReceptor;
         public Gate gate;
 
         public GateAndOrbEmitterPuzzle()
@@ -24,11 +24,15 @@ namespace Adventure
         {
             foreach (GameObject gameObject in attachedGameObjects)
             {
-                if (gameObject is MovingOrbReceptor orbReceptor)
+                if (gameObject is AnimatedGameObject orbReceptor)
                 {
-                    this.orbReceptor = orbReceptor;
+                    if (orbReceptor.receptorBehaviour)
+                    {
+                        this.orbReceptor = orbReceptor;
+                    }
                 }
-                else if (gameObject is Gate gate)
+                
+                if (gameObject is Gate gate)
                 {
                     this.gate = gate;
                 }

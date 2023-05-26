@@ -16,7 +16,7 @@ namespace Adventure
             // The platform will move from position A to position B back to position A again.
             // Pressing the Note again, mid-movement, does nothing.
 
-        public MovingPlatform_ABA(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
+        public MovingPlatform_ABA(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, bool receptorBehaviour = false) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player, receptorBehaviour)
         {
             movePlatform = false;
         }

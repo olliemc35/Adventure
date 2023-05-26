@@ -20,9 +20,14 @@ namespace Adventure
 
         public List<MovingPlatform_ABWrapAround> platforms = new List<MovingPlatform_ABWrapAround>();
 
+        // The platforms appear from somewhere - we call this the platformEmitter. 
+        // The platforms disappear somewhere - we call this the platformReceiver.
+        // Both of these are MovingPlatforms, but we may just want them to be animatedSprites (i.e. stationary). In this case we can create a MovingPlatform with speed 0.
+        // NOTE: the platformReceiver IS NOT THE SAME as the "platform receptor" which will be used for puzzle logic - the orb must hit the receptor in order to open a gate etc.
+        // This is because tying the receptor to the platform is not a good idea - we may want a receptor which requires 4 different orbs to activate it etc.
         // These may be NULL if the platforms simply appear/disappear off-screen
-        public Emitter platformEmitter;
-        public Emitter platformReceiver;
+        public MovingPlatform platformEmitter;
+        public MovingPlatform platformReceiver;
 
         // The int index denotes the index of the next platform to be released
         public int index = 0;
@@ -37,13 +42,10 @@ namespace Adventure
         public bool detectCollisionsWithTerrain = false;
 
 
-       
-
-
         
 
 
-        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, Emitter platformEmitter = null, Emitter platformReceiver = null, int numberOfPlatforms = 0)
+        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform platformEmitter = null, MovingPlatform platformReceiver = null, int numberOfPlatforms = 0)
         {
 
             this.framesBetweenEmitting = framesBetweenEmitting;
@@ -95,6 +97,10 @@ namespace Adventure
 
         public override void Update(GameTime gameTime)
         {
+            platformEmitter?.Update(gameTime);
+            platformReceiver?.Update(gameTime);
+
+
             if (counter < framesBetweenEmitting)
             {
                 counter++;
@@ -108,12 +114,25 @@ namespace Adventure
 
             foreach (MovingPlatform_ABWrapAround platform in platforms)
             {
+                if (platformEmitter != null)
+                {
+                    if (!platform.movePlatform)
+                    {
+                        for (int i = 0; i < platform.positions.Count; i++)
+                        {
+                            platform.positions[i] += platformEmitter.displacement;
+                            platform.position = platform.positions[0];
+                            platform.idleHitbox.rectangle.X = FindNearestInteger(platform.position.X) + platform.idleHitbox.offsetX;
+                            platform.idleHitbox.rectangle.Y = FindNearestInteger(platform.position.Y) + platform.idleHitbox.offsetY;
+                        }
+                    }
+                }
+
                 platform.Update(gameTime);
 
             }
 
-            platformEmitter?.Update(gameTime);
-            platformReceiver?.Update(gameTime);
+            
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -181,6 +200,7 @@ namespace Adventure
         // Code for ActionScreenBuilder
         public override void AdjustHorizontally(ref List<int> ints)
         {
+            
             foreach (MovingPlatform_ABWrapAround platform in platforms)
             {
                 platform.positions[0] = new Vector2(platform.positions[0].X + ints[0], platform.positions[0].Y);
@@ -188,7 +208,22 @@ namespace Adventure
                 platform.position.X += ints[0];
             }
 
-            ints.RemoveRange(0, 2);
+            int counter = 0;
+
+            for (int i = 0; i < platformEmitter.positions.Count; i++)
+            {
+                platformEmitter.positions[i] = new Vector2(platformEmitter.positions[i].X + ints[2 + i], platformEmitter.positions[i].Y);
+                counter++;
+            }
+
+            for (int i = 0; i < platformReceiver.positions.Count; i++)
+            {
+                platformReceiver.positions[i] = new Vector2(platformReceiver.positions[i].X + ints[2 + counter + i], platformReceiver.positions[i].Y);
+                counter++;
+            }
+
+
+            ints.RemoveRange(0, 2 + counter);
 
         }
         public override void AdjustVertically(ref List<int> ints)
@@ -200,7 +235,23 @@ namespace Adventure
                 platform.position.Y += ints[0];
             }
 
-            ints.RemoveRange(0, 2);
+            int counter = 0;
+
+            //for (int i = 0; i < platformEmitter.positions.Count; i++)
+            //{
+            //    platformEmitter.positions[i] = new Vector2(platformEmitter.positions[i].X, platformEmitter.positions[i].Y + ints[2 + i]);
+            //    counter++;
+            //}
+
+            //for (int i = 0; i < platformReceiver.positions.Count; i++)
+            //{
+            //    platformReceiver.positions[i] = new Vector2(platformReceiver.positions[i].X, platformReceiver.positions[i].Y + ints[2 + counter + i]);
+            //    counter++;
+            //}
+
+
+            ints.RemoveRange(0, 2 + counter);
+
 
         }
 

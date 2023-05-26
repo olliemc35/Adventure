@@ -20,7 +20,7 @@ namespace Adventure
         // The player is able to REVERSE the direction of the moving platforms by playing a corresponding Note
 
 
-        public SeriesOfMovingPlatform_ABWrapAround_Reversing(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, Emitter platformEmitter = null, Emitter platformReceiver = null, int numberOfPlatforms = 0) : base(initialPosition, endPoint, filename, speed, stationaryTimes, framesBetweenEmitting, assetManager, colliderManager, screenManager, player, platformEmitter, platformReceiver, numberOfPlatforms)
+        public SeriesOfMovingPlatform_ABWrapAround_Reversing(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform platformEmitter = null, MovingPlatform platformReceiver = null, int numberOfPlatforms = 0) : base(initialPosition, endPoint, filename, speed, stationaryTimes, framesBetweenEmitting, assetManager, colliderManager, screenManager, player, platformEmitter, platformReceiver, numberOfPlatforms)
         {
             SetStartingPositions(initialPosition, endPoint);
         }

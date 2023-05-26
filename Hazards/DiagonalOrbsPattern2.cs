@@ -49,7 +49,7 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y;
                     endPosition.Y = endStream.Y;
-                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, "HighCBell", soundManager);
+                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, false, "HighCBell", soundManager);
                     orbs.Add(orb);
 
                 }
@@ -57,14 +57,14 @@ namespace Adventure
                 {
                     startPosition.Y = startStream.Y - 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 8 * verticalSpacing;
-                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, "HighEflatBell", soundManager);
+                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, false, "HighEflatBell", soundManager);
                     orbs.Add(orb);
                 }
                 else if (i % 3 == 2)
                 {
                     startPosition.Y = startStream.Y - 2 * 8 * verticalSpacing;
                     endPosition.Y = endStream.Y - 2 * 8 * verticalSpacing;
-                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, "HighGBell", soundManager);
+                    MovingPlatform_ABWrapAround orb = new MovingPlatform_ABWrapAround(startPosition, endPosition, "RedSquare", speed, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player, false, "HighGBell", soundManager);
                     orbs.Add(orb);
                 }
 

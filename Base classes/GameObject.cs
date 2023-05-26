@@ -44,6 +44,8 @@ namespace Adventure
         // We will also use this to build up more complicated structures - e.g. an OrganStop is a movingPlatform with an attached AnimatedGameObject which represents the base
         public List<GameObject> attachedGameObjects;
 
+        public string noteTriggerData;
+
         // Some GameObjects e.g. moving platforms can either be controlled by the player (via a Note) or act according to themselves. This bool determines which case is true.
         public bool playerControlled = false;
 
@@ -105,6 +107,29 @@ namespace Adventure
         public virtual void HandleNoteTrigger()
         {
 
+        }
+
+        public virtual void HandleNoteTrigger(string noteTriggerData = null)
+        {
+
+        }
+
+        public int FindNearestInteger(float x)
+        {
+            if (Math.Ceiling(x) - x <= 0.5)
+            {
+                return (int)Math.Ceiling(x);
+            }
+            else
+            {
+                return (int)Math.Floor(x);
+            }
+
+        }
+
+        public Vector2 FindNearestIntegerVector(Vector2 vec)
+        {
+            return new Vector2(FindNearestInteger(vec.X), FindNearestInteger(vec.Y));
         }
 
 

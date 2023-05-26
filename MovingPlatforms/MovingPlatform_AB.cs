@@ -20,7 +20,7 @@ namespace Adventure
             // If platform is moving between A and B it will halt for 60 frames and then reverse direction, moving back to the point it came from.
         // The player trigger is the movePlatform bool.
        
-        public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player)
+        public MovingPlatform_AB(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, bool receptorBehaviour = false) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player, receptorBehaviour)
         {
             movePlatform = false;
         }
