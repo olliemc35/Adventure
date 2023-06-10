@@ -155,7 +155,7 @@ namespace Adventure
             }
             else
             {
-                player.maxHorizontalSpeed = 180;
+                player.maxHorizontalSpeed = 240;
             }
 
 

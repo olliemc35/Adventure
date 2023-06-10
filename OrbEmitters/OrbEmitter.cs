@@ -15,9 +15,14 @@ namespace Adventure
     public class OrbEmitter : SeriesOfMovingPlatform_ABWrapAround
     {
         // This object is a SeriesOfMovingPlatform_ABWrapAround object where the platforms are Orbs i.e. Hazards
+        // This will emit an orb everytime framesBetweenEmitting has passed
 
         public OrbEmitter(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform orbEmitter) : base(initialPosition, endPoint, filename, speed, stationaryTimes, framesBetweenEmitting, assetManager, colliderManager, screenManager, player, orbEmitter)
         {  
+        }
+
+        public OrbEmitter(Vector2 initialPosition, string movementDirection, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform orbEmitter) : base(initialPosition, movementDirection, filename, speed, stationaryTimes, framesBetweenEmitting, assetManager, colliderManager, screenManager, player, orbEmitter)
+        {
         }
 
         public override void LoadContent()

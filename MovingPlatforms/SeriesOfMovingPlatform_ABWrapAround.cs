@@ -41,8 +41,10 @@ namespace Adventure
 
         public bool detectCollisionsWithTerrain = false;
 
+        public string movementDirection;
 
-        
+
+
 
 
         public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform platformEmitter = null, MovingPlatform platformReceiver = null, int numberOfPlatforms = 0)
@@ -79,8 +81,57 @@ namespace Adventure
             // We set this so that on the first frame we get a platforming emitting.
             counter = framesBetweenEmitting;
 
+        }
+
+        public SeriesOfMovingPlatform_ABWrapAround(Vector2 initialPosition, string movementDirection, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform platformEmitter = null, MovingPlatform platformReceiver = null, int numberOfPlatforms = 0)
+        {
+
+            this.framesBetweenEmitting = framesBetweenEmitting;
+            this.platformEmitter = platformEmitter;
+            this.platformReceiver = platformReceiver;
+            this.movementDirection = movementDirection;
+
+            if (numberOfPlatforms == 0)
+            {
+                float temp = 0;
+
+                if (movementDirection == "left")
+                {
+                    temp = Vector2.Distance(initialPosition, new Vector2(0, initialPosition.Y));
+                }
+                else if (movementDirection == "right")
+                {
+                    temp = Vector2.Distance(initialPosition, new Vector2(screenManager.activeScreen.actualScreenWidth, initialPosition.Y));
+                }
+                else if (movementDirection == "up")
+                {
+                    temp = Vector2.Distance(initialPosition, new Vector2(initialPosition.X, 0));
+                }
+                else if (movementDirection == "down")
+                {
+                    temp = Vector2.Distance(initialPosition, new Vector2(initialPosition.X, screenManager.activeScreen.actualScreenHeight));
+                }
+
+
+                this.numberOfPlatforms = (int)Math.Ceiling(temp / (framesBetweenEmitting * speed));
+            }
+            else
+            {
+                this.numberOfPlatforms = numberOfPlatforms;
+            }
+
+            spacing = (int)(framesBetweenEmitting * speed);
+
+            for (int i = 0; i < this.numberOfPlatforms; i++)
+            {
+                platforms.Add(new MovingPlatform_ABWrapAround(initialPosition, movementDirection, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player));
+            }
+
+            // We set this so that on the first frame we get a platforming emitting.
+            counter = framesBetweenEmitting;
 
         }
+
 
         public override void LoadContent()
         {
@@ -90,7 +141,7 @@ namespace Adventure
             }
 
             // X?.Method() does nothing if X == null and evaluates Method otherwise
-            platformEmitter?.LoadContent();          
+            platformEmitter?.LoadContent();
             platformReceiver?.LoadContent();
 
         }
@@ -132,7 +183,7 @@ namespace Adventure
 
             }
 
-            
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -200,7 +251,7 @@ namespace Adventure
         // Code for ActionScreenBuilder
         public override void AdjustHorizontally(ref List<int> ints)
         {
-            
+
             foreach (MovingPlatform_ABWrapAround platform in platforms)
             {
                 platform.positions[0] = new Vector2(platform.positions[0].X + ints[0], platform.positions[0].Y);

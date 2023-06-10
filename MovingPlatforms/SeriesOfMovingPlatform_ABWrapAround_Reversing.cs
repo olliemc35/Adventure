@@ -25,6 +25,19 @@ namespace Adventure
             SetStartingPositions(initialPosition, endPoint);
         }
 
+        public SeriesOfMovingPlatform_ABWrapAround_Reversing(Vector2 initialPosition, string movementDirection, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform platformEmitter = null, MovingPlatform platformReceiver = null, int numberOfPlatforms = 0) : base(initialPosition, movementDirection, filename, speed, stationaryTimes, framesBetweenEmitting, assetManager, colliderManager, screenManager, player, platformEmitter, platformReceiver, numberOfPlatforms)
+        {
+        }
+
+        public override void LoadContent()
+        {
+            base.LoadContent();
+
+            if (movementDirection != null)
+            {
+                SetStartingPositions(platforms[0].positions[0], platforms[0].positions[1]);
+            }
+        }
         public override void Update(GameTime gametime)
         {
             //Debug.WriteLine(indexOfPlatformClosestToStart);

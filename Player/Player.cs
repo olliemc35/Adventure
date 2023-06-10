@@ -287,8 +287,9 @@ namespace Adventure
             //Debug.WriteLine("B: " + spriteDirectionX);
             //Debug.WriteLine("C: " + playerStateManager.normalState.Active);
             //Debug.WriteLine(velocity.X);
-            //Debug.WriteLine(position.X);
-            //Debug.WriteLine(position.Y);
+            //Debug.WriteLine(idleHitbox.rectangle.X);
+            //Debug.WriteLine("X is " + position.X);
+            //Debug.WriteLine("Y is " + position.Y);
 
 
             bomb.Update(gameTime);

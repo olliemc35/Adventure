@@ -29,6 +29,14 @@ namespace Adventure
             }
         }
 
+        public SeriesOfMovingPlatform_ABWrapAround_PlayerEmitter(Vector2 initialPosition, string movementDirection, string filename, float speed, List<int> stationaryTimes, int framesBetweenEmitting, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform platformEmitter = null, MovingPlatform platformReceiver = null, int numberOfPlatforms = 0) : base(initialPosition, movementDirection, filename, speed, stationaryTimes, framesBetweenEmitting, assetManager, colliderManager, screenManager, player, platformEmitter, platformReceiver, numberOfPlatforms)
+        {
+            if (platformEmitter != null)
+            {
+                platformEmitter.numberOfFramesHalted = 30;
+            }
+        }
+
 
         public override void Update(GameTime gameTime)
         {

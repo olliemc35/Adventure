@@ -123,10 +123,12 @@ namespace Adventure
             gameObjectDictionary.Add(new Color(101, 225, 39, 255), "OrbEmitter_Stationary"); // Very light green
             gameObjectDictionary.Add(new Color(94, 233, 24, 255), "OrbEmitter_PlayerEmitter_Stationary"); // Very very light green
             gameObjectDictionary.Add(new Color(76, 220, 4, 255), "SingleOrbEmitter_PlayerEmitter"); // Very very very light green
+            gameObjectDictionary.Add(new Color(179, 255, 141, 255), "SeriesOfOrbEmitters"); // Pale green
+
             gameObjectDictionary.Add(new Color(188, 206, 216, 255), "ActionScreenTransitionWall"); // Very light grey
             gameObjectDictionary.Add(new Color(104, 86, 86, 255), "BoostPad"); // Dark grey / brown
             gameObjectDictionary.Add(new Color(68, 165, 186, 255), "AnimatedGameObject"); // Turqoise
-
+            gameObjectDictionary.Add(new Color(115, 232, 255, 255), "ScreenWrap"); // Light blue
 
 
             //color_MovingPlatformPreMultiplyAlpha = Color.FromNonPremultiplied(color_MovingPlatformAlpha.ToVector4());
@@ -328,14 +330,15 @@ namespace Adventure
                                 receptor = true;
                             }
 
-                            gameObjects[i, j] = new AnimatedGameObject(position, filename, assetManager) { receptorBehaviour = receptor };                          
+                            gameObjects[i, j] = new AnimatedGameObject(position, filename, assetManager) { receptorBehaviour = receptor };
                             SetRectangularColorRegionToZero(ref colors, i, j, (int)ints[0], (int)ints[1]);
 
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Door")
                         {
+                            string filename = ParseUntilNextComma(ref info);
                             List<float> ints = ParseString(ref info, 3);
-                            gameObjects[i, j] = new Door(position, "Door", (int)ints[0], (int)ints[1], (int)ints[2], assetManager, colliderManager, inputManager, screenManager, player);
+                            gameObjects[i, j] = new Door(position, filename, (int)ints[0], (int)ints[1], (int)ints[2], assetManager, colliderManager, inputManager, screenManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 2);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "Spike")
@@ -372,7 +375,7 @@ namespace Adventure
                             {
                                 receptor = true;
                             }
-                            
+
                             Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha_1, i, j, direction);
                             gameObjects[i, j] = new MovingPlatform_AB(position, endPosition, filename, ints[0], new List<int>() { (int)ints[1], (int)ints[2] }, assetManager, colliderManager, screenManager, player, receptor);
                             SetRectangularColorRegionToZero(ref colors, i, j, (int)ints[3], (int)ints[4]);
@@ -493,30 +496,49 @@ namespace Adventure
                             string emitterFilename = ParseUntilNextComma(ref info);
                             string orbFilename = ParseUntilNextComma(ref info);
                             string orbDirection = ParseUntilNextComma(ref info);
-                            //string isThereAReceiver = ParseUntilNextComma(ref info);
+                            List<float> ints = ParseString(ref info, 4);
 
-                            List<float> ints = ParseString(ref info);
+                            if (orbDirection == "h" || orbDirection == "v")
+                            {
+                                MovingPlatform orbEmitter = new MovingPlatform(new List<Vector2>() { position, position }, emitterFilename, 0, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player);
+                                Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha_1, i, j, orbDirection);
+                                gameObjects[i, j] = new OrbEmitter(position, endPosition, orbFilename, ints[0], new List<int>() { (int)ints[1], (int)ints[2] }, (int)ints[3], assetManager, colliderManager, screenManager, player, orbEmitter);
+                                SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
+                            }
+                            else
+                            {
+                                MovingPlatform orbEmitter = new MovingPlatform(new List<Vector2>() { position, position }, emitterFilename, 0, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player);
+                                gameObjects[i, j] = new OrbEmitter(position, orbDirection, orbFilename, ints[0], new List<int>() { (int)ints[1], (int)ints[2] }, (int)ints[3], assetManager, colliderManager, screenManager, player, orbEmitter);
+                                SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
+                            }
 
-                            MovingPlatform orbEmitter = new MovingPlatform(new List<Vector2>() {position, position }, emitterFilename, 0, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha_1, i, j, orbDirection);
-                            gameObjects[i, j] = new OrbEmitter(position, endPosition, orbFilename, ints[0], new List<int>() { (int)ints[1], (int)ints[2] }, (int)ints[3], assetManager, colliderManager, screenManager, player, orbEmitter);
-                            SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "OrbEmitter_PlayerEmitter_Stationary")
                         {
                             string emitterFilename = ParseUntilNextComma(ref info);
-                            string filename = ParseUntilNextComma(ref info);
-                            string direction = ParseUntilNextComma(ref info);
-
+                            string orbFilename = ParseUntilNextComma(ref info);
+                            string orbDirection = ParseUntilNextComma(ref info);
                             List<float> ints = ParseString(ref info);
+                            if (orbDirection == "h" || orbDirection == "v")
+                            {
+                                MovingPlatform orbEmitter = new MovingPlatform(new List<Vector2>() { position, position }, emitterFilename, 0, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player);
+                                Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha_1, i, j, orbDirection);
+                                gameObjects[i, j] = new OrbEmitter_PlayerEmitter(position, endPosition, orbFilename, ints[0], new List<int>() { (int)ints[1], (int)ints[2] }, (int)ints[3], assetManager, colliderManager, screenManager, player, orbEmitter);
+                                SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
+                            }
+                            else
+                            {
+                                MovingPlatform orbEmitter = new MovingPlatform(new List<Vector2>() { position, position }, emitterFilename, 0, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player);
+                                gameObjects[i, j] = new OrbEmitter_PlayerEmitter(position, orbDirection, orbFilename, ints[0], new List<int>() { (int)ints[1], (int)ints[2] }, (int)ints[3], assetManager, colliderManager, screenManager, player, orbEmitter);
+                                SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
+                            }
 
-                            MovingPlatform orbEmitter = new MovingPlatform(new List<Vector2>() { position, position }, emitterFilename, 0, new List<int>() { 0, 0 }, assetManager, colliderManager, screenManager, player);
-                            Vector2 endPosition = FindEndPointForGameObject(colors, color_MovingPlatformPreMultiplyAlpha_1, i, j, direction);
-                            gameObjects[i, j] = new OrbEmitter_PlayerEmitter(position, endPosition, filename, ints[0], new List<int>() { (int)ints[1], (int)ints[2] }, (int)ints[3], assetManager, colliderManager, screenManager, player, orbEmitter);
-                            SetRectangularColorRegionToZero(ref colors, i, j, 1, 1);
+
                         }
                         else if (gameObjectDictionary[colors[i, j]] == "SingleOrbEmitter_PlayerEmitter")
                         {
+                            //Debug.WriteLine("here");
+
                             string emitterFilename = ParseUntilNextComma(ref info);
                             string filename = ParseUntilNextComma(ref info);
                             string orbDirection = ParseUntilNextComma(ref info);
@@ -542,11 +564,84 @@ namespace Adventure
                             }
 
                         }
+                        else if (gameObjectDictionary[colors[i, j]] == "SeriesOfOrbEmitters")
+                        {
+                            //Debug.WriteLine("here");
+                            List<int> numberOfEmitters = ParseStringToInts(ref info, 1);
+                            List<Vector2> positions = new List<Vector2>();
+                            positions.Add(position);
+
+                            if (j < colors.GetLength(1) - 1)
+                            {
+                                for (int j1 = j + 1; j1 < colors.GetLength(1); j1++)
+                                {
+                                    Debug.WriteLine(j1);
+
+                                    if (gameObjectDictionary.ContainsKey(colors[i, j1]))
+                                    {
+                                        if (gameObjectDictionary[colors[i, j1]] == "SeriesOfOrbEmitters")
+                                        {
+                                            positions.Add(new Vector2(i * tileSize, j1 * tileSize));
+                                            SetRectangularColorRegionToZero(ref colors, i, j1, 1, 1);
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (i < colors.GetLength(0) - 1)
+                            {
+                                for (int i1 = i + 1; i1 < colors.GetLength(0); i1++)
+                                {
+                                    for (int j1 = 0; j1 < colors.GetLength(1); j1++)
+                                    {
+                                        if (gameObjectDictionary.ContainsKey(colors[i1, j1]))
+                                        {
+                                            if (gameObjectDictionary[colors[i1, j1]] == "SeriesOfOrbEmitters")
+                                            {
+                                                positions.Add(new Vector2(i1 * tileSize, j1 * tileSize));
+                                                SetRectangularColorRegionToZero(ref colors, i1, j1, 1, 1);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                    
+
+                            List<string> movementDirections = new List<string>();
+                            
+                            for (int k = 0; k < numberOfEmitters[0]; k++)
+                            {
+                                movementDirections.Add(ParseUntilNextComma(ref info));
+                            }
+
+                            List<int> order = ParseStringToInts(ref info, numberOfEmitters[0]);
+
+
+                            string emitterFilename = ParseUntilNextComma(ref info);
+                            string orbFilename = ParseUntilNextComma(ref info);
+                            List<float> ints = ParseString(ref info);
+
+
+                            gameObjects[i, j] = new SeriesOfOrbEmitters(positions, movementDirections, order, orbFilename, emitterFilename, ints[0], assetManager, colliderManager, screenManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, 1,1);
+
+
+
+                        }
                         else if (gameObjectDictionary[colors[i, j]] == "BoostPad")
                         {
                             List<float> ints = ParseString(ref info);
                             gameObjects[i, j] = new BoostPad(position, "BoostPad", ints[0], assetManager, colliderManager, player);
                             SetRectangularColorRegionToZero(ref colors, i, j, 2, 1);
+
+                        }
+                        else if (gameObjectDictionary[colors[i, j]] == "ScreenWrap")
+                        {
+                            string location = ParseUntilNextComma(ref info);
+                            List<int> ints = ParseStringToInts(ref info);
+                            gameObjects[i, j] = new ScreenWrap(position, "ScreenWrap", location, tileSize * ints[0], tileSize * ints[1], assetManager, screenManager, player);
+                            SetRectangularColorRegionToZero(ref colors, i, j, ints[0], ints[1]);
 
                         }
                     }
@@ -699,7 +794,7 @@ namespace Adventure
                         //        gameObjects[i, j].noteTriggerData = ParseUntilNextComma(ref info);
                         //    }
                         //}
-                      
+
                         gameObjectsAttachmentsData[attachmentColors.IndexOf(colors[i, j])].Add(gameObjects[i, j]);
                     }
                 }

@@ -12,11 +12,7 @@ namespace Adventure
     public class MovingPlatform : MovingGameObject
     {
         // Every MovingPlatform will have a "moving" animation
-        public AnimatedSprite animation_Moving;
-
-        
-
-
+        public AnimatedSprite animation_Moving;        
 
         // A MovingPlatform object can either move horizontally or vertically (in straight lines) or be stationary
         public enum Direction
@@ -64,7 +60,8 @@ namespace Adventure
         public bool detectCollisionsWithTerrain = false;
         public bool flagCollision = false;
 
-
+        // For derived constructors which don't specify an endpoint - only a direction - and we use this bool
+        public string movementDirection;
 
 
         public MovingPlatform(List<Vector2> positions, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, bool receptorBehaviour = false) : base(positions[0], filename, assetManager)
@@ -95,11 +92,7 @@ namespace Adventure
         {
             base.LoadContent();
 
-            animation_Moving = spriteSheet.CreateAnimatedSprite("Moving");
-
-            
-
-
+            animation_Moving = spriteSheet.CreateAnimatedSprite("Moving");          
             idleHitbox.isActive = true;
 
         }
@@ -143,23 +136,15 @@ namespace Adventure
                 {
                     if (gameObject is AnimatedGameObject sprite)
                     {
-                        if (gameObject != this && gameObject != player && colliderManager.CheckForOverlap(idleHitbox, sprite.idleHitbox))
+                        if (gameObject != this && gameObject != player && sprite.CollisionObject && colliderManager.CheckForOverlap(idleHitbox, sprite.idleHitbox))
                         {
+                            Debug.WriteLine(sprite.position.Y);
                             HandleCollision();
 
                             if (sprite.receptorBehaviour)
                             {
                                 sprite.UpdatePlayingAnimation(sprite.animation_Hit, 1);
-
-                                //receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
                             }
-
-                            //if (sprite is MovingOrbReceptor receptor)
-                            //{
-                            //    receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
-
-                            //    //receptor.UpdatePlayingAnimation(receptor.animation_Hit, 1);
-                            //}
                         }
                     }
 
@@ -224,7 +209,7 @@ namespace Adventure
             }
             else
             {
-                if (position == positions[indexToMoveTo])
+                if (CheckPlatformHasReachedNextDestination())
                 {
                     if (stationaryTimes[indexToMoveTo] == 0)
                     {
@@ -241,6 +226,71 @@ namespace Adventure
             }
 
         }
+
+        // Ideally we want to check when position == positions[indexToMoveTo]
+        // The issue is that we may be moving at a speed of 3 (say) and the distance is not divisible by 3
+        // So we would never have an equality here 
+        // What we want to do is check for as soon as we are equal or overshoot the next position
+        // We then manually move ourselves to the actual position
+        // Of course, this will make movement looked jagged at the endpoints.
+        // So for objects like moving platforms we always want to ensure the speed + distance are such that we have equality in the check
+        // But for objects like orbs which may disappear off-screen, we do not want the hassle of choosing an endpoint (off-screen) so that we have equality etc.
+        public bool CheckPlatformHasReachedNextDestination()
+        {
+            switch (direction)
+            {
+                case Direction.moveRight:
+                    {
+                        if (position.X >= positions[indexToMoveTo].X)
+                        {
+                            position.X = positions[indexToMoveTo].X;
+                            return true;
+                        }
+
+                        break;
+                    }
+                case Direction.moveLeft:
+                    {
+                        if (position.X <= positions[indexToMoveTo].X)
+                        {
+                            position.X = positions[indexToMoveTo].X;
+                            return true;
+                        }
+
+                        break;
+                    }
+                case Direction.moveUp:
+                    {
+                        if (position.Y <= positions[indexToMoveTo].Y)
+                        {
+                            position.Y = positions[indexToMoveTo].Y;
+                            return true;
+                        }
+
+                        break;
+                    }
+                case Direction.moveDown:
+                    {
+                        if (position.Y >= positions[indexToMoveTo].Y)
+                        {
+                            position.Y = positions[indexToMoveTo].Y;
+                            return true;
+                        }
+
+                        break;
+                    }
+                case Direction.stationary:
+                    {      
+                        // We'll never be in this case in this method
+                        break;
+                    }
+
+            }
+
+
+            return false;
+        }
+
 
         public void UpdateIndices()
         {

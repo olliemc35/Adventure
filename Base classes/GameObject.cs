@@ -55,6 +55,8 @@ namespace Adventure
         // (e.g. if attached gameObject is CLIMABLE we need it to move first otherwise the CLIMB update will use the co-ordinates before the move)
         public bool LoadFirst = false;
 
+        public int tileSize = 16;
+
 
         public GameObject()
         {

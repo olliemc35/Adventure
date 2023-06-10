@@ -83,13 +83,35 @@ namespace Adventure
             }
             else if (behaviourType == 2)
             {
-                //var position = Matrix.CreateTranslation(-player.spritePosition.X, -player.spritePosition.Y, 0);
+                ////var position = Matrix.CreateTranslation(-player.spritePosition.X, -player.spritePosition.Y, 0);
 
-                //var offset = Matrix.CreateTranslation(Game1.ScreenWidth / 2, Game1.ScreenHeight / 2, 0);
-                var scale = Matrix.CreateScale(2);
-                Transform = scale;
-                //var offset = Matrix.CreateTranslation(0, -References.game.ScreenHeight, 0);
-                //Transform = scale * offset;
+                ////var offset = Matrix.CreateTranslation(Game1.ScreenWidth / 2, Game1.ScreenHeight / 2, 0);
+                //var scale = Matrix.CreateScale(2);
+                //Transform = scale;
+                ////var offset = Matrix.CreateTranslation(0, -References.game.ScreenHeight, 0);
+                ////Transform = scale * offset;
+                ///
+                // Set our camera centers
+                int cameraCenterX = DistanceToNearestInteger(player.position.X) + player.idleHitbox.rectangle.Width / 2;
+
+                Transform = Matrix.Identity;
+
+                // DO X AND Y SEPARATELY 
+
+                if (cameraCenterX <= screen.renderScreenWidth / 2)
+                {
+                    // do nothing
+                }
+                else if (cameraCenterX > screen.renderScreenWidth / 2 && cameraCenterX <= screen.actualScreenWidth - screen.renderScreenWidth / 2)
+                {
+                    Transform *= Matrix.CreateTranslation(-cameraCenterX + screen.renderScreenWidth / 2, 0, 0);
+                }
+                else if (cameraCenterX > screen.actualScreenWidth - screen.renderScreenWidth / 2)
+                {
+                    Transform *= Matrix.CreateTranslation(-screen.actualScreenWidth + screen.renderScreenWidth, 0, 0);
+                }
+
+                
 
             }
             else if (behaviourType == 3)

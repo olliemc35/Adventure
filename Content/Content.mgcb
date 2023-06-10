@@ -29,6 +29,16 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/Beam.aseprite;Beam.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/BigBouncingOrb.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BigBouncingOrb.aseprite;BigBouncingOrb.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/BigOrbReceptor2.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/BigOrbReceptor2.aseprite;BigOrbReceptor2.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/BoostPad.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -239,6 +249,11 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/levelTest2.aseprite;levelTest2.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/LockedGate.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/LockedGate.aseprite;LockedGate.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/MovingClimablePlatform.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
@@ -359,10 +374,50 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_27.aseprite;NEWLevel_27.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_28.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_28.aseprite;NEWLevel_28.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_29.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_29.aseprite;NEWLevel_29.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_3.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_3.aseprite;NEWLevel_3.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_30.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_30.aseprite;NEWLevel_30.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_31.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_31.aseprite;NEWLevel_31.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_32.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_32.aseprite;NEWLevel_32.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_33.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_33.aseprite;NEWLevel_33.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_34.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_34.aseprite;NEWLevel_34.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_35.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_35.aseprite;NEWLevel_35.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_4.aseprite
 /importer:AsepriteFileContentImporter
@@ -578,6 +633,11 @@
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/rune_G.aseprite;rune_G.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/ScreenWrap.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/ScreenWrap.aseprite;ScreenWrap.aseprite
 
 #begin ../../../OneDrive/Documents/AsepriteImages/SmallWoodenGate.aseprite
 /importer:AsepriteFileContentImporter

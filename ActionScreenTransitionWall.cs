@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using System.Diagnostics;
-using static Adventure.NormalState;
 
 
 namespace Adventure
@@ -33,7 +32,6 @@ namespace Adventure
         public int width;
         public int height;
 
-        public int tileSize = 16;
 
         public Vector2 spawnPoint = new Vector2();
 
@@ -45,7 +43,7 @@ namespace Adventure
             this.wallNumberToMoveTo = wallNumberToMoveTo;
             this.width = width;
             this.height = height;
-            CollisionObject = true;
+            //CollisionObject = true;
             this.colliderManager = colliderManager;
             this.inputManager = inputManager;
             this.screenManager = screenManager;

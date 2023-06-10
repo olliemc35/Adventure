@@ -12,13 +12,17 @@ namespace Adventure
 {
     public class SingleOrbEmitter_PlayerEmitter : SeriesOfMovingPlatform_ABWrapAround_PlayerEmitter
     {
-        // This is the same as ConstantOrbEmitter_PlayerEmitter except now we restrict to a single orb 
+        // This is the same as OrbEmitter_PlayerEmitter except now we restrict to a single orb 
+        // I.e. there can only be one orb on screen at any one time
 
         public SingleOrbEmitter_PlayerEmitter(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform orbEmitter) : base(initialPosition, endPoint, filename, speed, stationaryTimes, 0, assetManager, colliderManager, screenManager, player, orbEmitter, null, 1)
         {
 
         }
+        public SingleOrbEmitter_PlayerEmitter(Vector2 initialPosition, string movementDirection, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, MovingPlatform orbEmitter) : base(initialPosition, movementDirection, filename, speed, stationaryTimes, 0, assetManager, colliderManager, screenManager, player, orbEmitter, null, 1)
+        {
 
+        }
         public override void LoadContent()
         {
             base.LoadContent();
@@ -40,8 +44,9 @@ namespace Adventure
             base.Update(gameTime);
             //Debug.WriteLine(platforms[0].positions[1].Y);
 
-            Debug.WriteLine(platforms[0].position.Y);
+            //Debug.WriteLine(platforms[0].position.Y);
             //Debug.WriteLine(platforms[0].positions[1].Y - platforms[0].positions[0].Y);
+
             foreach (MovingPlatform_ABWrapAround orb in platforms)
             {
 

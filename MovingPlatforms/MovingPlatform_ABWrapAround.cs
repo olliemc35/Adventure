@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,18 +23,64 @@ namespace Adventure
         public SoundEffect noteSound;
         public List<SoundEffectInstance> noteInstances = new List<SoundEffectInstance>();
 
-        
 
+        // The standard constructor asks us to specify the start and end points of the motion
         public MovingPlatform_ABWrapAround(Vector2 initialPosition, Vector2 endPoint, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, bool receptorBehaviour = false, string noteValue = null, SoundManager soundManager = null) : base(new List<Vector2>() { initialPosition, endPoint }, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player, receptorBehaviour)
         {
             movePlatform = false;
-            this.soundManager  = soundManager;
-            this.noteValue = noteValue; 
+            this.soundManager = soundManager;
+            this.noteValue = noteValue;
         }
+
+        // We can also just give a direction - then the platform will move in that direction until it hits an obstacle or leaves the screen
+
+        public MovingPlatform_ABWrapAround(Vector2 initialPosition, string movementDirection, string filename, float speed, List<int> stationaryTimes, AssetManager assetManager, ColliderManager colliderManager, ScreenManager screenManager, Player player, bool receptorBehaviour = false, string noteValue = null, SoundManager soundManager = null) : base(new List<Vector2>() { initialPosition}, filename, speed, stationaryTimes, assetManager, colliderManager, screenManager, player, receptorBehaviour)
+        {         
+            this.movementDirection = movementDirection;
+
+            movePlatform = false;
+            this.soundManager = soundManager;
+            this.noteValue = noteValue;
+        }
+
+        public override void LoadContent()
+        {
+            base.LoadContent();
+
+            // To find the endpoint in the case we don't give it in the constructor we need to know the size of the idleHitbox, so create it here
+            if (movementDirection != null)
+            {
+                if (movementDirection == "left")
+                {
+                    positions.Add(new Vector2(-idleHitbox.rectangle.Width, positions[0].Y));                        
+                }
+                else if (movementDirection == "right")
+                {
+                    positions.Add(new Vector2(screenManager.activeScreen.actualScreenWidth + idleHitbox.rectangle.Width, positions[0].Y));
+                }
+                else if (movementDirection == "up")
+                {
+                    positions.Add(new Vector2(positions[0].X, -idleHitbox.rectangle.Height));
+                }
+                else if (movementDirection == "down")
+                {
+                    positions.Add(new Vector2(positions[0].X, screenManager.activeScreen.actualScreenHeight + idleHitbox.rectangle.Height));
+                }
+            }
+
+
+            Debug.WriteLine(positions[1].X);
+        }
+
+
 
         // We adjust Update method with logic to handle the sound effects
         public override void Update(GameTime gameTime)
         {
+            //Debug.WriteLine(position.X);
+
+
+
             base.Update(gameTime);
 
             if (noteInstances.Count() > 0)
@@ -57,6 +104,7 @@ namespace Adventure
         public override void UpdateAtStationaryPoints()
         {
             //Debug.WriteLine(position.Y);
+            //Debug.WriteLine(direction);
             //Debug.WriteLine(position.X);
             //Debug.WriteLine(positions[indexToMoveTo]);
 
@@ -74,8 +122,9 @@ namespace Adventure
             }
             else
             {
-                if (position == positions[indexToMoveTo])
+                if (CheckPlatformHasReachedNextDestination())
                 {
+                    //Debug.WriteLine("here");
                     position = positions[currentIndex];
                     idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
                     idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
@@ -128,6 +177,7 @@ namespace Adventure
 
         public override void HandleCollision()
         {
+            //Debug.WriteLine("here");
             position = positions[currentIndex];
             idleHitbox.rectangle.X = (int)position.X + idleHitbox.offsetX;
             idleHitbox.rectangle.Y = (int)position.Y + idleHitbox.offsetY;
