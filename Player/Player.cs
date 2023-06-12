@@ -35,6 +35,8 @@ namespace Adventure
         public AnimatedSprite animation_LandedLeft;
         public AnimatedSprite animation_FallingRight;
         public AnimatedSprite animation_FallingLeft;
+        public AnimatedSprite animation_PushRight;
+        public AnimatedSprite animation_PushLeft;
 
 
         public Vector2 ropeAnchor = new Vector2(0, 0);
@@ -52,7 +54,7 @@ namespace Adventure
         public float jumpDuration;
         public float jumpHeight;
         public float jumpSpeed;
-        public float boostMultiplier = 1.8f;
+        public float boostMultiplier = 1.0f;
 
         public bool jumpButtonPressed = false;
         public bool runButtonPressed = false;
@@ -105,8 +107,8 @@ namespace Adventure
 
             maxHorizontalSpeed = 60; // This is overridden in inputManager
 
-            jumpDuration = 35; // in frames
-            jumpHeight = 2 * tileSize + 4 + 2; // in pixels. We wish to be able to jump 2 tileSizes i.e. 32 pixels. Our player is only 28 pixels high so we add an extra 4. We then add an extra 2 for some extra lee-way.
+            jumpDuration = 30; // in frames
+            jumpHeight = 2 * tileSize + 4 + 4; // in pixels. We wish to be able to jump 2 tileSizes i.e. 32 pixels. Our player is only 28 pixels high so we add an extra 4. We then add an extra 2 for some extra lee-way.
 
             gravityConstant = 60 * 60 * 8 * jumpHeight / (jumpDuration * jumpDuration); // times by 60^2 to convert to right units
             jumpSpeed = 60 * 4 * jumpHeight / jumpDuration;
@@ -217,7 +219,8 @@ namespace Adventure
             animation_LandedLeft = spriteSheet.CreateAnimatedSprite("LandedLeft");
             animation_FallingRight = spriteSheet.CreateAnimatedSprite("FallingRight");
             animation_FallingLeft = spriteSheet.CreateAnimatedSprite("FallingLeft");
-
+            animation_PushRight = spriteSheet.CreateAnimatedSprite("PushRight");
+            animation_PushLeft = spriteSheet.CreateAnimatedSprite("PushLeft");
 
             animation_Landed.OnAnimationEnd = ReturnToIdleAnimation;
             animation_LandedLeft.OnAnimationEnd = ReturnToIdleLeftAnimation;
@@ -287,9 +290,11 @@ namespace Adventure
             //Debug.WriteLine("B: " + spriteDirectionX);
             //Debug.WriteLine("C: " + playerStateManager.normalState.Active);
             //Debug.WriteLine(velocity.X);
+            //Debug.WriteLine(velocity.Y);
             //Debug.WriteLine(idleHitbox.rectangle.X);
             //Debug.WriteLine("X is " + position.X);
             //Debug.WriteLine("Y is " + position.Y);
+            //Debug.WriteLine(CollidedOnBottom);
 
 
             bomb.Update(gameTime);

@@ -13,7 +13,7 @@ namespace Adventure
 {
     public class SlidingOnWallState : State
     {
-        public float slideConstant = 30;
+        public float slideConstant = 60;
         public float horizontalWallJumpSpeed = 180;
         public bool facingRight = false;
 
@@ -119,6 +119,7 @@ namespace Adventure
                 }
 
                 player.velocity.Y = -1 * player.jumpSpeed;
+                player.playerStateManager.normalState.jumpButtonHeldCounter = 1;
                 exits = Exits.exitToNormalState;
                 return;
             }

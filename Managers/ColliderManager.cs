@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoGame.Aseprite;
 using MonoGame.Aseprite.Sprites;
 using MonoGame.Aseprite.Content.Processors;
+using System.Diagnostics;
 
 namespace Adventure
 {
@@ -674,6 +675,8 @@ namespace Adventure
                 };
 
                 ghostHitboxes.Add(ghostHitbox);
+
+                //Debug.WriteLine(ghostHitbox.rectangle.X);
             }
 
             // Our method takes each terrain hitbox in turn and checks whether we collide with each one - here by collision we mean OVERLAP (not edges meeting).
@@ -800,6 +803,7 @@ namespace Adventure
 
                             if (ghostHitboxes.Last().CollidedOnBottom)
                             {
+                                //Debug.WriteLine("here");
                                 movingSprite.CollidedOnBottom = true;
                                 movingSprite.velocity.Y = 0;
                                 movingSprite.displacement.Y = 0;
@@ -884,6 +888,7 @@ namespace Adventure
 
                             if (possibleHitboxesIfCollisionDetected[keyIndex].CollidedOnBottom)
                             {
+                                //Debug.WriteLine("here");
                                 movingSprite.CollidedOnBottom = true;
                                 movingSprite.velocity.Y = 0;
                                 movingSprite.displacement.Y = 0;
@@ -891,6 +896,7 @@ namespace Adventure
                             }
                             if (possibleHitboxesIfCollisionDetected[keyIndex].CollidedOnTop)
                             {
+                                //Debug.WriteLine("here");
                                 movingSprite.CollidedOnTop = true;
                                 movingSprite.velocity.Y = 0;
                                 movingSprite.displacement.Y = 0;

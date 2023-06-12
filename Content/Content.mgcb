@@ -424,6 +424,16 @@
 /processor:AsepriteFileContentProcessor
 /build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_36.aseprite;NEWLevel_36.aseprite
 
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_37.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_37.aseprite;NEWLevel_37.aseprite
+
+#begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_38.aseprite
+/importer:AsepriteFileContentImporter
+/processor:AsepriteFileContentProcessor
+/build:../../../OneDrive/Documents/AsepriteImages/NEWLevel_38.aseprite;NEWLevel_38.aseprite
+
 #begin ../../../OneDrive/Documents/AsepriteImages/NEWLevel_4.aseprite
 /importer:AsepriteFileContentImporter
 /processor:AsepriteFileContentProcessor
