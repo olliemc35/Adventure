@@ -105,15 +105,15 @@ namespace Adventure
 
             maxHorizontalSpeed = 60; // This is overridden in inputManager
 
-            jumpDuration = 0.5f;
-            jumpHeight = 32;
+            jumpDuration = 35; // in frames
+            jumpHeight = 2 * tileSize + 4 + 2; // in pixels. We wish to be able to jump 2 tileSizes i.e. 32 pixels. Our player is only 28 pixels high so we add an extra 4. We then add an extra 2 for some extra lee-way.
 
-            gravityConstant = 8 * jumpHeight / (jumpDuration * jumpDuration);
-            jumpSpeed = 4 * jumpHeight / jumpDuration;
+            gravityConstant = 60 * 60 * 8 * jumpHeight / (jumpDuration * jumpDuration); // times by 60^2 to convert to right units
+            jumpSpeed = 60 * 4 * jumpHeight / jumpDuration;
 
             //gravityConstant = 750;
             // mass only comes in for swinging
-            mass = 8 * jumpHeight / (jumpDuration * jumpDuration * gravityConstant);
+            mass = 60 * 60 * 8 * jumpHeight / (jumpDuration * jumpDuration * gravityConstant);
             //jumpSpeed = 0.5f * mass * gravityConstant * jumpDuration;
 
 

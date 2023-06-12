@@ -138,7 +138,6 @@ namespace Adventure
                     {
                         if (gameObject != this && gameObject != player && sprite.CollisionObject && colliderManager.CheckForOverlap(idleHitbox, sprite.idleHitbox))
                         {
-                            Debug.WriteLine(sprite.position.Y);
                             HandleCollision();
 
                             if (sprite.receptorBehaviour)

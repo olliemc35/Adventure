@@ -575,7 +575,6 @@ namespace Adventure
                             {
                                 for (int j1 = j + 1; j1 < colors.GetLength(1); j1++)
                                 {
-                                    Debug.WriteLine(j1);
 
                                     if (gameObjectDictionary.ContainsKey(colors[i, j1]))
                                     {

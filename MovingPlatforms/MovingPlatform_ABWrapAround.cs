@@ -69,7 +69,6 @@ namespace Adventure
             }
 
 
-            Debug.WriteLine(positions[1].X);
         }
 
 

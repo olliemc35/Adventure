@@ -14,7 +14,7 @@ namespace Adventure
     public class SlidingOnWallState : State
     {
         public float slideConstant = 30;
-        public float wallJumpSpeed = 120;
+        public float horizontalWallJumpSpeed = 180;
         public bool facingRight = false;
 
         public int leavingWallCounter = 0;
@@ -111,11 +111,11 @@ namespace Adventure
             {
                 if (facingRight)
                 {
-                    player.velocity.X = -wallJumpSpeed;
+                    player.velocity.X = -horizontalWallJumpSpeed;
                 }
                 else
                 {
-                    player.velocity.X = wallJumpSpeed;
+                    player.velocity.X = horizontalWallJumpSpeed;
                 }
 
                 player.velocity.Y = -1 * player.jumpSpeed;

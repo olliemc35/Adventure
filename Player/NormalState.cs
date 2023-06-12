@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,8 @@ namespace Adventure
         public int playerControlCounter = 0;
         public int NumberOfFramesBeforePlayerRegainsControl = 9;
 
-        public float TimeTakenToAccelerateToMaxSpeedX = (float)6 / 60;
-        public float TimeTakenToDecelerateFromMaxSpeedX = (float)6 / 60;
+        public float framesTakenToAccelerateToMaxSpeedX = (float)6;
+        public float framesTakenToDecelerateFromMaxSpeedX = (float)6;
 
         public float originalLambdaAccel;
         public float originalLambdaDecel;
@@ -24,6 +25,18 @@ namespace Adventure
         public float fallingLambdaMultiplier = 0.2f;
 
         public bool landedFlag = false;
+
+        public int jumpButtonHeldCounter = 0;
+        public int framesWhenJumpButtonReleased = 0;
+        public int framesForMaxJump = 10;
+        public bool flagJumpButtonReleased;
+
+
+        // CoyoteTime corresponds to the frames after falling off an edge where the player can still jump
+        public int coyoteTimeCounter = 0;
+        public int framesForCoyoteTime = 5;
+        public bool flagCoyoteTimeEnded = false;
+
 
         public enum StatesX
         {
@@ -54,11 +67,12 @@ namespace Adventure
             statesX = StatesX.atRestX;
             statesY = StatesY.atRestY;
 
-            originalLambdaAccel = player.maxHorizontalSpeed / (TimeTakenToAccelerateToMaxSpeedX * TimeTakenToAccelerateToMaxSpeedX);
-            originalLambdaDecel = player.maxHorizontalSpeed / (TimeTakenToDecelerateFromMaxSpeedX * TimeTakenToDecelerateFromMaxSpeedX);
+            originalLambdaAccel = 60 * 60 * player.maxHorizontalSpeed / (framesTakenToAccelerateToMaxSpeedX * framesTakenToAccelerateToMaxSpeedX);
+            originalLambdaDecel = 60 * 60 * player.maxHorizontalSpeed / (framesTakenToDecelerateFromMaxSpeedX * framesTakenToDecelerateFromMaxSpeedX);
 
             lambdaAccel = originalLambdaAccel;
-            lambdaDecel = originalLambdaDecel;
+            lambdaDecel = 0.1f * originalLambdaDecel;
+
         }
 
         public override void Deactivate()
@@ -74,6 +88,8 @@ namespace Adventure
             //Debug.WriteLine(statesX);
             //Debug.WriteLine(player.displacement.X);
             //Debug.WriteLine(statesY);
+            //Debug.WriteLine(framesWhenJumpButtonReleased);
+            //Debug.WriteLine(lambdaDecel);
 
             if (enterStateFlag)
             {
@@ -117,7 +133,6 @@ namespace Adventure
 
 
                 UpdateVelocityAndDisplacement();
-                //player.colliderManager.AdjustForCollisionsPlayer(player, screenManager.activeScreen.terrainHitboxes, screenManager.activeScreen.hazardHitboxes, 1, 10);
                 player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
                 return;
 
@@ -129,8 +144,6 @@ namespace Adventure
             UpdateStatesX();
             UpdateStatesY();
             UpdateVelocityAndDisplacement();
-            //player.colliderManager.AdjustForCollisionsPlayer(player, screenManager.activeScreen.terrainHitboxes, screenManager.activeScreen.hazardHitboxes, 1, 10);
-
             player.colliderManager.AdjustForCollisionsMovingSpriteAgainstListOfSprites(player, screenManager.activeScreen.hitboxesToCheckCollisionsWith, 1, 10);
         }
 
@@ -176,28 +189,45 @@ namespace Adventure
                 else
                 {
 
+                   
 
-                    if (player.directionX == -1)
+                    if (player.CollidedOnBottom)
                     {
-                        statesX = StatesX.accelerateLeft;
                         playerControlCounter = 0;
-                        return;
-                    }
-                    else if (player.directionX == 1)
-                    {
-                        statesX = StatesX.constantVelocityRight;
-                        playerControlCounter = 0;
-                        return;
+
+                        if (player.directionX == 1)
+                        {
+                            statesX = StatesX.accelerateRight;
+                            return;
+                        }
+                        else if (player.directionX == -1)
+                        {
+                            statesX = StatesX.accelerateLeft;
+                            return;
+                        }
+                        else
+                        {
+                            statesX = StatesX.atRestX;
+                            return;
+                        }
                     }
                     else
                     {
-                        if (player.CollidedOnBottom)
+                        if (player.directionX == -1)
                         {
-                            statesX = StatesX.atRestX;
+                            statesX = StatesX.accelerateLeft;
+                            playerControlCounter = 0;
+                            return;
+                        }
+
+                        if (player.directionX == 0)
+                        {
+                            statesX = StatesX.decelerateRight;
                             playerControlCounter = 0;
                             return;
                         }
                     }
+
 
                     return;
 
@@ -215,30 +245,46 @@ namespace Adventure
                     return;
                 }
                 else
-                {
-                    
+                {                   
 
-                    if (player.directionX == 1)
+
+                    if (player.CollidedOnBottom)
                     {
-                        statesX = StatesX.accelerateRight;
                         playerControlCounter = 0;
-                        return;
-                    }
-                    else if (player.directionX == -1)
-                    {
-                        statesX = StatesX.constantVelocityLeft;
-                        playerControlCounter = 0;
-                        return;
+
+                        if (player.directionX == 1)
+                        {
+                            statesX = StatesX.accelerateRight;
+                            return;
+                        }
+                        else if (player.directionX == -1)
+                        {
+                            statesX = StatesX.accelerateLeft;
+                            return;
+                        }
+                        else
+                        {
+                            statesX = StatesX.atRestX;
+                            return;
+                        }
                     }
                     else
                     {
-                        if (player.CollidedOnBottom)
-                        {       
-                            statesX = StatesX.atRestX;
+                        if (player.directionX == 1)
+                        {
+                            statesX = StatesX.accelerateRight;
+                            playerControlCounter = 0;
+                            return;
+                        }
+                        
+                        if (player.directionX == 0)
+                        {
+                            statesX = StatesX.decelerateLeft;
                             playerControlCounter = 0;
                             return;
                         }
                     }
+
 
                     return;
 
@@ -325,16 +371,29 @@ namespace Adventure
         public void UpdateVelocityAndDisplacementX()
         {
 
-            if (statesY == StatesY.falling && lambdaAccel == originalLambdaAccel)
-            {
-                lambdaAccel *= fallingLambdaMultiplier;
-                //lambdaDecel *= fallingLambdaMultiplier;
-            }
+            //if (statesY == StatesY.falling && lambdaAccel == originalLambdaAccel)
+            //{
+            //    lambdaAccel *= fallingLambdaMultiplier;
+            //    //lambdaDecel *= fallingLambdaMultiplier;
+            //}
 
-            if (statesY == StatesY.atRestY && lambdaAccel != originalLambdaAccel)
+            //if (statesY == StatesY.atRestY && lambdaAccel != originalLambdaAccel)
+            //{
+            //    lambdaAccel = originalLambdaAccel;
+            //    //lambdaDecel = originalLambdaDecel;
+            //}
+
+            if (statesY == StatesY.atRestY)
             {
-                lambdaAccel = originalLambdaAccel;
-                //lambdaDecel = originalLambdaDecel;
+                lambdaDecel = originalLambdaDecel;
+                //lambdaAccel = originalLambdaAccel;
+
+            }
+            else if (statesY == StatesY.falling)
+            {
+                lambdaDecel = 0.1f * originalLambdaDecel;
+                //lambdaAccel = 0.1f * originalLambdaAccel;
+
             }
 
 
@@ -412,8 +471,12 @@ namespace Adventure
             }
 
             // On the ground and press jump
-            if (statesY == StatesY.atRestY && player.flagJumpButtonPressed)
+            if ((statesY == StatesY.atRestY && player.flagJumpButtonPressed) || (statesY == StatesY.falling && coyoteTimeCounter > 0 && player.flagJumpButtonPressed))
             {
+                coyoteTimeCounter = 0;
+
+                jumpButtonHeldCounter = 1;
+
                 statesY = StatesY.falling;
 
                 if (player.boosted)
@@ -427,17 +490,53 @@ namespace Adventure
                 return;
             }
 
-            // On the ground and walk off an edge
+            if (statesY == StatesY.falling && jumpButtonHeldCounter > 0)
+            {
+                if (player.jumpButtonPressed)
+                {
+                    jumpButtonHeldCounter++;
+                }
+                else
+                {
+                    flagJumpButtonReleased = true;
+                    framesWhenJumpButtonReleased = jumpButtonHeldCounter;
+                    jumpButtonHeldCounter = 0;
+                }
+                return;
+            }
+
+
+
+            // On the ground and walk off an edge - transition to falling and start coyote time counter
             if (statesY == StatesY.atRestY && !player.CollidedOnBottom)
             {
+                coyoteTimeCounter = 1;
+
                 statesY = StatesY.falling;
                 player.velocity.Y = 0;
+                return;
+            }
+
+            if (statesY == StatesY.falling && coyoteTimeCounter > 0 && !player.CollidedOnBottom)
+            {
+                if (coyoteTimeCounter < framesForCoyoteTime)
+                {
+                    coyoteTimeCounter++;
+                }
+                else
+                {
+                    coyoteTimeCounter = 0;
+                }
+
                 return;
             }
 
             // Falling in middair and hit ground
             if (statesY == StatesY.falling && player.CollidedOnBottom)
             {
+                jumpButtonHeldCounter = 0;
+                framesWhenJumpButtonReleased = 0;
+                coyoteTimeCounter = 0;
                 statesY = StatesY.atRestY;
                 player.velocity.Y = 0;
                 landedFlag = true;
@@ -458,6 +557,18 @@ namespace Adventure
                 case StatesY.falling:
                     {
                         player.velocity.Y += player.gravityConstant * player.deltaTime;
+
+                        if (flagJumpButtonReleased)
+                        {
+                            flagJumpButtonReleased = false;
+
+                            if (framesWhenJumpButtonReleased < framesForMaxJump)
+                            {
+                                player.velocity.Y *= 0.5f;
+                            }
+                        }
+                        
+
                         player.velocity.Y = Math.Min(player.velocity.Y, player.maxVerticalSpeed);
                         break;
                     }
@@ -469,7 +580,6 @@ namespace Adventure
             }
 
             player.displacement.Y = player.velocity.Y * player.deltaTime;
-
 
         }
 
